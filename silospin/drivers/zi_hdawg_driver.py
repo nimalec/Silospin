@@ -49,13 +49,25 @@ class HdawgDriver:
 
         ##Should add exception handeling here
         self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level , "interface" : interface, "connection_status" : "unconnected"}
-        # self._sequencers = 
+        #self._sequencers =
         # self._waves = []
         # self._markers = []
         # self._triggers = []
         # self._clocks = []
         # self._clocks_status = []
         # self._channel_config  = { }
+        #  - channel config
+        #  - oscillators
+        # - signal outputs
+         # - sine generators
+        #  -
+        #  -
+        #
+         #
+        #  - channel config
+        #  -
+        #
+         #
 
 
 
