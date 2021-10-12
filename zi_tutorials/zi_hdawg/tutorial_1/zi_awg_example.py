@@ -8,8 +8,8 @@ import zhinst.utils
 def run_example(
     device_id,
     server_host: str = "localhost",
-    server_port: int = 8004, ):
-    apilevel_example = 6  #
+    server_port: int = 8004,):
+    apilevel_example = 6
     (daq, device, _) = zhinst.utils.create_api_session(
         device_id, apilevel_example, server_host=server_host, server_port=server_port)
     zhinst.utils.api_server_version_check(daq)
@@ -51,21 +51,26 @@ def run_example(
     awgModule.set("device", device)
     awgModule.execute()
 
-    data_dir = awgModule.getString("directory")
-    wave_dir = os.path.join(data_dir, "awg", "waves")
-
-    if not os.path.isdir(wave_dir):
-        # The data directory is created by the AWG module and should always exist. If this exception
-        # is raised, something might be wrong with the file system.
-        raise Exception(
-            f"AWG module wave directory {wave_dir} does not exist or is not a directory"
-        )
-    # Save waveform data to CSV
-    csv_file = os.path.join(wave_dir, "wave0.csv")
-    np.savetxt(csv_file, waveform_0)
 
     awgModule.set("compiler/sourcestring", awg_program)
 
+    while awgModule.getInt("compiler/status") == -1:
+        time.sleep(0.1)
+
+    if awgModule.getInt("compiler/status") == 1:
+        # compilation failed, raise an exception
+        raise Exception(awgModule.getString("compiler/statusstring"))
+
+        )
+
+    if awgModule.getInt("compiler/status") == 2:
+        print(
+            "Compilation successful with warnings, will upload the program to the instrument."
+        )
+        print("Compiler warning: ", awgModule.getString("compiler/statusstring"))
+
+    daq.setInt(f"/{device}/awgs/0/single", 1)
+    daq.setInt(f"/{device}/awgs/0/enable", 1)
 
     if __name__ == "__main__":
        import sys
