@@ -61,8 +61,6 @@ def run_example(
         # compilation failed, raise an exception
         raise Exception(awgModule.getString("compiler/statusstring"))
 
-        )
-
     if awgModule.getInt("compiler/status") == 2:
         print(
             "Compilation successful with warnings, will upload the program to the instrument."
