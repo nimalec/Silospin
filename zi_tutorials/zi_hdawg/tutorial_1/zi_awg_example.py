@@ -8,7 +8,7 @@ import zhinst.utils
 def run_example(
     device_id,
     server_host: str = "localhost",
-    server_port: int = 8004,):
+    server_port: int = 8004):
     apilevel_example = 6
     (daq, device, _) = zhinst.utils.create_api_session(
         device_id, apilevel_example, server_host=server_host, server_port=server_port)
@@ -71,11 +71,14 @@ def run_example(
     daq.setInt(f"/{device}/awgs/0/enable", 1)
 
     if __name__ == "__main__":
-       import sys
-       from pathlib import Path
+        dev_ID = 8446
+        run_example(dev_id)
 
-       cli_util_path = Path(__file__).resolve().parent / "../../utils/python"
-       sys.path.insert(0, str(cli_util_path))
-       cli_utils = __import__("cli_utils")
-       cli_utils.run_commandline(run_example, __doc__)
-       sys.path.remove(str(cli_util_path))
+       # import sys
+       # from pathlib import Path
+       #
+       # cli_util_path = Path(__file__).resolve().parent / "../../utils/python"
+       # sys.path.insert(0, str(cli_util_path))
+       # cli_utils = __import__("cli_utils")
+       # cli_utils.run_commandline(run_example, __doc__)
+       # sys.path.remove(str(cli_util_path))
