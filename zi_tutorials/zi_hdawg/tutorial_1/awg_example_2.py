@@ -8,10 +8,10 @@ dev_id = 'dev8446'
 server_host =  "localhost"
 server_port = 8004
 apilevel_example = 6
-daq = zhinst.utils.create_api_session(dev_id, apilevel_example, server_host=server_host, server_port=server_port)
-# zhinst.utils.api_server_version_check(daq)
-# zhinst.utils.disable_everything(daq, device)
-#
+daq, device, _ = zhinst.utils.create_api_session(dev_id, apilevel_example, server_host=server_host, server_port=server_port)
+zhinst.utils.api_server_version_check(daq)
+zhinst.utils.disable_everything(daq, device)
+
 # daq.setInt(f"/{device}/system/awg/channelgrouping", 0)
 # out_channel = 0
 # awg_channel = 0
