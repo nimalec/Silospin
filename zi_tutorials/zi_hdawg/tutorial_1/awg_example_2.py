@@ -48,15 +48,15 @@ awgModule = daq.awgModule()
 awgModule.set("device", device)
 awgModule.execute()
 
-# awgModule.set("compiler/sourcestring", awg_program)
-#
-# while awgModule.getInt("compiler/status") == -1:
-#     time.sleep(0.1)
-#
-# if awgModule.getInt("compiler/status") == 1:
-#         # compilation failed, raise an exception
-#     raise Exception(awgModule.getString("compiler/statusstring"))
-#
-# if awgModule.getInt("compiler/status") == 2:
-#     print( "Compilation successful with warnings, will upload the program to the instrument.")
-#     print("Compiler warning: ", awgModule.getString("compiler/statusstring"))
+awgModule.set("compiler/sourcestring", awg_program)
+
+while awgModule.getInt("compiler/status") == -1:
+    time.sleep(0.1)
+
+if awgModule.getInt("compiler/status") == 1:
+        # compilation failed, raise an exception
+    raise Exception(awgModule.getString("compiler/statusstring"))
+
+if awgModule.getInt("compiler/status") == 2:
+    print( "Compilation successful with warnings, will upload the program to the instrument.")
+    print("Compiler warning: ", awgModule.getString("compiler/statusstring"))
