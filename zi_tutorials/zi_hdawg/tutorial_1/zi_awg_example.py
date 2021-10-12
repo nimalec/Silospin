@@ -70,9 +70,11 @@ def run_example(
     daq.setInt(f"/{device}/awgs/0/single", 1)
     daq.setInt(f"/{device}/awgs/0/enable", 1)
 
-    if __name__ == "__main__":
-        dev_ID = 8446
-        run_example(dev_id)
+dev_id = 8446 
+run_example(dev_id)
+    # if __name__ == "__main__":
+    #     dev_ID = 8446
+    #     run_example(dev_id)
 
        # import sys
        # from pathlib import Path
