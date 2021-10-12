@@ -8,7 +8,7 @@ dev_id = 8446
 server_host =  "localhost"
 server_port = 8004
 apilevel_example = 6
-daq, device = zhinst.utils.create_api_session(device_id, apilevel_example, server_host=server_host, server_port=server_port)
+daq, device = zhinst.utils.create_api_session(dev_id, apilevel_example, server_host=server_host, server_port=server_port)
 zhinst.utils.api_server_version_check(daq)
 zhinst.utils.disable_everything(daq, device)
 
