@@ -4,7 +4,7 @@ import textwrap
 import numpy as np
 import zhinst.utils
 
-dev_id = 8446
+dev_id = 'dev8446'
 server_host =  "localhost"
 server_port = 8004
 apilevel_example = 6
