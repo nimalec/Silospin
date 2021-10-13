@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import zhinst
 import zhinst.utils
+import zhinst.toolkit as tk
 
 class HdawgDriver:
     '''
@@ -32,7 +33,7 @@ class HdawgDriver:
         Print ...
     '''
 
-    def __init__(self, dev_id, server_host = "localhost", server_port = 8004, api_level = 6, interface = "1GbE", **kwargs):
+    def __init__(self, dev_id, name = "hdawg_1", server_host = "localhost", server_port = 8004, api_level = 6, interface = "1GbE", **kwargs):
        """
         Constructs all the necessary attributes for the person object.
 
@@ -50,19 +51,22 @@ class HdawgDriver:
                 Interface used to connect to server (default = "1GbE" for ethernet connection).
         """
 
-        ##Should add exception handeling here
-        self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level , "interface" : interface, "connection_status" : 0}
-        ## Channel groupings (int): 0- 4x2 , 1- 2x4 , 2- 1x8
-        self._channel_grouping = 0
-        #self._sequencers = {"channel_grouping": , "sequence" }
-        self._oscillators = {"osc1": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 } , "osc2": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 }, "osc3": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 }, "osc4":{"freq": 10e6, "harmonic": 1 , "phase": 0.0 } ,
-        "osc5": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 } , "osc6": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 } , "osc7": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 }, "osc8": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 }}
-        self._sin_out_amps = {"wav1": {"oscA": "osc1", "oscB": "osc2", "oscA_V": 1,  "oscB_V": 1 } , "wav2": {"oscA": "osc1", "oscB": "osc2", "oscA_V": 1,  "oscB_V": 1 }  , "wav3": {"oscA": "osc3", "oscB": "osc4", "oscA_V": 1,  "oscB_V": 1 } , "wav4": {"oscA": "osc3", "oscB": "osc4", "oscA_V": 1,  "oscB_V": 1 }  ,
-        "wav5": {"oscA": "osc5", "oscB": "osc6", "oscA_V": 1,  "oscB_V": 1 }  , "wav6": {"oscA": "osc5", "oscB": "osc6", "oscA_V": 1,  "oscB_V": 1 } , "wav7": {"oscA": "osc7", "oscB": "osc8", "oscA_V": 1,  "oscB_V": 1 }, "wav8": {"oscA": "osc7", "oscB": "osc8", "oscA_V": 1,  "oscB_V": 1 } }
-        self._waves_out_amps = {"wav1": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}, "wav2": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}, "wav3": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}, "wav4": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1},
-         "wav5": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1} , "wav6": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}, "wav7": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}, "wav8": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}}
-        self._device = None
-        self._daq = None
+        # ##Should add exception handeling here
+        self._connection_settings = {"hdawg_name": name, "hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level , "interface" : interface, "connection_status" : False}
+        self._hdawg = HDAWG(self._connection_settings["hdawg_name"],self._connection_settings["hdawg_id"])
+        #self._
+
+        # ## Channel groupings (int): 0- 4x2 , 1- 2x4 , 2- 1x8
+        # self._channel_grouping = 0
+        # #self._sequencers = {"channel_grouping": , "sequence" }
+        # self._oscillators = {"osc1": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 } , "osc2": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 }, "osc3": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 }, "osc4":{"freq": 10e6, "harmonic": 1 , "phase": 0.0 } ,
+        # "osc5": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 } , "osc6": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 } , "osc7": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 }, "osc8": {"freq": 10e6, "harmonic": 1 , "phase": 0.0 }}
+        # self._sin_out_amps = {"wav1": {"oscA": "osc1", "oscB": "osc2", "oscA_V": 1,  "oscB_V": 1 } , "wav2": {"oscA": "osc1", "oscB": "osc2", "oscA_V": 1,  "oscB_V": 1 }  , "wav3": {"oscA": "osc3", "oscB": "osc4", "oscA_V": 1,  "oscB_V": 1 } , "wav4": {"oscA": "osc3", "oscB": "osc4", "oscA_V": 1,  "oscB_V": 1 }  ,
+        # "wav5": {"oscA": "osc5", "oscB": "osc6", "oscA_V": 1,  "oscB_V": 1 }  , "wav6": {"oscA": "osc5", "oscB": "osc6", "oscA_V": 1,  "oscB_V": 1 } , "wav7": {"oscA": "osc7", "oscB": "osc8", "oscA_V": 1,  "oscB_V": 1 }, "wav8": {"oscA": "osc7", "oscB": "osc8", "oscA_V": 1,  "oscB_V": 1 } }
+        # self._waves_out_amps = {"wav1": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}, "wav2": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}, "wav3": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}, "wav4": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1},
+        #  "wav5": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1} , "wav6": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}, "wav7": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}, "wav8": {"mod1": "off", "mod2": "off", "mod1_V": 1, "mod2_V": 1}}
+        # self._device = None
+        # self._daq = None
         #self._awgmodule  =
         # self._markers = []
         # self._triggers = []
@@ -93,13 +97,18 @@ class HdawgDriver:
         None
       """
 
-    dev_id = self._connection_settings["hdawg_id"]
-    api_level = self._connection_settings["api_level"]
-    server_host = self._connection_settings["server_host"]
-    server_port = self._connection_settings["server_port"]
-    self._daq, self._device, _ = zhinst.utils.create_api_session(dev_id, api_level, server_host=server_host, server_port=server_port)
-    zhinst.utils.api_server_version_check(self._daq)
-    zhinst.utils.disable_everything(self._daq, self._device)
+    ## add exception handeling
+    self._hdawg.setup()
+    self._hdawg.connect_device()
+    connect_status = self._hdawg.is_connected()
+    self._connection_settings["connection_status"] = connect_status
+    # dev_id = self._connection_settings["hdawg_id"]
+    # api_level = self._connection_settings["api_level"]
+    # server_host = self._connection_settings["server_host"]
+    # server_port = self._connection_settings["server_port"]
+    # self._daq, self._device, _ = zhinst.utils.create_api_session(dev_id, api_level, server_host=server_host, server_port=server_port)
+    # zhinst.utils.api_server_version_check(self._daq)
+    # zhinst.utils.disable_everything(self._daq, self._device)
 
 
     # def close_connection(self):
@@ -126,8 +135,6 @@ class HdawgDriver:
         ## add exception here
         self._channel_grouping = value
         self._daq.setInt(f"/{device}/system/awg/channelgrouping", self._channel_grouping)
-
-
 
 
 
