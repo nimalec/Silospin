@@ -124,7 +124,12 @@ class HdawgDriver:
 
     def get_osc_freq(self, oscs):
         ## exception for oscs type: list or str ==> check that format is 'osc' + int
-        for i in 
+        osc_freqs = {}
+        for osc in oscs:
+            osc_idx = int(osc[3])-1
+            oscs_freqs[osc] = self._hdawg.nodetree.oscs[osc_idx]
+        return osc_freqs 
+
 
 
 
