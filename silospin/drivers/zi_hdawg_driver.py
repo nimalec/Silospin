@@ -32,22 +32,22 @@ class HdawgDriver:
     '''
 
     def __init__(self, dev_id, name = "hdawg_1", server_host = "localhost", server_port = 8004, api_level = 6, interface = "1GbE", **kwargs):
-       '''
-        Constructs all the necessary attributes for the person object.
+       #  '''
+      #  Constructs all the necessary attributes for the person object.
 
-        Parameters
-        ----------
-            dev_id : str
-                Device ID for AWG.
-            server_host : str
-                Server  host name (default = "localhost").
-            server_port : int
-                Port number for the host server (default = 8004).
-            api_level : int
-                API level of instrument (default = 6, for HDAWG).
-            interface : str
-                Interface used to connect to server (default = "1GbE" for ethernet connection).
-        '''
+       # Parameters
+      #  ----------
+      #      dev_id : str
+      #          Device ID for AWG.
+      #      server_host : str
+      #          Server  host name (default = "localhost").
+      #      server_port : int
+      #          Port number for the host server (default = 8004).
+      #      api_level : int
+      #          API level of instrument (default = 6, for HDAWG).
+      #      interface : str
+      #          Interface used to connect to server (default = "1GbE" for ethernet connection).
+      #  '''
 
         # ##Should add exception handeling here
         self._connection_settings = {"hdawg_name": name, "hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level , "interface" : interface, "connection_status" : False}
@@ -107,7 +107,7 @@ class HdawgDriver:
         #  -
 
     def open_connection(self):
-     # """ 
+     # """
      #  Initializes connection with HDAWG instrument via server.
      #
      #    First...
