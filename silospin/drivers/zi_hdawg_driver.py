@@ -107,8 +107,8 @@ class HdawgDriver:
         #  -
 
     def open_connection(self):
-     """
-     Initializes connection with HDAWG instrument via server.
+     '''
+      Initializes connection with HDAWG instrument via server.
 
         First...
 
@@ -120,11 +120,11 @@ class HdawgDriver:
         Returns
         -------
         None
-      """
+      '''
 
-        self._hdawg.setup()
-        self._hdawg.connect_device()
-        self._connection_settings["connection_status"] = True
+       self._hdawg.setup()
+       self._hdawg.connect_device()
+       self._connection_settings["connection_status"] = True
         ## add message of succeessful connection for each
         ## add try, catch for exception handeling
 
@@ -132,38 +132,36 @@ class HdawgDriver:
         ## exception for osc_freqs type: dict
         ##add exception for type real and bounded for each frequency
 
-        for key in osc_freqs:
-            self._oscillator_freqs[key] = oscs_freq[key]
-            osc_idx = int(key[3])-1
-            self._hdawg.nodetree.oscs[osc_idx].freq(self._oscillator_freqs[key])
+       for key in osc_freqs:
+          self._oscillator_freqs[key] = oscs_freq[key]
+          osc_idx = int(key[3])-1
+          self._hdawg.nodetree.oscs[osc_idx].freq(self._oscillator_freqs[key])
 
-    def get_osc_freq(self, oscs):
+   def get_osc_freq(self, oscs):
         ## exception for oscs type: list or str ==> check that format is 'osc' + int
-        osc_freqs = {}
-        for osc in oscs:
-            osc_idx = int(osc[3])-1
-            oscs_freqs[osc] = self._hdawg.nodetree.oscs[osc_idx]
-        return osc_freqs
+      osc_freqs = {}
+      for osc in oscs:
+         osc_idx = int(osc[3])-1
+         oscs_freqs[osc] = self._hdawg.nodetree.oscs[osc_idx]
+      return osc_freqs
 
-    def set_sine_wave(self, sinewave, osc, harmonic, amp1, amp2):
-        self._sines[sinewave]["osc"] = osc
-        self._sines[sinewave]["harmonic"] = harmonic
-        self._sines[sinewave]["amp1"] = amp1
-        self._sines[sinewave]["amp2"] = amp2
-        self._hdawg.nodetree.sines[1].oscselect(osc)
-        self._hdawg.nodetree.sines[1].harmonic(harmonic)
-        self._hdawg.nodetree.sines[1].amplitudes[0]  = amp1
-        self._hdawg.nodetree.sines[1].amplitudes[1]  = amp2
+   def set_sine_wave(self, sinewave, osc, harmonic, amp1, amp2):
+      self._sines[sinewave]["osc"] = osc
+      self._sines[sinewave]["harmonic"] = harmonic
+      self._sines[sinewave]["amp1"] = amp1
+      self._sines[sinewave]["amp2"] = amp2
+      self._hdawg.nodetree.sines[1].oscselect(osc)
+      self._hdawg.nodetree.sines[1].harmonic(harmonic)
+      self._hdawg.nodetree.sines[1].amplitudes[0]  = amp1
+      self._hdawg.nodetree.sines[1].amplitudes[1]  = amp2
 
-    def get_sine_wave(self, sinewave):
-        ## sinewave: label for sinewave
-        return self._sines[sinewave]
+   def get_sine_wave(self, sinewave):
+      ## sinewave: label for sinewave
+   return self._sines[sinewave]
 
-    def get_awgcore(self, core_id):
-        return self._awgs[core_id]
+   def get_awgcore(self, core_id):
+      return self._awgs[core_id]
 
-    # def out_amps(self):
-    #
 
 
 
