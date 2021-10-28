@@ -77,15 +77,15 @@ class HdawgDriver:
         self._waveforms = {"awg1" : {"memoryusage" : self._awgs["awg1"].waveform.memoryusage , "playstatus" : self._awgs["awg1"].waveform.playing, "playstatus" : self._awgs["awg1"].waveform.descriptors}, "awg2" : {"awg1" : {"memoryusage" : self._awgs["awg2"].waveform.memoryusage , "playstatus" : self._awgs["awg2"].waveform.playing, "playstatus" : self._awgs["awg2"].waveform.descriptors}
            , "awg3" : {"awg1" : {"memoryusage" : self._awgs["awg3"].waveform.memoryusage , "playstatus" : self._awgs["awg3"].waveform.playing, "playstatus" : self._awgs["awg3"].waveform.descriptors}
            , "awg4" : {"awg1" : {"memoryusage" : self._awgs["awg4"].waveform.memoryusage , "playstatus" : self._awgs["awg4"].waveform.playing, "playstatus" : self._awgs["awg4"].waveform.descriptors}}
-        self._sweep_trigs = {"awg1": self._awgs["awg1"].sweep.awgtrigs, "awg2": self._awgs["awg2"].sweep.awgtrigs,
-        "awg3": self._awgs["awg3"].sweep.awgtrigs, "awg4": self._awgs["awg4"].sweep.awgtrigs}
-        self._aux_triggers = {"awg1" : {"trig1" : self._awgs["awg1"].auxtriggers[0], "trig2": self._awgs["awg1"].auxtriggers[1]},
-       "awg2" : {"trig1" : se_awgs["awg2"].auxtriggers[0], "trig2": self._awgs["awg2"].auxtriggers[1]},
-       "awg3" : {"trig1" : self._awgs["awg3"].auxtriggers[0], "trig2": self._awgs["awg3"].auxtriggers[1]},
-       "awg4" : {"trig1" : self._awgs["awg4"].auxtriggers[0], "trig2": self._awgs["awg4"].auxtriggers[1]}}
-        self._awgs_enabled = {"awg1": self._awgs["awg1"].enable, "awg2": self._awgs["awg2"].enable , "awg3": self._awgs["awg3"].enable, "awg4": self._awgs["awg4"].enable}
-        self._awgs_ready = {"awg1": self._awgs["awg1"].ready, "awg2": self._awgs["awg2"].ready , "awg3": self._awgs["awg3"].ready, "awg4": self._awgs["awg4"].ready}
-        self._awgs_reset = {"awg1": self._awgs["awg1"].reset, "awg2": self._awgs["awg2"].reset , "awg3": self._awgs["awg3"].reset, "awg4": self._awgs["awg4"].reset}
+        #self._sweep_trigs = {"awg1": self._awgs["awg1"].sweep.awgtrigs, "awg2": self._awgs["awg2"].sweep.awgtrigs,
+        #"awg3": self._awgs["awg3"].sweep.awgtrigs, "awg4": self._awgs["awg4"].sweep.awgtrigs}
+        #self._aux_triggers = {"awg1" : {"trig1" : self._awgs["awg1"].auxtriggers[0], "trig2": self._awgs["awg1"].auxtriggers[1]},
+       #"awg2" : {"trig1" : se_awgs["awg2"].auxtriggers[0], "trig2": self._awgs["awg2"].auxtriggers[1]},
+       #"awg3" : {"trig1" : self._awgs["awg3"].auxtriggers[0], "trig2": self._awgs["awg3"].auxtriggers[1]},
+       #"awg4" : {"trig1" : self._awgs["awg4"].auxtriggers[0], "trig2": self._awgs["awg4"].auxtriggers[1]}}
+    #    self._awgs_enabled = {"awg1": self._awgs["awg1"].enable, "awg2": self._awgs["awg2"].enable , "awg3": self._awgs["awg3"].enable, "awg4": self._awgs["awg4"].enable}
+#        self._awgs_ready = {"awg1": self._awgs["awg1"].ready, "awg2": self._awgs["awg2"].ready , "awg3": self._awgs["awg3"].ready, "awg4": self._awgs["awg4"].ready}
+    #    self._awgs_reset = {"awg1": self._awgs["awg1"].reset, "awg2": self._awgs["awg2"].reset , "awg3": self._awgs["awg3"].reset, "awg4": self._awgs["awg4"].reset}
 
         # self._channel_grouping = 0
         # #self._sequencers = {"channel_grouping": , "sequence" }
