@@ -68,6 +68,8 @@ class HdawgDriver:
         self._modulation_freqs = {"awg1": self._hdawg.awgs[0].modulation_freq(), "awg2": self._hdawg.awgs[1].modulation_freq(), "awg3": self._hdawg.awgs[2].modulation_freq(), "awg4": self._hdawg.awgs[3].modulation_freq()}
         self._modulation_phase_shifts = {"awg1": self._hdawg.awgs[0].modulation_phase_shift(), "awg2": self._hdawg.awgs[1].modulation_phase_shift(), "awg3": self._hdawg.awgs[2].modulation_phase_shift(), "awg4": self._hdawg.awgs[3].modulation_phase_shift()}
         self._gains = {"awg1": {"gain1" : self._hdawg.awgs[0].gain1() , "gain2" : self._hdawg.awgs[0].gain2()}, "awg2": {"gain1" : self._hdawg.awgs[1].gain1() , "gain2" : self._hdawg.awgs[1].gain2()}, "awg3": {"gain1" : self._hdawg.awgs[2].gain1() , "gain2" : self._hdawg.awgs[2].gain2()}, "awg4": {"gain1" : self._hdawg.awgs[3].gain1() , "gain2" : self._hdawg.awgs[3].gain2()}}
+        self._single = {"awg1": self._hdawg.awgs[0].single(), "awg2": self._hdawg.awgs[1].single(), "awg3": self._hdawg.awgs[2].single(), "awg4": self._hdawg.awgs[3].single()}
+    
         # self._markers = [# self._triggers = []
         # self._clocks = []
         # self._clocks_status = []
