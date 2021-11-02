@@ -62,23 +62,14 @@ class HdawgDriver:
         self._awgs = {"awg1" : self._hdawg.nodetree.awgs[0], "awg2" : self._hdawg.nodetree.awgs[1], "awg3" : self._hdawg.nodetree.awgs[2], "awg4" : self._hdawg.nodetree.awgs[3]}
         self._output_amps = {"awg1" : {"out1" : self._awgs["awg1"].outputs[0].amplitude, "out2" : self._awgs["awg1"].outputs[1].amplitude}, "awg2" : {"out1" : self._awgs["awg2"].outputs[0].amplitude, "out2" : self._awgs["awg2"].outputs[1].amplitude}, "awg3" : {"out1" : self._awgs["awg3"].outputs[0].amplitude, "out2" : self._awgs["awg3"].outputs[1].amplitude}, "awg4" : {"out1" : self._awgs["awg4"].outputs[0].amplitude, "out2" : self._awgs["awg4"].outputs[1].amplitude}}
         self._sequencers = {"awg1" : {"positions" : self._awgs["awg1"].sequencer.pc, "status" :self._awgs["awg1"].sequencer.status , "memoryusage" : self._awgs["awg1"].sequencer.memoryusage, "triggered" : self._awgs["awg1"].sequencer.triggered, "program" :  self._awgs["awg1"].sequencer.program}, "awg2" : {"positions" : self._awgs["awg2"].sequencer.pc, "status" :self._awgs["awg2"].sequencer.status , "memoryusage" : self._awgs["awg2"].sequencer.memoryusage, "triggered" : self._awgs["awg2"].sequencer.triggered, "program" :  self._awgs["awg2"].sequencer.program}, "awg3" : {"positions" : self._awgs["awg3"].sequencer.pc, "status" :self._awgs["awg3"].sequencer.status , "memoryusage" : self._awgs["awg3"].sequencer.memoryusage, "triggered" : self._awgs["awg3"].sequencer.triggered, "program" :  self._awgs["awg3"].sequencer.program}, "awg4" : {"positions" : self._awgs["awg4"].sequencer.pc, "status" :self._awgs["awg4"].sequencer.status , "memoryusage" : self._awgs["awg4"].sequencer.memoryusage, "triggered" : self._awgs["awg4"].sequencer.triggered, "program" :  self._awgs["awg4"].sequencer.program}}
-
         self._ref_clock_status = self._hdawg.ref_clock_status()
         self._output_status = {"awg1" : {"out1" : self._hdawg.awgs[0].output1(), "out2" : self._hdawg.awgs[0].output1()}, "awg2" : {"out1" : self._hdawg.awgs[1].output1(), "out2" : self._hdawg.awgs[1].output1()},  "awg3" : {"out1" : self._hdawg.awgs[2].output1(), "out2" : self._hdawg.awgs[2].output1()}, "awg4" : {"out1" : self._hdawg.awgs[3].output1(), "out2" : self._hdawg.awgs[3].output1()}}
         self._modulation_freqs = {"awg1": self._hdawg.awgs[0].modulation_freq(), "awg2": self._hdawg.awgs[1].modulation_freq(), "awg3": self._hdawg.awgs[2].modulation_freq(), "awg4": self._hdawg.awgs[3].modulation_freq()}
         self._modulation_phase_shifts = {"awg1": self._hdawg.awgs[0].modulation_phase_shift(), "awg2": self._hdawg.awgs[1].modulation_phase_shift(), "awg3": self._hdawg.awgs[2].modulation_phase_shift(), "awg4": self._hdawg.awgs[3].modulation_phase_shift()}
         self._gains = {"awg1": {"gain1" : self._hdawg.awgs[0].gain1() , "gain2" : self._hdawg.awgs[0].gain2()}, "awg2": {"gain1" : self._hdawg.awgs[1].gain1() , "gain2" : self._hdawg.awgs[1].gain2()}, "awg3": {"gain1" : self._hdawg.awgs[2].gain1() , "gain2" : self._hdawg.awgs[2].gain2()}, "awg4": {"gain1" : self._hdawg.awgs[3].gain1() , "gain2" : self._hdawg.awgs[3].gain2()}}
         self._single = {"awg1": self._hdawg.awgs[0].single(), "awg2": self._hdawg.awgs[1].single(), "awg3": self._hdawg.awgs[2].single(), "awg4": self._hdawg.awgs[3].single()}
-    
-        # self._markers = [# self._triggers = []
-        # self._clocks = []
-        # self._clocks_status = []
-        # self._channel_config  = { }
-        #  - channel config
-        #  - oscillators
-        # - signal outputs
-        #  - channel config
-        #  -
+        self._waveforms = {"awg1": self._hdawg.awgs[0].waveforms(), "awg2": self._hdawg.awgs[1].waveforms(), "awg3": self._hdawg.awgs[2].waveforms(), "awg4": self._hdawg.awgs[3].waveforms()}
+        self._run_status = {"awg1": self._hdawg.awgs[0].is_running, "awg2": self._hdawg.awgs[1].is_running, "awg3": self._hdawg.awgs[2].is_running, "awg4": self._hdawg.awgs[3].is_running}
 
    #  def open_connection(self):
    #   # """
