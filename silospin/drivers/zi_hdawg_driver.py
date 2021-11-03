@@ -4,7 +4,7 @@ import zhinst.utils
 import zhinst.toolkit as tk
 
 class HdawgDriver:
-    '''
+    """
     Driver class for ZI-HDAWG (Zurich arbitrary waveform generator) instrument.
 
     >>> hd = HdawgDriver("hdawg_name", "dev8030")
@@ -29,35 +29,38 @@ class HdawgDriver:
     - - - - - - -
     example (additional=" "):
         Print ...
-    '''
+    """
 
     def __init__(self, dev_id, name = "hdawg_1", server_host = "localhost", server_port = 8004, api_level = 6, interface = "1GbE"):
-       #  '''
-      #  Constructs all the necessary attributes for the person object.
+        """
+         Constructor for HDAWG Driver.
 
-       # Parameters
-      #  ----------
-      #      dev_id : str
-      #          Device ID for AWG.
-      #      server_host : str
-      #          Server  host name (default = "localhost").
-      #      server_port : int
-      #          Port number for the host server (default = 8004).
-      #      api_level : int
-      #          API level of instrument (default = 6, for HDAWG).
-      #      interface : str
-      #          Interface used to connect to server (default = "1GbE" for ethernet connection).
-      #  '''
+           Parameters
+           ----------
+           dev_id : str
+              Device ID for AWG.
+           server_host : str
+              Server  host name (default = "localhost").
+           server_port : int
+              Port number for the host server (default = 8004).
+           api_level : int
+              API level of instrument (default = 6, for HDAWG).
+           interface : str
+              Interface used to connect to server (default = "1GbE" for ethernet connection).
 
+           Returns
+           -------
+           None.
+        """
         ##Part 1: connect to instrument
         # ##Should add exception handeling here
-        self._connection_settings = {"hdawg_name": name, "hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level , "interface" : interface, "connection_status" : False}
+        self._connection_settings = {"hdawg_name": name, "hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "interface" : interface, "connection_status" : False}
         self._hdawg = tk.HDAWG(self._connection_settings["hdawg_name"],self._connection_settings["hdawg_id"])
         self._hdawg.setup()
         self._hdawg.connect_device()
+        self._connection_settings["connection_status"] = True
         ##check if connected: (1) yes ==> move forward, (2) no ==> throw exception
         self._oscillator_freq = {"osc1" :self._hdawg.nodetree.oscs[0].freq(), "osc2" :self._hdawg.nodetree.oscs[1].freq(), "osc3" :self._hdawg.nodetree.oscs[2].freq(), "osc4" :self._hdawg.nodetree.oscs[3].freq(), "osc5" :self._hdawg.nodetree.oscs[4].freq(), "osc6" :self._hdawg.nodetree.oscs[5].freq(), "osc7" :self._hdawg.nodetree.oscs[6].freq(), "osc8" :self._hdawg.nodetree.oscs[7].freq(), "osc9" :self._hdawg.nodetree.oscs[8].freq(), "osc10" :self._hdawg.nodetree.oscs[9].freq(), "osc11" :self._hdawg.nodetree.oscs[10].freq(), "osc12" :self._hdawg.nodetree.oscs[11].freq(), "osc13" :self._hdawg.nodetree.oscs[12].freq(), "osc13" :self._hdawg.nodetree.oscs[12].freq(), "osc14" :self._hdawg.nodetree.oscs[13].freq(), "osc15" :self._hdawg.nodetree.oscs[14].freq(), "osc16" :self._hdawg.nodetree.oscs[15].freq()}
-
         self._sines = {"sin1" : {"osc" : self._hdawg.nodetree.sines[0].oscselect(), "phaseshift": self._hdawg.nodetree.sines[0].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[0].harmonic(), "amp1" : self._hdawg.nodetree.sines[0].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[0].amplitudes[1]}, "sin2" : {"osc" : self._hdawg.nodetree.sines[1].oscselect(), "phaseshift": self._hdawg.nodetree.sines[1].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[1].harmonic(), "amp1" : self._hdawg.nodetree.sines[1].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[1].amplitudes[1]}, "sin3" : {"osc" : self._hdawg.nodetree.sines[2].oscselect(), "phaseshift": self._hdawg.nodetree.sines[2].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[2].harmonic(), "amp1" : self._hdawg.nodetree.sines[2].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[2].amplitudes[1]}, "sin4" : {"osc" : self._hdawg.nodetree.sines[3].oscselect(), "phaseshift": self._hdawg.nodetree.sines[3].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[3].harmonic(), "amp1" : self._hdawg.nodetree.sines[3].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[3].amplitudes[1]}, "sin5" : {"osc" : self._hdawg.nodetree.sines[4].oscselect(), "phaseshift": self._hdawg.nodetree.sines[4].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[4].harmonic(), "amp1" : self._hdawg.nodetree.sines[4].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[4].amplitudes[1]}, "sin6" : {"osc" : self._hdawg.nodetree.sines[5].oscselect(), "phaseshift": self._hdawg.nodetree.sines[5].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[5].harmonic(), "amp1" : self._hdawg.nodetree.sines[5].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[5].amplitudes[1]}, "sin7" : {"osc" : self._hdawg.nodetree.sines[6].oscselect(), "phaseshift": self._hdawg.nodetree.sines[6].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[6].harmonic(), "amp1" : self._hdawg.nodetree.sines[6].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[6].amplitudes[1]}, "sin8" : {"osc" : self._hdawg.nodetree.sines[7].oscselect(), "phaseshift": self._hdawg.nodetree.sines[7].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[0].harmonic(), "amp1" : self._hdawg.nodetree.sines[7].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[7].amplitudes[1]}}
         self._awgs = {"awg1" : self._hdawg.nodetree.awgs[0], "awg2" : self._hdawg.nodetree.awgs[1], "awg3" : self._hdawg.nodetree.awgs[2], "awg4" : self._hdawg.nodetree.awgs[3]}
         self._output_amps = {"awg1" : {"out1" : self._awgs["awg1"].outputs[0].amplitude, "out2" : self._awgs["awg1"].outputs[1].amplitude}, "awg2" : {"out1" : self._awgs["awg2"].outputs[0].amplitude, "out2" : self._awgs["awg2"].outputs[1].amplitude}, "awg3" : {"out1" : self._awgs["awg3"].outputs[0].amplitude, "out2" : self._awgs["awg3"].outputs[1].amplitude}, "awg4" : {"out1" : self._awgs["awg4"].outputs[0].amplitude, "out2" : self._awgs["awg4"].outputs[1].amplitude}}
@@ -71,546 +74,541 @@ class HdawgDriver:
         self._waveforms = {"awg1": self._hdawg.awgs[0].waveforms(), "awg2": self._hdawg.awgs[1].waveforms(), "awg3": self._hdawg.awgs[2].waveforms(), "awg4": self._hdawg.awgs[3].waveforms()}
         self._run_status = {"awg1": self._hdawg.awgs[0].is_running, "awg2": self._hdawg.awgs[1].is_running, "awg3": self._hdawg.awgs[2].is_running, "awg4": self._hdawg.awgs[3].is_running}
 
-    def open_connection(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
+    def get_connection_settings(self, param):
+      """
+        Getter function for HDAWG connection settings.
 
-    def get_connection_settings(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
+        Parameters
+        ----------
+        Connection setting parameter (str) : must be "hdawg_name" (str), "hdawg_id" (str), "server_host" (str), "server_port" (int), "api_level" (int), "interface" (str), "connection_status" (bool).
 
-    def get_osc_freq(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
+        Returns
+        -------
+        Corresponding paramaeter value in connection setttings dictionary.
+      """
 
-    def set_osc_freq(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
+      params = {"hdawg_name", "hdawg_id",  "server_host", "server_port",  "api_level", "interface",  "connection_status"}
 
-    def get_sine(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
+      try:
+         if type(param) is not str:
+            raise ValueError("'param' should be a string.")
+      except ValueError:
+         raise
 
-    def set_sine(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
+      try:
+         if param not in params:
+            raise ValueError("'param' must be a connection setting parameters.")
+      except ValueError:
+         raise
 
-    def get_awg(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
+      return self._connection_settings[param]
 
-    def get_out_amp(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def get_seq(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def set_seq(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def set_seq_param(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def get_clock_status(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def get_out_status(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def set_out_status(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def get_mod_freq(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def set_mod_freq(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def get_mod_phase(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def set_mod_phase(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def get_gain(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def set_gain(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def get_waveform(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def get_run_status(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def compile_core(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def compile_core_upload_seq(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def set_output(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def queue_waveform(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def replace_waveform(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def empty_queue(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def run_core(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def stop_core(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def upload_waveform(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
-
-    def wait_core(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     test = 1
+    # def get_osc_freq(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def set_osc_freq(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_sine(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def set_sine(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_awg(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_out_amp(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_seq(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def set_seq(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def set_seq_param(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_clock_status(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_out_status(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def set_out_status(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_mod_freq(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def set_mod_freq(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_mod_phase(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def set_mod_phase(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_gain(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def set_gain(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_waveform(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def get_run_status(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def compile_core(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def compile_core_upload_seq(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def set_output(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def queue_waveform(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def replace_waveform(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def empty_queue(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def run_core(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def stop_core(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def upload_waveform(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
+    #
+    # def wait_core(self):
+    #  # """
+    #  #  Initializes connection with HDAWG instrument via server.
+    #  #
+    #  #    First...
+    #  #
+    #  #    Parameters
+    #  #    ----------
+    #  #    additional : str, optional
+    #  #        More info to be displayed (default is None)
+    #  #
+    #  #    Returns
+    #  #    -------
+    #  #    None
+    #  #  """
+    #  test = 1
