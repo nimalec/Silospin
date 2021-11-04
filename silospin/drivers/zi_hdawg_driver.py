@@ -262,23 +262,31 @@ class HdawgDriver:
        self._hdawg.nodetree.sines[sin_num-1].amplitudes[1](amp2)
        print("Sine wave set to: ", self._sines["sin"+str(sin_num)])
 
+    def get_awg(self, awg_num):
+       """
+        Getter function for AWG core.
 
-    # def get_awg(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
+        Parameters
+        ----------
+        AWG core index : int
+            Sine index number between 1-4.
+
+        Returns
+        -------
+        AWG core (<zhinst.toolkit.control.node_tree.Node> object).
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if sin_num < 1 or sin_num > 4:
+             raise ValueError("'sin_num' should be between 1 and 8.")
+       except ValueError:
+          raise
+       return self._awgs["awg"+str(awg_num)]
+
     #
     # def get_out_amp(self):
     #  # """
