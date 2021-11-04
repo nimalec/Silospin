@@ -60,7 +60,7 @@ class HdawgDriver:
         self._hdawg.connect_device()
         self._connection_settings["connection_status"] = self._hdawg.is_connected
         self._oscillator_freq = {"osc1" :self._hdawg.nodetree.oscs[0].freq(), "osc2" :self._hdawg.nodetree.oscs[1].freq(), "osc3" :self._hdawg.nodetree.oscs[2].freq(), "osc4" :self._hdawg.nodetree.oscs[3].freq(), "osc5" :self._hdawg.nodetree.oscs[4].freq(), "osc6" :self._hdawg.nodetree.oscs[5].freq(), "osc7" :self._hdawg.nodetree.oscs[6].freq(), "osc8" :self._hdawg.nodetree.oscs[7].freq(), "osc9" :self._hdawg.nodetree.oscs[8].freq(), "osc10" :self._hdawg.nodetree.oscs[9].freq(), "osc11" :self._hdawg.nodetree.oscs[10].freq(), "osc12" :self._hdawg.nodetree.oscs[11].freq(), "osc13" :self._hdawg.nodetree.oscs[12].freq(), "osc13" :self._hdawg.nodetree.oscs[12].freq(), "osc14" :self._hdawg.nodetree.oscs[13].freq(), "osc15" :self._hdawg.nodetree.oscs[14].freq(), "osc16" :self._hdawg.nodetree.oscs[15].freq()}
-        self._sines = {"sin1" : {"osc" : self._hdawg.nodetree.sines[0].oscselect(), "phaseshift": self._hdawg.nodetree.sines[0].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[0].harmonic(), "amp1" : self._hdawg.nodetree.sines[0].amplitudes[0]() , "amp2" :self._hdawg.nodetree.sines[0].amplitudes[1]()}, "sin2" : {"osc" : self._hdawg.nodetree.sines[1].oscselect(), "phaseshift": self._hdawg.nodetree.sines[1].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[1].harmonic(), "amp1" : self._hdawg.nodetree.sines[1].amplitudes[0](), "amp2" :self._hdawg.nodetree.sines[1].amplitudes[1]()}, "sin3" : {"osc" : self._hdawg.nodetree.sines[2].oscselect(), "phaseshift": self._hdawg.nodetree.sines[2].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[2].harmonic(), "amp1" : self._hdawg.nodetree.sines[2].amplitudes[0](), "amp2" :self._hdawg.nodetree.sines[2].amplitudes[1]()}, "sin4" : {"osc" : self._hdawg.nodetree.sines[3].oscselect(), "phaseshift": self._hdawg.nodetree.sines[3].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[3].harmonic(), "amp1" : self._hdawg.nodetree.sines[3].amplitudes[0]() , "amp2" :self._hdawg.nodetree.sines[3].amplitudes[1]()}, "sin5" : {"osc" : self._hdawg.nodetree.sines[4].oscselect(), "phaseshift": self._hdawg.nodetree.sines[4].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[4].harmonic(), "amp1" : self._hdawg.nodetree.sines[4].amplitudes[0](), "amp2" :self._hdawg.nodetree.sines[4].amplitudes[1]()}, "sin6" : {"osc" : self._hdawg.nodetree.sines[5].oscselect(), "phaseshift": self._hdawg.nodetree.sines[5].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[5].harmonic(), "amp1" : self._hdawg.nodetree.sines[5].amplitudes[0]()() , "amp2" :self._hdawg.nodetree.sines[5].amplitudes[1]()}, "sin7" : {"osc" : self._hdawg.nodetree.sines[6].oscselect(), "phaseshift": self._hdawg.nodetree.sines[6].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[6].harmonic(), "amp1" : self._hdawg.nodetree.sines[6].amplitudes[0]() , "amp2" :self._hdawg.nodetree.sines[6].amplitudes[1]()}, "sin8" : {"osc" : self._hdawg.nodetree.sines[7].oscselect(), "phaseshift": self._hdawg.nodetree.sines[7].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[0].harmonic(), "amp1" : self._hdawg.nodetree.sines[7].amplitudes[0]() , "amp2" :self._hdawg.nodetree.sines[7].amplitudes[1]()}}
+        self._sines = {"sin1" : {"osc" : self._hdawg.nodetree.sines[0].oscselect(), "phaseshift": self._hdawg.nodetree.sines[0].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[0].harmonic(), "amp1" : self._hdawg.nodetree.sines[0].amplitudes[0]() , "amp2" :self._hdawg.nodetree.sines[0].amplitudes[1]()}, "sin2" : {"osc" : self._hdawg.nodetree.sines[1].oscselect(), "phaseshift": self._hdawg.nodetree.sines[1].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[1].harmonic(), "amp1" : self._hdawg.nodetree.sines[1].amplitudes[0](), "amp2" :self._hdawg.nodetree.sines[1].amplitudes[1]()}, "sin3" : {"osc" : self._hdawg.nodetree.sines[2].oscselect(), "phaseshift": self._hdawg.nodetree.sines[2].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[2].harmonic(), "amp1" : self._hdawg.nodetree.sines[2].amplitudes[0](), "amp2" :self._hdawg.nodetree.sines[2].amplitudes[1]()}, "sin4" : {"osc" : self._hdawg.nodetree.sines[3].oscselect(), "phaseshift": self._hdawg.nodetree.sines[3].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[3].harmonic(), "amp1" : self._hdawg.nodetree.sines[3].amplitudes[0]() , "amp2" :self._hdawg.nodetree.sines[3].amplitudes[1]()}, "sin5" : {"osc" : self._hdawg.nodetree.sines[4].oscselect(), "phaseshift": self._hdawg.nodetree.sines[4].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[4].harmonic(), "amp1" : self._hdawg.nodetree.sines[4].amplitudes[0](), "amp2" :self._hdawg.nodetree.sines[4].amplitudes[1]()}, "sin6" : {"osc" : self._hdawg.nodetree.sines[5].oscselect(), "phaseshift": self._hdawg.nodetree.sines[5].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[5].harmonic(), "amp1" : self._hdawg.nodetree.sines[5].amplitudes[0]() , "amp2" :self._hdawg.nodetree.sines[5].amplitudes[1]()}, "sin7" : {"osc" : self._hdawg.nodetree.sines[6].oscselect(), "phaseshift": self._hdawg.nodetree.sines[6].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[6].harmonic(), "amp1" : self._hdawg.nodetree.sines[6].amplitudes[0]() , "amp2" :self._hdawg.nodetree.sines[6].amplitudes[1]()}, "sin8" : {"osc" : self._hdawg.nodetree.sines[7].oscselect(), "phaseshift": self._hdawg.nodetree.sines[7].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[0].harmonic(), "amp1" : self._hdawg.nodetree.sines[7].amplitudes[0]() , "amp2" :self._hdawg.nodetree.sines[7].amplitudes[1]()}}
         self._awgs = {"awg1" : self._hdawg.nodetree.awgs[0], "awg2" : self._hdawg.nodetree.awgs[1], "awg3" : self._hdawg.nodetree.awgs[2], "awg4" : self._hdawg.nodetree.awgs[3]}
         self._output_amps = {"awg1" : {"out1" : self._awgs["awg1"].outputs[0].amplitude, "out2" : self._awgs["awg1"].outputs[1].amplitude}, "awg2" : {"out1" : self._awgs["awg2"].outputs[0].amplitude, "out2" : self._awgs["awg2"].outputs[1].amplitude}, "awg3" : {"out1" : self._awgs["awg3"].outputs[0].amplitude, "out2" : self._awgs["awg3"].outputs[1].amplitude}, "awg4" : {"out1" : self._awgs["awg4"].outputs[0].amplitude, "out2" : self._awgs["awg4"].outputs[1].amplitude}}
         self._sequencers = {"awg1" : {"positions" : self._awgs["awg1"].sequencer.pc, "status" :self._awgs["awg1"].sequencer.status , "memoryusage" : self._awgs["awg1"].sequencer.memoryusage, "triggered" : self._awgs["awg1"].sequencer.triggered, "program" :  self._awgs["awg1"].sequencer.program}, "awg2" : {"positions" : self._awgs["awg2"].sequencer.pc, "status" :self._awgs["awg2"].sequencer.status , "memoryusage" : self._awgs["awg2"].sequencer.memoryusage, "triggered" : self._awgs["awg2"].sequencer.triggered, "program" :  self._awgs["awg2"].sequencer.program}, "awg3" : {"positions" : self._awgs["awg3"].sequencer.pc, "status" :self._awgs["awg3"].sequencer.status , "memoryusage" : self._awgs["awg3"].sequencer.memoryusage, "triggered" : self._awgs["awg3"].sequencer.triggered, "program" :  self._awgs["awg3"].sequencer.program}, "awg4" : {"positions" : self._awgs["awg4"].sequencer.pc, "status" :self._awgs["awg4"].sequencer.status , "memoryusage" : self._awgs["awg4"].sequencer.memoryusage, "triggered" : self._awgs["awg4"].sequencer.triggered, "program" :  self._awgs["awg4"].sequencer.program}}
@@ -189,7 +189,7 @@ class HdawgDriver:
          raise
       return self._sines["sin"+str(sin_num)]
 
-    def set_sine(self, sin_num, osc_num, phase, harmonic, amp1, amp2):
+    def set_sine(self, sin_num, osc_num, phase=0.0, harmonic=1, amp1=1.0, amp2=1.0):
        """
         Setter function for sines.
 
@@ -200,18 +200,19 @@ class HdawgDriver:
         osc_num : int
             Oscillator index number between 1-16.
         phase : double
-            Phase shift of sine wave in degrees.
+            Phase shift of sine wave in degrees. Default set to 0.0.
         harmonic : int
-            Harmonic of sine waves reference signal (integer factor of frequency).
+            Harmonic of sine waves reference signal (integer factor of frequency). Default set to 1
         amp1 : double
-            Amplitude of wave output 1 in Volts.
+            Amplitude of wave output 1 in Volts. Default set to 1.0.
         amp2 : double
-            Amplitude of wave output 1 in Volts.
+            Amplitude of wave output 1 in Volts. Default set to 1.0.
 
         Returns
         -------
         None.
        """
+
        try:
           if type(sin_num) is not int:
              raise TypeError("'sin_num' should be an integer.")
@@ -252,6 +253,14 @@ class HdawgDriver:
              raise TypeError("'amp2' should be a float.")
        except TypeError:
           raise
+
+       self._sines["sin"+str(sin_num)] = {"osc" : osc_num, "phaseshift": phase, "harmonic" : harmonic, "amp1" : amp1, "amp2" : amp2}
+       self._hdawg.nodetree.sines[sin_num-1].oscselect(osc_num)
+       self._hdawg.nodetree.sines[sin_num-1].phaseshift(phase)
+       self._hdawg.nodetree.sines[sin_num-1].harmonic(harmonic)
+       self._hdawg.nodetree.sines[sin_num-1].amplitudes[0](amp1)
+       self._hdawg.nodetree.sines[sin_num-1].amplitudes[1](amp2)
+       print("Sine wave set to: ", self._sines["sin"+str(sin_num)])
 
 
     # def get_awg(self):
