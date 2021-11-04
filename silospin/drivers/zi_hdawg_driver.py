@@ -58,8 +58,7 @@ class HdawgDriver:
         self._hdawg = tk.HDAWG(self._connection_settings["hdawg_name"],self._connection_settings["hdawg_id"])
         self._hdawg.setup()
         self._hdawg.connect_device()
-        self._connection_settings["connection_status"] = True
-        ##check if connected: (1) yes ==> move forward, (2) no ==> throw exception
+        self._connection_settings["connection_status"] = self._hdawg.is_connected
         self._oscillator_freq = {"osc1" :self._hdawg.nodetree.oscs[0].freq(), "osc2" :self._hdawg.nodetree.oscs[1].freq(), "osc3" :self._hdawg.nodetree.oscs[2].freq(), "osc4" :self._hdawg.nodetree.oscs[3].freq(), "osc5" :self._hdawg.nodetree.oscs[4].freq(), "osc6" :self._hdawg.nodetree.oscs[5].freq(), "osc7" :self._hdawg.nodetree.oscs[6].freq(), "osc8" :self._hdawg.nodetree.oscs[7].freq(), "osc9" :self._hdawg.nodetree.oscs[8].freq(), "osc10" :self._hdawg.nodetree.oscs[9].freq(), "osc11" :self._hdawg.nodetree.oscs[10].freq(), "osc12" :self._hdawg.nodetree.oscs[11].freq(), "osc13" :self._hdawg.nodetree.oscs[12].freq(), "osc13" :self._hdawg.nodetree.oscs[12].freq(), "osc14" :self._hdawg.nodetree.oscs[13].freq(), "osc15" :self._hdawg.nodetree.oscs[14].freq(), "osc16" :self._hdawg.nodetree.oscs[15].freq()}
         self._sines = {"sin1" : {"osc" : self._hdawg.nodetree.sines[0].oscselect(), "phaseshift": self._hdawg.nodetree.sines[0].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[0].harmonic(), "amp1" : self._hdawg.nodetree.sines[0].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[0].amplitudes[1]}, "sin2" : {"osc" : self._hdawg.nodetree.sines[1].oscselect(), "phaseshift": self._hdawg.nodetree.sines[1].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[1].harmonic(), "amp1" : self._hdawg.nodetree.sines[1].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[1].amplitudes[1]}, "sin3" : {"osc" : self._hdawg.nodetree.sines[2].oscselect(), "phaseshift": self._hdawg.nodetree.sines[2].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[2].harmonic(), "amp1" : self._hdawg.nodetree.sines[2].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[2].amplitudes[1]}, "sin4" : {"osc" : self._hdawg.nodetree.sines[3].oscselect(), "phaseshift": self._hdawg.nodetree.sines[3].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[3].harmonic(), "amp1" : self._hdawg.nodetree.sines[3].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[3].amplitudes[1]}, "sin5" : {"osc" : self._hdawg.nodetree.sines[4].oscselect(), "phaseshift": self._hdawg.nodetree.sines[4].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[4].harmonic(), "amp1" : self._hdawg.nodetree.sines[4].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[4].amplitudes[1]}, "sin6" : {"osc" : self._hdawg.nodetree.sines[5].oscselect(), "phaseshift": self._hdawg.nodetree.sines[5].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[5].harmonic(), "amp1" : self._hdawg.nodetree.sines[5].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[5].amplitudes[1]}, "sin7" : {"osc" : self._hdawg.nodetree.sines[6].oscselect(), "phaseshift": self._hdawg.nodetree.sines[6].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[6].harmonic(), "amp1" : self._hdawg.nodetree.sines[6].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[6].amplitudes[1]}, "sin8" : {"osc" : self._hdawg.nodetree.sines[7].oscselect(), "phaseshift": self._hdawg.nodetree.sines[7].phaseshift(), "harmonic" : self._hdawg.nodetree.sines[0].harmonic(), "amp1" : self._hdawg.nodetree.sines[7].amplitudes[0] , "amp2" :self._hdawg.nodetree.sines[7].amplitudes[1]}}
         self._awgs = {"awg1" : self._hdawg.nodetree.awgs[0], "awg2" : self._hdawg.nodetree.awgs[1], "awg3" : self._hdawg.nodetree.awgs[2], "awg4" : self._hdawg.nodetree.awgs[3]}
@@ -124,32 +123,49 @@ class HdawgDriver:
       except TypeError:
          raise
       try:
-         if osc_num <1 or osc_num >16:
+         if osc_num < 1 or osc_num > 16:
             raise ValueError("'osc_num' should be between 1 and 16.")
       except ValueError:
          raise
 
       return self._oscillator_freq["osc"+str(osc_num)]
 
+    def set_osc_freq(self, osc_num, freq):
+      """
+        Setter function for oscillator frequency.
 
+        Parameters
+        ----------
+        osc_num : int
+            Oscillator number between 1-16.
+        freq : double
+            Oscillator frequency in Hz.
 
-    # def set_osc_freq(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
+        Returns
+        -------
+        None.
+      """
+      try:
+         if type(osc_num) is not int:
+            raise TypeError("'osc_num' should be an integer.")
+      except TypeError:
+         raise
+      try:
+         if osc_num < 1 or osc_num > 16:
+            raise ValueError("'osc_num' should be between 1 and 16.")
+      except ValueError:
+         raise
+
+      try:
+         if type(freq) is not float:
+            raise TypeError("'freq' should be a double.")
+      except TypeError:
+         raise
+
+      self._oscillator_freq["osc"+str(osc_num)] = freq
+      self._hdawg.nodetree.oscs[osc_num-1] = freq
+      print("Oscillator frequency (Hz) set to : ",freq)
+
     # def get_sine(self):
     #  # """
     #  #  Initializes connection with HDAWG instrument via server.
