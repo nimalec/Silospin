@@ -94,7 +94,6 @@ class HdawgDriver:
             raise TypeError("'param' should be a string.")
       except TypeError:
          raise
-
       try:
          if param not in params:
             raise ValueError("'param' must be a connection setting parameters.")
@@ -155,7 +154,6 @@ class HdawgDriver:
             raise ValueError("'osc_num' should be between 1 and 16.")
       except ValueError:
          raise
-
       try:
          if type(freq) is not float:
             raise TypeError("'freq' should be a double.")
@@ -166,22 +164,31 @@ class HdawgDriver:
       self._hdawg.nodetree.oscs[osc_num-1] = freq
       print("Oscillator frequency (Hz) set to : ",freq)
 
-    # def get_sine(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
+    def get_sine(self, sin_num):
+      """
+        Getter function for sines.
+
+        Parameters
+        ----------
+        sin_num : int
+            Sine index number between 1-8.
+
+        Returns
+        -------
+        None.
+      """
+      try:
+         if type(sin_num) is not int:
+            raise TypeError("'sin_num' should be an integer.")
+      except TypeError:
+         raise
+      try:
+         if sin_num < 1 or sin_num > 8:
+            raise ValueError("'sin_num' should be between 1 and 8.")
+      except ValueError:
+         raise
+      return self._sines["sin"+str(sin_num)]
+
     #
     # def set_sine(self):
     #  # """
