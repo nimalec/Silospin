@@ -80,7 +80,8 @@ class HdawgDriver:
 
         Parameters
         ----------
-        Connection setting parameter (str) : must be "hdawg_name" (str), "hdawg_id" (str), "server_host" (str), "server_port" (int), "api_level" (int), "interface" (str), "connection_status" (bool).
+        param : str
+            Connection paramater. Must be "hdawg_name" (str), "hdawg_id" (str), "server_host" (str), "server_port" (int), "api_level" (int), "interface" (str), "connection_status" (bool).
 
         Returns
         -------
@@ -91,8 +92,8 @@ class HdawgDriver:
 
       try:
          if type(param) is not str:
-            raise ValueError("'param' should be a string.")
-      except ValueError:
+            raise TypeError("'param' should be a string.")
+      except TypeError:
          raise
 
       try:
@@ -103,23 +104,35 @@ class HdawgDriver:
 
       return self._connection_settings[param]
 
-    # def get_osc_freq(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
+    def get_osc_freq(self, osc_num):
+      """
+        Getter function for oscillator frequency.
+
+        Parameters
+        ----------
+        osc_num : int
+            Oscillator number between 1-16.
+
+
+        Returns
+        -------
+        Oscillator frequency in Hz (double).
+      """
+      try:
+         if type(osc_num) is not int:
+            raise TypeError("'osc_num' should be an integer.")
+      except TypeError:
+         raise
+      try:
+         if osc_num <1 or osc_num >16:
+            raise ValueError("'osc_num' should be between 1 and 16.")
+      except ValueError:
+         raise
+
+      return self._oscillator_freq["osc"+str(osc_num)]
+
+
+
     # def set_osc_freq(self):
     #  # """
     #  #  Initializes connection with HDAWG instrument via server.
