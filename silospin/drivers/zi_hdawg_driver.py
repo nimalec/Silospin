@@ -287,23 +287,31 @@ class HdawgDriver:
           raise
        return self._awgs["awg"+str(awg_num)]
 
-    #
-    # def get_out_amp(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
+    def get_out_amp(self, awg_num):
+       """
+        Getter function for AWG core amplitudes.
+
+        Parameters
+        ----------
+        awg_num: int
+            Sine index number between 1-4.
+
+        Returns
+        -------
+        List of AWG amplitudes in Volts: [amp1, amp1]. (list)
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
+       except ValueError:
+          raise
+       return [self._output_amps["awg"+str(awg_num)]["out1"], self._output_amps["awg"+str(awg_num)]["out2"]]
+
     #
     # def get_seq(self):
     #  # """
