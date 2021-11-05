@@ -312,23 +312,70 @@ class HdawgDriver:
           raise
        return [self._output_amps["awg"+str(awg_num)]["out1"], self._output_amps["awg"+str(awg_num)]["out2"]]
 
-    #
+    def set_out_amp(self, awg_num, channel_num, amp):
+       """
+        Setter function for AWG core amplitudes.
+
+        Parameters
+        ----------
+        awg_num: int
+            AWG index number between 1-4.
+        channel_num: int
+            Channel index number between 1-2.
+        amp: double
+            Amplitude for corresponding channel.
+
+        Returns
+        -------
+        None.
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
+       except ValueError:
+          raise
+       try:
+          if type(channel_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if channel_num !=1 or channel_num != 2 :
+             raise ValueError("'channel_num' should be 1 or 2.")
+       except ValueError:
+          raise
+       try:
+          if type(amp) is not float:
+             raise TypeError("'amp' should be a float.")
+       except TypeError:
+          raise
+
+       if channel_num == 1:
+          self._output_amps["awg"+str(awg_num)]["out1"] = amp
+          self._awgs["awg"+str(awg_num)].outputs[0].amplitude(amp)
+       else:
+          self._output_amps["awg"+str(awg_num)]["out2"] = amp
+          self._awgs["awg"+str(awg_num)].outputs[1].amplitude(amp)
+
     # def get_seq(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
+    #    """
+    #     Getter function for AWG sequence.
+    #
+    #     Parameters
+    #     ----------
+    #     awg_num: int
+    #         Sine index number between 1-4.
+    #
+    #     Returns
+    #     -------
+    #     List of AWG amplitudes in Volts: [amp1, amp1]. (list)
+    #    """
+    #
     #
     # def set_seq(self):
     #  # """
