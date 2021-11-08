@@ -586,24 +586,24 @@ class HdawgDriver:
           raise
 
        return self._waveforms["awg"+str(awg_num)]
-    #
-    # def get_run_status(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
+
+    #def get_run_status(self):
+     # """
+     #  Initializes connection with HDAWG instrument via server.
+     #
+     #    First...
+     #
+     #    Parameters
+     #    ----------
+     #    additional : str, optional
+     #        More info to be displayed (default is None)
+     #
+     #    Returns
+     #    -------
+     #    None
+     #  """
+     # test = 1
+
     # def compile_core(self):
     #  # """
     #  #  Initializes connection with HDAWG instrument via server.
