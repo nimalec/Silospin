@@ -611,25 +611,35 @@ class HdawgDriver:
        except ValueError:
           raise
 
+       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
        return self._run_status["awg"+str(awg_num)]
 
 
-    # def compile_core(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
+    def compile_core(self, awg_num):
+       """
+        Compiles sequence currently on AWG core.
+
+        Parameters
+        ----------
+        awg_num: int
+            AWG index number between 1-4.
+
+        Returns
+        -------
+        None.
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
+       except ValueError:
+          raise
+       self._hdawg.awgs[awg_num-1].compile()
+       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running 
     #
     # def compile_core_upload_seq(self):
     #  # """
