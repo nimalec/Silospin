@@ -587,22 +587,32 @@ class HdawgDriver:
 
        return self._waveforms["awg"+str(awg_num)]
 
-    #def get_run_status(self):
-     # """
-     #  Initializes connection with HDAWG instrument via server.
-     #
-     #    First...
-     #
-     #    Parameters
-     #    ----------
-     #    additional : str, optional
-     #        More info to be displayed (default is None)
-     #
-     #    Returns
-     #    -------
-     #    None
-     #  """
-     # test = 1
+    def get_run_status(self, awg_num):
+       """
+        Getter function for run status of selected AWG core.
+
+        Parameters
+        ----------
+        awg_num: int
+            AWG index number between 1-4.
+
+        Returns
+        -------
+        Run status for selected AWG core [bool].
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
+       except ValueError:
+          raise
+
+       return self._run_status["awg"+str(awg_num)]
+
 
     # def compile_core(self):
     #  # """
