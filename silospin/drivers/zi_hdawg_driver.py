@@ -281,8 +281,8 @@ class HdawgDriver:
        except TypeError:
           raise
        try:
-          if sin_num < 1 or sin_num > 4:
-             raise ValueError("'sin_num' should be between 1 and 8.")
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
        except ValueError:
           raise
        return self._awgs["awg"+str(awg_num)]
@@ -561,22 +561,31 @@ class HdawgDriver:
     #  #  """
     #  test = 1
     #
-    # def get_waveform(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
+    def get_waveform(self, awg_num):
+       """
+        Getter function for waveforms for specified AWG core in 'simple' status.
+
+        Parameters
+        ----------
+        awg_num: int
+            AWG index number between 1-4.
+
+        Returns
+        -------
+        List of waveforms for AWG core (list of numpy arrays). (list)
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
+       except ValueError:
+          raise
+
+       return self._waveforms["awg"+str(awg_num)]
     #
     # def get_run_status(self):
     #  # """
