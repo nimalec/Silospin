@@ -411,23 +411,20 @@ class HdawgDriver:
     #  #  """
     #  test = 1
     #
-    # def get_clock_status(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
+    def get_clock_status(self):
+       """
+        Gets status of internal clock.
+
+        Parameters
+        ----------
+        None.
+
+        Returns
+        -------
+        Status of internal clock. (str)
+       """
+       return self._hdawg.ref_clock_status()
+
     # def get_out_status(self):
     #  # """
     #  #  Initializes connection with HDAWG instrument via server.
