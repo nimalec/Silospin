@@ -2,6 +2,7 @@
 import zhinst
 import zhinst.utils
 import zhinst.toolkit as tk
+import numpy as np
 
 class HdawgDriver:
     """
@@ -684,91 +685,153 @@ class HdawgDriver:
     #  #  """
     #  test = 1
     #
-    # def queue_waveform(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
-    # def replace_waveform(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
-    # def empty_queue(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
-    # def run_core(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
-    # def stop_core(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
+    def queue_waveform(self, awg_num, wave1, wave2=[], delay=0):
+       """
+        Queues waveforms onto specified AWG cores for 'Simple' or 'Custom' sequences.
+
+        Parameters
+        ----------
+        awg_num: int
+            AWG index number between 1-4.
+        wave1: array or list.
+            A 1D array or list representing.
+        wave2: array or list.
+            A 1D array or list representing.
+        delay: float
+            Delay of queued sequences with respect to time origin.
+
+        Returns
+        -------
+        None.
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
+       except ValueError:
+          raise
+
+       self._hdawg.awgs[awg_num-1].queue_waveform(wave1, wave2, delay)
+       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+
+    def replace_waveform(self, awg_num, wave1, wave2=[], delay=0):
+       """
+        Replaces waveforms for specified AWG core for 'Simple' or 'Custom' sequences.
+
+        Parameters
+        ----------
+        awg_num: int
+            AWG index number between 1-4.
+        wave1: array or list.
+            A 1D array or list representing.
+        wave2: array or list.
+            A 1D array or list representing.
+        delay: float
+            Delay of queued sequences with respect to time origin.
+
+        Returns
+        -------
+        None.
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
+       except ValueError:
+          raise
+
+       self._hdawg.awgs[awg_num-1].replace_waveform(wave1, wave2, delay)
+       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+
+    def empty_queue(self, awg_num):
+       """
+        Resets queue for current AWG core.
+
+        Parameters
+        ----------
+        awg_num: int
+            AWG index number between 1-4.
+
+        Returns
+        -------
+        None.
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
+       except ValueError:
+          raise
+      self._hdawg.awgs[awg_num-1].reset_queue()
+      self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+
+
+    def run_core(self, awg_num):
+       """
+        Resets queue for current AWG core.
+
+        Parameters
+        ----------
+        awg_num: int
+            AWG index number between 1-4.
+
+        Returns
+        -------
+        None.
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
+       except ValueError:
+          raise
+       self._hdawg.awgs[awg_num-1].run()
+       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+
+
+    def stop_core(self, awg_num):
+       """
+        Stops running for current AWG core.
+
+        Parameters
+        ----------
+        awg_num: int
+            AWG index number between 1-4.
+
+        Returns
+        -------
+        None.
+       """
+       try:
+          if type(awg_num) is not int:
+             raise TypeError("'awg_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if awg_num < 1 or awg_num > 4:
+             raise ValueError("'awg_num' should be between 1 and 4.")
+       except ValueError:
+          raise
+       self._hdawg.awgs[awg_num-1].stop()
+       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+
+
     # def upload_waveform(self):
     #  # """
     #  #  Initializes connection with HDAWG instrument via server.
