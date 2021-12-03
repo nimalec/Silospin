@@ -774,8 +774,8 @@ class HdawgDriver:
              raise ValueError("'awg_num' should be between 1 and 4.")
        except ValueError:
           raise
-      self._hdawg.awgs[awg_num-1].reset_queue()
-      self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+       self._hdawg.awgs[awg_num-1].reset_queue()
+       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
 
     def run_core(self, awg_num):
@@ -832,23 +832,31 @@ class HdawgDriver:
        self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
 
-    # def upload_waveform(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
+    def upload_waveforms(self,awg_num):
+      """
+      Uploads waveforms currently complied and on the queue.
+
+      Parameters
+      ----------
+      awg_num: int
+          AWG index number between 1-4.
+
+      Returns
+      -------
+        None
+      """
+      try:
+         if type(awg_num) is not int:
+            raise TypeError("'awg_num' should be an integer.")
+      except TypeError:
+         raise
+      try:
+         if awg_num < 1 or awg_num > 4:
+            raise ValueError("'awg_num' should be between 1 and 4.")
+      except ValueError:
+         raise
+      self._hdawg.awgs[awg_num-1].upload_waveforms()
+
     # def wait_core(self):
     #  # """
     #  #  Initializes connection with HDAWG instrument via server.
