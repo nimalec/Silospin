@@ -642,7 +642,7 @@ class HdawgDriver:
        self._hdawg.awgs[awg_num-1].compile()
        self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
-    def compile_core_upload_seq(self, awg):
+    def compile_core_upload_seq(self, awg_num):
        """
         Compiles and uploads sequence currently on AWG core at once.
 
