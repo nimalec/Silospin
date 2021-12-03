@@ -858,19 +858,42 @@ class HdawgDriver:
          raise
       self._hdawg.awgs[awg_num-1].upload_waveforms()
 
-    # def wait_core(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
+    def wait_core(self,awg_num,timeout=10,sleep_time=0.005):
+      """
+      Waits until AWG core is finished.
+
+      Parameters
+      ----------
+      awg_num: int
+          AWG index number between 1-4.
+      timeout: float
+          Max wait time in seconds (default set to 10 seconds).
+      sleep_time: float
+          Time to wait between requesting AWG state in seconds (default set to 0.005 seconds).
+
+      Returns
+      -------
+        None
+      """
+      try:
+         if type(awg_num) is not int:
+            raise TypeError("'awg_num' should be an integer.")
+      except TypeError:
+         raise
+      try:
+         if awg_num < 1 or awg_num > 4:
+            raise ValueError("'awg_num' should be between 1 and 4.")
+      except ValueError:
+         raise
+      try:
+         if type(timeout) is not float:
+            raise TypeError("'timeout' should be a float.")
+      except TypeError:
+         raise
+      try:
+         if type(sleep_time) is not float:
+            raise TypeError("'sleep_time' should be a float.")
+      except TypeError:
+         raise
+
+      self._hdawg.awgs[awg_num-1].wait_done(timeout,sleep_time)
