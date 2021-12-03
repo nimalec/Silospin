@@ -715,6 +715,7 @@ class HdawgDriver:
        except ValueError:
           raise
 
+       self._hdawg.awgs[awg_num-1].set_sequence_params(sequence_type="Simple")
        self._hdawg.awgs[awg_num-1].queue_waveform(wave1, wave2, delay)
        self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
