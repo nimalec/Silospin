@@ -4,6 +4,11 @@ import zhinst.utils
 import zhinst.toolkit as tk
 import numpy as np
 
+
+
+#class MFLIDAQ:
+#class MFLISWEEPER:
+
 class MFLI:
 
     def __init__(self, dev_id, name = "mfli_1", server_host = "localhost", server_port = 8004, api_level = 6, interface = "1GbE"):
@@ -19,7 +24,9 @@ class MFLI:
         self._mfli.setup()
         self._mfli.connect_device()
         self._connection_settings["connection_status"] = self._mfli.is_connected
+
         self._oscillator_freq = self._mfli.nodetree.osc.freq()
+
         self._demod_channel = [self._mfli.demods[0].adcselect(), self._mfli.demods[1].adcselect()]
         self._filter_order = [self._mfli.demods[0].order(), self._mfli.demods[1].order()]
         self._sample_rate = [self._mfli.demods[0].rate(), self._mfli.demods[1].rate()]
@@ -40,13 +47,15 @@ class MFLI:
         "2": {"level": self._mfli.nodetree.triggers.in_[1].level(), "autothreshold": self._mfli.nodetree.triggers.in_[1].autothreshold()}}
         self._trigger_out = {"1": {"source": self._mfli.nodetree.triggers.out[0].source(), "pulsewidth": self._mfli.nodetree.triggers.out[0].pulsewidth()},
         "2": {"source": self._mfli.nodetree.triggers.out[1].source(), "pulsewidth": self._mfli.nodetree.triggers.out[1].pulsewidth()}}
+        self._li_channels = {"auxin_1": self._mfli.nodetree.auxin.values[0](), "auxin_2": , "auxout_1": , "auxout_2":   , "auxout_3": ,  "auxout_4": ,
+        "sigin": , "sigout": , "currin": }
 
         self._auxin = {"auxin_1": self._mfli.nodetree.auxin.values[0](), "auxin_2": self._mfli.nodetree.auxin.values[1]()}
         self._auxout = {"auxout_1": self._mfli.nodetree.auxouts[0].value(), "auxout_2": self._mfli.nodetree.auxouts[1].value(),
         "auxout_3": self._mfli.nodetree.auxouts[2].value(), "auxout_4": self._mfli.nodetree.auxouts[3].value()}
         self._sigin = {"diff": self._mfli.nodetree.sigin.diff(), "ac": self._mfli.nodetree.sigin.ac(), "imp": self._mfli.nodetree.sigin.imp50(), "float": self._mfli.nodetree.sigin.float(),  "on": self._mfli.nodetree.sigin.on(), "gain":  self._mfli.nodetree.sigin.range(), "scale": self._mfli.nodetree.sigin.scaling()}
         self._sigout = {"imp": self._mfli.nodetree.sigout.imp50(), "diff": self._mfli.nodetree.sigout.diff() , "gain": self._mfli.nodetree.sigout.range(), "over": self._mfli.nodetree.sigout.over() , "offset": self._mfli.nodetree.sigout.offset() , "add":  self._mfli.nodetree.sigout.add() ,  "enable": self._mfli.nodetree.sigout.enable() , "amp": self._mfli.nodetree.sigout.amplitude()}
-        self._currin = {"gain": self._mfli.nodetree.sigout.range(), "float": self._mfli.nodetree.sigout.float(), "on": self._mfli.nodetree.sigout.on(), "scale": self._mfli.nodetree.sigout.scale()}
+        self._currin = {"gain": self._mfli.nodetree.currin.range(), "float": self._mfli.nodetree.currin.float(), "on": self._mfli.nodetree.currin.on(), "scale": self._mfli.nodetree.currin.scale()}
 
 
     # def connect_lockin(self)
