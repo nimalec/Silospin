@@ -142,14 +142,15 @@ class MFLI:
                   self._auxin_channels["auxin_2"]["n_av"] = value
 
           elif setting == "sigin":
-              sigin_settings = {"ac_coupling", "autorange", "diff", "float", "imp50", "max", "min", "on", "scaling", "trigger"}
+              sigin_settings = {"ac", "autorange", "diff", "float", "imp50", "max", "min", "on", "scaling", "trigger"}
               try:
                   if setting is not in sigin_settings:
                       raise ValueError("setting not in sigin settings")
               except ValueError:
                   raise
+              exec("self._mfli.nodetree.sigin."+setting+"("+str(value)+")) 
 
-             #self._mfli.nodetree.sigin.(value)
+
 
 
 
