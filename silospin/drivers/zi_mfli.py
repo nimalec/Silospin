@@ -48,7 +48,7 @@ class MFLI:
         self._trigger_out = {"1": {"source": self._mfli.nodetree.triggers.out[0].source(), "pulsewidth": self._mfli.nodetree.triggers.out[0].pulsewidth()},
         "2": {"source": self._mfli.nodetree.triggers.out[1].source(), "pulsewidth": self._mfli.nodetree.triggers.out[1].pulsewidth()}}
         self._li_channels = {"auxin_1": self._mfli.nodetree.auxin.values[0](), "auxin_2": , "auxout_1": , "auxout_2":   , "auxout_3": ,  "auxout_4": ,
-        "sigin": , "sigout": , "currin": }
+        "sigin": , "sigout": , "csurrin": }
 
         self._auxin = {"auxin_1": self._mfli.nodetree.auxin.values[0](), "auxin_2": self._mfli.nodetree.auxin.values[1]()}
         self._auxout = {"auxout_1": self._mfli.nodetree.auxouts[0].value(), "auxout_2": self._mfli.nodetree.auxouts[1].value(),
@@ -65,3 +65,4 @@ class MFLI:
     # def output_phase(self)
     # def output_impedance(self)
     # def data_acquisition(self):
+    #def start_measurement(self): 

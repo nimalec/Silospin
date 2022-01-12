@@ -78,7 +78,7 @@ class MFLI:
          ,"rate":  self._mfli.nodetree.demods[0].rate()
          ,"sample": self._mfli.nodetree.demods[0].sample()
         ,"sinc":  self._mfli.nodetree.demods[0].sinc()
-        ,"timeconstant": self._mfli.nodetree.demods[0].timeconstant() } ,
+        ,"timeconstant": self._mfli.nodetree.demods[0].timeconstant()},
         "chan_2": {"adcselect": self._mfli.nodetree.demods[1].adcselect(),
         "bypass": self._mfli.nodetree.demods[1].bypass(),
         "freq": self._mfli.nodetree.demods[1].freq(),
@@ -103,9 +103,81 @@ class MFLI:
 
         self._daq =  self._mfli.daq() #implement daq from previously implemented class
         self._sweeper = self._mfli.sweeper() #implement daq from previously implemented class
-        #self._threshold_settings = { }
+        #self._threshold_settings = {}
 
-    #def connect_device(self):
+
+      def connect_device(self):
+          self._mfli = tk.MFLI(self._connection_settings["li_name"], self._connection_settings["li_id"])
+          self._mfli.setup()
+          self._mfli.connect_device()
+          self._connection_settings["connection_status"] = self._mfli.is_connected
+
+      def set_input_channel(self, input_channel, setting, value):
+          input_channels = {"auxin_1", "auxin_2", "sigin", "currin"}
+          try:
+              if type(setting) is not str:
+                  raise TypeError("'setting' should be a string.")
+          except TypeError:
+              raise
+
+          try:
+               if setting not in input_channels:
+                    raise ValueError("'setting' must be in input_channels.")
+          except ValueError:
+              raise
+
+          if setting == "auxin_1" or setting == "auxin_2":
+              try:
+                  if setting is not "n_av":
+                      raise ValueError("'param' must be n_av")
+              except ValueError:
+                  raise
+
+              if setting == "auxin_1":
+                  self._mfli.nodetree.auxin.averaging[0](value)
+                  self._auxin_channels["auxin_1"]["n_av"] = value
+
+              else:
+                  self._mfli.nodetree.auxin.averaging[1](value)
+                  self._auxin_channels["auxin_2"]["n_av"] = value
+
+          elif setting == "sigin":
+              sigin_settings = {"ac_coupling", "autorange", "diff", "float", "imp50", "max", "min", "on", "scaling", "trigger"}
+              try:
+                  if setting is not in sigin_settings:
+                      raise ValueError("setting not in sigin settings")
+              except ValueError:
+                  raise
+
+             #self._mfli.nodetree.sigin.(value)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # def connect_device(self):
+    #     params = {"hdawg_name", "hdawg_id",  "server_host", "server_port",  "api_level", "interface",  "connection_status"}
+    #     try:
+    #         if type(param) is not str:
+    #             raise TypeError("'param' should be a string.")
+    #     except TypeError:
+    #         raise
+    #     try:
+    #          if param not in params:
+    #               raise ValueError("'param' must be a connection setting parameters.")
+    #     except ValueError:
+    #         raise
+    #     return self._connection_settings[param]
+
     #def set_input_channel(self):
     #def set_output_channel_setting(self):
     #def get_input_channel(self):
@@ -116,4 +188,11 @@ class MFLI:
     #def get_modulator_setting(self):
     #def set_trigger(self):
     #def get_trigger(self):
-     
+    #def set_sweeper(self):
+    #def get_sweeper(self):
+    #def set_daq(self):
+    #def get_daq(self):
+    #def set_filter(self):
+    #def get_filter(self):
+    #def start_measurement(self):
+    #def stop_measurement(self):
