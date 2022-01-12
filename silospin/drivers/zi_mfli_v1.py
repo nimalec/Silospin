@@ -79,27 +79,41 @@ class MFLI:
          ,"sample": self._mfli.nodetree.demods[0].sample()
         ,"sinc":  self._mfli.nodetree.demods[0].sinc()
         ,"timeconstant": self._mfli.nodetree.demods[0].timeconstant() } ,
-        "chan_2": {"adcselect": self._mfli.nodetree.demods[0].adcselect(),
-        "bypass": self._mfli.nodetree.demods[0].bypass(),
-        "freq": self._mfli.nodetree.demods[0].freq(),
-        "harmonic": self._mfli.nodetree.demods[0].harmonic()
-         ,"order": self._mfli.nodetree.demods[0].order()
-        ,"osc_sel": self._mfli.nodetree.demods[0].oscselect()
-        ,"phaseadjust": self._mfli.nodetree.demods[0].phaseadjust()
-        ,"phaseshift":  self._mfli.nodetree.demods[0].phaseshift()
-        , "rate":  self._mfli.nodetree.demods[0].rate()
-        , "sample": self._mfli.nodetree.demods[0].sample()
-        , "sinc":  self._mfli.nodetree.demods[0].sinc()
-        , "timeconstant": self._mfli.nodetree.demods[0].timeconstant()}}
+        "chan_2": {"adcselect": self._mfli.nodetree.demods[1].adcselect(),
+        "bypass": self._mfli.nodetree.demods[1].bypass(),
+        "freq": self._mfli.nodetree.demods[1].freq(),
+        "harmonic": self._mfli.nodetree.demods[1].harmonic()
+         ,"order": self._mfli.nodetree.demods[1].order()
+        ,"osc_sel": self._mfli.nodetree.demods[1].oscselect()
+        ,"phaseadjust": self._mfli.nodetree.demods[1].phaseadjust()
+        ,"phaseshift":  self._mfli.nodetree.demods[1].phaseshift()
+        , "rate":  self._mfli.nodetree.demods[1].rate()
+        , "sample": self._mfli.nodetree.demods[1].sample()
+        , "sinc":  self._mfli.nodetree.demods[1].sinc()
+        , "timeconstant": self._mfli.nodetree.demods[1].timeconstant()}}
 
         self._extref_settings = {"enable": self._mfli.nodetree.extref.enable(), "automode": self._mfli.nodetree.extref.automode(),
          "adcselect": self._mfli.nodetree.extref.adcselect(), "demodselect": self._mfli.nodetree.extref.demodselect(),
          "oscselect": self._mfli.nodetree.extref.oscselect(), "locked": self._mfli.nodetree.extref.locked()}
-
 
         self._oscillator_freq = self._mfli.nodetree.osc.freq()
         self._trigger_settings = {"in":  {"1": {"auto_thresh": self._mfli.nodetree.triggers.in_[0].autothreshold(), "level": self._mfli.nodetree.triggers.in_[0].level()},
         "2": {"auto_thresh": self._mfli.nodetree.triggers.in_[1].autothreshold() , "level": self._mfli.nodetree.triggers.in_[1].level()}}, "out": {"1": {"pulse_width": self._mfli.nodetree.triggers.out[0].pulsewidth(), "source":self._mfli.nodetree.triggers.out[0].source()},
         "2": {"pulse_width": self._mfli.nodetree.triggers.out[1].pulsewidth(), "source":self._mfli.nodetree.triggers.out[1].source()}}}
 
+        self._daq =  self._mfli.daq() #implement daq from previously implemented class
+        self._sweeper = self._mfli.sweeper() #implement daq from previously implemented class
         #self._threshold_settings = { }
+
+    #def connect_device(self):
+    #def set_input_channel(self):
+    #def set_output_channel_setting(self):
+    #def get_input_channel(self):
+    #def get_output_channel_setting(self):
+    #def set_demodulator(self):
+    #def get_demodulator_setting(self):
+    #def set_modulator(self):
+    #def get_modulator_setting(self):
+    #def set_trigger(self):
+    #def get_trigger(self):
+     
