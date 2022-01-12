@@ -39,7 +39,7 @@ class MFLI:
         "output_type": self._mfli.nodetree.auxouts[3].outputselect(), "pre_off":   self._mfli.nodetree.auxouts[3].preoffset(),
         "scale":  self._mfli.nodetree.auxouts[3].scale(), "v_value" :  self._mfli.nodetree.auxouts[3].value()} }
 
-        self._sigin_channel = {"ac_couple": self._mfli.nodetree.sigin.ac(),
+        self._sigin_channel = {"ac": self._mfli.nodetree.sigin.ac(),
         "autorange": self._mfli.nodetree.sigin.autorange()
         ,"diff": self._mfli.nodetree.sigin.autorange()
         ,"float": self._mfli.nodetree.sigin.float(),
@@ -148,42 +148,53 @@ class MFLI:
                       raise ValueError("setting not in sigin settings")
               except ValueError:
                   raise
-              exec("self._mfli.nodetree.sigin."+setting+"("+str(value)+")) 
+              exec("self._mfli.nodetree.sigin."+setting+"("+str(value)+")")
+              self._sigin_channel[setting] = value
+
+          else:
+              currin_settings = {"autorange", "float", "max", "min",  "on", "range"}
+              try:
+                  if setting is not in currin_settings:
+                      raise ValueError("setting not in currin settings")
+              except ValueError:
+                  raise
+              exec("self._mfli.nodetree.currin."+setting+"("+str(value)+")")
+              self._currin_channel[setting] = value
+
+      def get_input_channel_value(self, input_channel, setting):
+          ##check this function again
+          input_channels = {"auxin_1", "auxin_2", "sigin", "currin"}
+          try:
+              if type(setting) is not str:
+                  raise TypeError("'setting' should be a string.")
+          except TypeError:
+              raise
+
+          try:
+               if setting not in input_channels:
+                    raise ValueError("'setting' must be in input_channels.")
+          except ValueError:
+              raise
+
+          if setting == "auxin_1":
+              value = self._mfli.nodetree.auxin.values[0]()
+          elif setting == "auxin_2":
+              value = self._mfli.nodetree.auxin.values[0]()
+          elif setting = "sigin":
+              value = self._mfli.nodetree.sigin
+          else:
+              value = self._mfli.nodetree.currin
+        return value
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # def connect_device(self):
-    #     params = {"hdawg_name", "hdawg_id",  "server_host", "server_port",  "api_level", "interface",  "connection_status"}
-    #     try:
-    #         if type(param) is not str:
-    #             raise TypeError("'param' should be a string.")
-    #     except TypeError:
-    #         raise
-    #     try:
-    #          if param not in params:
-    #               raise ValueError("'param' must be a connection setting parameters.")
-    #     except ValueError:
-    #         raise
-    #     return self._connection_settings[param]
-
-    #def set_input_channel(self):
     #def set_output_channel_setting(self):
+
     #def get_input_channel(self):
+
     #def get_output_channel_setting(self):
+
     #def set_demodulator(self):
+
     #def get_demodulator_setting(self):
     #def set_modulator(self):
     #def get_modulator_setting(self):
