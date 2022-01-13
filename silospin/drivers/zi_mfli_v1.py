@@ -279,9 +279,9 @@ class MFLI:
             raise
 
         if channel == 1:
-            exec("self._mfli.nodetree.auxouts[0]."+demod_setting+"("+str(value)+")")
+            exec("self._mfli.nodetree.demods[0]."+demod_setting+"("+str(value)+")")
         else:
-            exec("self._mfli.nodetree.auxouts[1]."+demod_setting+"("+str(value)+")")
+            exec("self._mfli.nodetree.demods[1]."+demod_setting+"("+str(value)+")")
 
    def get_demodulator_setting(self, channel, demod_setting):
        settings = {"adcselect", "bypass", "freq", "harmonic", "order", "osc_sel", "phaseadjust", "phaseshift", "rate", "sample", "sinc", "timeconstant"}
@@ -305,6 +305,14 @@ class MFLI:
                raise ValueError("'output_channel' must be in output_channels.")
        except ValueError:
            raise
+
+       if channel == 1:
+           exec("value = self._mfli.nodetree.demods[0]."+demod_setting+"("+str(value)+")")
+       else:
+           exec("value = self._mfli.nodetree.demods[2]."+demod_setting+"("+str(value)+")")
+       return value
+
+
 
        #do something
 
