@@ -309,18 +309,47 @@ class MFLI:
        if channel == 1:
            exec("value = self._mfli.nodetree.demods[0]."+demod_setting+"("+str(value)+")")
        else:
-           exec("value = self._mfli.nodetree.demods[2]."+demod_setting+"("+str(value)+")")
+           exec("value = self._mfli.nodetree.demods[1]."+demod_setting+"("+str(value)+")")
        return value
 
+   def set_trigger(self, channel, in_out, trig_setting):
+       ## in_out ==> input or output trigger
+       ## channel == > 0 or 1
+       ## trig_setting ==> 0: autothreshold , level. 1: pulse_width, source
+       try:
+           if channel != 1 or channel != 2:
+               raise ValueError("'channel' should be an integer.")
+       except ValueError:
+           raise
+       try:
+           if in_out != "in" or in_out != "out" :
+               raise ValueError("'in_out' should be 'in' or 'out'.")
+       except ValueError:
+           raise
+       try:
+           if trig_setting is not in {"autothreshold", "level", "pulse_width", "source"}:
+               raise ValueError("'trig_setting' should be autothreshold , level, pulse_width, source")
+       except ValueError:
+           raise
 
 
-       #do something
 
 
 
-    #def set_modulator(self):
-    #def get_modulator_setting(self):
-    #def set_trigger(self):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     #def get_trigger(self):
     #def set_sweeper(self):
     #def get_sweeper(self):
