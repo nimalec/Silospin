@@ -312,10 +312,7 @@ class MFLI:
            exec("value = self._mfli.nodetree.demods[1]."+demod_setting+"("+str(value)+")")
        return value
 
-   def set_trigger(self, channel, in_out, trig_setting):
-       ## in_out ==> input or output trigger
-       ## channel == > 0 or 1
-       ## trig_setting ==> 0: autothreshold , level. 1: pulse_width, source
+   def set_trigger(self, channel, in_out, trig_setting, value):
        try:
            if channel != 1 or channel != 2:
                raise ValueError("'channel' should be an integer.")
@@ -332,25 +329,42 @@ class MFLI:
        except ValueError:
            raise
 
+       if in_out == "in" and channel == 1:
+           exec("self._mfli.nodetree.triggers.in_[0]."+trig_setting+".("+str(value)+")")
+       elif in_out == "in" and channel == 2:
+           exec("self._mfli.nodetree.triggers.in_[1]."+trig_setting+".("+str(value)+")")
+       elif in_out == "out" and channel == 1:
+           exec("self._mfli.nodetree.triggers.out[0]."+trig_setting+".("+str(value)+")")
+       else:
+           exec("self._mfli.nodetree.triggers.out[1]."+trig_setting+".("+str(value)+")")
 
+    def get_trigger(self, channel, in_out, trig_setting):
+        try:
+            if channel != 1 or channel != 2:
+                raise ValueError("'channel' should be an integer.")
+        except ValueError:
+            raise
+        try:
+            if in_out != "in" or in_out != "out" :
+                raise ValueError("'in_out' should be 'in' or 'out'.")
+        except ValueError:
+            raise
+        try:
+            if trig_setting is not in {"autothreshold", "level", "pulse_width", "source"}:
+                raise ValueError("'trig_setting' should be autothreshold , level, pulse_width, source")
+        except ValueError:
+            raise
 
+        if in_out == "in" and channel == 1:
+            exec("value = self._mfli.nodetree.triggers.in_[0]."+trig_setting+".()")
+        elif in_out == "in" and channel == 2:
+            exec("value = self._mfli.nodetree.triggers.in_[1]."+trig_setting+".()")
+        elif in_out == "out" and channel == 1:
+            exec("value = self._mfli.nodetree.triggers.out[0]."+trig_setting+".()")
+        else:
+            exec("value = self._mfli.nodetree.triggers.out[1]."+trig_setting+".()")
+        return value
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    #def get_trigger(self):
     #def set_sweeper(self):
     #def get_sweeper(self):
     #def set_daq(self):
