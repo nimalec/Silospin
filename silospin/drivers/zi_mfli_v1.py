@@ -115,14 +115,14 @@ class MFLI:
       def set_input_channel(self, input_channel, setting, value):
           input_channels = {"auxin_1", "auxin_2", "sigin", "currin"}
           try:
-              if type(setting) is not str:
-                  raise TypeError("'setting' should be a string.")
+              if type(input_channel) is not str:
+                  raise TypeError("'input_channel' should be a string.")
           except TypeError:
               raise
 
           try:
-               if setting not in input_channels:
-                    raise ValueError("'setting' must be in input_channels.")
+               if input_channel not in input_channels:
+                    raise ValueError("'input_channel' must be in input_channels.")
           except ValueError:
               raise
 
@@ -171,23 +171,59 @@ class MFLI:
               raise
 
           try:
-               if setting not in input_channels:
+               if input_channel not in input_channels:
                     raise ValueError("'setting' must be in input_channels.")
           except ValueError:
               raise
 
           if setting == "auxin_1":
-              value = self._mfli.nodetree.auxin.values[0]()
+              value = self._mfli.nodetree.auxin[0].values()
           elif setting == "auxin_2":
-              value = self._mfli.nodetree.auxin.values[0]()
+              value = self._mfli.nodetree.auxin[1].values()
           elif setting = "sigin":
               value = self._mfli.nodetree.sigin
           else:
               value = self._mfli.nodetree.currin
         return value
 
+    def set_output_channel_setting(self, output_channel, setting, value):
+        output_channels = {"auxout_1", "auxout_2", "auxout_3", "auxout_4", "sigout"}
+        try:
+            if type(output_channel) is not str:
+                raise TypeError("'output_channel' should be a string.")
+        except TypeError:
+            raise
+        try:
+            if type(output_channel) is not str:
+                raise TypeError("'output_channel' should be a string.")
+        except TypeError:
+            raise
+        try:
+            if output_channel not in output_channels:
+                raise ValueError("'output_channel' must be in output_channels.")
+        except ValueError:
+            raise
 
-    #def set_output_channel_setting(self):
+        if output_channel == "auxout_1" or output_channel == "auxout_2" or output_channel == "auxout_3" or output_channel == "auxout_4":
+            auxout_settings = {"demodselect", "limitlower", "limitupper", "offset", "outputselect", "preoffset", "scale"}
+            try:
+                if input_channel not in output_channels:
+                    raise ValueError("'output_channel' must be in output_channels.")
+            except ValueError:
+                raise
+            if output_channel == "auxout_1":
+                exec("self._mfli.nodetree.auxouts[0]."+setting+"("+str(value)+")")
+
+            elif output_channel == "auxout_2":
+                exec("self._mfli.nodetree.auxouts[1]."+setting+"("+str(value)+")")
+
+            elif output_channel == "auxout_3":
+                exec("self._mfli.nodetree.auxouts[2]."+setting+"("+str(value)+")")
+            else:
+                exec("self._mfli.nodetree.auxouts[3]."+setting+"("+str(value)+")")
+        else:
+            sigout_settings = {"add", "autorange", "diff", "imp50", "offset", "on", "range", "amplitude", "enables"}
+            exec("self._mfli.nodetree.sigouts."+setting+"("+str(value)+")")
 
     #def get_input_channel(self):
 
