@@ -242,6 +242,7 @@ class MFLI:
                 raise ValueError("'output_channel' must be in output_channels.")
         except ValueError:
             raise
+
         if output_channel == "auxout_1":
             value = self._mfli.nodetree.auxouts[0].value()
         elif output_channel == "auxout_2":
@@ -254,11 +255,61 @@ class MFLI:
             value = self._mfli.nodetree.sigouts
         return value
 
-    #def get_output_channel_setting(self):
+    def set_demodulator(self, channel, demod_setting, value):
+        demod_settings = {"adcselect", "bypass", "freq", "harmonic", "order", "osc_sel", "phaseadjust", "phaseshift", "rate", "sample", "sinc", "timeconstant"}
+        try:
+            if type(channel) is not int:
+                raise TypeError("'channel' should be an integer.")
+        except TypeError:
+            raise
+        try:
+            if channel != 1 or channel != 2:
+                raise ValueError("'channel' should be an integer.")
+        except ValueError:
+            raise
+        try:
+            if type(demod_setting) is not str:
+                raise TypeError("'demod_setting' should be a string.")
+        except TypeError:
+            raise
+        try:
+            if demod_setting not in demod_settings:
+                raise ValueError("'output_channel' must be in output_channels.")
+        except ValueError:
+            raise
 
-    #def set_demodulator(self):
+        if channel == 1:
+            exec("self._mfli.nodetree.auxouts[0]."+demod_setting+"("+str(value)+")")
+        else:
+            exec("self._mfli.nodetree.auxouts[1]."+demod_setting+"("+str(value)+")")
 
-    #def get_demodulator_setting(self):
+   def get_demodulator_setting(self, channel, demod_setting):
+       settings = {"adcselect", "bypass", "freq", "harmonic", "order", "osc_sel", "phaseadjust", "phaseshift", "rate", "sample", "sinc", "timeconstant"}
+       try:
+           if type(channel) is not int:
+               raise TypeError("'channel' should be an integer.")
+       except TypeError:
+           raise
+       try:
+           if channel != 1 or channel != 2:
+               raise ValueError("'channel' should be an integer.")
+       except ValueError:
+           raise
+       try:
+           if type(demod_setting) is not str:
+               raise TypeError("'demod_setting' should be a string.")
+       except TypeError:
+           raise
+       try:
+           if demod_setting not in demod_settings:
+               raise ValueError("'output_channel' must be in output_channels.")
+       except ValueError:
+           raise
+
+       #do something
+
+
+
     #def set_modulator(self):
     #def get_modulator_setting(self):
     #def set_trigger(self):
@@ -267,7 +318,5 @@ class MFLI:
     #def get_sweeper(self):
     #def set_daq(self):
     #def get_daq(self):
-    #def set_filter(self):
-    #def get_filter(self):
     #def start_measurement(self):
     #def stop_measurement(self):
