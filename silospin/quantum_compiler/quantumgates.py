@@ -42,7 +42,7 @@ class SingleQubitGate:
             pass
         else:
             pass
-        self._pulse_envelope
+        self._pulse_envelope = wave 
 
 
     #def get_pulse_envelope(self)
