@@ -58,11 +58,12 @@ class MFLI:
         self._currin = {"gain": self._mfli.nodetree.currin.range(), "float": self._mfli.nodetree.currin.float(), "on": self._mfli.nodetree.currin.on(), "scale": self._mfli.nodetree.currin.scale()}
 
 
-    # def connect_lockin(self)
+    # def connect_lockin(self):
     # def frequency_sweep(self, freq_range)
     # def amplitude_sweep(self, amp_range)
-    # def output_amplitude(self)
-    # def output_phase(self)
-    # def output_impedance(self)
+    # def
+    # def output_amplitude(self):
+    # def output_phase(self):
+    # def output_impedance(self):
     # def data_acquisition(self):
-    #def start_measurement(self): 
+    #def start_measurement(self):
