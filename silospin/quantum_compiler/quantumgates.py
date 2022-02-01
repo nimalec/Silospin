@@ -5,14 +5,13 @@ from silospin.drivers.math.math_helpers import gauss, rectangular
 class SingleQubitGate:
     ##hdawg = HdawgDriver(dev_id = "1234")
     ## X_gate = SingleQubitGate(gate_type="x", pulse_type="rectangular", awg=hdawg)
-    ## X_gate.
-    ##
-    ##
-    ##
-    def __init__(self, gate_type, pulse_type, awg=None, I_channel=1, I_osc=1, I_mod_channel="sin11", mod_freq=10e6, Q_channel=2, Q_osc=2, Q_mod_channel="sin22", IQ_offset=0):
+    ## X_gate.make_queue_pulse()
+    ## X_gate.play_pulse()
+
+    def __init__(self, gate_type, pulse_type="rectangular", awg=None, I_channel=1, I_osc=1, I_mod_channel="sin11", mod_freq=10e6, Q_channel=2, Q_osc=2, Q_mod_channel="sin22", IQ_offset=0):
         ##set default values for all input parameters...
-        gates = {"x", "y", "wait"}
-        pulses = {"rectangular", "gaussian", "chirped", "adiabatic"}
+        gates = {"x", "y", "h", "wait"}
+        pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
         ## ensure connection with AWG
 
         try:
@@ -21,22 +20,29 @@ class SingleQubitGate:
         except TypeError:
             raise
         try:
+            if type(gate_type) not in gates:
+                raise ValueError("'gate_type' should be 'x', 'y', or 'wait'.")
+        except ValueError:
+            raise
+
+        try:
             if type(pulse_type) is not str:
                 raise TypeError("'pulse_type' should be a string.")
         except TypeError:
             raise
         try:
             if type(gate_type) not in gates:
-                raise TypeError("'gate_type' should be 'x', 'y', or 'wait'.")
-        except TypeError:
+                raise ValueError("'pulse_type' should be 'rectangular', 'gaussian', 'chirped', 'adiabatic', 'wait'.")
+        except ValueError:
             raise
 
-        if pulse_type == "rectangular":
-            envelope = rectangular(npoints, amp)
-        elif pulse_type == "gaussian":
-            envelope = gauss(x, amp=amplitude, mu=t_p/2, sig=sigma)
+        if gate_type == "x":
+            I_phase = 0
+            Q_phase =
+
+        elif gate_type == "y":
+
         else:
-            pass
 
         self._gate_type = gate_type
         self._pulse_type = pulse_type
@@ -58,7 +64,8 @@ class SingleQubitGate:
             pass
         self._pulse_envelope = wave
 
-    #def get_pulse_envelope(self)
+    def get_pulse_envelope(self):
+        return make_pulse
 #    def make_pulse(self, gate_type):
         ##add assertiion that pulse envelope exists
     #def get_pulse(self):
