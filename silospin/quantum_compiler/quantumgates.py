@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from silospin.drivers import zi_mfli_v1
 from silospin.drivers.math.math_helpers import gauss, rectangular
 
@@ -8,11 +9,11 @@ class SingleQubitGate:
     ## X_gate.make_queue_pulse()
     ## X_gate.play_pulse()
 
-    def __init__(self, gate_type, pulse_type="rectangular", awg=None, I_channel=1, I_osc=1, I_mod_channel="sin11", mod_freq=10e6, Q_channel=2, Q_osc=2, Q_mod_channel="sin22", IQ_offset=0):
+    def __init__(self, gate_type, pulse_type="rectangular", awg=None, I_channel=1, I_osc=1, I_mod_channel="sin11", mod_freq=None, Q_channel=2, Q_osc=2, Q_mod_channel="sin22", IQ_offset=None):
         ##set default values for all input parameters...
-        gates = {"x", "y", "h", "wait"}
+        gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
-        ## ensure connection with AWG
+        rectangular_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
 
         try:
             if type(gate_type) is not str:
@@ -21,7 +22,7 @@ class SingleQubitGate:
             raise
         try:
             if type(gate_type) not in gates:
-                raise ValueError("'gate_type' should be 'x', 'y', or 'wait'.")
+                raise ValueError("'gate_type' should be in list of gate types.")
         except ValueError:
             raise
 
@@ -32,23 +33,50 @@ class SingleQubitGate:
             raise
         try:
             if type(gate_type) not in gates:
-                raise ValueError("'pulse_type' should be 'rectangular', 'gaussian', 'chirped', 'adiabatic', 'wait'.")
+                raise ValueError("'pulse_type' should be 'rectangular', 'gaussian', 'chirped', 'adiabatic', 'wait'")
         except ValueError:
             raise
 
-        if gate_type == "x":
-            I_phase = 0
-            Q_phase =
-
-        elif gate_type == "y":
-
+        if mod_freq:
+            self._mod_freq = mod_freq
         else:
+            self._mod_freq = rectangular_gate_df["mod_freq"][0]
 
-        self._gate_type = gate_type
-        self._pulse_type = pulse_type
-        self._hdawg = hdawg
-        self._pulse_envelope = envelope
-        self._IQ_settings = {"I": {"channel": I_channel, "osc": I_osc, "freq": mod_freq, "phase_shift": 0, "modulation_channels": I_mod_channel, "wave_out": True}, "Q": {"channel": Q_channel, "osc": Q_osc, "freq": mod_freq, "phase_shift": np.pi/2+IQ_offset, "modulation_channels": Q_mod_channel, "wave_out": True}}
+
+        if gate_type == "x" or gate_type == "xx" or gate_type == "xxx" or gate_type == "mxxm":
+            if IQ_offset:
+                I_phase = 0
+                Q_phase = np.pi/2 + IQ_offset
+            else:
+                I_phase = rectangle_singlequbit_gates_df["i_phase"][0]
+                Q_phase = rectangle_singlequbit_gates_df["q_phase"][0]
+
+            if gate_type == "x" or gate_type == "xxx":
+                tau = rectangle_singlequbit_gates_df["pulse_time"][0]
+            else:
+                tau = rectangle_singlequbit_gates_df["pulse_time"][1]
+
+        elif gate_type == "y" or gate_type == "yy" or gate_type == "yy" or gate_type == "myym":
+            if IQ_offset:
+                I_phase = np.pi/2
+                Q_phase = np.pi/2 + IQ_offset
+            else:
+                I_phase = rectangle_singlequbit_gates_df["i_phase"][0]
+                Q_phase = rectangle_singlequbit_gates_df["q_phase"][0]
+        else:
+            I_phase = 0
+            Q_phase = 0
+            
+            if gate_type == "y" or gate_type == "yyy":
+                tau = rectangle_singlequbit_gates_df["pulse_time"][4]
+            else:
+                tau = rectangle_singlequbit_gates_df["pulse_time"][5]
+
+        # self._gate_type = gate_type
+        # self._pulse_type = pulse_type
+        # self._hdawg = hdawg
+        # self._pulse_envelope = envelope
+        # self._IQ_settings = {"I": {"channel": I_channel, "osc": I_osc, "freq": mod_freq, "phase_shift": 0, "modulation_channels": I_mod_channel, "wave_out": True}, "Q": {"channel": Q_channel, "osc": Q_osc, "freq": mod_freq, "phase_shift": np.pi/2+IQ_offset, "modulation_channels": Q_mod_channel, "wave_out": True}}
 
     #def set_awg()
 
