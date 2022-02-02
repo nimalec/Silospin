@@ -9,7 +9,7 @@ class SingleQubitGate:
     ## X_gate.make_queue_pulse()
     ## X_gate.play_pulse()
 
-    def __init__(self, gate_type, pulse_type, awg, I_channel=1, I_osc=1, I_mod_channel="sin11", mod_freq=None, Q_channel=2, Q_osc=2, Q_mod_channel="sin22", IQ_offset=None, tau_p = 10e-6, awg_amp=1):
+    def __init__(self, gate_type, pulse_type, awg, I_channel=1, I_osc=1, I_mod_channel="sin11", mod_freq=None, Q_channel=2, Q_osc=2, Q_mod_channel="sin22", IQ_offset=None, tau_p = 10e-6, awg_amp=1, amp_wvfrm=1):
         ##set default values for all input parameters...
         gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
@@ -97,8 +97,10 @@ class SingleQubitGate:
         ##Implement funciton to generate waveform
         t_start =  0
         t_end = self._pulse_duration
-        self._amplitude = amps
-        waveform = make_pulse_envelope(self, pulse_type="rectangular", npoints, t_start, t_end, amp)
+        self._amplitude = amp
+        waveform = rectangular(npoints, t_start, t_end, npoints, amp_wbfrm)
+        #waveform = make_pulse_envelope(pulse_type="rectangular", npoints, t_start, t_end, amp_wvfrm)
+
 
         # self.e_type = gate_type
         # self._pulse_type = pulse_type
