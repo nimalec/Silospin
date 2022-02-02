@@ -38,17 +38,79 @@ class SingleQubitGate:
         except ValueError:
             raise
 
-        if mod_freq:
-            self._mod_freq = mod_freq
-        else:
-            self._mod_freq = rectangular_gate_df["mod_freq"][0]
+      ##(1) assert awg type
+      ##(2) ensure a connection with awg
+      ##(3) assert channel settings  (I_channel, I_osc, I_mod_channel, mod_Freq, Q_channel, IQ_offset, etc.)
+      ##(4) determine IQ-settings
+      ##(5) generate waveform
+       try:
+           if awg._connection_settings["connection_status"] == 0:
+               raise ValueError("'awg' should be connected.")
+       except ValueError:
+           raise
 
-        try:
-            if type(awg) is not str:
-                #check if type AWG
-                raise TypeError("'awg' should be type hdawg.")
-        except TypeError:
-            raise
+       try:
+           if type(I_channel) is not int:
+               raise TypeError("'I_channel should be type int.")
+       except TypeError:
+           raise
+
+       try:
+           if type(I_osc) is not int:
+               raise TypeError("'I_osc should be type int.")
+       except TypeError:
+           raise
+
+       try:
+           if type(I_mod_channel) is not str:
+               raise TypeError("'I_mod_channel should be type str.")
+       except TypeError:
+           raise
+
+       try:
+           if type(Q_channel) is not int:
+               raise TypeError("'I_channel should be type int.")
+       except TypeError:
+           raise
+
+       try:
+           if type(Q_osc) is not int:
+               raise TypeError("'I_osc should be type int.")
+       except TypeError:
+           raise
+
+       try:
+           if type(Q_mod_channel) is not str:
+               raise TypeError("'I_mod_channel should be type str.")
+       except TypeError:
+           raise
+
+
+
+
+       # try:
+       #     if awg._connection_settings["connection_status"] == 0:
+       #         raise ValueError("'awg' should be connected.")
+       # except ValueError:
+       #     raise
+
+
+
+
+
+
+
+        # if mod_freq:
+        #     self._mod_freq = mod_freq
+        # else:
+        #     self._mod_freq = rectangular_gate_df["mod_freq"][0]
+
+        # try:
+        #     if type(awg) is not str:
+        #         #check if type AWG
+        #         raise TypeError("'awg' should be type hdawg.")
+        # except TypeError:
+        #     raise
 
        try:
            if awg.connection_settings["connection_status"] != 1
@@ -98,11 +160,9 @@ class SingleQubitGate:
         t_start =  0
         t_end = self._pulse_duration
         self._amplitude = amp
-        waveform = rectangular(npoints, t_start, t_end, npoints, amp_wbfrm)
+        waveform = rectangular(npoints, t_start, t_end, npoints, amp_wvfrm)
+        self._waveform = waveform
         #waveform = make_pulse_envelope(pulse_type="rectangular", npoints, t_start, t_end, amp_wvfrm)
-
-
-        # self.e_type = gate_type
         # self._pulse_type = pulse_type
         # self._hdawg = hdawg
         # self._pulse_envelope = envelope
