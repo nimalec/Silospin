@@ -9,11 +9,12 @@ class SingleQubitGate:
     ## X_gate.make_queue_pulse()
     ## X_gate.play_pulse()
 
-    def __init__(self, gate_type, pulse_type="rectangular", awg=None, I_channel=1, I_osc=1, I_mod_channel="sin11", mod_freq=None, Q_channel=2, Q_osc=2, Q_mod_channel="sin22", IQ_offset=None):
+    def __init__(self, gate_type, pulse_type, awg, I_channel=1, I_osc=1, I_mod_channel="sin11", mod_freq=None, Q_channel=2, Q_osc=2, Q_mod_channel="sin22", IQ_offset=None, tau_p = 10e-6, awg_amp=1):
         ##set default values for all input parameters...
         gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
         rectangular_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
+
 
         try:
             if type(gate_type) is not str:
@@ -42,7 +43,21 @@ class SingleQubitGate:
         else:
             self._mod_freq = rectangular_gate_df["mod_freq"][0]
 
+        try:
+            if type(awg) is not str:
+                #check if type AWG
+                raise TypeError("'awg' should be type hdawg.")
+        except TypeError:
+            raise
 
+       try:
+           if awg.connection_settings["connection_status"] != 1
+               #check if type AWG
+               raise ValueError("'awg' should be connected.")
+       except TypeError:
+           raise
+
+        ### set single qubit gate parameters
         if gate_type == "x" or gate_type == "xx" or gate_type == "xxx" or gate_type == "mxxm":
             if IQ_offset:
                 I_phase = 0
@@ -63,16 +78,29 @@ class SingleQubitGate:
             else:
                 I_phase = rectangle_singlequbit_gates_df["i_phase"][0]
                 Q_phase = rectangle_singlequbit_gates_df["q_phase"][0]
-        else:
-            I_phase = 0
-            Q_phase = 0
-            
+
             if gate_type == "y" or gate_type == "yyy":
                 tau = rectangle_singlequbit_gates_df["pulse_time"][4]
             else:
                 tau = rectangle_singlequbit_gates_df["pulse_time"][5]
 
-        # self._gate_type = gate_type
+        else:
+            I_phase = 0
+            Q_phase = 0
+            tau = tau_p
+
+        self._pulse_duration = tau
+        self._I_phase = I_phase
+        self._Q_phase = Q_phase
+        self._IQ_settings = {"I": {"channel": I_channel, "osc": I_osc, "freq": self._mod_freq, "phase_shift": self._I_phase, "modulation_channels": I_mod_channel, "wave_out": True, "amp": amp}, "Q": {"channel": Q_channel, "osc": Q_osc, "freq": self._mod_freq, "phase_shift": self._Q_phase, "modulation_channels": Q_mod_channel, "wave_out": True , "amp": amp}}
+
+        ##Implement funciton to generate waveform
+        t_start =  0
+        t_end = self._pulse_duration
+        self._amplitude = amps
+        waveform = make_pulse_envelope(self, pulse_type="rectangular", npoints, t_start, t_end, amp)
+
+        # self.e_type = gate_type
         # self._pulse_type = pulse_type
         # self._hdawg = hdawg
         # self._pulse_envelope = envelope
