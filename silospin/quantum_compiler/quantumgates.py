@@ -9,12 +9,13 @@ class SingleQubitGate:
     ## X_gate.make_queue_pulse()
     ## X_gate.play_pulse()
 
-    def __init__(self, gate_type, pulse_type, awg, I_channel=1, I_osc=1, I_mod_channel="sin11", mod_freq=None, Q_channel=2, Q_osc=2, Q_mod_channel="sin22", IQ_offset=None, tau_p = 10e-6, awg_amp=1, amp_wvfrm=1):
+    def __init__(self, gate_type, pulse_type, awg, I_channel=1, I_osc=1, I_mod_channel="sin11", Q_channel=2, Q_osc=2, Q_mod_channel="sin22", mod_freq=None, IQ_offset=None, tau_p = 10e-6, channel_amp=1, amp_pulse=1):
         ##set default values for all input parameters...
         gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
         rectangular_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
 
+        ##Assertions for input values
 
         try:
             if type(gate_type) is not str:
@@ -33,7 +34,7 @@ class SingleQubitGate:
         except TypeError:
             raise
         try:
-            if type(gate_type) not in gates:
+            if type(pulse_type) not in pulses:
                 raise ValueError("'pulse_type' should be 'rectangular', 'gaussian', 'chirped', 'adiabatic', 'wait'")
         except ValueError:
             raise
@@ -56,8 +57,20 @@ class SingleQubitGate:
            raise
 
        try:
+           if I_channel < 1 or I_channel > 8:
+               raise ValueError("'I_channel should be between 1 and 8.")
+       except TypeError:
+           raise
+
+       try:
            if type(I_osc) is not int:
                raise TypeError("'I_osc should be type int.")
+       except TypeError:
+           raise
+
+       try:
+           if I_osc < 1 or I_osc > 16:
+               raise ValueError("'I_osc should be between 1 and 16")
        except TypeError:
            raise
 
@@ -68,25 +81,82 @@ class SingleQubitGate:
            raise
 
        try:
+           if type(I_mod_channel) not in {"sin11", "sin22", "sin12", "sin21"}:
+               raise TypeError("'I_mod_channel should be in list of 'sin11', 'sin22', 'sin12', 'sin21'.")
+       except TypeError:
+           raise
+
+       try:
            if type(Q_channel) is not int:
-               raise TypeError("'I_channel should be type int.")
+               raise TypeError("'Q_channel should be type int.")
+       except TypeError:
+           raise
+
+       try:
+           if Q_channel < 1 or Q_channel > 8:
+               raise ValueError("'Q_channel should be between 1 and 8.")
        except TypeError:
            raise
 
        try:
            if type(Q_osc) is not int:
-               raise TypeError("'I_osc should be type int.")
+               raise TypeError("'Q_osc should be type int.")
+       except TypeError:
+           raise
+
+       try:
+           if Q_osc < 1 or Q_osc > 16:
+               raise ValueError("'Q_osc should be between 1 and 16")
        except TypeError:
            raise
 
        try:
            if type(Q_mod_channel) is not str:
-               raise TypeError("'I_mod_channel should be type str.")
+               raise TypeError("'Q_mod_channel should be type str.")
        except TypeError:
            raise
 
+       try:
+           if type(Q_mod_channel) not in {"sin11", "sin22", "sin12", "sin21"}:
+               raise TypeError("'Q_mod_channel should be in list of 'sin11', 'sin22', 'sin12', 'sin21'")
+       except TypeError:
+           raise
 
+       try:
+           if type(Q_mod_channel) not in {"sin11", "sin22", "sin12", "sin21"}:
+               raise TypeError("'Q_mod_channel should be in list of 'sin11', 'sin22', 'sin12', 'sin21'")
+       except TypeError:
+           raise
 
+       try:
+           if type(mod_freq) is not float or type(mod_freq) is not int:
+               raise TypeError("Modulation frequency should be type int or float")
+       except TypeError:
+           raise
+
+       try:
+           if type(IQ_offset) is not float or type(mod_freq) is not int:
+               raise TypeError("IQ offset should be type int or float")
+       except TypeError:
+           raise
+
+       try:
+           if type(tau_p) is not float or type(tau_p) is not int:
+               raise TypeError("Pulse duration should be type int or float")
+       except TypeError:
+           raise
+
+       try:
+           if type(channel_amp) is not float or type(channel_amp) is not int:
+               raise TypeError("Channel amplitude should be type int or float")
+       except TypeError:
+           raise
+
+       try:
+           if type(amp_pulse) is not float or type(amp_pulse) is not int:
+               raise TypeError("Pulse amplitude should be type int or float.")
+       except TypeError:
+           raise
 
        # try:
        #     if awg._connection_settings["connection_status"] == 0:
