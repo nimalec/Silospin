@@ -1,15 +1,15 @@
 import numpy as np
 import pandas as pd
 #from silospin.drivers import zi_mfli_v1
-#from silospin.drivers.math.math_helpers import gauss, rectangular
+from silospin.drivers.math.math_helpers import gauss, rectangular
 
 class SingleQubitGate:
     ##hdawg = HdawgDriver(dev_id = "1234")
     ## X_gate = SingleQubitGate(gate_type="x", pulse_type="rectangular", awg=hdawg)
-    ## X_gate.make_queue_pulse()
+    ## X_gate.make_queue_pulse(
     ## X_gate.play_pulse()
 
-    def __init__(self, gate_type, pulse_type, awg, I_channel=1, I_osc=1, I_mod_channel="sin11", Q_channel=2, Q_osc=2, Q_mod_channel="sin22", mod_freq=None, IQ_offset=None, tau_p = 10e-6, channel_amp=1, amp_pulse=1):
+    def __init__(self, gate_type, pulse_type, awg, I_channel=1, I_osc=1, I_mod_channel="sin11", Q_channel=2, Q_osc=2, Q_mod_channel="sin22", sample_rate=2.4e9, mod_freq=None, IQ_offset=None, tau_p = 10e-6, channel_amp=1, amp_pulse=1):
         ##set default values for all input parameters...
         gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
@@ -191,21 +191,20 @@ class SingleQubitGate:
             Q_phase = 0
             tau = tau_p
 
+        self._awg = awg
+        self._gate_type = gate_type
         self._pulse_duration = tau
         self._I_phase = I_phase
         self._Q_phase = Q_phase
+        self._npoints = int(sample_rate*self._pulse_duration)
         self._IQ_settings = {"I": {"channel": I_channel, "osc": I_osc, "freq": self._mod_freq, "phase_shift": self._I_phase, "modulation_channels": I_mod_channel, "wave_out": True, "amp": amp}, "Q": {"channel": Q_channel, "osc": Q_osc, "freq": self._mod_freq, "phase_shift": self._Q_phase, "modulation_channels": Q_mod_channel, "wave_out": True , "amp": amp}}
 
 
+        if gate_type == "wait":
+            self._waveform = rectangular(self._npoints,0)
+        else:
+            self._waveform = rectangular(self._npoints,amp_pulse)
 
-        # ##Implement function to generate waveform
-        # t_start =  0
-        # t_end = self._pulse_duration
-        # self._amplitude = amp
-        # waveform = rectangular(npoints, t_start, t_end, npoints, amp_wvfrm)
-        # self._waveform = waveform
-        #waveform = make_pulse_envelope(pulse_type="rectangular", npoints, t_start, t_end, amp_wvfrm)
-        # self._pulse_type = pulse_type
         # self._hdawg = hdawg
         # self._pulse_envelope = envelope
         # self._IQ_settings = {"I": {"channel": I_channel, "osc": I_osc, "freq": mod_freq, "phase_shift": 0, "modulation_channels": I_mod_channel, "wave_out": True}, "Q": {"channel": Q_channel, "osc": Q_osc, "freq": mod_freq, "phase_shift": np.pi/2+IQ_offset, "modulation_channels": Q_mod_channel, "wave_out": True}}
