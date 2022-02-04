@@ -13,6 +13,7 @@ class SingleQubitGate:
         ##set default values for all input parameters...
         gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
+        sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
         rectangular_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
 
         ##Assertions for input values
@@ -147,7 +148,7 @@ class SingleQubitGate:
             raise
 
         try:
-            if type(channel_amp) is not float or type(channel_amp) is not int:
+            if type(amp_channel) is not float or type(amp_channel) is not int:
                 raise TypeError("Channel amplitude should be type int or float")
         except TypeError:
             raise
@@ -158,6 +159,17 @@ class SingleQubitGate:
         except TypeError:
             raise
 
+        try:
+            if type(sample_rate) is not float or type(sample_rate) is not int :
+                raise TypeError("Sample rate should be type int or float")
+        except TypeError:
+            raise
+
+        try:
+            if sample_rate not in sample_rates:
+                raise ValueError("Sample rate should be in sample_rates")
+        except ValueError:
+            raise
 
         ### set single qubit gate parameters
         if gate_type == "x" or gate_type == "xx" or gate_type == "xxx" or gate_type == "mxxm":
@@ -205,7 +217,42 @@ class SingleQubitGate:
         else:
             self._waveform = rectangular(self._npoints,amp_pulse)
 
-    #def set_awg()
+    def set_awg(self, awg):
+        try:
+            if awg._connection_settings["connection_status"] == 0:
+                raise ValueError("'awg' should be connected.")
+        except ValueError:
+            raise
+        self._awg = awg
+
+    def get_awg(self):
+        return awg
+
+    def get_gate_type(self):
+        return self._gate_type = gate_type
+
+    def get_pulse_duration(self):
+        return self._pulse_duration
+
+    def set_sample_rate(self, sample_rate):
+        sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
+        try:
+            if type(sample_rate) is not float:
+                raise TypeError("sample_rate should be a float.")
+        except TypeError:
+            raise
+        self._npoints = sample_rate*self._pulse_duration
+
+
+
+
+
+
+
+
+
+
+
 
     # def make_pulse_envelope(self, pulse_type, npoints, t_start, t_end, amplitude, t_p=None, mu=None, sig=None):
     #     pulses  = {"rectangular", "gaussian", "adiabatic", "chirped"}
@@ -228,26 +275,3 @@ class SingleQubitGate:
     #def set_IQ_settings(self):
     #def queue_wave(self):
     #def play_wave(self):
-
-
-
-
-
-
-
-
-# def MakeIQWave(gate, pulse_shape, t_p, delta_phi, omega_s, amp, osc_1, osc_2)
-# ##Input:
-# ## gate (X, Y, H, Z)
-# ## Omega_s (sample rate)
-# ## omega (modulation freq)
-# ## delta_phi (phase offset)
-# ## rot_angle
-# ## pm
-# ## osc_I
-# ## osc_Q
-# ## trigger
-# ## channel_mod (sin11, sin22, etc.)
-# ## AWG_channel
-#     gates = {"x", "y", "wait"}
-#     pulse_shapes = {"rectangular", "gaussian", "chirped", "adiabatic"}
