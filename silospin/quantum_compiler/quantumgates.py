@@ -206,10 +206,8 @@ class SingleQubitGate:
         self._awg = awg
         self._gate_type = gate_type
         self._pulse_duration = tau
-        self._I_phase = I_phase
-        self._Q_phase = Q_phase
         self._npoints = int(sample_rate*self._pulse_duration)
-        self._IQ_settings = {"I": {"channel": I_channel, "osc": I_osc, "freq": self._mod_freq, "phase_shift": self._I_phase, "modulation_channels": I_mod_channel, "wave_out": True, "amp": amp_channel}, "Q": {"channel": Q_channel, "osc": Q_osc, "freq": self._mod_freq, "phase_shift": self._Q_phase, "modulation_channels": Q_mod_channel, "wave_out": True , "amp": amp_channel}}
+        self._IQ_settings = {"I": {"channel": I_channel, "osc": I_osc, "freq": mod_freq, "phase_shift": I_phase, "modulation_channels": I_mod_channel, "wave_out": True, "amp": amp_channel}, "Q": {"channel": Q_channel, "osc": Q_osc, "freq": mod_freq, "phase_shift": Q_phase, "modulation_channels": Q_mod_channel, "wave_out": True , "amp": amp_channel}}
 
 
         if gate_type == "wait":
@@ -241,17 +239,45 @@ class SingleQubitGate:
                 raise TypeError("sample_rate should be a float.")
         except TypeError:
             raise
+        try:
+            if sample_rate not in sample_rates:
+                raise ValueError("Sample rate should be in sample_rates")
+        except ValueError:
+            raise
         self._npoints = sample_rate*self._pulse_duration
 
+    def get_sample_rate(self):
+        return self._sample_rate
+
+    def set_IQ_settings(self, IQ, setting, value):
+        try:
+            if IQ != "I" or IQ != "Q":
+                raise ValueError("IQ should be 'I' or 'Q'.")
+        except ValueError:
+            raise
+        settings = {"channel", "osc", "freq", "phase_shift", "modulation_channels", "wave_out", "amp"}
+        try:
+            if setting not in settings:
+                raise ValueError("setting should be in IQ settings")
+        except ValueError:
+            raise
+
+        self._IQ_settings[IQ][setting] = value
 
 
-
-
-
-
-
-
-
+    def get_IQ_settings(self, IQ, setting, value):
+        try:
+            if IQ != "I" or IQ != "Q":
+                raise ValueError("IQ should be 'I' or 'Q'.")
+        except ValueError:
+            raise
+        settings = {"channel", "osc", "freq", "phase_shift", "modulation_channels", "wave_out", "amp"}
+        try:
+            if setting not in settings:
+                raise ValueError("setting should be in IQ settings")
+        except ValueError:
+            raise
+        return self._IQ_settings[IQ][setting]
 
 
     # def make_pulse_envelope(self, pulse_type, npoints, t_start, t_end, amplitude, t_p=None, mu=None, sig=None):
