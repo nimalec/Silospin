@@ -172,6 +172,9 @@ class SingleQubitGate:
             raise
 
         ### set single qubit gate parameters
+        ##set pulse table for single qubit gates  + command table
+        ##For Gaussian pulses, set Gauss width = round(npoints/3)
+        ## add column to table for pulse amplitude
         if gate_type == "x" or gate_type == "xx" or gate_type == "xxx" or gate_type == "mxxm":
             if IQ_offset:
                 I_phase = 0
