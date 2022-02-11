@@ -183,24 +183,23 @@ class SingleQubitGate:
                 I_phase = rectangle_singlequbit_gates_df["i_phase"][0]
                 Q_phase = rectangle_singlequbit_gates_df["q_phase"][0]
 
-            if gate_type == "x" or gate_type == "xxx":
+            if gate_type == "x" or gate_type == "xxx": ##both pi/2 gates
                 tau = rectangle_singlequbit_gates_df["pulse_time"][0]
-            else:
+            else: ##both pi gates
                 tau = rectangle_singlequbit_gates_df["pulse_time"][1]
 
         elif gate_type == "y" or gate_type == "yy" or gate_type == "yy" or gate_type == "myym":
             if IQ_offset:
                 I_phase = np.pi/2
                 Q_phase = np.pi/2 + IQ_offset
-            else:
+            else: ##default I and Q phases
                 I_phase = rectangle_singlequbit_gates_df["i_phase"][0]
                 Q_phase = rectangle_singlequbit_gates_df["q_phase"][0]
 
-            if gate_type == "y" or gate_type == "yyy":
+            if gate_type == "y" or gate_type == "yyy":   ## pi/2 gates
                 tau = rectangle_singlequbit_gates_df["pulse_time"][4]
-            else:
+            else: ## pi gates
                 tau = rectangle_singlequbit_gates_df["pulse_time"][5]
-
         else:
             I_phase = 0
             Q_phase = 0
