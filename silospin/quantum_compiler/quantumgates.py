@@ -11,7 +11,7 @@ class SingleQubitGate:
 
     def __init__(self, gate_type, pulse_type, awg, I_channel=1, I_osc=1, I_mod_channel="sin11", Q_channel=2, Q_osc=2, Q_mod_channel="sin22", sample_rate=2.4e9, mod_freq=None, IQ_offset=None, tau_p = 10e-6, amp_channel=1, amp_pulse=1):
         ##set default values for all input parameters...
-        gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
+        single_gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
         sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
         rectangular_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
@@ -209,7 +209,6 @@ class SingleQubitGate:
         self._npoints = int(sample_rate*self._pulse_duration)
         self._IQ_settings = {"I": {"channel": I_channel, "osc": I_osc, "freq": mod_freq, "phase_shift": I_phase, "modulation_channels": I_mod_channel, "wave_out": True, "amp": amp_channel}, "Q": {"channel": Q_channel, "osc": Q_osc, "freq": mod_freq, "phase_shift": Q_phase, "modulation_channels": Q_mod_channel, "wave_out": True , "amp": amp_channel}}
 
-
         if gate_type == "wait":
             self._waveform = rectangular(self._npoints,0)
         else:
@@ -264,7 +263,6 @@ class SingleQubitGate:
 
         self._IQ_settings[IQ][setting] = value
 
-
     def get_IQ_settings(self, IQ, setting, value):
         try:
             if IQ != "I" or IQ != "Q":
@@ -278,7 +276,6 @@ class SingleQubitGate:
         except ValueError:
             raise
         return self._IQ_settings[IQ][setting]
-
 
     # def make_pulse_envelope(self, pulse_type, npoints, t_start, t_end, amplitude, t_p=None, mu=None, sig=None):
     #     pulses  = {"rectangular", "gaussian", "adiabatic", "chirped"}
