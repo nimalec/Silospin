@@ -175,35 +175,15 @@ class SingleQubitGate:
         ##set pulse table for single qubit gates  + command table
         ##For Gaussian pulses, set Gauss width = round(npoints/3)
         ## add column to table for pulse amplitude
-        if gate_type == "x" or gate_type == "xx" or gate_type == "xxx" or gate_type == "mxxm":
-            if IQ_offset:
-                I_phase = 0
-                Q_phase = np.pi/2 + IQ_offset
-            else:
-                I_phase = rectangle_singlequbit_gates_df["i_phase"][0]
-                Q_phase = rectangle_singlequbit_gates_df["q_phase"][0]
+       I_phase = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["i_phase"]
+       Q_phase = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["q_phase"]
+       if IQ_offset:
+           Q_phase = Q_phase + IQ_offset
+       else:
+           pass
 
-            if gate_type == "x" or gate_type == "xxx": ##both pi/2 gates
-                tau = rectangle_singlequbit_gates_df["pulse_time"][0]
-            else: ##both pi gates
-                tau = rectangle_singlequbit_gates_df["pulse_time"][1]
-
-        elif gate_type == "y" or gate_type == "yy" or gate_type == "yy" or gate_type == "myym":
-            if IQ_offset:
-                I_phase = np.pi/2
-                Q_phase = np.pi/2 + IQ_offset
-            else: ##default I and Q phases
-                I_phase = rectangle_singlequbit_gates_df["i_phase"][0]
-                Q_phase = rectangle_singlequbit_gates_df["q_phase"][0]
-
-            if gate_type == "y" or gate_type == "yyy":   ## pi/2 gates
-                tau = rectangle_singlequbit_gates_df["pulse_time"][4]
-            else: ## pi gates
-                tau = rectangle_singlequbit_gates_df["pulse_time"][5]
-        else:
-            I_phase = 0
-            Q_phase = 0
-            tau = tau_p
+       tau  = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["pulse_time"]
+       amp  = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["pulse_amp"]
 
         self._awg = awg
         self._gate_type = gate_type
