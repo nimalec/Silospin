@@ -9,7 +9,7 @@ class SingleQubitGate:
     ## X_gate.make_queue_pulse(
     ## X_gate.play_pulse()
 
-    def __init__(self, gate_type, pulse_type, awg, I_channel=1, I_osc=1, I_mod_channel="sin11", Q_channel=2, Q_osc=2, Q_mod_channel="sin22", sample_rate=2.4e9, mod_freq=None, IQ_offset=None, tau_p = 10e-6, amp_channel=1, amp_pulse=1):
+    def __init__(self, gate_type, pulse_type, awg, I_channel=1, Q_channel=2,  I_mod_channel="sin11",  Q_mod_channel="sin22", osc = 1, sample_rate=2.4e9, mod_freq=15e6, IQ_offset=None, tau_p = 10e-6):
         ##set default values for all input parameters...
         single_gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
@@ -175,6 +175,7 @@ class SingleQubitGate:
         ##set pulse table for single qubit gates  + command table
         ##For Gaussian pulses, set Gauss width = round(npoints/3)
         ## add column to table for pulse amplitude
+
        I_phase = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["i_phase"]
        Q_phase = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["q_phase"]
        if IQ_offset:
@@ -185,16 +186,18 @@ class SingleQubitGate:
        tau  = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["pulse_time"]
        amp  = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["pulse_amp"]
 
-        self._awg = awg
-        self._gate_type = gate_type
-        self._pulse_duration = tau
-        self._npoints = int(sample_rate*self._pulse_duration)
-        self._IQ_settings = {"I": {"channel": I_channel, "osc": I_osc, "freq": mod_freq, "phase_shift": I_phase, "modulation_channels": I_mod_channel, "wave_out": True, "amp": amp_channel}, "Q": {"channel": Q_channel, "osc": Q_osc, "freq": mod_freq, "phase_shift": Q_phase, "modulation_channels": Q_mod_channel, "wave_out": True , "amp": amp_channel}}
+       self._awg = awg
+       self._gate_type = gate_type
+       self._pulse_duration = tau
+       self._npoints = round(sample_rate*self._pulse_duration/16)*16
+       self._IQ_settings = {"I": {"channel": I_channel, "osc": osc, "freq": mod_freq, "phase_shift": I_phase, "modulation_channels": I_mod_channel, "wave_out": True}, "Q": {"channel": Q_channel, "osc": osc, "freq": mod_freq, "phase_shift": Q_phase, "modulation_channels": Q_mod_channel, "wave_out": True}}
 
-        if gate_type == "wait":
-            self._waveform = rectangular(self._npoints,0)
-        else:
-            self._waveform = rectangular(self._npoints,amp_pulse)
+       if gate_type == "wait":
+           self._waveform = rectangular(self._npoints,0)
+       else:
+           self._waveform = rectangular(self._npoints,amp_pulse)
+
+
 
     def set_awg(self, awg):
         try:
@@ -258,6 +261,21 @@ class SingleQubitGate:
         except ValueError:
             raise
         return self._IQ_settings[IQ][setting]
+
+    def make_pulse_envelope(self, pulse_type, npoints, t_start, t_end, amplitude, t_p=None, mu=None, sig=None):
+        pulse_types = {"gaussian", "rectangular"}
+        try:
+            if pulse_type not in pulse_types:
+                raise ValueError("pulse_type should bse rectangular or gaussian.")
+        except ValueError:
+            raise
+
+        if pulse_type == "gaussian":
+            mu = 0
+            sig = npoints/3
+            waveform = gauss(npoints, amp, mu, sig)
+        else:
+            waveform = rectangular(npoints, amp)
 
     # def make_pulse_envelope(self, pulse_type, npoints, t_start, t_end, amplitude, t_p=None, mu=None, sig=None):
     #     pulses  = {"rectangular", "gaussian", "adiabatic", "chirped"}
