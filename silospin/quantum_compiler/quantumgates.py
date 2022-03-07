@@ -8,8 +8,10 @@ class SingleQubitGate:
     ## X_gate = SingleQubitGate(gate_type="x", pulse_type="rectangular", awg=hdawg)
     ## X_gate.make_queue_pulse(
     ## X_gate.play_pulse()
+    ## gauss_settings = {"amp" : , "mu": , "sigma": }
 
-    def __init__(self, gate_type, pulse_type, awg, I_channel=1, Q_channel=2,  I_mod_channel="sin11",  Q_mod_channel="sin22", osc = 1, sample_rate=2.4e9, mod_freq=15e6, IQ_offset=None, tau_p = 10e-6):
+    def __init__(self, gate_type, awg, pulse_settings = {"pulse_type": "rectangular", "sample_rate": 2.4e9, "tau_p": None}, IQ_settings = {"I_channel": 1, "Q_channel": 2, "I_mod_channel": "sin11",  "Q_mod_channel": "sin22", "IQ_offset": IQ_offset, "osc": osc, "mod_freq": 15e6, "I_out": 1, "Q_out": 1}, gauss_settings = {"mu": None , "sigma": None, "amp": 1}):
+        ##If tau_p is None ==> use default settings (pull from table). Otherwise, generate new signal
         ##set default values for all input parameters...
         single_gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
