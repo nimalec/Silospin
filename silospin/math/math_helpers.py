@@ -1,5 +1,5 @@
 import numpy as np
-def gauss(npoints, amp, mu, sig):
+def gauss(x, amp, mu, sig):
     return amp*np.exp(-(x-mu)**2/(2*sig**2))
 
 def rectangular(npoints, amp):
