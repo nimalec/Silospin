@@ -162,7 +162,7 @@ class HdawgDriver:
          raise
 
       self._oscillator_freq["osc"+str(osc_num)] = freq
-      self._hdawg.nodetree.oscs[osc_num-1] = freq
+      self._hdawg.nodetree.oscs[osc_num-1](freq)
       print("Oscillator frequency (Hz) set to : ",freq)
 
     def get_sine(self, sin_num):
