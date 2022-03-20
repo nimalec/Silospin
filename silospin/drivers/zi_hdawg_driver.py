@@ -155,11 +155,6 @@ class HdawgDriver:
             raise ValueError("'osc_num' should be between 1 and 16.")
       except ValueError:
          raise
-      try:
-         if type(freq) is not float or type(freq) is not int:
-            raise TypeError("'freq' should be a float or integer.")
-      except TypeError:
-         raise
 
       self._oscillator_freq["osc"+str(osc_num)] = freq
       self._hdawg.nodetree.oscs[osc_num-1].freq(freq)
