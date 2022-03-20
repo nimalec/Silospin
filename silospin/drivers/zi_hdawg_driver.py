@@ -156,8 +156,8 @@ class HdawgDriver:
       except ValueError:
          raise
       try:
-         if type(freq) is not float:
-            raise TypeError("'freq' should be a double.")
+         if type(freq) is not float or type(freq) is not int:
+            raise TypeError("'freq' should be a float or integer.")
       except TypeError:
          raise
 
