@@ -255,6 +255,8 @@ class HdawgDriver:
        self._hdawg.nodetree.sines[sin_num-1].harmonic(harmonic)
        self._hdawg.nodetree.sines[sin_num-1].amplitudes[0](amp1)
        self._hdawg.nodetree.sines[sin_num-1].amplitudes[1](amp2)
+
+
        print("Sine wave set to: ", self._sines["sin"+str(sin_num)])
 
     def get_awg(self, awg_num):
@@ -282,30 +284,46 @@ class HdawgDriver:
           raise
        return self._awgs["awg"+str(awg_num)]
 
-    def get_out_amp(self, awg_num):
+    def get_out_amp(self, sin_num, wave_num):
        """
-        Getter function for AWG core amplitudes.
+        Getter function for AWG core amplitudes. .
 
         Parameters
         ----------
-        awg_num: int
-            Sine index number between 1-4.
+        sin_num: int
+            Sine index number between 1-8.
+
+        wave_num: int
+            Wave index number between 1-2.
 
         Returns
         -------
-        List of AWG amplitudes in Volts: [amp1, amp1]. (list)
+        Returns output amplitude in volts.
        """
+
+       try:
+          if type(sin_num) is not int:
+             raise TypeError("'sin_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if sin_num < 1 or sin_num > 8:
+             raise ValueError("'sin_num' should be between 1 and 8.")
+       except ValueError:
+          raise
+
        try:
           if type(awg_num) is not int:
              raise TypeError("'awg_num' should be an integer.")
        except TypeError:
           raise
        try:
-          if awg_num < 1 or awg_num > 4:
-             raise ValueError("'awg_num' should be between 1 and 4.")
+          if wave_num != 1 or wave_num != 2:
+             raise ValueError("'wave_num' should be 1 or 2")
        except ValueError:
           raise
-       return [self._output_amps["awg"+str(awg_num)]["out1"], self._output_amps["awg"+str(awg_num)]["out2"]]
+
+       return self._sines["sin"+str(sin_num)]["amp"+str(wave_num)]
 
     def set_out_amp(self, awg_num, channel_num, amp):
        """
