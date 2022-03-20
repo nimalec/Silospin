@@ -255,7 +255,7 @@ class HdawgDriver:
           raise
 
        self._sines["sin"+str(sin_num)] = {"osc" : osc_num, "phaseshift": phase, "harmonic" : harmonic, "amp1" : amp1, "amp2" : amp2}
-       self._hdawg.nodetree.sines[sin_num-1].oscselect(osc_num)
+       self._hdawg.nodetree.sines[sin_num-1].oscselect(osc_num-1)
        self._hdawg.nodetree.sines[sin_num-1].phaseshift(phase)
        self._hdawg.nodetree.sines[sin_num-1].harmonic(harmonic)
        self._hdawg.nodetree.sines[sin_num-1].amplitudes[0](amp1)
