@@ -313,8 +313,8 @@ class HdawgDriver:
           raise
 
        try:
-          if type(awg_num) is not int:
-             raise TypeError("'awg_num' should be an integer.")
+          if type(wave_num) is not int:
+             raise TypeError("'wave_num' should be an integer.")
        except TypeError:
           raise
        try:
