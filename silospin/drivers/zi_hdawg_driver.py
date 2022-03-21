@@ -362,7 +362,7 @@ class HdawgDriver:
 
        try:
           if amp > 0.9:
-             raise ValueError("Output amplitude should not exceed 0.9")
+             raise ValueError("Output amplitude should not exceed 0.9 volts")
        except ValueError:
           raise
 
