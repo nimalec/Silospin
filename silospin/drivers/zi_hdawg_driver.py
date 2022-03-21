@@ -317,11 +317,7 @@ class HdawgDriver:
              raise TypeError("'wave_num' should be an integer.")
        except TypeError:
           raise
-       try:
-          if wave_num != 1 or wave_num != 2:
-             raise ValueError("'wave_num' should be 1 or 2")
-       except ValueError:
-          raise
+
 
        return self._sines["sin"+str(sin_num)]["amp"+str(wave_num)]
 
