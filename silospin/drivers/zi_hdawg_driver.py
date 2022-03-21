@@ -355,18 +355,13 @@ class HdawgDriver:
        except TypeError:
           raise
        try:
-          if wave_num !=1 or wave_num != 2 :
-             raise ValueError("'wave_num' should be 1 or 2.")
-       except ValueError:
-          raise
-       try:
           if type(amp) is not float:
              raise TypeError("'amp' should be a float.")
        except TypeError:
           raise
 
        try:
-          if amp > 0.9
+          if amp > 0.9:
              raise ValueError("Output amplitude should not exceed 0.9")
        except ValueError:
           raise
