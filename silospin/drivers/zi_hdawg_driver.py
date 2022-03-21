@@ -321,15 +321,15 @@ class HdawgDriver:
 
        return self._sines["sin"+str(sin_num)]["amp"+str(wave_num)]
 
-    def set_out_amp(self, awg_num, channel_num, amp):
+    def set_out_amp(self, sin_num, wave_num, amp):
        """
-        Setter function for AWG core amplitudes.
+        Setter function for awg output amplitudes.
 
         Parameters
         ----------
-        awg_num: int
-            AWG index number between 1-4.
-        channel_num: int
+        sines_num: int
+            AWG index number between 1-8.
+        wave_num: int
             Channel index number between 1-2.
         amp: double
             Amplitude for corresponding channel.
@@ -338,24 +338,25 @@ class HdawgDriver:
         -------
         None.
        """
+
        try:
-          if type(awg_num) is not int:
-             raise TypeError("'awg_num' should be an integer.")
+          if type(sin_num) is not int:
+             raise TypeError("'sin_num' should be an integer.")
        except TypeError:
           raise
        try:
-          if awg_num < 1 or awg_num > 4:
-             raise ValueError("'awg_num' should be between 1 and 4.")
+          if sin_num < 1 or sin_num > 8:
+             raise ValueError("'sin_num' should be between 1 and 8.")
        except ValueError:
           raise
        try:
-          if type(channel_num) is not int:
-             raise TypeError("'awg_num' should be an integer.")
+          if type(wave_num) is not int:
+             raise TypeError("'wave_num' should be an integer.")
        except TypeError:
           raise
        try:
-          if channel_num !=1 or channel_num != 2 :
-             raise ValueError("'channel_num' should be 1 or 2.")
+          if wave_num !=1 or wave_num != 2 :
+             raise ValueError("'wave_num' should be 1 or 2.")
        except ValueError:
           raise
        try:
@@ -364,12 +365,15 @@ class HdawgDriver:
        except TypeError:
           raise
 
-       if channel_num == 1:
-          self._output_amps["awg"+str(awg_num)]["out1"] = amp
-          self._awgs["awg"+str(awg_num)].outputs[0].amplitude(amp)
-       else:
-          self._output_amps["awg"+str(awg_num)]["out2"] = amp
-          self._awgs["awg"+str(awg_num)].outputs[1].amplitude(amp)
+       self._hdawg.nodetree.sines[sin_num-1].amplitudes[wave_num-1](amp)
+       self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
+
+       # if channel_num == 1:
+       #    self._output_amps["awg"+str(awg_num)]["out1"] = amp
+       #    self._awgs["awg"+str(awg_num)].outputs[0].amplitude(amp)
+       # else:
+       #    self._output_amps["awg"+str(awg_num)]["out2"] = amp
+       #    self._awgs["awg"+str(awg_num)].outputs[1].amplitude(amp)
 
     # def get_seq(self):
     #    """
