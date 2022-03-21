@@ -365,6 +365,12 @@ class HdawgDriver:
        except TypeError:
           raise
 
+       try:
+          if amp > 0.9
+             raise ValueError("Output amplitude should not exceed 0.9")
+       except ValueError:
+          raise
+
        self._hdawg.nodetree.sines[sin_num-1].amplitudes[wave_num-1](amp)
        self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
 
