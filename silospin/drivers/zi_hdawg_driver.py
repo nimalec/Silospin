@@ -72,7 +72,7 @@ class HdawgDriver:
         #self._awgs = {"awg1" : self._hdawg.awgs[0](), "awg2" : self._hdawg.awgs[1](), "awg3" : self._hdawg.awgs[2](), "awg4" : self._hdawg.awgs[3]()}
         #
         # self._sequencer = {"position": self._hdawg.awgs[0].sequencer.program(),  "status": self._hdawg.awgs[0].sequencer.status(), "position": self._hdawg.awgs[0].sequencer.pc(), "triggered": self._hdawg.awgs[0].sequencer.triggered()}
-        self._ref_clock_status = self._hdawg.clockbase()
+        #self._ref_clock_status = self._hdawg.clockbase()
         #self._waveforms = {"awg1": self._hdawg.awgs[0].waveform(), "awg2": self._hdawg.awgs[1].waveform(), "awg3": self._hdawg.awgs[2].waveform(), "awg4": self._hdawg.awgs[3].waveform()}
         #self._command_table = {"awg1": self._hdawg.awgs[0].commandtable.data(),  "awg2": self._hdawg.awgs[1].commandtable.data(), "awg3": self._hdawg.awgs[2].commandtable.data(), "awg4": self._hdawg.awgs[3].commandtable.data()}
 
