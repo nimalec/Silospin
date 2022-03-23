@@ -458,21 +458,21 @@ class HdawgDriver:
     #    self._hdawg.awgs[0].load_sequencer_program(seq)
     #
 
-    def get_clock_status(self):
-       """
-        Gets status of internal clock.
-
-        Parameters
-        ----------
-        None.
-
-        Returns
-        -------
-        Status of internal clock. (str)
-       """
-
-       self._ref_clock_status = self._hdawg.clockbase()
-       return self._ref_clock_status
+    # def get_clock_status(self):
+    #    """
+    #     Gets status of internal clock.
+    #
+    #     Parameters
+    #     ----------
+    #     None.
+    #
+    #     Returns
+    #     -------
+    #     Status of internal clock. (str)
+    #    """
+    #
+    #    self._ref_clock_status = self._hdawg.clockbase()
+    #    return self._ref_clock_status
 
     def get_waveform(self, awg_num):
        """
