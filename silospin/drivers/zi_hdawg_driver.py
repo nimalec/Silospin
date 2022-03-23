@@ -315,11 +315,11 @@ class HdawgDriver:
           raise
 
        self._sines["sin"+str(sin_num)] = {"osc" : osc_num, "phaseshift": phase, "harmonic" : harmonic, "amp1" : amp1, "amp2" : amp2}
-       self._hdawg.nodetree.sines[sin_num-1].oscselect(osc_num-1)
-       self._hdawg.nodetree.sines[sin_num-1].phaseshift(phase)
-       self._hdawg.nodetree.sines[sin_num-1].harmonic(harmonic)
-       self._hdawg.nodetree.sines[sin_num-1].amplitudes[0](amp1)
-       self._hdawg.nodetree.sines[sin_num-1].amplitudes[1](amp2)
+       self._hdawg.sines[sin_num-1].oscselect(osc_num-1)
+       self._hdawg.sines[sin_num-1].phaseshift(phase)
+       self._hdawg.sines[sin_num-1].harmonic(harmonic)
+       self._hdawg.sines[sin_num-1].amplitudes[0](amp1)
+       self._hdawg.sines[sin_num-1].amplitudes[1](amp2)
 
        print("Sine wave set to: ", self._sines["sin"+str(sin_num)])
 
@@ -430,7 +430,7 @@ class HdawgDriver:
        except ValueError:
           raise
 
-       self._hdawg.nodetree.sines[sin_num-1].amplitudes[wave_num-1](amp)
+       self._hdawg.sines[sin_num-1].amplitudes[wave_num-1](amp)
        self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
 
 
@@ -447,7 +447,7 @@ class HdawgDriver:
         Python sequence program (str).
        """
 
-       return self._hdawg.nodetree.awgs[0].sequencer.program()
+       return self._hdawg.awgs[0].sequencer.program()
 
     # def load_sequence(self, seq):
     #    """
@@ -477,44 +477,10 @@ class HdawgDriver:
         -------
         Status of internal clock. (str)
        """
-       return self._hdawg.ref_clock_status()
 
+       self._ref_clock_status = self._hdawg.clockbase()
+       return self._ref_clock_status
 
-    #
-    # def get_gain(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
-    # def set_gain(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
     def get_waveform(self, awg_num):
        """
         Getter function for waveforms for specified AWG core in 'simple' status.
@@ -539,6 +505,7 @@ class HdawgDriver:
        except ValueError:
           raise
 
+       self._waveforms["awg"+str(awg_num)]
        return self._waveforms["awg"+str(awg_num)]
 
     def get_run_status(self, awg_num):
