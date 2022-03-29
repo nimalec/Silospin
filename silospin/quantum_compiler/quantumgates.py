@@ -175,6 +175,7 @@ class SingleQubitGate:
 
         I_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["i_phase"]
         Q_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["q_phase"]
+        IQ_offset = IQ_settings["IQ_offset"]
         if IQ_offset:
            Q_phase = Q_phase + IQ_offset
         else:
