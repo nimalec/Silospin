@@ -173,8 +173,8 @@ class SingleQubitGate:
         ##For Gaussian pulses, set Gauss width = round(npoints/3)
         ## add column to table for pulse amplitude
 
-        I_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["i_phase"]
-        Q_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["q_phase"]
+        I_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["i_phase"].values
+        Q_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["q_phase"].values
         IQ_offset = IQ_settings["IQ_offset"]
         if IQ_offset:
            Q_phase = Q_phase + IQ_offset
