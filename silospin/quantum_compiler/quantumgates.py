@@ -11,7 +11,7 @@ class SingleQubitGate:
         single_gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
         sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
-        rectangular_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
+        rectangle_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
 
         ##Assertions for input values
         #
