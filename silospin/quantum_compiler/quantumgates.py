@@ -173,117 +173,117 @@ class SingleQubitGate:
         ##For Gaussian pulses, set Gauss width = round(npoints/3)
         ## add column to table for pulse amplitude
 
-       I_phase = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["i_phase"]
-       Q_phase = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["q_phase"]
-       if IQ_offset:
+        I_phase = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["i_phase"]
+        Q_phase = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["q_phase"]
+        if IQ_offset:
            Q_phase = Q_phase + IQ_offset
-       else:
+        else:
            pass
 
-       tau  = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["pulse_time"]
-       amp  = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["pulse_amp"]
+        tau  = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["pulse_time"]
+        amp  = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["pulse_amp"]
 
-       self._awg = awg
-       self._gate_type = gate_type
-       self._pulse_duration = tau
-       self._npoints = round(sample_rate*self._pulse_duration/16)*16
-       self._IQ_settings = {"I": {"channel": IQ_settings["I_sin"], "wave_out": IQ_settings["I_out"],  "osc": IQ_settings["osc"],  "freq": IQ_settings["freq"], "phase": I_phase, "amp": IQ_settings["amp"]},
+        self._awg = awg
+        self._gate_type = gate_type
+        self._pulse_duration = tau
+        self._npoints = round(sample_rate*self._pulse_duration/16)*16
+        self._IQ_settings = {"I": {"channel": IQ_settings["I_sin"], "wave_out": IQ_settings["I_out"],  "osc": IQ_settings["osc"],  "freq": IQ_settings["freq"], "phase": I_phase, "amp": IQ_settings["amp"]},
         "Q": {"channel": IQ_settings["I_sin"],  "wave_out": IQ_settings["Q_out"], "osc": IQ_settings["osc"], "freq": IQ_settings["freq"], "phase": Q_phase, "amp": IQ_settings["amp"]}}
 
-       if gate_type == "wait":
+        if gate_type == "wait":
            self._waveform = rectangular(self._npoints,0)
-       else:
+        else:
            self._waveform = rectangular(self._npoints,amp_pulse)
 
        ##sets I-Q frequencies
-       self._awg.set_osc_freq(self._IQ_settings["I"]["osc"], self._IQ_settings["I"]["freq"])
-       self._awg.set_osc_freq(self._IQ_settings["Q"]["osc"], self._IQ_settings["Q"]["freq"])
+        self._awg.set_osc_freq(self._IQ_settings["I"]["osc"], self._IQ_settings["I"]["freq"])
+        self._awg.set_osc_freq(self._IQ_settings["Q"]["osc"], self._IQ_settings["Q"]["freq"])
 
        ##sets I-Q amplitudes
-       self._awg.set_out_amp(self._IQ_settings["I"]["channel"], self._IQ_settings["I"]["wave_out"], self._IQ_settings["I"]["amp"])
-       self._awg.set_out_amp(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["wave_out"], self._IQ_settings["Q"]["amp"])
+        self._awg.set_out_amp(self._IQ_settings["I"]["channel"], self._IQ_settings["I"]["wave_out"], self._IQ_settings["I"]["amp"])
+        self._awg.set_out_amp(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["wave_out"], self._IQ_settings["Q"]["amp"])
 
        ##sets I-Q phase
-       self._awg.set_phase(self._IQ_settings["I"]["channel"], self._IQ_settings["I"]["phase"])
-       self._awg.set_phase(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["phase"])
+        self._awg.set_phase(self._IQ_settings["I"]["channel"], self._IQ_settings["I"]["phase"])
+        self._awg.set_phase(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["phase"])
 
-    def get_awg(self):
-        return awg
-
-    def set_awg(self, awg):
-        try:
-            if awg._connection_settings["connection_status"] == 0:
-                raise ValueError("'awg' should be connected.")
-        except ValueError:
-            raise
-        self._awg = awg
-
-    def get_gate_type(self):
-        return self._gate_type = gate_type
-
-    def get_pulse_duration(self):
-        return self._pulse_duration
-
-    def set_sample_rate(self, sample_rate):
-        sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
-        try:
-            if type(sample_rate) is not float:
-                raise TypeError("sample_rate should be a float.")
-        except TypeError:
-            raise
-        try:
-            if sample_rate not in sample_rates:
-                raise ValueError("Sample rate should be in sample_rates")
-        except ValueError:
-            raise
-        self._npoints = sample_rate*self._pulse_duration
-
-    def get_sample_rate(self):
-        return self._sample_rate
-
-    def set_IQ_settings(self, IQ, setting, value):
-        try:
-            if IQ != "I" or IQ != "Q":
-                raise ValueError("IQ should be 'I' or 'Q'.")
-        except ValueError:
-            raise
-        settings = {"channel", "osc", "freq", "phase_shift", "modulation_channels", "wave_out", "amp"}
-        try:
-            if setting not in settings:
-                raise ValueError("setting should be in IQ settings")
-        except ValueError:
-            raise
-
-        self._IQ_settings[IQ][setting] = value
-
-    def get_IQ_settings(self, IQ, setting, value):
-        try:
-            if IQ != "I" or IQ != "Q":
-                raise ValueError("IQ should be 'I' or 'Q'.")
-        except ValueError:
-            raise
-        settings = {"channel", "osc", "freq", "phase_shift", "modulation_channels", "wave_out", "amp"}
-        try:
-            if setting not in settings:
-                raise ValueError("setting should be in IQ settings")
-        except ValueError:
-            raise
-        return self._IQ_settings[IQ][setting]
-
-    def make_pulse_envelope(self, pulse_type, npoints, t_start, t_end, amplitude, t_p=None, mu=None, sig=None):
-        pulse_types = {"gaussian", "rectangular"}
-        try:
-            if pulse_type not in pulse_types:
-                raise ValueError("pulse_type should bse rectangular or gaussian.")
-        except ValueError:
-            raise
-
-        if pulse_type == "gaussian":
-            mu = 0
-            sig = npoints/3
-            waveform = gauss(npoints, amp, mu, sig)
-        else:
-            waveform = rectangular(npoints, amp)
+    # def get_awg(self):
+    #     return awg
+    #
+    # def set_awg(self, awg):
+    #     try:
+    #         if awg._connection_settings["connection_status"] == 0:
+    #             raise ValueError("'awg' should be connected.")
+    #     except ValueError:
+    #         raise
+    #     self._awg = awg
+    #
+    # def get_gate_type(self):
+    #     return self._gate_type = gate_type
+    #
+    # def get_pulse_duration(self):
+    #     return self._pulse_duration
+    #
+    # def set_sample_rate(self, sample_rate):
+    #     sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
+    #     try:
+    #         if type(sample_rate) is not float:
+    #             raise TypeError("sample_rate should be a float.")
+    #     except TypeError:
+    #         raise
+    #     try:
+    #         if sample_rate not in sample_rates:
+    #             raise ValueError("Sample rate should be in sample_rates")
+    #     except ValueError:
+    #         raise
+    #     self._npoints = sample_rate*self._pulse_duration
+    #
+    # def get_sample_rate(self):
+    #     return self._sample_rate
+    #
+    # def set_IQ_settings(self, IQ, setting, value):
+    #     try:
+    #         if IQ != "I" or IQ != "Q":
+    #             raise ValueError("IQ should be 'I' or 'Q'.")
+    #     except ValueError:
+    #         raise
+    #     settings = {"channel", "osc", "freq", "phase_shift", "modulation_channels", "wave_out", "amp"}
+    #     try:
+    #         if setting not in settings:
+    #             raise ValueError("setting should be in IQ settings")
+    #     except ValueError:
+    #         raise
+    #
+    #     self._IQ_settings[IQ][setting] = value
+    #
+    # def get_IQ_settings(self, IQ, setting, value):
+    #     try:
+    #         if IQ != "I" or IQ != "Q":
+    #             raise ValueError("IQ should be 'I' or 'Q'.")
+    #     except ValueError:
+    #         raise
+    #     settings = {"channel", "osc", "freq", "phase_shift", "modulation_channels", "wave_out", "amp"}
+    #     try:
+    #         if setting not in settings:
+    #             raise ValueError("setting should be in IQ settings")
+    #     except ValueError:
+    #         raise
+    #     return self._IQ_settings[IQ][setting]
+    #
+    # def make_pulse_envelope(self, pulse_type, npoints, t_start, t_end, amplitude, t_p=None, mu=None, sig=None):
+    #     pulse_types = {"gaussian", "rectangular"}
+    #     try:
+    #         if pulse_type not in pulse_types:
+    #             raise ValueError("pulse_type should bse rectangular or gaussian.")
+    #     except ValueError:
+    #         raise
+    #
+    #     if pulse_type == "gaussian":
+    #         mu = 0
+    #         sig = npoints/3
+    #         waveform = gauss(npoints, amp, mu, sig)
+    #     else:
+    #         waveform = rectangular(npoints, amp)
 
     # def make_pulse_envelope(self, pulse_type, npoints, t_start, t_end, amplitude, t_p=None, mu=None, sig=None):
     #     pulses  = {"rectangular", "gaussian", "adiabatic", "chirped"}
