@@ -1,17 +1,11 @@
 import numpy as np
 import pandas as pd
-#from silospin.drivers import zi_mfli_v1
+from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 
 
 class SingleQubitGate:
-    ##hdawg = HdawgDriver(dev_id = "1234")
-    ## X_gate = SingleQubitGate(gate_type="x", pulse_type="rectangular", awg=hdawg)
-    ## X_gate.make_queue_pulse(
-    ## X_gate.play_pulse()
-    ## gauss_settings = {"amp" : , "mu": , "sigma": }
-
-    def __init__(self, gate_type, awg, pulse_settings = {"pulse_type": "rectangular", "sample_rate": 2.4e9, "tau_p": None}, IQ_settings = {"I_channel": 1, "Q_channel": 2, "I_mod_channel": "sin11",  "Q_mod_channel": "sin22", "IQ_offset": IQ_offset, "osc": osc, "mod_freq": 15e6, "I_out": 1, "Q_out": 1}, gauss_settings = {"mu": None , "sigma": None, "amp": 1}):
+    def __init__(self, gate_type, awg, pulse_settings = {"pulse_type": "rectangular", "sample_rate": 2.4e9, "tau_p": None}, IQ_settings = {"I_sin": 1, "Q_sin": 2, "I_out": 1, "Q_out": 2, "IQ_offset": IQ_offset, "osc": osc, "freq": 15e6 , "amp": 0.5}, gauss_settings = {"mu": None , "sigma": None, "amp": 1}):
         ##If tau_p is None ==> use default settings (pull from table). Otherwise, generate new signal
         ##set default values for all input parameters...
         single_gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
@@ -193,14 +187,28 @@ class SingleQubitGate:
        self._gate_type = gate_type
        self._pulse_duration = tau
        self._npoints = round(sample_rate*self._pulse_duration/16)*16
-       self._IQ_settings = {"I": {"channel": I_channel, "osc": osc, "freq": mod_freq, "phase_shift": I_phase, "modulation_channels": I_mod_channel, "wave_out": True}, "Q": {"channel": Q_channel, "osc": osc, "freq": mod_freq, "phase_shift": Q_phase, "modulation_channels": Q_mod_channel, "wave_out": True}}
+       self._IQ_settings = {"I": {"channel": IQ_settings["I_sin"], "wave_out": IQ_settings["I_out"],  "osc": IQ_settings["osc"],  "freq": IQ_settings["freq"], "phase": I_phase, "amp": IQ_settings["amp"]},
+        "Q": {"channel": IQ_settings["I_sin"],  "wave_out": IQ_settings["Q_out"], "osc": IQ_settings["osc"], "freq": IQ_settings["freq"], "phase": Q_phase, "amp": IQ_settings["amp"]}}
 
        if gate_type == "wait":
            self._waveform = rectangular(self._npoints,0)
        else:
            self._waveform = rectangular(self._npoints,amp_pulse)
 
+       ##sets I-Q frequencies
+       self._awg.set_osc_freq(self._IQ_settings["I"]["osc"], self._IQ_settings["I"]["freq"])
+       self._awg.set_osc_freq(self._IQ_settings["Q"]["osc"], self._IQ_settings["Q"]["freq"])
 
+       ##sets I-Q amplitudes
+       self._awg.set_out_amp(self._IQ_settings["I"]["channel"], self._IQ_settings["I"]["wave_out"], self._IQ_settings["I"]["amp"])
+       self._awg.set_out_amp(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["wave_out"], self._IQ_settings["Q"]["amp"])
+
+       ##sets I-Q phase
+       self._awg.set_phase(self._IQ_settings["I"]["channel"], self._IQ_settings["I"]["phase"])
+       self._awg.set_phase(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["phase"])
+
+    def get_awg(self):
+        return awg
 
     def set_awg(self, awg):
         try:
@@ -209,9 +217,6 @@ class SingleQubitGate:
         except ValueError:
             raise
         self._awg = awg
-
-    def get_awg(self):
-        return awg
 
     def get_gate_type(self):
         return self._gate_type = gate_type
