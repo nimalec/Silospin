@@ -173,15 +173,15 @@ class SingleQubitGate:
         ##For Gaussian pulses, set Gauss width = round(npoints/3)
         ## add column to table for pulse amplitude
 
-        I_phase = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["i_phase"]
-        Q_phase = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["q_phase"]
+        I_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["i_phase"]
+        Q_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["q_phase"]
         if IQ_offset:
            Q_phase = Q_phase + IQ_offset
         else:
            pass
 
-        tau  = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["pulse_time"]
-        amp  = rectangle_singlequbit_gates_df[rectangle_singlequbit_gates_df["gate"] == gate_type]["pulse_amp"]
+        tau  = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["pulse_time"]
+        amp  = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["pulse_amp"]
 
         self._awg = awg
         self._gate_type = gate_type
