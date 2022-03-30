@@ -8,11 +8,10 @@ from silospin.math.math_helpers import gauss, rectangular
 class SingleQubitGate:
     def __init__(self, gate_type, awg, pulse_settings = {"pulse_type": "rectangular", "sample_rate": 2.4e9, "tau_p": None}, IQ_settings = {"I_sin": 1, "Q_sin": 2, "I_out": 1, "Q_out": 2, "IQ_offset": 0, "osc": 1, "freq": 15e6 , "amp": 0.5}, gauss_settings = {"mu": None , "sigma": None, "amp": 1}):
 
-        single_gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
+        gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
         sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
         gates_path = resource_filename("silospin.quantum_compiler.quantumgates","rectangle_singlequbit_gates.csv")
-        #rectangle_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
         rectangle_gate_df = pd.read_csv(gates_path)
 
         try:
