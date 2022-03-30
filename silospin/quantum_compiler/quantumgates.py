@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import pkg_resources
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 
@@ -11,7 +12,9 @@ class SingleQubitGate:
         single_gates = {"x", "xx", "xxx", "mxxm", "y", "yy", "yyy", "myym", "wait"}
         pulses = {"rectangular", "gaussian", "chirped", "adiabatic", "wait"}
         sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
-        rectangle_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
+        gates_path = pkg_resources("silospin.quantum_compiler.quantumgates","rectangle_singlequbit_gates.csv")
+        #rectangle_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
+        rectangle_gate_df = pd.read_csv(gates_path)
 
         ##Assertions for input values
         #
