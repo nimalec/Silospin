@@ -15,19 +15,17 @@ class SingleQubitGate:
         #rectangle_gate_df = pd.read_csv("rectangle_singlequbit_gates.csv")
         rectangle_gate_df = pd.read_csv(gates_path)
 
-        ##Assertions for input values
-        #
-        # try:
-        #     if type(gate_type) is not str:
-        #         raise TypeError("'gate_type' should be a string.")
-        # except TypeError:
-        #     raise
-        # try:
-        #     if gate_type not in gates:
-        #         raise ValueError("'gate_type' should be in list of gate types.")
-        # except ValueError:
-        #     raise
-        #
+        try:
+            if type(gate_type) is not str:
+                raise TypeError("'gate_type' should be a string.")
+        except TypeError:
+            raise
+        try:
+            if gate_type not in gates:
+                raise ValueError("'gate_type' should be in list of gate types.")
+        except ValueError:
+            raise
+
         # try:
         #     if type(pulse_type) is not str:
         #         raise TypeError("'pulse_type' should be a string.")
