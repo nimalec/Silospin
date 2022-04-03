@@ -242,6 +242,32 @@ class HdawgDriver:
          raise
       return self._sines["sin"+str(sin_num)]
 
+
+    def assign_osc(self, sin_num, osc_num):
+       try:
+          if type(sin_num) is not int:
+             raise TypeError("'sin_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if sin_num < 1 or sin_num > 8:
+             raise ValueError("'sin_num' should be between 1 and 8.")
+       except ValueError:
+          raise
+       try:
+          if type(osc_num) is not int:
+             raise TypeError("'osc_num' should be an integer.")
+       except TypeError:
+          raise
+       try:
+          if osc_num < 1 or osc_num > 16:
+             raise ValueError("'osc_num' should be between 1 and 16.")
+       except ValueError:
+          raise
+       self._sines["sin"+str(sin_num)]["osc_num"] = osc_num
+       self._hdawg.sines[sin_num-1].oscselect(osc_num-1)
+
+
     def set_sine(self, sin_num, osc_num, phase=0.0, harmonic=1, amp1=1.0, amp2=1.0):
        """
         Setter function for sines.
