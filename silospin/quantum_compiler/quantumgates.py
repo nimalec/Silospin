@@ -190,8 +190,8 @@ class SingleQubitGate:
         else:
            pass
 
-        tau  = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["pulse_time"][0]
-        amp  = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["pulse_amp"][0]
+        tau  = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["pulse_time"].values[0]
+        amp  = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["pulse_amp"].values[0]
 
         self._awg = awg
         self._gate_type = gate_type
