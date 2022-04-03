@@ -69,42 +69,10 @@ class SingleQubitGate:
             raise
 
         try:
-            if type(IQ_settings["freq"]) is not float or type(IQ_settings["freq"]) is not int:
-                raise TypeError("Modulation frequency should be type int or float")
-        except TypeError:
+            if pulse_settings["sample_rate"] not in sample_rates:
+                raise ValueError("Sample rate should be in sample_rates")
+        except ValueError:
             raise
-
-
-
-        # try:
-        #     if type(tau_p) is not float or type(tau_p) is not int:
-        #         raise TypeError("Pulse duration should be type int or float")
-        # except TypeError:
-        #     raise
-        #
-        # try:
-        #     if type(amp_channel) is not float or type(amp_channel) is not int:
-        #         raise TypeError("Channel amplitude should be type int or float")
-        # except TypeError:
-        #     raise
-        #
-        # try:
-        #     if type(amp_pulse) is not float or type(amp_pulse) is not int:
-        #         raise TypeError("Pulse amplitude should be type int or float.")
-        # except TypeError:
-        #     raise
-        #
-        # try:
-        #     if type(sample_rate) is not float or type(sample_rate) is not int :
-        #         raise TypeError("Sample rate should be type int or float")
-        # except TypeError:
-        #     raise
-        #
-        # try:
-        #     if sample_rate not in sample_rates:
-        #         raise ValueError("Sample rate should be in sample_rates")
-        # except ValueError:
-        #     raise
 
         I_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["i_phase"].values[0]
         Q_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["q_phase"].values[0]
