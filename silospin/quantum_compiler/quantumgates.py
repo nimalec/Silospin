@@ -25,7 +25,7 @@ class SingleQubitGate:
         except ValueError:
             raise
 
-        pusle_type = pulse_settings["pulse_type"]
+        pulse_type = pulse_settings["pulse_type"]
 
         try:
             if type(pulse_type) is not str:
