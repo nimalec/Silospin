@@ -25,33 +25,33 @@ class SingleQubitGate:
         except ValueError:
             raise
 
-        # try:
-        #     if type(pulse_type) is not str:
-        #         raise TypeError("'pulse_type' should be a string.")
-        # except TypeError:
-        #     raise
-        # try:
-        #     if pulse_type not in pulses:
-        #         raise ValueError("'pulse_type' should be 'rectangular', 'gaussian', 'chirped', 'adiabatic', 'wait'")
-        # except ValueError:
-        #     raise
+        try:
+            if type(pulse_type) is not str:
+                raise TypeError("'pulse_type' should be a string.")
+        except TypeError:
+            raise
+        try:
+            if pulse_type not in pulses:
+                raise ValueError("'pulse_type' should be 'rectangular', 'gaussian', 'chirped', 'adiabatic', 'wait'")
+        except ValueError:
+            raise
 
       ##(1) assert awg type
       ##(2) ensure a connection with awg
       ##(3) assert channel settings  (I_channel, I_osc, I_mod_channel, mod_Freq, Q_channel, IQ_offset, etc.)
       ##(4) determine IQ-settings
       ##(5) generate waveform
-        # try:
-        #     if awg._connection_settings["connection_status"] == 0:
-        #         raise ValueError("'awg' should be connected.")
-        # except ValueError:
-        #     raise
-        #
-        # try:
-        #     if type(I_channel) is not int:
-        #         raise TypeError("'I_channel should be type int.")
-        # except TypeError:
-        #     raise
+        try:
+            if awg._connection_settings["connection_status"] == 0:
+                raise ValueError("'awg' should be connected.")
+        except ValueError:
+            raise
+
+        try:
+            if type(I_channel) is not int:
+                raise TypeError("'I_channel should be type int.")
+        except TypeError:
+            raise
         #
         # try:
         #     if I_channel < 1 or I_channel > 8:
@@ -167,11 +167,6 @@ class SingleQubitGate:
         # except ValueError:
         #     raise
 
-        ### set single qubit gate parameters
-        ##set pulse table for single qubit gates  + command table
-        ##For Gaussian pulses, set Gauss width = round(npoints/3)
-        ## add column to table for pulse amplitude
-
         I_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["i_phase"].values[0]
         Q_phase = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["q_phase"].values[0]
         IQ_offset = IQ_settings["IQ_offset"]
@@ -180,8 +175,8 @@ class SingleQubitGate:
         else:
            pass
 
-        tau  = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["pulse_time"]
-        amp  = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["pulse_amp"]
+        tau  = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["pulse_time"][0]
+        amp  = rectangle_gate_df[rectangle_gate_df["gate"] == gate_type]["pulse_amp"][0]
 
         self._awg = awg
         self._gate_type = gate_type
@@ -190,10 +185,11 @@ class SingleQubitGate:
         self._IQ_settings = {"I": {"channel": IQ_settings["I_sin"], "wave_out": IQ_settings["I_out"],  "osc": IQ_settings["osc"],  "freq": IQ_settings["freq"], "phase": I_phase, "amp": IQ_settings["amp"]},
         "Q": {"channel": IQ_settings["Q_sin"],  "wave_out": IQ_settings["Q_out"], "osc": IQ_settings["osc"], "freq": IQ_settings["freq"], "phase": Q_phase, "amp": IQ_settings["amp"]}}
 
-        #if gate_type == "wait":
-        #   self._waveform = rectangular(self._npoints,0)
-        #else:
-        #   self._waveform = rectangular(self._npoints,amp_pulse)
+        ##Use rectangular pulses for now
+        if gate_type == "wait":
+          self._waveform = rectangular(self._npoints,0)
+        else:
+          self._waveform = rectangular(self._npoints,amp_pulse)
 
        ##sets I-Q frequencies
         self._awg.set_osc_freq(self._IQ_settings["I"]["osc"], self._IQ_settings["I"]["freq"])
@@ -207,22 +203,22 @@ class SingleQubitGate:
         self._awg.set_phase(self._IQ_settings["I"]["channel"], self._IQ_settings["I"]["phase"])
         self._awg.set_phase(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["phase"])
 
-    # def get_awg(self):
-    #     return awg
-    #
-    # def set_awg(self, awg):
-    #     try:
-    #         if awg._connection_settings["connection_status"] == 0:
-    #             raise ValueError("'awg' should be connected.")
-    #     except ValueError:
-    #         raise
-    #     self._awg = awg
-    #
-    # def get_gate_type(self):
-    #     return self._gate_type = gate_type
-    #
-    # def get_pulse_duration(self):
-    #     return self._pulse_duration
+    def get_awg(self):
+        return awg
+
+    def set_awg(self, awg):
+        try:
+            if awg._connection_settings["connection_status"] == 0:
+                raise ValueError("'awg' should be connected.")
+        except ValueError:
+            raise
+        self._awg = awg
+
+    def get_gate_type(self):
+        return self._gate_type = gate_type
+
+    def get_pulse_duration(self):
+        return self._pulse_duration
     #
     # def set_sample_rate(self, sample_rate):
     #     sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
