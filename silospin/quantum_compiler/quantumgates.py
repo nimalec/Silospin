@@ -121,8 +121,6 @@ class SingleQubitGate:
             raise
         self._awg = awg
 
-    #def get_gate_type(self):
-
     def get_gate_type(self):
         return self._gate_type
 
@@ -167,75 +165,52 @@ class SingleQubitGate:
         except TypeError:
             raise
         self._IQ_settings["Q"]["phase"] = self._IQ_settings["Q"]["phase"] + phase_offset
+        self._awg.set_phase(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["phase"])
 
-    #def set_freq(freq):
-    #def set_channel_amp(amp):
-    #def set_tau_p():
-    #def set_amp():
+    def get_phase(self, IQ):
+        try:
+            if IQ != "I" or IQ != "Q":
+                raise ValueError("IQ should be 'I' or 'Q'")
+        except ValueError:
+            raise
+        return self._IQ_settings[IQ]["phase"]
 
+    def set_freq(self, osc_num, freq):
+        try:
+            if osc_num < 1 or osc_num > 16:
+                raise ValueError("Oscillator number should be between 1 and 16")
+        except ValueError:
+            raise
+        try:
+            if type(float(freq)) is not float:
+                raise TypeError("freq should be a float")
+        except TypeError:
+            raise
 
-    # def set_IQ_settings(self, IQ, setting, value):
-    #     try:
-    #         if IQ != "I" or IQ != "Q":
-    #             raise ValueError("IQ should be 'I' or 'Q'.")
-    #     except ValueError:
-    #         raise
-    #     settings = {"channel", "osc", "freq", "phase_shift", "modulation_channels", "wave_out", "amp"}
-    #     try:
-    #         if setting not in settings:
-    #             raise ValueError("setting should be in IQ settings")
-    #     except ValueError:
-    #         raise
-    #
-    #     self._IQ_settings[IQ][setting] = value
-    #
-    # def get_IQ_settings(self, IQ, setting, value):
-    #     try:
-    #         if IQ != "I" or IQ != "Q":
-    #             raise ValueError("IQ should be 'I' or 'Q'.")
-    #     except ValueError:
-    #         raise
-    #     settings = {"channel", "osc", "freq", "phase_shift", "modulation_channels", "wave_out", "amp"}
-    #     try:
-    #         if setting not in settings:
-    #             raise ValueError("setting should be in IQ settings")
-    #     except ValueError:
-    #         raise
-    #     return self._IQ_settings[IQ][setting]
-    #
-    # def make_pulse_envelope(self, pulse_type, npoints, t_start, t_end, amplitude, t_p=None, mu=None, sig=None):
-    #     pulse_types = {"gaussian", "rectangular"}
-    #     try:
-    #         if pulse_type not in pulse_types:
-    #             raise ValueError("pulse_type should bse rectangular or gaussian.")
-    #     except ValueError:
-    #         raise
-    #
-    #     if pulse_type == "gaussian":
-    #         mu = 0
-    #         sig = npoints/3
-    #         waveform = gauss(npoints, amp, mu, sig)
-    #     else:
-    #         waveform = rectangular(npoints, amp)
+        self._IQ_settings["I"]["osc"] = osc_num
+        self._IQ_settings["Q"]["osc"] = osc_num
+        self._IQ_settings["I"]["freq"] = freq
+        self._IQ_settings["Q"]["freq"] = freq
+        self._awg.set_osc_freq(osc_num, freq)
 
-    # def make_pulse_envelope(self, pulse_type, npoints, t_start, t_end, amplitude, t_p=None, mu=None, sig=None):
-    #     pulses  = {"rectangular", "gaussian", "adiabatic", "chirped"}
-    #     if pulse_type == "rectangular":
-    #         wave = recatangular_wave(amplitude, t_p, npoints)
-    #     elif pulse_type == "gaussian":
-    #         wave = gaussian_wave(amplitude, mu, sig, npoints)
-    #     elif pulse_type == "chriped":
-    #         pass
-    #     else:
-    #         pass
-    #     self._pulse_envelope = wave
-    #
-    # def get_pulse_envelope(self):
-    #     return make_pulse
-#    def make_pulse(self, gate_type):
-        ##add assertiion that pulse envelope exists
+    def get_freq(self):
+        return self._IQ_settings["I"]["freq"]
+
+    def set_amp(self, amp):
+        self._awg.set_out_amp(self._IQ_settings["I"]["channel"], self._IQ_settings["I"]["wave_out"], amp)
+        self._awg.set_out_amp(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["wave_out"], amp)
+        self._IQ_settings["I"]["amp"] = amp
+        self._IQ_settings["Q"]["amp"] = amp
+
+    def get_amp(self):
+        return self._IQ_settings["I"]["amp"]
+
+    #def set_tau_p(self, tau):
+
+    #def set_pulse(self):
+
     #def get_pulse(self):
-    #def get_IQ_settings(self):
-    #def set_IQ_settings(self):
-    #def queue_wave(self):
-    #def play_wave(self):
+
+    #def compile_gate(self):
+
+    #def play_gate(self):
