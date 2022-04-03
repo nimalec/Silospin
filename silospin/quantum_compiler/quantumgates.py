@@ -204,7 +204,7 @@ class SingleQubitGate:
         if gate_type == "wait":
           self._waveform = rectangular(self._npoints,0)
         else:
-          self._waveform = rectangular(self._npoints,amp_pulse)
+          self._waveform = rectangular(self._npoints,1)
 
        ##sets I-Q frequencies
         self._awg.set_osc_freq(self._IQ_settings["I"]["osc"], self._IQ_settings["I"]["freq"])
