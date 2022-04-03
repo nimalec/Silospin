@@ -25,6 +25,8 @@ class SingleQubitGate:
         except ValueError:
             raise
 
+        pusle_type = pulse_settings["pulse_type"]
+
         try:
             if type(pulse_type) is not str:
                 raise TypeError("'pulse_type' should be a string.")
@@ -48,17 +50,53 @@ class SingleQubitGate:
             raise
 
         try:
-            if type(I_channel) is not int:
+            if type(pulse_settings["I_sin"]) is not int:
                 raise TypeError("'I_channel should be type int.")
         except TypeError:
             raise
-        #
-        # try:
-        #     if I_channel < 1 or I_channel > 8:
-        #         raise ValueError("'I_channel should be between 1 and 8.")
-        # except TypeError:
-        #     raise
-        #
+
+        try:
+            if pulse_settings["I_sin"] < 1 or pulse_settings["I_sin"] > 8:
+                raise ValueError("'I_channel should be between 1 and 8.")
+        except TypeError:
+            raise
+
+        try:
+            if type(pulse_settings["Q_sin"]) is not int:
+                raise TypeError("'Q_channel should be type int.")
+        except TypeError:
+            raise
+
+        try:
+            if pulse_settings["Q_sin"] < 1 or pulse_settings["Q_sin"] > 8:
+                raise ValueError("'Q_channel should be between 1 and 8.")
+        except TypeError:
+            raise
+
+        try:
+            if type(pulse_settings["I_out"]) is not int:
+                raise TypeError("'I_out should be type int.")
+        except TypeError:
+            raise
+
+        try:
+            if pulse_settings["I_out"] != 1 or pulse_settings["I_out"] != 2:
+                raise ValueError("'I_channel should be 1 or 2")
+        except TypeError:
+            raise
+
+        try:
+            if type(pulse_settings["Q_out"]) is not int:
+                raise TypeError("'Q_out should be type int.")
+        except TypeError:
+            raise
+
+        try:
+            if pulse_settings["Q_out"] != 1 or pulse_settings["Q_out"] != 2:
+                raise ValueError("'Q_channel should be 1 or 2.")
+        except TypeError:
+            raise
+
         # try:
         #     if type(I_osc) is not int:
         #         raise TypeError("'I_osc should be type int.")
