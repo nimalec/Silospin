@@ -56,7 +56,7 @@ class SingleQubitGate:
             raise
 
         try:
-            if IQ_settings["I_sin"] < 1 or pulse_settings["I_sin"] > 8:
+            if IQ_settings["I_sin"] < 1 or IQ_settings["I_sin"] > 8:
                 raise ValueError("'I_channel should be between 1 and 8.")
         except TypeError:
             raise
