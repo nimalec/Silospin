@@ -74,11 +74,7 @@ class SingleQubitGate:
         except TypeError:
             raise
 
-        try:
-            if type(IQ_offset) is not float or type(mod_freq) is not int:
-                raise TypeError("IQ offset should be type int or float")
-        except TypeError:
-            raise
+
 
         # try:
         #     if type(tau_p) is not float or type(tau_p) is not int:
