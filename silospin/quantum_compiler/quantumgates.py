@@ -53,7 +53,7 @@ class SingleQubitGate:
         try:
             if IQ_settings["I_sin"] < 1 or IQ_settings["I_sin"] > 8:
                 raise ValueError("'I_channel should be between 1 and 8.")
-        except TypeError:
+        except ValueError:
             raise
 
         try:
@@ -65,7 +65,7 @@ class SingleQubitGate:
         try:
             if IQ_settings["Q_sin"] < 1 or IQ_settings["Q_sin"] > 8:
                 raise ValueError("'Q_channel should be between 1 and 8.")
-        except TypeError:
+        except ValueError:
             raise
 
         try:
@@ -121,29 +121,59 @@ class SingleQubitGate:
             raise
         self._awg = awg
 
+    #def get_gate_type(self):
+
     def get_gate_type(self):
         return self._gate_type
 
     def get_pulse_duration(self):
         return self._pulse_duration
-    #
-    # def set_sample_rate(self, sample_rate):
-    #     sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
-    #     try:
-    #         if type(sample_rate) is not float:
-    #             raise TypeError("sample_rate should be a float.")
-    #     except TypeError:
-    #         raise
-    #     try:
-    #         if sample_rate not in sample_rates:
-    #             raise ValueError("Sample rate should be in sample_rates")
-    #     except ValueError:
-    #         raise
-    #     self._npoints = sample_rate*self._pulse_duration
-    #
-    # def get_sample_rate(self):
-    #     return self._sample_rate
-    #
+
+    def set_sample_rate(self, sample_rate):
+        sample_rates = {2.4e9, 1.2e9, 600e6, 300e6, 75e6, 37.5e6, 18.75e6, 9.37e6, 4.68e6, 2.34e6, 1.17e6, 585.93e3, 292.96e3}
+        try:
+            if sample_rate not in sample_rates:
+                raise ValueError("Sample rate should be in sample_rates")
+        except ValueError:
+            raise
+        self._npoints = round(sample_rate*self._pulse_duration/16)*16
+
+    def get_sample_rate(self):
+        return self._sample_rate
+
+    def set_IQ_channel(self, sin_num, IQ):
+        try:
+            if type(sin_num) is not int:
+                raise TypeError("'sin_num should be type int.")
+        except TypeError:
+            raise
+
+        try:
+            if sin_num < 1 or sin_num > 8:
+                raise ValueError("'sin_num should be between 1 and 8.")
+        except ValueError:
+            raise
+
+        try:
+            if IQ != "I" or IQ != "Q":
+                raise ValueError("IQ should be 'I' or 'Q'")
+        except ValueError:
+            raise
+
+    def set_phase_offset(phase_offset):
+        try:
+            if type(float(phase_offset)) is not float:
+                raise TypeError("phase_offset should be a float")
+        except TypeError:
+            raise
+        self._IQ_settings["Q"]["phase"] = self._IQ_settings["Q"]["phase"] + phase_offset
+
+    #def set_freq(freq):
+    #def set_channel_amp(amp):
+    #def set_tau_p():
+    #def set_amp():
+
+
     # def set_IQ_settings(self, IQ, setting, value):
     #     try:
     #         if IQ != "I" or IQ != "Q":
