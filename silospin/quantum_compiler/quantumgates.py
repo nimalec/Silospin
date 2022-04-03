@@ -73,29 +73,6 @@ class SingleQubitGate:
         except TypeError:
             raise
 
-        try:
-            if type(IQ_settings["I_out"]) is not int:
-                raise TypeError("'I_out should be type int.")
-        except TypeError:
-            raise
-
-        try:
-            if IQ_settings["I_out"] != 1 or IQ_settings["I_out"] != 2:
-                raise ValueError("'I_channel should be 1 or 2")
-        except TypeError:
-            raise
-
-        try:
-            if type(IQ_settings["Q_out"]) is not int:
-                raise TypeError("'Q_out should be type int.")
-        except TypeError:
-            raise
-
-        try:
-            if IQ_settings["Q_out"] != 1 or IQ_settings["Q_out"] != 2:
-                raise ValueError("'Q_channel should be 1 or 2.")
-        except TypeError:
-            raise
 
         # try:
         #     if type(I_osc) is not int:
