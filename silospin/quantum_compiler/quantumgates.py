@@ -111,7 +111,7 @@ class SingleQubitGate:
         self._awg.set_phase(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["phase"])
 
     def get_awg(self):
-        return awg
+        return self._awg
 
     def set_awg(self, awg):
         try:
