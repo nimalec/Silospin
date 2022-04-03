@@ -215,7 +215,7 @@ class SingleQubitGate:
         self._awg = awg
 
     def get_gate_type(self):
-        return self._gate_type = gate_type
+        return self._gate_type
 
     def get_pulse_duration(self):
         return self._pulse_duration
