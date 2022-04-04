@@ -156,11 +156,11 @@ class SingleQubitGate:
         except ValueError:
             raise
 
-        try:
-            if IQ != "I" or IQ != "Q":
-                raise ValueError("IQ should be 'I' or 'Q'")
-        except ValueError:
-            raise
+        # try:
+        #     if IQ != "I" or IQ != "Q":
+        #         raise ValueError("IQ should be 'I' or 'Q'")
+        # except ValueError:
+        #     raise
 
     def set_phase_offset(phase_offset):
         try:
