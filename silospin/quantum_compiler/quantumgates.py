@@ -88,6 +88,7 @@ class SingleQubitGate:
         self._awg = awg
         self._gate_type = gate_type
         self._pulse_duration = tau
+        self._sample_rate = pulse_settings["sample_rate"]
         self._npoints = round(pulse_settings["sample_rate"]*self._pulse_duration/16)*16
         self._IQ_settings = {"I": {"channel": IQ_settings["I_sin"], "wave_out": IQ_settings["I_out"],  "osc": IQ_settings["osc"],  "freq": IQ_settings["freq"], "phase": I_phase, "amp": IQ_settings["amp"]},
         "Q": {"channel": IQ_settings["Q_sin"],  "wave_out": IQ_settings["Q_out"], "osc": IQ_settings["osc"], "freq": IQ_settings["freq"], "phase": Q_phase, "amp": IQ_settings["amp"]}}
