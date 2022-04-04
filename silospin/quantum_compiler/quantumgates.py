@@ -172,11 +172,11 @@ class SingleQubitGate:
         self._awg.set_phase(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["phase"])
 
     def get_phase(self, IQ):
-        try:
-            if IQ != "I" or IQ != "Q":
-                raise ValueError("IQ should be 'I' or 'Q'")
-        except ValueError:
-            raise
+        # try:
+        #     if IQ != "I" or IQ != "Q":
+        #         raise ValueError("IQ should be 'I' or 'Q'")
+        # except ValueError:
+        #     raise
         return self._IQ_settings[IQ]["phase"]
 
     def set_freq(self, osc_num, freq):
