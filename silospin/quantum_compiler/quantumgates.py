@@ -91,6 +91,8 @@ class SingleQubitGate:
         self._npoints = round(pulse_settings["sample_rate"]*self._pulse_duration/16)*16
         self._IQ_settings = {"I": {"channel": IQ_settings["I_sin"], "wave_out": IQ_settings["I_out"],  "osc": IQ_settings["osc"],  "freq": IQ_settings["freq"], "phase": I_phase, "amp": IQ_settings["amp"]},
         "Q": {"channel": IQ_settings["Q_sin"],  "wave_out": IQ_settings["Q_out"], "osc": IQ_settings["osc"], "freq": IQ_settings["freq"], "phase": Q_phase, "amp": IQ_settings["amp"]}}
+        self._awg.assign_osc(self._IQ_settings["I"]["channel"] ,IQ_settings["osc"])
+        self._awg.assign_osc(self._IQ_settings["Q"]["channel"] ,IQ_settings["osc"])
 
         ##Use rectangular pulses for now
         if gate_type == "wait":
@@ -109,6 +111,7 @@ class SingleQubitGate:
        ##sets I-Q phase
         self._awg.set_phase(self._IQ_settings["I"]["channel"], self._IQ_settings["I"]["phase"])
         self._awg.set_phase(self._IQ_settings["Q"]["channel"], self._IQ_settings["Q"]["phase"])
+
 
     def get_awg(self):
         return self._awg
