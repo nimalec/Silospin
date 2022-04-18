@@ -254,7 +254,7 @@ class GateString:
                  phase0 = {"value": 0,  "increment": True}
                  phase1 = {"value":  0,  "increment": True}
              else:
-                 waveform = {"index": wave_idx["index"]}
+                 waveform = {"index": wave_idx[gt]}
                  phase0 = {"value": phases[gt]["phase0"], "increment": True}
                  phase1 = {"value": phases[gt]["phase1"], "increment": True}
 
