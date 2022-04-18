@@ -5,5 +5,8 @@ def gauss(x, amp, mu, sig):
 def rectangular(npoints, amp):
     return amp*np.ones(npoints)
 
+
+
+
 ##def chirped():
 ##def adiabatic():
