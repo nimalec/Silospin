@@ -35,5 +35,5 @@ def make_command_table(gate_string, iq_settings):
         ct.append(ct_entry)
         idx += 1
 
-    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': [ct]}
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
