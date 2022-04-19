@@ -237,7 +237,7 @@ class QubitGatesSet:
     # (1) rectangular or gauss?
     # (2) sample rate
 
-     def __init__(self, gate_string, awg, iq_settings={"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 15e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "rectangular", tau_pi = 50e-9, tau_pi2 = 25e-9):
+     def __init__(self, gate_string, awg, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 15e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "rectangular", tau_pi = 50e-9, tau_pi2 = 25e-9):
          self._gate_string = gate_string
          self._awg = awg
          self._sample_rate = sample_rate
@@ -246,9 +246,9 @@ class QubitGatesSet:
 
          self._tau_pi = tau_pi
          self._tau_pi_2 =  tau_pi2
-         self._awg.set_osc_freq(self._iq_settings["osc_num"], self._iq_settings["freq"])
-         self._awg.set_sine(self._iq_settings["i_sin"], self._iq_settings["osc_num"])
-         self._awg.set_sine(self._iq_settings["q_sin"], self._iq_settings["osc_num"])
+         self._awg.set_osc_freq(self._iq_settings["osc"], self._iq_settings["freq"])
+         self._awg.set_sine(self._iq_settings["i_sin"], self._iq_settings["osc"])
+         self._awg.set_sine(self._iq_settings["q_sin"], self._iq_settings["osc"])
          self._awg.set_out_amp(self._iq_settings["i_sin"], 1, self._iq_settings["i_amp"])
          self._awg.set_out_amp(self._iq_settings["q_sin"], 2, self._iq_settings["q_amp"])
 
