@@ -251,7 +251,7 @@ class QubitGatesSet:
          self._awg.set_sine(self._iq_settings["q_sin"], self._iq_settings["osc_num"])
          self._awg.set_out_amp(self._iq_settings["i_sin"], 1, self._iq_settings["i_amp"])
          self._awg.set_out_amp(self._iq_settings["q_sin"], 2, self._iq_settings["q_amp"])
-         
+
 
 
 
