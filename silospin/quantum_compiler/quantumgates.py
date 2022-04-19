@@ -3,6 +3,7 @@ import pandas as pd
 from pkg_resources import resource_filename
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
+from qc_helpers import make_command_table
 
 class SingleQubitGate:
     def __init__(self, gate_type, awg, pulse_settings = {"pulse_type": "rectangular", "sample_rate": 2.4e9, "tau_p": None}, IQ_settings = {"I_sin": 1, "Q_sin": 2, "I_out": 1, "Q_out": 2, "IQ_offset": 0, "osc": 1, "freq": 15e6 , "amp": 0.5}, gauss_settings = {"mu": None , "sigma": None, "amp": 1}):
@@ -218,48 +219,46 @@ class SingleQubitGate:
 
     #def play_gate(self):
 #
-class GateString:
+class QubitGatesSet:
     ##Defines waveforms and command table for a given set of input gates
-     def __init__(self, gate_string, iq_settings = None, waveform_settings = None):
+    ##Inputs:
+    #-  awg
+    #-  gate sequence
+    #-  IQ settings (IQ channels, IQ offset,  mod freq,  I_amp, Q_amp)
+    # - sample rate
+    #-
+    #-pulse_settings (shape, tau_p)
+    #-
+
+    ##AWG settings: IQ channels: 12, 34, 56, 78.
+    #IQ_settings = {"I_sin": 1, "Q_sin": 2, "I_out": 1, "Q_out": 2, "IQ_offset": 0, "osc": 1, "freq": 15e6 , "amp": 0.5}
+    #pulse_settings = {"pulse_type": "rectangular", "sample_rate": 2.4e9, "tau_p": None}
+    ##Waveform settings:
+    # (1) rectangular or gauss?
+    # (2) sample rate
+
+     def __init__(self, gate_string, awg, iq_settings={"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 15e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "rectangular", tau_pi = 50e-9, tau_pi2 = 25e-9):
          self._gate_string = gate_string
-         self._command_table = None
+         self._awg = awg
+         self._sample_rate = sample_rate
+         self._command_table = make_command_table(self._gate_string, self._iq_settings)
+
+         self._tau_pi = tau_pi
+         self._tau_pi_2 =  tau_pi_2
+         self._iq_settings = iq_settings
+         self._awg.set_osc_freq(self._iq_settings["osc_num"], self._iq_settings["freq"])
+         self._awg.set_sine(self._iq_settings["i_sin"], self._iq_settings["osc_num"])
+         self._awg.set_sine(self._iq_settings["q_sin"], self._iq_settings["osc_num"])
+         self._awg.set_out_amp(self._iq_settings["i_sin"], 1, self._iq_settings["i_amp"])
+         self._awg.set_out_amp(self._iq_settings["q_sin"], 2, self._iq_settings["q_amp"])
+         
 
 
-     def make_command_table(self):
-         ##Need to specify AWG and output channel.
-         ## I ==> out = 0 , Q ==> out = 1.
-         ## 1: AWG = 0 , out = 0
-         ## 2: AWG = 0 , out = 1
-         ## 3: AWG = 1 , out = 0
-         ## 4 : AWG = 1 , out = 1
-         ## 5 : AWG = 2 , out = 0
-         ## 6 : AWG = 2 , out = 1
-         ## 7 : AWG = 3 , out = 0
-         ## 8 : AWG = 3 , out = 1
 
-         ##X, Y, XXX, YYY  :  wave_idx = 0 (tau = tau_0)
-         ##XX, YY, mXXm, mYYm :  wave_idx = 1 (tau = tau_1) (XX = mXm)
-         wave_idx = {"x": 0, "y": 0, "xx": 1, "yy": 1, "xxx": 0, "yyy": 0, "mxxm": 1, "myym": 1}
-         phases = {"x": {"phase0": 0, "phase1": 90} , "y": {"phase0": 90, "phase1": 180},
-         "xx": {"phase0": 0, "phase1": 90} , "yy": {"phase0": 90, "phase1": 180},
-         "xxx": {"phase0": 360, "phase1": 270} , "yyy": {"phase0": 270 , "phase1": 180} ,
-         "mxxm": {"phase0": 360, "phase1": 270} , "myym":  {"phase0": 270, "phase1": 180}}
 
-         idx = 0
-         ct = []
-         for gt in self._gate_string:
-             #break into 2 cases: playZero = False, playZero = True.
-             if gt == "tau":
-                 waveform = {"length": 10, "playZero": True}
-                 phase0 = {"value": 0,  "increment": True}
-                 phase1 = {"value":  0,  "increment": True}
-             else:
-                 waveform = {"index": wave_idx[gt]}
-                 phase0 = {"value": phases[gt]["phase0"], "increment": True}
-                 phase1 = {"value": phases[gt]["phase1"], "increment": True}
-
-             ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
-             ct.append(ct_entry)
-             idx += 1
-
-         self._command_table = ct
+        ## (1) Generate each waveform
+        ## (2) assign waveform index
+        ## (3) upload waveform and compile
+        ## (4) upload sequencer code
+        ## (5) generate command table
+        ## (6) run command table
