@@ -241,11 +241,11 @@ class QubitGatesSet:
          self._gate_string = gate_string
          self._awg = awg
          self._sample_rate = sample_rate
+         self._iq_settings = iq_settings
          self._command_table = make_command_table(self._gate_string, self._iq_settings)
 
          self._tau_pi = tau_pi
          self._tau_pi_2 =  tau_pi_2
-         self._iq_settings = iq_settings
          self._awg.set_osc_freq(self._iq_settings["osc_num"], self._iq_settings["freq"])
          self._awg.set_sine(self._iq_settings["i_sin"], self._iq_settings["osc_num"])
          self._awg.set_sine(self._iq_settings["q_sin"], self._iq_settings["osc_num"])
