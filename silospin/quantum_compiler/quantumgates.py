@@ -3,7 +3,7 @@ import pandas as pd
 from pkg_resources import resource_filename
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
-from qc_helpers import make_command_table
+from silospin.quantum_compiler.qc_helpers import make_command_table
 
 class SingleQubitGate:
     def __init__(self, gate_type, awg, pulse_settings = {"pulse_type": "rectangular", "sample_rate": 2.4e9, "tau_p": None}, IQ_settings = {"I_sin": 1, "Q_sin": 2, "I_out": 1, "Q_out": 2, "IQ_offset": 0, "osc": 1, "freq": 15e6 , "amp": 0.5}, gauss_settings = {"mu": None , "sigma": None, "amp": 1}):
