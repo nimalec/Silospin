@@ -260,6 +260,8 @@ class QubitGatesSet:
          self._tau_pi_wave = rectangular(npoints_tau_pi, 1)
          self._tau_pi_2_wave = rectangular(npoints_tau_pi_2, 1)
 
+
+
         ## (1) Generate each waveform
         ## (2) assign waveform index
         ## (3) upload waveform and compile
