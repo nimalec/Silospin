@@ -1,4 +1,4 @@
-def make_command_table(gate_string, iq_settings, sampel):
+def make_command_table(gate_string, iq_settings, sample_rate):
     ##Need to specify AWG and output channel.
     ## I ==> out = 0 , Q ==> out = 1.
     ## 1: AWG = 0 , out = 0
