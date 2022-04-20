@@ -1,4 +1,4 @@
-def make_command_table(gate_string, iq_settings):
+def make_command_table(gate_string, iq_settings, sampel):
     ##Need to specify AWG and output channel.
     ## I ==> out = 0 , Q ==> out = 1.
     ## 1: AWG = 0 , out = 0
@@ -22,8 +22,10 @@ def make_command_table(gate_string, iq_settings):
     ct = []
     for gt in gate_string:
         #break into 2 cases: playZero = False, playZero = True.
-        if gt == "tau":
-            waveform = {"length": 10, "playZero": True}
+        if gt[0] == "t":
+            t = gt[1:3]
+            n_t = round(sample_rate*int(t)/16)*16
+            waveform = {"length": n_t, "playZero": True}
             phase0 = {"value": 0,  "increment": True}
             phase1 = {"value":  0,  "increment": True}
         else:

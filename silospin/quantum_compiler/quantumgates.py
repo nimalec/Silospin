@@ -242,7 +242,9 @@ class QubitGatesSet:
          self._awg = awg
          self._sample_rate = sample_rate
          self._iq_settings = iq_settings
-         self._command_table = make_command_table(self._gate_string, self._iq_settings)
+         self._command_table = make_command_table(self._gate_string, self._iq_settings, self._sample_rate)
+         self._pulse_type = pulse_type
+
 
          self._tau_pi = tau_pi
          self._tau_pi_2 =  tau_pi2
@@ -252,9 +254,11 @@ class QubitGatesSet:
          self._awg.set_out_amp(self._iq_settings["i_sin"], 1, self._iq_settings["i_amp"])
          self._awg.set_out_amp(self._iq_settings["q_sin"], 2, self._iq_settings["q_amp"])
 
+         npoints_tau_pi = round(sample_rate*self._tau_pi/16)*16
+         npoints_tau_pi_2 = round(sample_rate*self._tau_pi_2/16)*16
 
-
-
+         self._tau_pi_wave = rectangular(npoints_tau_pi, 1)
+         self._tau_pi_2_wave = rectangular(npoints_tau_pi_2, 1)
 
         ## (1) Generate each waveform
         ## (2) assign waveform index
