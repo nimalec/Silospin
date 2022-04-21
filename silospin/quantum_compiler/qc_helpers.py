@@ -39,3 +39,5 @@ def make_command_table(gate_string, iq_settings, sample_rate):
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
+
+#def make_gateset_sequencer():
