@@ -40,4 +40,15 @@ def make_command_table(gate_string, iq_settings, sample_rate):
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
 
-#def make_gateset_sequencer():
+
+def make_gateset_sequencer(n_array):
+    ##Input: n_array. List of lengths for each gate operation.
+    idx = 0
+    sequence_code = ""
+    for n in n_array:
+        n_str = str(n)
+        idx_str = str(idx)
+        line = "assignWaveIndex(placeholder("+n_str+"),"+idx_str+");\n"
+        sequence_code = sequence_code + line
+        idx+=1
+    return sequence_code
