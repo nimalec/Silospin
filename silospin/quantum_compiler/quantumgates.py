@@ -270,8 +270,7 @@ class QubitGatesSet:
              elif gt[0] == "t":
                  npoints_tau = round(sample_rate*int(gt[1:3])*(1e-9)/16)*16
                  n_array.append(npoints_tau)
-            else:
-                pass
+             else:
+                 pass
 
          self._sequence_code = make_gateset_sequencer(n_array)
-         
