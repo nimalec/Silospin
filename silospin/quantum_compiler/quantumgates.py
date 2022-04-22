@@ -274,3 +274,4 @@ class QubitGatesSet:
                  pass
 
          self._sequence_code = make_gateset_sequencer(n_array)
+         self._awg.load_sequence(self._sequence_code)
