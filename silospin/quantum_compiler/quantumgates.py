@@ -3,7 +3,7 @@ import pandas as pd
 from pkg_resources import resource_filename
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
-from silospin.quantum_compiler.qc_helpers import make_command_table
+from silospin.quantum_compiler.qc_helpers import make_command_table, make_gateset_sequencer
 
 class SingleQubitGate:
     def __init__(self, gate_type, awg, pulse_settings = {"pulse_type": "rectangular", "sample_rate": 2.4e9, "tau_p": None}, IQ_settings = {"I_sin": 1, "Q_sin": 2, "I_out": 1, "Q_out": 2, "IQ_offset": 0, "osc": 1, "freq": 15e6 , "amp": 0.5}, gauss_settings = {"mu": None , "sigma": None, "amp": 1}):
@@ -245,7 +245,6 @@ class QubitGatesSet:
          self._command_table = make_command_table(self._gate_string, self._iq_settings, self._sample_rate)
          self._pulse_type = pulse_type
 
-
          self._tau_pi = tau_pi
          self._tau_pi_2 =  tau_pi2
          self._awg.set_osc_freq(self._iq_settings["osc"], self._iq_settings["freq"])
@@ -259,3 +258,20 @@ class QubitGatesSet:
 
          self._tau_pi_wave = rectangular(npoints_tau_pi, 1)
          self._tau_pi_2_wave = rectangular(npoints_tau_pi_2, 1)
+
+         n_array = []
+         for gt in self._gate_string:
+             if gt in {"x", "y", "xxx", "yyy"}:
+                 n_array.append(npoints_tau_pi_2)
+
+             elif gt in  {"xx", "yy", "mxxm", "myym"}:
+                 n_array.append(npoints_tau)
+
+             elif gt[0] == "t":
+                 npoints_tau = round(sample_rate*int(gt[1:3])*(1e-9)/16)*16
+                 n_array.append(npoints_tau)
+            else:
+                pass
+
+         self._sequence_code = make_gateset_sequencer(n_array)
+         
