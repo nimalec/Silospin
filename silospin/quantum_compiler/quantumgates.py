@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from math import ceil 
+from math import ceil
 from pkg_resources import resource_filename
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
@@ -270,7 +270,7 @@ class QubitGatesSet:
                  n_array.append(npoints_tau)
 
              elif gt[0] == "t":
-                 npoints_tau = round(sample_rate*int(gt[1:3])*(1e-9)/16)*16
+                 npoints_tau = ceil(sample_rate*int(gt[1:3])*(1e-9)/16)*16
                  n_array.append(npoints_tau)
              else:
                  pass
