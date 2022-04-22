@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+from math import ceil 
 from pkg_resources import resource_filename
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
