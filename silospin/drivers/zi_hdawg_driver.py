@@ -583,7 +583,7 @@ class HdawgDriver:
 
 
 
-    def load_sequence(self, awg_num, program):
+    def load_sequence(self, program, awg_num=1):
         self._awgs["awg"+str(awg_num)].load_sequencer_program(program)
 
     def compile_core_upload_seq(self, awg_num):
