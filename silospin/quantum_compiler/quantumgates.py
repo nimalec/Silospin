@@ -258,7 +258,6 @@ class QubitGatesSet:
 
          self._tau_pi_wave = rectangular(npoints_tau_pi, 1)
          self._tau_pi_2_wave = rectangular(npoints_tau_pi_2, 1)
-         print(n_array)
 
 
          n_array = []
@@ -275,5 +274,6 @@ class QubitGatesSet:
              else:
                  pass
 
+         print(n_array)
          self._sequence_code = make_gateset_sequencer(n_array)
          self._awg.load_sequence(self._sequence_code)
