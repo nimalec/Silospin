@@ -271,6 +271,7 @@ class QubitGatesSet:
 
              elif gt[0] == "t":
                  npoints_tau = ceil(sample_rate*int(gt[1:3])*(1e-9)/16)*16
+                 print(gt[1:3])
                  n_array.append(npoints_tau)
              else:
                  pass
