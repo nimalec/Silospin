@@ -59,6 +59,7 @@ class HdawgDriver:
         self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "interface" : interface, "connection_status" : False}
         session = Session(server_host)
         self._hdawg = session.connect_device(dev_id)
+        self._daq = session.daq_server
 
         if session.server_port:
             self._connection_settings["connection_status"] = True

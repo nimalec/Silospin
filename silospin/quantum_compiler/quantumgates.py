@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 from math import ceil
+import json
 from pkg_resources import resource_filename
 from zhinst.toolkit import Waveforms
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
@@ -293,3 +294,6 @@ class QubitGatesSet:
 
          self._waveforms = waveforms
          self._awg._awgs["awg1"].write_to_waveform_memory(self._waveforms)
+         awg_index = 0
+         daq =
+         daq.setVector(f"/{self._awg._hdawg}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
