@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from math import ceil
 from pkg_resources import resource_filename
+from zhinst.toolkit import Waveforms
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.qc_helpers import make_command_table, make_gateset_sequencer
@@ -275,6 +276,20 @@ class QubitGatesSet:
              else:
                  pass
 
-         print(n_array)
          self._sequence_code = make_gateset_sequencer(n_array)
          self._awg.load_sequence(self._sequence_code)
+
+         waveforms = Waveforms()
+         idx = 0
+         for gt in self._gate_string:
+             if gt in {"x", "y", "xxx", "yyy"}:
+                 waveforms.assign_waveform(idx, self._tau_pi_2_wave)
+
+             elif gt in  {"xx", "yy", "mxxm", "myym"}:
+                 waveforms.assign_waveform(idx, self._tau_pi_2_wave)
+             else:
+                 pass
+              idx += 1
+
+         self._waveforms = waveforms
+         self._awg._awgs["awg1"].write_to_waveform_memory(self._waveforms)
