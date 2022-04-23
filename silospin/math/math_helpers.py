@@ -8,7 +8,7 @@ def rectangular(npoints, amp):
     array[1] = 0
     array[npoints-1] = 0
     array[npoints-2] = 0
-    return amp*np.ones(npoints)
+    return array 
 
 
 ##def chirped():

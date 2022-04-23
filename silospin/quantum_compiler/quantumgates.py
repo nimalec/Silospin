@@ -292,4 +292,4 @@ class QubitGatesSet:
              idx += 1
 
          self._waveforms = waveforms
-         self._awg._hdawg.awgs[0].write_to_waveform_memory(self._waveforms)
+         self._awg._awgs["awg1"].write_to_waveform_memory(self._waveforms)
