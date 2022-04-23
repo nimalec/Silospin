@@ -23,8 +23,8 @@ def make_command_table(gate_string, iq_settings, sample_rate):
     for gt in gate_string:
         #break into 2 cases: playZero = False, playZero = True.
         if gt[0] == "t":
-            t = gt[1:3]
-            n_t = round(sample_rate*int(t)*(1e-9)/16)*16
+            t = gt[1:4]
+            n_t = round(sample_rate*int(t)*(1e-9)/32)*32
             waveform = {"length": n_t, "playZero": True}
             phase0 = {"value": 0,  "increment": True}
             phase1 = {"value":  0,  "increment": True}
