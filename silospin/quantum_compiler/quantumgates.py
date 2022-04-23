@@ -286,7 +286,7 @@ class QubitGatesSet:
                  waveforms.assign_waveform(idx, self._tau_pi_2_wave)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                 waveforms.assign_waveform(idx, self._tau_pi_2_wave)
+                 waveforms.assign_waveform(idx, self._tau_pi_wave)
              else:
                  pass
              idx += 1
