@@ -254,8 +254,8 @@ class QubitGatesSet:
          self._awg.set_out_amp(self._iq_settings["i_sin"], 1, self._iq_settings["i_amp"])
          self._awg.set_out_amp(self._iq_settings["q_sin"], 2, self._iq_settings["q_amp"])
 
-         npoints_tau_pi = ceil(sample_rate*self._tau_pi/16)*16
-         npoints_tau_pi_2 = ceil(sample_rate*self._tau_pi_2/16)*16
+         npoints_tau_pi = ceil(sample_rate*self._tau_pi/32)*32
+         npoints_tau_pi_2 = ceil(sample_rate*self._tau_pi_2/32)*32
 
          self._tau_pi_wave = rectangular(npoints_tau_pi, 1)
          self._tau_pi_2_wave = rectangular(npoints_tau_pi_2, 1)
@@ -270,7 +270,7 @@ class QubitGatesSet:
                  n_array.append(npoints_tau)
 
              elif gt[0] == "t":
-                 npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/16)*16
+                 npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/32)*32
                  n_array.append(npoints_tau)
              else:
                  pass
