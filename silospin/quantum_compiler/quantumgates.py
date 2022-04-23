@@ -289,7 +289,7 @@ class QubitGatesSet:
                  waveforms.assign_waveform(idx, self._tau_pi_2_wave)
              else:
                  pass
-              idx += 1
+             idx += 1
 
          self._waveforms = waveforms
          self._awg._awgs["awg1"].write_to_waveform_memory(self._waveforms)
