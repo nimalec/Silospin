@@ -268,7 +268,7 @@ class QubitGatesSet:
                  n_array.append(npoints_tau_pi_2)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                 n_array.append(npoints_tau)
+                 n_array.append(npoints_tau_pi)
 
              elif gt[0] == "t":
                  npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/32)*32
