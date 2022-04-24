@@ -279,22 +279,29 @@ class QubitGatesSet:
 
          self._sequence_code = make_gateset_sequencer(n_array)
          self._awg.load_sequence(self._sequence_code)
+         daq = self._awg._daq
+         dev = self._awg._connection_settings["hdawg_id"]
+         daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
+         awg_index = 0
 
          waveforms = Waveforms()
          idx = 0
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
-                 waveforms.assign_waveform(idx, self._tau_pi_2_wave)
+                 #waveforms.assign_waveform(idx, self._tau_pi_2_wave)
+                 wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_2_wave)
+                 daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                 waveforms.assign_waveform(idx, self._tau_pi_wave)
+                 #waveforms.assign_waveform(idx, self._tau_pi_wave)
+                 wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_wave)
+                 daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
              else:
                  pass
              idx += 1
 
          self._waveforms = waveforms
-         self._awg._awgs["awg1"].write_to_waveform_memory(self._waveforms)
-         awg_index = 0
-         daq = self._awg._daq
-         dev = self._awg._connection_settings["hdawg_id"]
-         daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
+         #self._awg._awgs["awg1"].write_to_waveform_memory(self._waveforms)
+         #wave_raw = zhinst.utils.convert_awg_waveform(wave[0])
+         #daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{i}', wave_raw)
+         #daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
