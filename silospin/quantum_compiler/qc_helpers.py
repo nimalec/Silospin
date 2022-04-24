@@ -51,4 +51,7 @@ def make_gateset_sequencer(n_array):
         line = "assignWaveIndex(placeholder("+n_str+"),"+idx_str+");\n"
         sequence_code = sequence_code + line
         idx+=1
+    command_table_execute =  """\n for (i = 0; i <"""+str(len(n_array))+""" ; i++) { \n   executeTableEntry(i);\n
+}\n"""
+    sequence_code = sequence_code + command_table_execute
     return sequence_code
