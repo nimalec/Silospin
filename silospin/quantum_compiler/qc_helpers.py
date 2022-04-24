@@ -60,6 +60,7 @@ def make_gateset_sequencer(n_array):
     ##Input: n_array. List of lengths for each gate operation.
     idx = 0
     sequence_code = ""
+    command_code = ""
     for n in n_array:
         n_str = str(n)
         idx_str = str(idx)
@@ -69,5 +70,13 @@ def make_gateset_sequencer(n_array):
 #    command_table_execute =  """\n for (i = 0; i <"""+str(len(n_array))+""" ; i++) { \n   executeTableEntry(i);\n
 #}\n"""
     #sequence_code = sequence_code + command_table_execute
-    sequence_code = sequence_code + "executeTableEntry(0); \n executeTableEntry(1); \n executeTableEntry(2); \n  executeTableEntry(3);\n  "
+    idx = 0
+    for n in n_array:
+        idx_str = str(idx)
+        line = "executeTableEntry("+idx_str+");\n";
+        command_code = command_code + line
+        idx+=1
+
+    sequence_code = sequence_code + command_code
+    #sequence_code = sequence_code + "executeTableEntry(0); \n executeTableEntry(1); \n executeTableEntry(2); \n  executeTableEntry(3);\n  "
     return sequence_code
