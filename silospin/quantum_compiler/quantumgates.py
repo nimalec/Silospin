@@ -296,5 +296,5 @@ class QubitGatesSet:
          self._awg._awgs["awg1"].write_to_waveform_memory(self._waveforms)
          awg_index = 0
          daq = self._awg._daq
-         awg = self._awg._hdawg
-         daq.setVector(f"/{awg}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
+         dev = self._awg._connection_settings["hdawg_id"]
+         daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
