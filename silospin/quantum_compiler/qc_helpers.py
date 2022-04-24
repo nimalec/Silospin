@@ -40,22 +40,6 @@ def make_command_table(gate_string, iq_settings, sample_rate):
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
 
-
-# def make_gateset_sequencer(n_array):
-#     ##Input: n_array. List of lengths for each gate operation.
-#     idx = 0
-#     sequence_code = ""
-#     for n in n_array:
-#         n_str = str(n)
-#         idx_str = str(idx)
-#         line = "assignWaveIndex(placeholder("+n_str+"),"+idx_str+");\n"
-#         sequence_code = sequence_code + line
-#         idx+=1
-#     command_table_execute =  """\n for (i = 0; i <"""+str(len(n_array))+""" ; i++) { \n   executeTableEntry(i);\n
-# }\n"""
-#     sequence_code = sequence_code + command_table_execute
-#     return sequence_code
-
 def make_gateset_sequencer(n_array):
     ##Input: n_array. List of lengths for each gate operation.
     idx = 0
@@ -67,9 +51,7 @@ def make_gateset_sequencer(n_array):
         line = "assignWaveIndex(placeholder("+n_str+"),"+idx_str+");\n"
         sequence_code = sequence_code + line
         idx+=1
-#    command_table_execute =  """\n for (i = 0; i <"""+str(len(n_array))+""" ; i++) { \n   executeTableEntry(i);\n
-#}\n"""
-    #sequence_code = sequence_code + command_table_execute
+
     idx = 0
     for n in n_array:
         idx_str = str(idx)
@@ -78,5 +60,4 @@ def make_gateset_sequencer(n_array):
         idx+=1
 
     sequence_code = sequence_code + command_code
-    #sequence_code = sequence_code + "executeTableEntry(0); \n executeTableEntry(1); \n executeTableEntry(2); \n  executeTableEntry(3);\n  "
     return sequence_code
