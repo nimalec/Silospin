@@ -68,5 +68,5 @@ def make_gateset_sequencer(n_array):
         idx+=1
     command_table_execute =  """\n for (i = 0; i <"""+str(len(n_array))+""" ; i++) { \n   executeTableEntry(i);\n
 }\n"""
-   sequence_code = sequence_code + command_table_execute
+    sequence_code = sequence_code + command_table_execute
     return sequence_code
