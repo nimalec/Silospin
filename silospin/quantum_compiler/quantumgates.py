@@ -4,7 +4,7 @@ from math import ceil
 import json
 from pkg_resources import resource_filename
 from zhinst.toolkit import Waveforms
-import zhinst.utils 
+import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.qc_helpers import make_command_table, make_gateset_sequencer
@@ -282,8 +282,8 @@ class QubitGatesSet:
          self._awg.load_sequence(self._sequence_code)
          daq = self._awg._daq
          dev = self._awg._connection_settings["hdawg_id"]
-         daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
          awg_index = 0
+         daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
 
          waveforms = Waveforms()
          idx = 0
