@@ -4,6 +4,7 @@ from math import ceil
 import json
 from pkg_resources import resource_filename
 from zhinst.toolkit import Waveforms
+import zhinst.utils 
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.qc_helpers import make_command_table, make_gateset_sequencer
