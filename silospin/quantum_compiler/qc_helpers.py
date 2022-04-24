@@ -41,6 +41,21 @@ def make_command_table(gate_string, iq_settings, sample_rate):
     return command_table
 
 
+# def make_gateset_sequencer(n_array):
+#     ##Input: n_array. List of lengths for each gate operation.
+#     idx = 0
+#     sequence_code = ""
+#     for n in n_array:
+#         n_str = str(n)
+#         idx_str = str(idx)
+#         line = "assignWaveIndex(placeholder("+n_str+"),"+idx_str+");\n"
+#         sequence_code = sequence_code + line
+#         idx+=1
+#     command_table_execute =  """\n for (i = 0; i <"""+str(len(n_array))+""" ; i++) { \n   executeTableEntry(i);\n
+# }\n"""
+#     sequence_code = sequence_code + command_table_execute
+#     return sequence_code
+
 def make_gateset_sequencer(n_array):
     ##Input: n_array. List of lengths for each gate operation.
     idx = 0
@@ -51,7 +66,7 @@ def make_gateset_sequencer(n_array):
         line = "assignWaveIndex(placeholder("+n_str+"),"+idx_str+");\n"
         sequence_code = sequence_code + line
         idx+=1
-    command_table_execute =  """\n for (i = 0; i <"""+str(len(n_array))+""" ; i++) { \n   executeTableEntry(i);\n
-}\n"""
-    sequence_code = sequence_code + command_table_execute
+    #command_table_execute =  """\n for (i = 0; i <"""+str(len(n_array))+""" ; i++) { \n   executeTableEntry(i);\n
+#}\n"""
+#    sequence_code = sequence_code + command_table_execute
     return sequence_code
