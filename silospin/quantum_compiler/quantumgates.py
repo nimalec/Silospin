@@ -300,7 +300,9 @@ class QubitGatesSet:
                  waveforms.assign_waveform(idx, self._tau_pi_wave)
 
              else:
-                 pass
+                 t = gt[1:4]
+                 n_t = round(sample_rate*int(t)*(1e-9)/32)*32
+                 waveforms.assign_waveform(idx, np.zeros(n_t))
              idx += 1
 
          self._waveforms = waveforms
