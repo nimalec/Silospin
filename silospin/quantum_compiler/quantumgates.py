@@ -284,29 +284,31 @@ class QubitGatesSet:
                  pass
 
          self._sequence_code = make_gateset_sequencer(n_array)
+         self._awg._hdawg.awgs[0].enable(False)
          self._awg.load_sequence(self._sequence_code)
          daq = self._awg._daq
          dev = self._awg._connection_settings["hdawg_id"]
          awg_index = 0
+
+         waveforms = Waveforms()
+         idx = 0
+         for gt in self._gate_string:
+             if gt in {"x", "y", "xxx", "yyy"}:
+                 waveforms.assign_waveform(idx, self._tau_pi_2_wave)
+                 wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_2_wave)
+                 daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
+
+             elif gt in  {"xx", "yy", "mxxm", "myym"}:
+                 waveforms.assign_waveform(idx, self._tau_pi_wave)
+                 wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_wave)
+                 daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
+             else:
+                 pass
+             idx += 1
+
+         self._waveforms = waveforms
          daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
 
-         # waveforms = Waveforms()
-         # idx = 0
-         # for gt in self._gate_string:
-         #     if gt in {"x", "y", "xxx", "yyy"}:
-         #         waveforms.assign_waveform(idx, self._tau_pi_2_wave)
-         #         wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_2_wave)
-         #         daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
-         #
-         #     elif gt in  {"xx", "yy", "mxxm", "myym"}:
-         #         waveforms.assign_waveform(idx, self._tau_pi_wave)
-         #         wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_wave)
-         #         daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
-         #     else:
-         #         pass
-         #     idx += 1
-         #
-         # self._waveforms = waveforms
 
     #def run_program(self):
 
