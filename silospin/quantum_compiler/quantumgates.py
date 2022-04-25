@@ -241,7 +241,7 @@ class QubitGatesSet:
     # (1) rectangular or gauss?
     # (2) sample rate
 
-     def __init__(self, gate_string, awg, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 15e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "rectangular", tau_pi = 50e-9, tau_pi2 = 25e-9):
+     def __init__(self, gate_string, awg, awg_idx = 0, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 15e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "rectangular", tau_pi = 50e-9, tau_pi2 = 25e-9):
          self._gate_string = gate_string
          self._awg = awg
          self._sample_rate = sample_rate
@@ -284,7 +284,7 @@ class QubitGatesSet:
                  pass
 
          self._sequence_code = make_gateset_sequencer(n_array)
-         self._awg._hdawg.awgs[0].enable(False)
+         self._awg._hdawg.awgs[awg_idx].enable(False)
          self._awg.load_sequence(self._sequence_code)
          daq = self._awg._daq
          dev = self._awg._connection_settings["hdawg_id"]
@@ -295,21 +295,17 @@ class QubitGatesSet:
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
                  waveforms.assign_waveform(idx, self._tau_pi_2_wave)
-                 #wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_2_wave)
-                 #daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
                  waveforms.assign_waveform(idx, self._tau_pi_wave)
-                 #wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_wave)
-                 #daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
+
              else:
                  pass
              idx += 1
 
          self._waveforms = waveforms
-         self._awg._awgs["awg1"].write_to_waveform_memory(self._waveforms)
+         self._awg._awgs["awg"+str(awg_index+1)].write_to_waveform_memory(self._waveforms)
          daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
-         idx = 0 
     #def run_program(self):
 
     #def plot_waveforms(self):
