@@ -295,21 +295,20 @@ class QubitGatesSet:
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
                  waveforms.assign_waveform(idx, self._tau_pi_2_wave)
-                 wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_2_wave)
-                 daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
+                 #wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_2_wave)
+                 #daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
                  waveforms.assign_waveform(idx, self._tau_pi_wave)
-                 wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_wave)
-                 daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
+                 #wave_raw = zhinst.utils.convert_awg_waveform(self._tau_pi_wave)
+                 #daq.setVector(f'/{dev}/awgs/{awg_index}/waveform/waves/{idx}', wave_raw)
              else:
                  pass
              idx += 1
 
          self._waveforms = waveforms
+         self._awg._awgs["awg1"].write_to_waveform_memory(self._waveforms)
          daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
-
-
     #def run_program(self):
 
     #def plot_waveforms(self):
