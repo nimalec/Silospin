@@ -288,7 +288,7 @@ class QubitGatesSet:
          self._awg.load_sequence(self._sequence_code)
          daq = self._awg._daq
          dev = self._awg._connection_settings["hdawg_id"]
-         awg_index = 0
+         awg_index = awg_idx
 
          waveforms = Waveforms()
          idx = 0
@@ -306,6 +306,10 @@ class QubitGatesSet:
          self._waveforms = waveforms
          self._awg._awgs["awg"+str(awg_index+1)].write_to_waveform_memory(self._waveforms)
          daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
-    #def run_program(self):
+
+     def run_program(self, awg_index):
+         self._awg._awgs["awg"+str(awg_index+1)].single(True)
+         self._awg._awgs["awg"+str(awg_index+1)].enable(True)
+
 
     #def plot_waveforms(self):
