@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import zhinst
 import zhinst.utils
+import json
 from zhinst.toolkit import Session
 #import zhinst.toolkit as tk
 import numpy as np
@@ -71,6 +72,8 @@ class HdawgDriver:
         self._sines = {"sin1" : {"osc" : self._hdawg.sines[0].oscselect(), "phaseshift": self._hdawg.sines[0].phaseshift(), "harmonic" : self._hdawg.sines[0].harmonic(), "amp1" : self._hdawg.sines[0].amplitudes[0]() , "amp2" :self._hdawg.sines[0].amplitudes[1]()}, "sin2" : {"osc" : self._hdawg.sines[1].oscselect(), "phaseshift": self._hdawg.sines[1].phaseshift(), "harmonic" : self._hdawg.sines[1].harmonic(), "amp1" : self._hdawg.sines[1].amplitudes[0](), "amp2" :self._hdawg.sines[1].amplitudes[1]()}, "sin3" : {"osc" : self._hdawg.sines[2].oscselect(), "phaseshift": self._hdawg.sines[2].phaseshift(), "harmonic" : self._hdawg.sines[2].harmonic(), "amp1" : self._hdawg.sines[2].amplitudes[0](), "amp2" :self._hdawg.sines[2].amplitudes[1]()}, "sin4" : {"osc" : self._hdawg.sines[3].oscselect(), "phaseshift": self._hdawg.sines[3].phaseshift(), "harmonic" : self._hdawg.sines[3].harmonic(), "amp1" : self._hdawg.sines[3].amplitudes[0]() , "amp2" :self._hdawg.sines[3].amplitudes[1]()}, "sin5" : {"osc" : self._hdawg.sines[4].oscselect(), "phaseshift": self._hdawg.sines[4].phaseshift(), "harmonic" : self._hdawg.sines[4].harmonic(), "amp1" : self._hdawg.sines[4].amplitudes[0](), "amp2" :self._hdawg.sines[4].amplitudes[1]()}, "sin6" : {"osc" : self._hdawg.sines[5].oscselect(), "phaseshift": self._hdawg.sines[5].phaseshift(), "harmonic" : self._hdawg.sines[5].harmonic(), "amp1" : self._hdawg.sines[5].amplitudes[0]() , "amp2" :self._hdawg.sines[5].amplitudes[1]()}, "sin7" : {"osc" : self._hdawg.sines[6].oscselect(), "phaseshift": self._hdawg.sines[6].phaseshift(), "harmonic" : self._hdawg.sines[6].harmonic(), "amp1" : self._hdawg.sines[6].amplitudes[0]() , "amp2" :self._hdawg.sines[6].amplitudes[1]()}, "sin8" : {"osc" : self._hdawg.sines[7].oscselect(), "phaseshift": self._hdawg.sines[7].phaseshift(), "harmonic" : self._hdawg.sines[0].harmonic(), "amp1" : self._hdawg.sines[7].amplitudes[0]() , "amp2" :self._hdawg.sines[7].amplitudes[1]()}}
         #
         self._awgs = {"awg1" : self._hdawg.awgs[0], "awg2" : self._hdawg.awgs[1], "awg3" : self._hdawg.awgs[2], "awg4" : self._hdawg.awgs[3]}
+        self._command_tables =  {"awg1": None, "awg2": None, "awg3": None, "awg4": None}
+        self._sequences =  {"awg1": None, "awg2": None, "awg3": None, "awg4": None}
         #
         # self._sequencer = {"position": self._hdawg.awgs[0].sequencer.program(),  "status": self._hdawg.awgs[0].sequencer.status(), "position": self._hdawg.awgs[0].sequencer.pc(), "triggered": self._hdawg.awgs[0].sequencer.triggered()}
         #self._waveforms = {"awg1": self._hdawg.awgs[0].waveform(), "awg2": self._hdawg.awgs[1].waveform(), "awg3": self._hdawg.awgs[2].waveform(), "awg4": self._hdawg.awgs[3].waveform()}
@@ -454,7 +457,7 @@ class HdawgDriver:
        self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
 
 
-    def get_sequence(self):
+    def get_sequence(self, awg_idx):
        """
         Getter function for AWG sequence.
 
@@ -466,8 +469,7 @@ class HdawgDriver:
         -------
         Python sequence program (str).
        """
-
-       return self._hdawg.awgs[0].sequencer.program()
+       return self._sequences["awg"+str(awg_idx+1)]
 
     # def load_sequence(self, seq):
     #    """
@@ -584,8 +586,9 @@ class HdawgDriver:
 
 
 
-    def load_sequence(self, program, awg_num=1):
-        self._awgs["awg"+str(awg_num)].load_sequencer_program(program)
+    def load_sequence(self, program, awg_idx=0):
+        self._awgs["awg"+str(awg_idx+1)].load_sequencer_program(program)
+        self._sequences["awg"+str(awg_idx+1)] = program
 
     def compile_core_upload_seq(self, awg_num):
        """
@@ -842,3 +845,8 @@ class HdawgDriver:
          raise
 
       self._hdawg.awgs[awg_num-1].wait_done(timeout,sleep_time)
+
+    def set_command_table(self, ct, awg_index):
+        dev = self._connection_settings["hdawg_id"]
+        self._daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(ct))
+        self._command_tables["awg"+str(awg_index+1)] = ct
