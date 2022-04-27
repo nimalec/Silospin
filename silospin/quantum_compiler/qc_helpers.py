@@ -22,6 +22,8 @@ def make_command_table(gate_string, iq_settings, sample_rate):
 
     idx = 0
     ct = []
+    phi0_prev = 0
+    phi1_prev = 0
     for gt in gate_string:
         #break into 2 cases: playZero = False, playZero = True.
         if gt[0] == "t":
@@ -30,10 +32,15 @@ def make_command_table(gate_string, iq_settings, sample_rate):
             waveform = {"length": n_t, "playZero": True}
             phase0 = {"value": 0,  "increment": True}
             phase1 = {"value":  0,  "increment": True}
+            phi0_prev = 0
+            phi1_prev = 0
+
         else:
             waveform = {"index": wave_idx[gt]}
-            phase0 = {"value": phases[gt]["phase0"], "increment": True}
-            phase1 = {"value": phases[gt]["phase1"]+ iq_settings["iq_offset"], "increment": True}
+            phase0 = {"value": phases[gt]["phase0"] - phi0_prev, "increment": True}
+            phase1 = {"value": phases[gt]["phase1"] - phi1_prev + iq_settings["iq_offset"], "increment": True}
+            phi0_prev = phases[gt]["phase0"]
+            phi1_prev = phases[gt]["phase1"]
 
         ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
         ct.append(ct_entry)
