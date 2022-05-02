@@ -60,7 +60,7 @@ def make_gateset_sequencer(n_array):
         line = "assignWaveIndex(placeholder("+n_str+"),"+idx_str+");\n"
         sequence_code = sequence_code + line
         idx+=1
-
+    sequnce_code = sequnce_code + "while(true){\n"
     idx = 0
     for n in n_array:
         idx_str = str(idx)
@@ -68,5 +68,5 @@ def make_gateset_sequencer(n_array):
         command_code = command_code + line
         idx+=1
 
-    sequence_code = sequence_code + command_code
+    sequence_code = sequence_code + command_code +"}"
     return sequence_code
