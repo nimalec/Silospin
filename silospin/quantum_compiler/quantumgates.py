@@ -248,15 +248,14 @@ class QubitGatesSet:
          self._awg._hdawg.awgs[0].enable(False)
          self._sample_rate = sample_rate
          self._iq_settings = iq_settings
-
+         self._awg._hdawg.sigouts[self._iq_settings["i_out"]-1].on(0)
+         self._awg._hdawg.sigouts[self._iq_settings["q_out"]-1].on(0)
 
          self._awg.set_osc_freq(self._iq_settings["osc"], self._iq_settings["freq"])
          self._awg.set_sine(self._iq_settings["i_sin"], self._iq_settings["osc"])
          self._awg.set_sine(self._iq_settings["q_sin"], self._iq_settings["osc"])
          self._awg.set_out_amp(self._iq_settings["i_sin"], 1, self._iq_settings["i_amp"])
          self._awg.set_out_amp(self._iq_settings["q_sin"], 2, self._iq_settings["q_amp"])
-
-
 
          self._command_table = make_command_table(self._gate_string, self._iq_settings, self._sample_rate)
          self._pulse_type = pulse_type
@@ -320,6 +319,8 @@ class QubitGatesSet:
          daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
 
      def run_program(self, awg_idx=0):
+         self._awg._hdawg.sigouts[self._iq_settings["i_out"]-1].on(1)
+         self._awg._hdawg.sigouts[self._iq_settings["q_out"]-1].on(1)
          self._awg._awgs["awg"+str(awg_idx+1)].single(True)
          self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
 
