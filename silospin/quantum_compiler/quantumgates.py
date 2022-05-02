@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 from math import ceil
 import json
+import time
 from pkg_resources import resource_filename
 from zhinst.toolkit import Waveforms
 import zhinst.utils
@@ -244,21 +245,27 @@ class QubitGatesSet:
      def __init__(self, gate_string, awg, awg_idx = 0, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 15e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "rectangular", tau_pi = 50e-9, tau_pi2 = 25e-9):
          self._gate_string = gate_string
          self._awg = awg
+         self._awg.awgs[0].enable(False)
          self._sample_rate = sample_rate
          self._iq_settings = iq_settings
-         self._command_table = make_command_table(self._gate_string, self._iq_settings, self._sample_rate)
-         self._pulse_type = pulse_type
 
-         self._tau_pi = tau_pi
-         self._tau_pi_2 =  tau_pi2
+
          self._awg.set_osc_freq(self._iq_settings["osc"], self._iq_settings["freq"])
          self._awg.set_sine(self._iq_settings["i_sin"], self._iq_settings["osc"])
          self._awg.set_sine(self._iq_settings["q_sin"], self._iq_settings["osc"])
          self._awg.set_out_amp(self._iq_settings["i_sin"], 1, self._iq_settings["i_amp"])
          self._awg.set_out_amp(self._iq_settings["q_sin"], 2, self._iq_settings["q_amp"])
 
-         npoints_tau_pi = ceil(sample_rate*self._tau_pi/32)*32
-         npoints_tau_pi_2 = ceil(sample_rate*self._tau_pi_2/32)*32
+
+
+         self._command_table = make_command_table(self._gate_string, self._iq_settings, self._sample_rate)
+         self._pulse_type = pulse_type
+
+         self._tau_pi = tau_pi
+         self._tau_pi_2 =  tau_pi2
+
+         npoints_tau_pi = ceil(self._sample_rate*self._tau_pi/32)*32
+         npoints_tau_pi_2 = ceil(self._sample_rate*self._tau_pi_2/32)*32
 
          if  self._pulse_type == "rectangular":
              self._tau_pi_wave = rectangular(npoints_tau_pi, 1)
@@ -284,8 +291,10 @@ class QubitGatesSet:
                  pass
 
          self._sequence_code = make_gateset_sequencer(n_array)
-         self._awg._hdawg.awgs[awg_idx].enable(False)
          self._awg.load_sequence(self._sequence_code)
+         time.sleep(3)
+
+
          daq = self._awg._daq
          dev = self._awg._connection_settings["hdawg_id"]
          awg_index = awg_idx
@@ -294,15 +303,15 @@ class QubitGatesSet:
          idx = 0
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
-                 waveforms.assign_waveform(idx, self._tau_pi_2_wave)
+                 waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_2_wave)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                 waveforms.assign_waveform(idx, self._tau_pi_wave)
+                 waveforms.assign_waveform(slot = idx, wave1= self._tau_pi_wave)
 
              else:
                  t = gt[1:4]
                  n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
-                 waveforms.assign_waveform(idx, np.zeros(n_t))
+                 waveforms.assign_waveform(slot = idx, slot = np.zeros(n_t))
              idx += 1
 
          self._waveforms = waveforms
