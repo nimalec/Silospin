@@ -49,7 +49,7 @@ def make_command_table(gate_string, iq_settings, sample_rate):
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
 
-def make_gateset_sequencer(n_array):
+def make_gateset_sequencer(n_array, continuous=False):
     ##Input: n_array. List of lengths for each gate operation.
     idx = 0
     sequence_code = ""
@@ -68,5 +68,8 @@ def make_gateset_sequencer(n_array):
         command_code = command_code + line
         idx+=1
 
-    sequence_code = sequence_code + "while(true){\n" + command_code +"}\n"
-    return sequence_code
+    if continuous is True:
+        program = sequence_code + "while(true){\n" + command_code +"}\n"
+    else:
+        program = sequence_code + command_code
+    return program

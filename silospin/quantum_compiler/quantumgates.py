@@ -242,7 +242,7 @@ class QubitGatesSet:
     # (1) rectangular or gauss?
     # (2) sample rate
 
-     def __init__(self, gate_string, awg, awg_idx = 0, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 15e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "rectangular", tau_pi = 50e-9, tau_pi2 = 25e-9):
+     def __init__(self, gate_string, awg, awg_idx = 0, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 15e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "rectangular", tau_pi = 50e-9, tau_pi2 = 25e-9, continuous=False):
          self._gate_string = gate_string
          self._awg = awg
          self._awg._hdawg.awgs[0].enable(False)
@@ -290,7 +290,7 @@ class QubitGatesSet:
              else:
                  pass
 
-         self._sequence_code = make_gateset_sequencer(n_array)
+         self._sequence_code = make_gateset_sequencer(n_array, continuous=continuous)
          self._awg.load_sequence(self._sequence_code)
          time.sleep(3)
 
@@ -313,9 +313,8 @@ class QubitGatesSet:
                  n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
                  waveforms.assign_waveform(slot = idx, wave1 = np.zeros(n_t))
              idx += 1
-             
+
          time.sleep(3)
-         self._awg._hdawg.awgs[0].enable(False)
          self._waveforms = waveforms
          self._awg._awgs["awg"+str(awg_index+1)].write_to_waveform_memory(self._waveforms)
          daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
