@@ -245,7 +245,7 @@ class QubitGatesSet:
      def __init__(self, gate_string, awg, awg_idx = 0, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 15e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "rectangular", tau_pi = 50e-9, tau_pi2 = 25e-9):
          self._gate_string = gate_string
          self._awg = awg
-         self._awg.awgs[0].enable(False)
+         self._awg._hdawg.awgs[0].enable(False)
          self._sample_rate = sample_rate
          self._iq_settings = iq_settings
 
