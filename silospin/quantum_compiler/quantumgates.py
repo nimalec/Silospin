@@ -275,21 +275,24 @@ class QubitGatesSet:
              self._tau_pi_2_wave = gauss(np.array(range(npoints_tau_pi_2)), 0.5, ceil(npoints_tau_pi_2/2),  ceil(gauss_width*npoints_tau_pi_2))
 
 
-         n_array = []
-         for gt in self._gate_string:
-             if gt in {"x", "y", "xxx", "yyy"}:
-                 n_array.append(npoints_tau_pi_2)
+        # n_array = []
+         #n_array = {}
+         # for gt in self._gate_string:
+         #     if gt in {"x", "y", "xxx", "yyy"}:
+         #         n_array["tau_pi_2"] = npoints_tau_pi_2
+         #
+         #     elif gt in  {"xx", "yy", "mxxm", "myym"}:
+         #        # n_array.add(npoints_tau_pi)
+         #         n_array["tau_pi"] = npoints_tau_pi
+         #
+         #     elif gt[0] == "t":
+         #         #npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/32)*32
+         #         #n_array.append(npoints_tau)
+         #         pass
+         #     else:
+         #         pass
 
-             elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                 n_array.append(npoints_tau_pi)
-
-             elif gt[0] == "t":
-                 npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/32)*32
-                 n_array.append(npoints_tau)
-             else:
-                 pass
-
-         self._sequence_code = make_gateset_sequencer(n_array, continuous=continuous)
+         self._sequence_code = make_gateset_sequencer([npoints_tau_pi_2, npoints_tau_pi], continuous=continuous)
          self._awg.load_sequence(self._sequence_code)
          time.sleep(3)
 
@@ -299,21 +302,23 @@ class QubitGatesSet:
          awg_index = awg_idx
 
          waveforms = Waveforms()
-         idx = 0
-         for gt in self._gate_string:
-             if gt in {"x", "y", "xxx", "yyy"}:
-                 waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_2_wave)
+         #idx = 0
+         waveforms.assign_waveform(slot = 0, wave1 = self._tau_pi_2_wave)
+         waveforms.assign_waveform(slot = 1, wave1 = self._tau_pi_wave)
 
-             elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                 waveforms.assign_waveform(slot = idx, wave1= self._tau_pi_wave)
+         # for gt in self._gate_string:
+         #     if gt in {"x", "y", "xxx", "yyy"}:
+         #         waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_2_wave)
+         #
+         #     elif gt in  {"xx", "yy", "mxxm", "myym"}:
+         #         waveforms.assign_waveform(slot = idx, wave1= self._tau_pi_wave)
+         #
+         #     else:
+         #         t = gt[1:4]
+         #         n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
+         #         waveforms.assign_waveform(slot = idx, wave1 = np.zeros(n_t))
+         #     idx += 1
 
-             else:
-                 t = gt[1:4]
-                 n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
-                 waveforms.assign_waveform(slot = idx, wave1 = np.zeros(n_t))
-             idx += 1
-
-         time.sleep(3)
          self._waveforms = waveforms
          self._awg._awgs["awg"+str(awg_index+1)].write_to_waveform_memory(self._waveforms)
          daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
