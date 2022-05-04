@@ -1,6 +1,6 @@
 from math import ceil
 
-def make_command_table(gate_string, iq_settings, sample_rate):
+def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
     ##Need to specify AWG and output channel.
     ## I ==> out = 0 , Q ==> out = 1.
     ## 1: AWG = 0 , out = 0
@@ -15,15 +15,11 @@ def make_command_table(gate_string, iq_settings, sample_rate):
     ##X, Y, XXX, YYY  :  wave_idx = 0 (tau = tau_0)
     ##XX, YY, mXXm, mYYm :  wave_idx = 1 (tau = tau_1) (XX = mXm)
     wave_idx = {"x": 0, "y": 0, "xx": 1, "yy": 1, "xxx": 0, "yyy": 0, "mxxm": 1, "myym": 1}
-    phases = {"x": {"phase0": 0, "phase1": 90} , "y": {"phase0": 90, "phase1": 180},
-    "xx": {"phase0": 0, "phase1": 90} , "yy": {"phase0": 90, "phase1": 180},
-    "xxx": {"phase0": 360, "phase1": 270} , "yyy": {"phase0": 270 , "phase1": 180} ,
-    "mxxm": {"phase0": 360, "phase1": 270} , "myym":  {"phase0": 270, "phase1": 180}}
+    dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  360, "yyy": 270, "mxxm":  360, "myym": 270}
+
 
     idx = 0
     ct = []
-    phi0_prev = 0
-    phi1_prev = 0
     for gt in gate_string:
         #break into 2 cases: playZero = False, playZero = True.
         if gt[0] == "t":
@@ -32,19 +28,16 @@ def make_command_table(gate_string, iq_settings, sample_rate):
             waveform = {"length": n_t, "playZero": True}
             phase0 = {"value": 0,  "increment": True}
             phase1 = {"value":  0,  "increment": True}
-            phi0_prev = 0
-            phi1_prev = 0
 
         else:
             waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0","sigout1"]}
-            phase0 = {"value": phases[gt]["phase0"] - phi0_prev, "increment": True}
-            phase1 = {"value": phases[gt]["phase1"] + 90 - phi1_prev + iq_settings["iq_offset"], "increment": True}
-            phi0_prev = phases[gt]["phase0"]
-            phi1_prev = phases[gt]["phase1"]
+            dPhi_d = dPhid_gt[gt] + phi_z
+            dPhi_a = dPhi_d - dPhi_l
+            phase0 = {"value": dPhi_a, "increment": True}
+            phase1 = {"value": dPhi_a + 90, "increment": True}
+            dPhi_l = dPhi_a
 
 
-
-        #phase1 = {"value":  0,  "increment": True}
         ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
         ct.append(ct_entry)
         idx += 1
