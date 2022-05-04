@@ -20,6 +20,7 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
 
     idx = 0
     ct = []
+    dPhi_l = 0
     for gt in gate_string:
         #break into 2 cases: playZero = False, playZero = True.
         if gt[0] == "t":
