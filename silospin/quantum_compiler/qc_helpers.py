@@ -14,7 +14,7 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
 
     ##X, Y, XXX, YYY  :  wave_idx = 0 (tau = tau_0)
     ##XX, YY, mXXm, mYYm :  wave_idx = 1 (tau = tau_1) (XX = mXm)
-    wave_idx = {"x": 0, "y": 0, "xx": 1, "yy": 1, "xxx": 0, "yyy": 0, "mxxm": 1, "myym": 1}
+    #wave_idx = {"x": 0, "y": 0, "xx": 1, "yy": 1, "xxx": 0, "yyy": 0, "mxxm": 1, "myym": 1}
     dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  360, "yyy": 270, "mxxm":  360, "myym": 270}
 
 
@@ -26,12 +26,14 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
         if gt[0] == "t":
             t = gt[1:4]
             n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
-            waveform = {"length": n_t, "playZero": True}
+            #waveform = {"length": n_t, "playZero": True}
+            waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             phase0 = {"value": 0,  "increment": True}
             phase1 = {"value":  90,  "increment": True}
 
         else:
-            waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0","sigout1"]}
+            #waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0","sigout1"]}
+            waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             dPhi_d = dPhid_gt[gt] + phi_z
             dPhi_a = dPhi_d - dPhi_l
             phase0 = {"value": dPhi_a, "increment": True}
