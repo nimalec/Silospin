@@ -319,6 +319,7 @@ class QubitGatesSet:
                  waveforms.assign_waveform(slot = idx, wave1 = np.zeros(n_t))
              idx += 1
 
+         time.sleep(3)
          self._waveforms = waveforms
          self._awg._awgs["awg"+str(awg_index+1)].write_to_waveform_memory(self._waveforms)
          daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
