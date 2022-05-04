@@ -30,7 +30,7 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
             waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             phase0 = {"value": 0,  "increment": True}
             phase1 = {"value":  90,  "increment": True}
-            ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1, "amplitude0": { "value": 0 },  "amplitude1":  { "value": 0}}
+            #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1, "amplitude0": { "value": 0 },  "amplitude1":  { "value": 0}}
 
         else:
             #waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0","sigout1"]}
@@ -40,10 +40,10 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
             phase0 = {"value": dPhi_a, "increment": True}
             phase1 = {"value": dPhi_a + 90, "increment": True}
             dPhi_l = dPhi_a
-            ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
+            #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
 
 
-        #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
+        ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
         ct.append(ct_entry)
         idx += 1
 
