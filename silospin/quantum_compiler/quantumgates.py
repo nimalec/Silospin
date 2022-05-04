@@ -275,24 +275,24 @@ class QubitGatesSet:
              self._tau_pi_2_wave = gauss(np.array(range(npoints_tau_pi_2)), 0.5, ceil(npoints_tau_pi_2/2),  ceil(gauss_width*npoints_tau_pi_2))
 
 
-        # n_array = []
+         n_array = []
          #n_array = {}
-         # for gt in self._gate_string:
-         #     if gt in {"x", "y", "xxx", "yyy"}:
-         #         n_array["tau_pi_2"] = npoints_tau_pi_2
-         #
-         #     elif gt in  {"xx", "yy", "mxxm", "myym"}:
-         #        # n_array.add(npoints_tau_pi)
-         #         n_array["tau_pi"] = npoints_tau_pi
-         #
-         #     elif gt[0] == "t":
-         #         #npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/32)*32
-         #         #n_array.append(npoints_tau)
-         #         pass
-         #     else:
-         #         pass
+         for gt in self._gate_string:
+             if gt in {"x", "y", "xxx", "yyy"}:
+                 n_array["tau_pi_2"] = npoints_tau_pi_2
 
-         self._sequence_code = make_gateset_sequencer([npoints_tau_pi_2, npoints_tau_pi], continuous=continuous)
+             elif gt in  {"xx", "yy", "mxxm", "myym"}:
+                # n_array.add(npoints_tau_pi)
+                 n_array["tau_pi"] = npoints_tau_pi
+
+             elif gt[0] == "t":
+                 #npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/32)*32
+                 #n_array.append(npoints_tau)
+                 pass
+             else:
+                 pass
+
+         self._sequence_code = make_gateset_sequencer(n_array, continuous=continuous)
          self._awg.load_sequence(self._sequence_code)
          time.sleep(3)
 
