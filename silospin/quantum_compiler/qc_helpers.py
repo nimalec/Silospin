@@ -36,7 +36,7 @@ def make_command_table(gate_string, iq_settings, sample_rate):
             phi1_prev = 0
 
         else:
-            waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0"], "awgChannel1": ["sigout1"]}
+            waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0"], "awgChannel1": ["sigout0"]}
             phase0 = {"value": phases[gt]["phase0"] - phi0_prev, "increment": True}
             phase1 = {"value": phases[gt]["phase1"] - phi1_prev + iq_settings["iq_offset"], "increment": True}
             phi0_prev = phases[gt]["phase0"]
