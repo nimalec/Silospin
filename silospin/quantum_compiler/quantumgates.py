@@ -242,7 +242,7 @@ class QubitGatesSet:
     # (1) rectangular or gauss?
     # (2) sample rate
 
-     def __init__(self, gate_string, awg, awg_idx = 0, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 60e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "rectangular", tau_pi = 50e-9, tau_pi2 = 25e-9, continuous=False):
+     def __init__(self, gate_string, awg, awg_idx = 0, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 60e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "gaussian", gauss_width = 1/8, tau_pi = 200e-9, tau_pi2 = 100e-9, continuous=False):
          self._gate_string = gate_string
          self._awg = awg
          self._awg._hdawg.awgs[0].enable(False)
@@ -271,8 +271,8 @@ class QubitGatesSet:
              self._tau_pi_2_wave = rectangular(npoints_tau_pi_2, 0.5)
 
          elif self._pulse_type == "gaussian":
-             self._tau_pi_wave = gauss(np.array(range(npoints_tau_pi)), 0.5, ceil(npoints_tau_pi/2),  ceil(npoints_tau_pi/8))
-             self._tau_pi_2_wave = gauss(np.array(range(npoints_tau_pi_2)), 0.5, ceil(npoints_tau_pi_2/2),  ceil(npoints_tau_pi_2/8))
+             self._tau_pi_wave = gauss(np.array(range(npoints_tau_pi)), 0.5, ceil(npoints_tau_pi/2),  ceil(gauss_width*npoints_tau_pi))
+             self._tau_pi_2_wave = gauss(np.array(range(npoints_tau_pi_2)), 0.5, ceil(npoints_tau_pi_2/2),  ceil(gauss_width*npoints_tau_pi_2))
 
 
          n_array = []
