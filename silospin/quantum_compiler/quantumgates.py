@@ -271,8 +271,8 @@ class QubitGatesSet:
              self._tau_pi_2_wave = rectangular(npoints_tau_pi_2, 0.5)
 
          elif self._pulse_type == "gaussian":
-             self._tau_pi_wave = gauss(np.array(range(npoints_tau_pi)), 0, ceil(npoints_tau_pi/2),  ceil(gauss_width*npoints_tau_pi))
-             self._tau_pi_2_wave = gauss(np.array(range(npoints_tau_pi_2)), 0, ceil(npoints_tau_pi_2/2),  ceil(gauss_width*npoints_tau_pi_2))
+             self._tau_pi_wave = gauss(np.array(range(npoints_tau_pi)), 0.5, ceil(npoints_tau_pi/2),  ceil(gauss_width*npoints_tau_pi))
+             self._tau_pi_2_wave = gauss(np.array(range(npoints_tau_pi_2)), 0.5, ceil(npoints_tau_pi_2/2),  ceil(gauss_width*npoints_tau_pi_2))
 
 
          n_array = []
