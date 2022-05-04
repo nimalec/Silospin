@@ -26,8 +26,8 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
         if gt[0] == "t":
             t = gt[1:4]
             n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
-            #waveform = {"length": n_t, "playZero": True}
-            waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
+            waveform = {"length": n_t, "playZero": True}
+            #waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             phase0 = {"value": 0,  "increment": True}
             phase1 = {"value":  90,  "increment": True}
             #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1, "amplitude0": { "value": 0 },  "amplitude1":  { "value": 0}}
