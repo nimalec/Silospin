@@ -44,7 +44,7 @@ def make_command_table(gate_string, iq_settings, sample_rate):
 
 
 
-        phase1 = {"value":  0,  "increment": True}
+        #phase1 = {"value":  0,  "increment": True}
         ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
         ct.append(ct_entry)
         idx += 1
