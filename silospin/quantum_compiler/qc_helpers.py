@@ -21,7 +21,12 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
     idx = 0
     ct = []
     dPhi_l = 0
+    phase0 = {"value": 0}
+    phase1 = {"value": 90}
+    ct_entry = {"index": idx,  "phase0": phase0, "phase1": phase1}
+    ct.append(ct_entry)
     for gt in gate_string:
+        idx += 1
         #break into 2 cases: playZero = False, playZero = True.
         if gt[0] == "t":
             t = gt[1:4]
@@ -29,7 +34,7 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
             #waveform = {"length": n_t, "playZero": True}
             waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             phase0 = {"value": 0,  "increment": True}
-            phase1 = {"value":  90,  "increment": True}
+            phase1 = {"value": 0,  "increment": True}
             #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1, "amplitude0": { "value": 0 },  "amplitude1":  { "value": 0}}
 
         else:
@@ -38,14 +43,14 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
             dPhi_d = dPhid_gt[gt] + phi_z
             dPhi_a = dPhi_d - dPhi_l
             phase0 = {"value": dPhi_a, "increment": True}
-            phase1 = {"value": dPhi_a + 90, "increment": True}
+            phase1 = {"value": dPhi_a, "increment": True}
             dPhi_l = dPhi_a
             #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
 
 
         ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
         ct.append(ct_entry)
-        idx += 1
+
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
