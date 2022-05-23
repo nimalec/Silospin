@@ -29,7 +29,7 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
             #waveform = {"length": n_t, "playZero": True}
             waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             phase0 = {"value": 0,  "increment": True}
-            phase1 = {"value":  0,  "increment": True}
+            phase1 = {"value":  90,  "increment": True}
             #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1, "amplitude0": { "value": 0 },  "amplitude1":  { "value": 0}}
 
         else:
