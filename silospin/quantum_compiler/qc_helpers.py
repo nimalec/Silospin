@@ -45,9 +45,10 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
             phase1 = {"value": dPhi_a+90, "increment": True}
             dPhi_l = dPhi_a
             #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
-        idx += 1
+        #idx += 1
         ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
         ct.append(ct_entry)
+        idx += 1
 
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
