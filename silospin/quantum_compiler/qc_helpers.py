@@ -21,19 +21,19 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
     idx = 0
     ct = []
     dPhi_l = 0
-    phase0 = {"value": 0, "increment": True}
-    phase1 = {"value": 90, "increment": True}
-    ct_entry = {"index": idx,  "phase0": phase0, "phase1": phase1}
-    ct.append(ct_entry)
-    idx +=1
+    # phase0 = {"value": 0, "increment": True}
+    # phase1 = {"value": 90, "increment": True}
+    # ct_entry = {"index": idx,  "phase0": phase0, "phase1": phase1}
+    # ct.append(ct_entry)
+    # idx +=1
 
     for gt in gate_string:
         #break into 2 cases: playZero = False, playZero = True.
         if gt[0] == "t":
             t = gt[1:4]
             n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
-            #waveform = {"length": n_t, "playZero": True}
-            waveform = {"index": idx-1, "awgChannel0": ["sigout0","sigout1"]}
+            waveform = {"length": n_t, "playZero": True}
+            #waveform = {"index": idx-1, "awgChannel0": ["sigout0","sigout1"]}
             #waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             phase0 = {"value": 0,  "increment": True}
             phase1 = {"value": 0,  "increment": True}
@@ -41,16 +41,15 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
 
         else:
             #waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0","sigout1"]}
-            waveform = {"index": idx-1, "awgChannel0": ["sigout0","sigout1"]}
-            #waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
+            #waveform = {"index": idx-1, "awgChannel0": ["sigout0","sigout1"]}
+            waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             dPhi_d = dPhid_gt[gt] + phi_z
             dPhi_a = dPhi_d - dPhi_l
             phase0 = {"value": dPhi_a, "increment": True}
             phase1 = {"value": dPhi_a, "increment": True}
-            #phase1 = {"value": dPhi_a+90, "increment": True}
             dPhi_l = dPhi_a
-            #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
-        #idx += 1
+
+
         ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
         ct.append(ct_entry)
         idx += 1
