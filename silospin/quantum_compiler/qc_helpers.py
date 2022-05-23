@@ -21,8 +21,8 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
     idx = 0
     ct = []
     dPhi_l = 0
-    phase0 = {"value": 0}
-    phase1 = {"value": 90}
+    phase0 = {"value": 0, "increment": True}
+    phase1 = {"value": 90, "increment": True}
     ct_entry = {"index": idx,  "phase0": phase0, "phase1": phase1}
     ct.append(ct_entry)
     for gt in gate_string:
@@ -39,7 +39,7 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
 
         else:
             #waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0","sigout1"]}
-            waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
+            waveform = {"index": idx-1, "awgChannel0": ["sigout0","sigout1"]}
             dPhi_d = dPhid_gt[gt] + phi_z
             dPhi_a = dPhi_d - dPhi_l
             phase0 = {"value": dPhi_a, "increment": True}
