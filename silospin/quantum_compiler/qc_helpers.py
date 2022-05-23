@@ -39,7 +39,7 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
 
         else:
             #waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0","sigout1"]}
-            waveform = {"index": idx-1, "awgChannel0": ["sigout0","sigout1"]}
+            waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             dPhi_d = dPhid_gt[gt] + phi_z
             dPhi_a = dPhi_d - dPhi_l
             phase0 = {"value": dPhi_a, "increment": True}
