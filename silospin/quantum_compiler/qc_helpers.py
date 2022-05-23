@@ -44,8 +44,8 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
             dPhi_d = dPhid_gt[gt] + phi_z
             dPhi_a = dPhi_d - dPhi_l
             if idx == 0:
-                phase0 = {"value": dPhi_a, "increment": True}
-                phase1 = {"value": dPhi_a+90, "increment": True}
+                phase0 = {"value": dPhi_a, "increment": False}
+                phase1 = {"value": dPhi_a+90, "increment": False}
             else:
                 phase0 = {"value": dPhi_a, "increment": True}
                 phase1 = {"value": dPhi_a, "increment": True}
