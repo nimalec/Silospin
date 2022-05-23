@@ -21,10 +21,10 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
     idx = 0
     ct = []
     dPhi_l = 0
-    phase0 = {"value": 0, "increment": True}
-    phase1 = {"value": 90, "increment": True}
-    ct_entry = {"index": idx,  "phase0": phase0, "phase1": phase1}
-    ct.append(ct_entry)
+    #phase0 = {"value": 0, "increment": True}
+    #phase1 = {"value": 90, "increment": True}
+    #ct_entry = {"index": idx,  "phase0": phase0, "phase1": phase1}
+    #ct.append(ct_entry)
     for gt in gate_string:
         idx += 1
         #break into 2 cases: playZero = False, playZero = True.
