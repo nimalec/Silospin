@@ -306,36 +306,49 @@ class QubitGatesSet:
          #waveforms.assign_waveform(slot = 0, wave1 = self._tau_pi_2_wave)
          #waveforms.assign_waveform(slot = 1, wave1 = self._tau_pi_wave)
 
-         for gt in self._gate_string:
-             if gt == "x":
+          for gt in self._gate_string:
+              if gt in {"x", "y", "xxx", "yyy"}:
                  waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_2_wave)
 
-             elif gt == "y":
-                 waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_2_wave)
-
-             elif gt == "xxx":
-                 waveforms.assign_waveform(slot = idx, wave1 = -self._tau_pi_2_wave)
-
-             elif gt == "yyy":
-                 waveforms.assign_waveform(slot = idx, wave1 = -self._tau_pi_2_wave)
-
-             elif gt == "xx":
+              elif gt in {"xx", "yy", "mxxm", "myym"}:
                  waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_wave)
 
-             elif gt == "yy":
-                 waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_wave)
-
-             elif gt == "mxxm":
-                 waveforms.assign_waveform(slot = idx, wave1 = -self._tau_pi_2_wave)
-
-             elif gt == "myym":
-                 waveforms.assign_waveform(slot = idx, wave1 = -self._tau_pi_2_wave)
-
-             elif gt[0]=="t":
+              elif gt[0]=="t":
                  t = gt[1:4]
                  n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
-                 waveforms.assign_waveform(slot = idx, wave1 = np.zeros(n_t))
-             idx += 1
+                  waveforms.assign_waveform(slot = idx, wave1 = np.zeros(n_t))
+              idx += 1
+
+
+         #     if gt == "x":
+         #         waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_2_wave)
+         #
+         #     elif gt == "y":
+         #         waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_2_wave)
+         #
+         #     elif gt == "xxx":
+         #         waveforms.assign_waveform(slot = idx, wave1 = -self._tau_pi_2_wave)
+         #
+         #     elif gt == "yyy":
+         #         waveforms.assign_waveform(slot = idx, wave1 = -self._tau_pi_2_wave)
+         #
+         #     elif gt == "xx":
+         #         waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_wave)
+         #
+         #     elif gt == "yy":
+         #         waveforms.assign_waveform(slot = idx, wave1 = self._tau_pi_wave)
+         #
+         #     elif gt == "mxxm":
+         #         waveforms.assign_waveform(slot = idx, wave1 = -self._tau_pi_wave)
+         #
+         #     elif gt == "myym":
+         #         waveforms.assign_waveform(slot = idx, wave1 = -self._tau_pi_wave)
+         #
+         #     elif gt[0]=="t":
+         #         t = gt[1:4]
+         #         n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
+         #         waveforms.assign_waveform(slot = idx, wave1 = np.zeros(n_t))
+         #     idx += 1
 
          time.sleep(3)
          self._waveforms = waveforms
