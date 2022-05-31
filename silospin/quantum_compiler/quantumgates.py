@@ -331,7 +331,7 @@ class QubitGatesSet:
              elif gt == "myym":
                  waveforms.assign_waveform(slot = idx, wave1 = -self._tau_pi_2_wave)
 
-             else:
+             elif gt[0]=="t":
                  t = gt[1:4]
                  n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
                  waveforms.assign_waveform(slot = idx, wave1 = np.zeros(n_t))
