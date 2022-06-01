@@ -1,6 +1,6 @@
 from math import ceil
 
-def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
+def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0, del_phi=0):
     ##Need to specify AWG and output channel.
     ## I ==> out = 0 , Q ==> out = 1.
     ## 1: AWG = 0 , out = 0
@@ -44,8 +44,8 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0):
             dPhi_d = dPhid_gt[gt] + phi_z
             dPhi_a = dPhi_d - dPhi_l
             if idx == 0:
-                phase0 = {"value": dPhi_a, "increment": False}
-                phase1 = {"value": dPhi_a+90, "increment": False}
+                phase0 = {"value": dPhi_a+del_phi, "increment": False}
+                phase1 = {"value": dPhi_a+90+del_phi, "increment": False}
             else:
                 phase0 = {"value": dPhi_a, "increment": True}
                 phase1 = {"value": dPhi_a, "increment": True}
