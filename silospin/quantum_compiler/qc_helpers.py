@@ -17,7 +17,8 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0, del_phi
     #wave_idx = {"x": 0, "y": 0, "xx": 1, "yy": 1, "xxx": 0, "yyy": 0, "mxxm": 1, "myym": 1}
 
     #dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  360, "yyy": 270, "mxxm":  360, "myym": 270}
-    dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  0, "yyy": 90, "mxxm": 0, "myym": 90}
+    #dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  0, "yyy": 90, "mxxm": 0, "myym": 90}
+    dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90}
 
 
     idx = 0
