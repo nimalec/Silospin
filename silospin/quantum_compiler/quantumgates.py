@@ -313,19 +313,10 @@ class QubitGatesSet:
 
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
-                 if gt == "x" or gt == "y":
-                     waveforms.assign_waveform(slot = ii, wave1 = self._tau_pi_2_wave)
-                 else:
-                     #waveforms.assign_waveform(slot = ii, wave1 = -self._tau_pi_2_wave)
-                     waveforms.assign_waveform(slot = ii, wave1 = self._tau_pi_2_wave)
+                 waveforms.assign_waveform(slot = ii, wave1 = self._tau_pi_2_wave)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                 if gt == "xx" or gt == "yy":
-                     waveforms.assign_waveform(slot = ii, wave1= self._tau_pi_wave)
-
-                 else:
-                     #waveforms.assign_waveform(slot = ii, wave1= -self._tau_pi_wave)
-                     waveforms.assign_waveform(slot = ii, wave1= self._tau_pi_wave)
+                 waveforms.assign_waveform(slot = ii, wave1= self._tau_pi_wave)
 
              else:
                  t = gt[1:4]
@@ -333,7 +324,6 @@ class QubitGatesSet:
                  waveforms.assign_waveform(slot = ii, wave1 = np.zeros(n_t))
              ii += 1
 
-         #time.sleep(3)
          self._waveforms = waveforms
          self._awg._awgs["awg"+str(awg_index+1)].write_to_waveform_memory(self._waveforms)
          daq.setVector(f"/{dev}/awgs/{awg_index}/commandtable/data", json.dumps(self._command_table))
