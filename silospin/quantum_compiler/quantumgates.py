@@ -279,10 +279,16 @@ class QubitGatesSet:
          #n_array = {}
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
-                 n_array.append(npoints_tau_pi_2)
+                 if self._pulse_type == "rectangular":
+                     n_array.append(npoints_tau_pi_2+32)
+                 else:
+                     n_array.append(npoints_tau_pi_2)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                 n_array.append(npoints_tau_pi)
+                 if self._pulse_type == "rectangular":
+                     n_array.append(npoints_tau_pi+32)
+                 else:
+                     n_array.append(npoints_tau_pi)
 
              elif gt[0] == "t":
                  npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/32)*32
