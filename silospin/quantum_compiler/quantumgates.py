@@ -282,7 +282,6 @@ class QubitGatesSet:
                  n_array.append(npoints_tau_pi_2)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                # n_array.add(npoints_tau_pi)
                  n_array.append(npoints_tau_pi)
 
              elif gt[0] == "t":

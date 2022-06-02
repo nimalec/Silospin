@@ -4,11 +4,8 @@ def gauss(x, amp, mu, sig):
 
 def rectangular(npoints, amp):
     array = amp*np.ones(npoints)
-    array[0] = 0
-    array[1] = 0
-    array[npoints-1] = 0
-    array[npoints-2] = 0
-    return array 
+    zr = np.zeros(16)
+    return np.concatenate((zr, array,zr), axis=None)
 
 
 ##def chirped():
