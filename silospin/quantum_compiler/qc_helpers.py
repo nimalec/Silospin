@@ -44,9 +44,9 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0, del_phi
         else:
             #waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0","sigout1"]}
             waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
-            dPhi_d = dPhid_gt[gt] + phi_z
+            dPhi_d = dPhid_gt[gt] + phi_z # WE SHOULD HANDLE PHI_Z SEPARATELY, I THINK AS WRITTEN THINGS WON'T WORK WHEN YOU ADD Z ROTATIONS IN. TO DO A Z WE JUST NEED TO CHECK IF THE GATE IS A Z AND IF SO WE JUST IMMEDIATELY APPLY AN INCREMENT BY THE APPROPRIATE VALUE. YOU SHOULDN'T NEED TO TRACK THE PHASE IN THAT CASE. I.E. Z GATE = A ROTATION OF THE REFERENCE FRAME.
             dPhi_a = dPhi_d - Phi_l
-            Phi_l = Phi_l + dPhi_a
+            Phi_l = Phi_l + dPhi_a # WHY NOT Phi_l = dPhi_d ? it may be a bit more transparent what you're doing/what the phi's mean
             if idx == 0:
                 phase0 = {"value": dPhi_a+del_phi, "increment": False}
                 phase1 = {"value": dPhi_a+90+del_phi, "increment": False}
@@ -60,7 +60,7 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0, del_phi
         idx += 1
 
 
-    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct} # eventually (after the code is in a better state), we want to remove any online resources... the code should run with the computer not connected to the internet. I know this is taken directly from ZI and works, but we'll want to make things more robust.
     return command_table
 
 def make_gateset_sequencer(n_array, continuous=False):
