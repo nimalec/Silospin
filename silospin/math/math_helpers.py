@@ -4,7 +4,7 @@ def gauss(x, amp, mu, sig):
 
 def rectangular(npoints, amp):
     array = amp*np.ones(npoints)
-    zr = np.zeros(64)
+    zr = np.zeros(32)
     return np.concatenate((zr, array,zr), axis=None)
 
 
