@@ -280,13 +280,13 @@ class QubitGatesSet:
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
                  if self._pulse_type == "rectangular":
-                     n_array.append(npoints_tau_pi_2+96). # Why are we adding over 30ns of points to the end of all square waves??
+                     n_array.append(npoints_tau_pi_2+64). 
                  else:
                      n_array.append(npoints_tau_pi_2)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
                  if self._pulse_type == "rectangular":
-                     n_array.append(npoints_tau_pi+96) # same thing, why such a huge delay?
+                     n_array.append(npoints_tau_pi+64)
                  else:
                      n_array.append(npoints_tau_pi)
 
