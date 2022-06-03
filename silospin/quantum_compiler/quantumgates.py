@@ -280,7 +280,7 @@ class QubitGatesSet:
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
                  if self._pulse_type == "rectangular":
-                     n_array.append(npoints_tau_pi_2+64). 
+                     n_array.append(npoints_tau_pi_2+64)
                  else:
                      n_array.append(npoints_tau_pi_2)
 
