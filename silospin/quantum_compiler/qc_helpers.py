@@ -83,7 +83,7 @@ def make_gateset_sequencer(n_array, continuous=False):
         idx+=1
 
     if continuous is True:
-        program = sequence_code + "while(true){\n resetOscPhase(); \n" + command_code +"}\n"
+        program = sequence_code + "resetOscPhase(); \n while(true){\n " + command_code +"}\n"
     else:
         program = sequence_code + command_code
     return program
