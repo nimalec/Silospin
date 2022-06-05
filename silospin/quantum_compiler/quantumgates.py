@@ -329,7 +329,7 @@ class QubitGatesSet:
                 if gt == "x" or "xxx":
                     waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_2_wave)
                 else:
-                    waveforms.assign_waveform(slot = ii, wave1 = -self._tau_pi_2_wave)
+                    waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_2_wave)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
                 # waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_wave)
