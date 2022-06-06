@@ -16,33 +16,23 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0, del_phi
     ##XX, YY, mXXm, mYYm :  wave_idx = 1 (tau = tau_1) (XX = mXm)
     #wave_idx = {"x": 0, "y": 0, "xx": 1, "yy": 1, "xxx": 0, "yyy": 0, "mxxm": 1, "myym": 1}
 
-    #dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  360, "yyy": 270, "mxxm":  360, "myym": 270}
-    #dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  0, "yyy": 90, "mxxm": 0, "myym": 90}
     dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90}
 
 
     idx = 0
     ct = []
     Phi_l = 0
-    # phase0 = {"value": 0, "increment": True}
-    # phase1 = {"value": 90, "increment": True}
-    # ct_entry = {"index": idx,  "phase0": phase0, "phase1": phase1}
-    # ct.append(ct_entry)
-    # idx +=1
 
     for gt in gate_string:
         #break into 2 cases: playZero = False, playZero = True.
         if gt[0] == "t":
             t = gt[1:4]
-            n_t = ceil(sample_rate*int(t)*(1e-9)/32)*32
-            #waveform = {"length": n_t, "playZero": True}
+            n_t = ceil(sample_rate*int(t)*(1e-9)/48)*48
             waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             phase0 = {"value": 0,  "increment": True}
             phase1 = {"value": 0,  "increment": True}
-            #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1, "amplitude0": { "value": 0 },  "amplitude1":  { "value": 0}}
 
         else:
-            #waveform = {"index": wave_idx[gt], "awgChannel0": ["sigout0","sigout1"]}
             waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             dPhi_d = dPhid_gt[gt] + phi_z # WE SHOULD HANDLE PHI_Z SEPARATELY, I THINK AS WRITTEN THINGS WON'T WORK WHEN YOU ADD Z ROTATIONS IN. TO DO A Z WE JUST NEED TO CHECK IF THE GATE IS A Z AND IF SO WE JUST IMMEDIATELY APPLY AN INCREMENT BY THE APPROPRIATE VALUE. YOU SHOULDN'T NEED TO TRACK THE PHASE IN THAT CASE. I.E. Z GATE = A ROTATION OF THE REFERENCE FRAME.
             dPhi_a = dPhi_d - Phi_l
@@ -83,7 +73,7 @@ def make_gateset_sequencer(n_array, continuous=False):
         idx+=1
 
     if continuous is True:
-        program = sequence_code + "resetOscPhase(); \n while(true){\n " + command_code +"}\n"
+        program = sequence_code + "while(true){\n " + command_code +"}\n"
     else:
         program = sequence_code + command_code
     return program

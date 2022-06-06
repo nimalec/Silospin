@@ -297,6 +297,14 @@ class QubitGatesSet:
              else:
                  pass
 
+
+         phase_reset_seq = "resetOscPhase();\n"
+         self._awg.load_sequence(phase_reset_seq)
+         time.sleep(3)
+         self._awg._awgs["awg"+str(awg_idx+1)].single(True)
+         self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
+         time.sleep(3)
+
          self._sequence_code = make_gateset_sequencer(n_array, continuous=continuous)
          self._awg.load_sequence(self._sequence_code)
          #time.sleep(3)
@@ -325,18 +333,18 @@ class QubitGatesSet:
 
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
-                # waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_2_wave)
-                if gt == "x" or "xxx":
-                    waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_2_wave)
-                else:
-                    waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_2_wave)
+                 waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_2_wave)
+                # if gt == "x" or "xxx":
+                #     waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_2_wave)
+                # else:
+                #     waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_2_wave)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                # waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_wave)
-                if gt == "xx" or gt == "myym":
-                    waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_wave)
-                else:
-                    waveforms.assign_waveform(slot = ii, wave1 =-self._tau_pi_wave)
+                 waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_wave)
+                # if gt == "xx" or gt == "myym":
+                #     waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_wave)
+                # else:
+                #     waveforms.assign_waveform(slot = ii, wave1 =-self._tau_pi_wave)
 
              else:
                  t = gt[1:4]
