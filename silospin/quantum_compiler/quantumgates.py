@@ -298,12 +298,12 @@ class QubitGatesSet:
                  pass
 
 
-         phase_reset_seq = "resetOscPhase();\n"
-         self._awg.load_sequence(phase_reset_seq)
-         time.sleep(3)
-         self._awg._awgs["awg"+str(awg_idx+1)].single(True)
-         self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
-         time.sleep(3)
+         #phase_reset_seq = "resetOscPhase();\n"
+         #self._awg.load_sequence(phase_reset_seq)
+         #time.sleep(3)
+         #self._awg._awgs["awg"+str(awg_idx+1)].single(True)
+         #self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
+         #time.sleep(3)
 
          self._sequence_code = make_gateset_sequencer(n_array, continuous=continuous)
          self._awg.load_sequence(self._sequence_code)
