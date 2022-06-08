@@ -242,7 +242,7 @@ class QubitGatesSet:
     # (1) rectangular or gauss?
     # (2) sample rate
 
-     def __init__(self, gate_string, awg, awg_idx = 0, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 60e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "gaussian", gauss_width = 1/8, tau_pi = 200e-9, tau_pi2 = 100e-9, continuous=False, del_phi=0):
+     def __init__(self, gate_string, awg, awg_idx = 0, iq_settings= {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 60e6 , "i_amp": 0.5, "q_amp": 0.5}, sample_rate=2.4e9, pulse_type = "gaussian", gauss_width = 1/8, tau_pi = 200e-9, tau_pi2 = 100e-9, continuous=False, trigger = False, del_phi=0):
          self._gate_string = gate_string
          self._awg = awg
          self._awg._hdawg.awgs[0].enable(False)
@@ -305,7 +305,7 @@ class QubitGatesSet:
          self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
          time.sleep(3)
 
-         self._sequence_code = make_gateset_sequencer(n_array, continuous=continuous)
+         self._sequence_code = make_gateset_sequencer(n_array, continuous=continuous, trigger=trigger)
          self._awg.load_sequence(self._sequence_code)
          #time.sleep(3)
 
