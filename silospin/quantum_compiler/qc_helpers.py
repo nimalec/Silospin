@@ -53,7 +53,7 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0, del_phi
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct} # eventually (after the code is in a better state), we want to remove any online resources... the code should run with the computer not connected to the internet. I know this is taken directly from ZI and works, but we'll want to make things more robust.
     return command_table
 
-def make_gateset_sequencer(n_array, continuous=False):
+def make_gateset_sequencer(n_array, continuous=False, trigger=False):
     ##Input: n_array. List of lengths for each gate operation.
     idx = 0
     sequence_code = ""
@@ -73,7 +73,15 @@ def make_gateset_sequencer(n_array, continuous=False):
         idx+=1
 
     if continuous is True:
-        program = sequence_code + "while(true){\n " + command_code +"}\n"
+        if trigger is False:
+            program = sequence_code + "while(true){\n" + command_code +"}\n"
+        else:
+            program = sequence_code + "while(true){\n  setTrigger(1);\n setTrigger(0);\n" + command_code +"}\n"
+
     else:
-        program = sequence_code + command_code
+        if trigger is False:
+            program = sequence_code + command_code
+        else:
+            program = sequence_code + "setTrigger(1);\n setTrigger(0);\n" + command_code
+
     return program
