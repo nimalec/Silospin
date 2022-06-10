@@ -74,12 +74,13 @@ def make_gateset_sequencer(n_array, n_seq, continuous=False, trigger=False):
         idx+=1
     sequnce_code = sequence_code
     ##Replace n_array  for command table with ct indices instead
-    idx = 0
-    for n in n_seq:
-        idx_str = str(idx)
+    #idx = 0
+    for n in range(n_seq):
+        #idx_str = str(idx)
+        idx_str = str(n)
         line = "executeTableEntry("+idx_str+");\n";
         command_code = command_code + line
-        idx+=1
+        #idx+=1
 
     if continuous is True:
         if trigger is False:
