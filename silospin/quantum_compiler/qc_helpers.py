@@ -12,14 +12,14 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0, del_phi
     ## 7 : AWG = 3 , out = 0
     ## 8 : AWG = 3 , out = 1
 
-    ##X, Y, XXX, YYY  :  wave_idx = 0 (tau = tau_0)
-    ##XX, YY, mXXm, mYYm :  wave_idx = 1 (tau = tau_1) (XX = mXm)
-    #wave_idx = {"x": 0, "y": 0, "xx": 1, "yy": 1, "xxx": 0, "yyy": 0, "mxxm": 1, "myym": 1}
-
     dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90}
 
 
-    idx = 0
+    #idx = 0
+
+    ct_idx = 0
+    wv_idx = 0
+
     ct = []
     Phi_l = 0
 
@@ -28,26 +28,34 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0, del_phi
         if gt[0] == "t":
             t = gt[1:4]
             n_t = ceil(sample_rate*int(t)*(1e-9)/48)*48
-            waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
+
+            waveform = {"playZero": True, "length": n_t}
+            #waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
             phase0 = {"value": 0,  "increment": True}
             phase1 = {"value": 0,  "increment": True}
 
+
         else:
-            waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
+            #waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
+            waveform = {"index": wv_idx, "awgChannel0": ["sigout0","sigout1"]}
             dPhi_d = dPhid_gt[gt] + phi_z # WE SHOULD HANDLE PHI_Z SEPARATELY, I THINK AS WRITTEN THINGS WON'T WORK WHEN YOU ADD Z ROTATIONS IN. TO DO A Z WE JUST NEED TO CHECK IF THE GATE IS A Z AND IF SO WE JUST IMMEDIATELY APPLY AN INCREMENT BY THE APPROPRIATE VALUE. YOU SHOULDN'T NEED TO TRACK THE PHASE IN THAT CASE. I.E. Z GATE = A ROTATION OF THE REFERENCE FRAME.
             dPhi_a = dPhi_d - Phi_l
             Phi_l = Phi_l + dPhi_a # WHY NOT Phi_l = dPhi_d ? it may be a bit more transparent what you're doing/what the phi's mean
-            if idx == 0:
+            #if idx == 0:
+            if ct_idx == 0:
                 phase0 = {"value": dPhi_a+del_phi, "increment": False}
                 phase1 = {"value": dPhi_a+90+del_phi, "increment": False}
             else:
                 phase0 = {"value": dPhi_a, "increment": True}
                 phase1 = {"value": dPhi_a, "increment": True}
+            wv_idx += 1
 
 
-        ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
+        #ct_entry = {"index": idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
+        ct_entry = {"index": ct_idx, "waveform": waveform, "phase0": phase0, "phase1": phase1}
         ct.append(ct_entry)
-        idx += 1
+    #    idx += 1
+        ct_idx += 1
 
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct} # eventually (after the code is in a better state), we want to remove any online resources... the code should run with the computer not connected to the internet. I know this is taken directly from ZI and works, but we'll want to make things more robust.

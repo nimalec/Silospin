@@ -279,20 +279,23 @@ class QubitGatesSet:
          #n_array = {}
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
-                 if self._pulse_type == "rectangular":
-                     n_array.append(npoints_tau_pi_2)
-                 else:
-                     n_array.append(npoints_tau_pi_2)
+                 n_array.append(npoints_tau_pi_2)
+
+                 # if self._pulse_type == "rectangular":
+                 #     n_array.append(npoints_tau_pi_2)
+                 # else:
+                 #     n_array.append(npoints_tau_pi_2)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
-                 if self._pulse_type == "rectangular":
-                     n_array.append(npoints_tau_pi)
-                 else:
-                     n_array.append(npoints_tau_pi)
+                 n_array.append(npoints_tau_pi)
+                 # if self._pulse_type == "rectangular":
+                 #     n_array.append(npoints_tau_pi)
+                 # else:
+                 #     n_array.append(npoints_tau_pi)
 
              elif gt[0] == "t":
-                 npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/48)*48
-                 n_array.append(npoints_tau)
+                 #npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/48)*48
+                 #n_array.append(npoints_tau)
                  pass
              else:
                  pass
@@ -334,6 +337,7 @@ class QubitGatesSet:
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
                  waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_2_wave)
+                 ii += 1
                 # if gt == "x" or "xxx":
                 #     waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_2_wave)
                 # else:
@@ -341,16 +345,17 @@ class QubitGatesSet:
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
                  waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_wave)
+                 ii += 1
                 # if gt == "xx" or gt == "myym":
                 #     waveforms.assign_waveform(slot = ii, wave1 =self._tau_pi_wave)
                 # else:
                 #     waveforms.assign_waveform(slot = ii, wave1 =-self._tau_pi_wave)
 
              else:
-                 t = gt[1:4]
-                 n_t = ceil(sample_rate*int(t)*(1e-9)/48)*48
-                 waveforms.assign_waveform(slot = ii, wave1 = np.zeros(n_t))
-             ii += 1
+                # t = gt[1:4]
+                 #n_t = ceil(sample_rate*int(t)*(1e-9)/48)*48
+                 #waveforms.assign_waveform(slot = ii, wave1 = np.zeros(n_t))
+             #ii += 1
 
          self._waveforms = waveforms
          self._awg._awgs["awg"+str(awg_index+1)].write_to_waveform_memory(self._waveforms)
