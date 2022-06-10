@@ -281,21 +281,12 @@ class QubitGatesSet:
              if gt in {"x", "y", "xxx", "yyy"}:
                  n_array.append(npoints_tau_pi_2)
 
-                 # if self._pulse_type == "rectangular":
-                 #     n_array.append(npoints_tau_pi_2)
-                 # else:
-                 #     n_array.append(npoints_tau_pi_2)
 
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
                  n_array.append(npoints_tau_pi)
-                 # if self._pulse_type == "rectangular":
-                 #     n_array.append(npoints_tau_pi)
-                 # else:
-                 #     n_array.append(npoints_tau_pi)
+
 
              elif gt[0] == "t":
-                 #npoints_tau = ceil(sample_rate*int(gt[1:4])*(1e-9)/48)*48
-                 #n_array.append(npoints_tau)
                  pass
              else:
                  pass
@@ -308,7 +299,7 @@ class QubitGatesSet:
          self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
          time.sleep(3)
 
-         self._sequence_code = make_gateset_sequencer(n_array, continuous=continuous, trigger=trigger)
+         self._sequence_code = make_gateset_sequencer(n_array, len(self._gate_string), continuous=continuous, trigger=trigger)
          self._awg.load_sequence(self._sequence_code)
          #time.sleep(3)
 
@@ -352,7 +343,7 @@ class QubitGatesSet:
                 #     waveforms.assign_waveform(slot = ii, wave1 =-self._tau_pi_wave)
 
              else:
-                 pass 
+                 pass
                 # t = gt[1:4]
                  #n_t = ceil(sample_rate*int(t)*(1e-9)/48)*48
                  #waveforms.assign_waveform(slot = ii, wave1 = np.zeros(n_t))
