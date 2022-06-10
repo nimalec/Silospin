@@ -352,6 +352,7 @@ class QubitGatesSet:
                 #     waveforms.assign_waveform(slot = ii, wave1 =-self._tau_pi_wave)
 
              else:
+                 pass 
                 # t = gt[1:4]
                  #n_t = ceil(sample_rate*int(t)*(1e-9)/48)*48
                  #waveforms.assign_waveform(slot = ii, wave1 = np.zeros(n_t))
