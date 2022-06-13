@@ -31,7 +31,7 @@ class MultiQubitGatesSet:
              "1": {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 60e6 , "i_amp": 0.5, "q_amp": 0.5},
              "2": {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 60e6 , "i_amp": 0.5, "q_amp": 0.5},
              "3": {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 60e6 , "i_amp": 0.5, "q_amp": 0.5}}
-         print(self._iq_settings)
+
 
          tau_pi_default = 200e-9
          tau_pi_2_default = 100e-9
@@ -58,7 +58,6 @@ class MultiQubitGatesSet:
                  pass
 
          self._sample_rate = sample_rate
-         self._iq_settings = iq_settings
          channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
          channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
 
