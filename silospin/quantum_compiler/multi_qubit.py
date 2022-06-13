@@ -1,3 +1,16 @@
+import numpy as np
+import pandas as pd
+from math import ceil
+import json
+import time
+from pkg_resources import resource_filename
+from zhinst.toolkit import Waveforms
+import zhinst.utils
+from silospin.drivers.zi_hdawg_driver import HdawgDriver
+from silospin.math.math_helpers import gauss, rectangular
+from silospin.quantum_compiler.qc_helpers import make_command_table, make_gateset_sequencer
+
+
 class MultiQubitGatesSet:
      def __init__(self, gate_strings, awg, iq_settings=None, sample_rate=2.4e9, taus_pi = None, tau_pi2 = None, continuous=False, trigger = False):
          ##ensure 4x2 channel grouping
