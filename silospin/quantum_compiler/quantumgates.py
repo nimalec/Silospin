@@ -280,17 +280,10 @@ class QubitGatesSet:
          for gt in self._gate_string:
              if gt in {"x", "y", "xxx", "yyy"}:
                  n_array.append(npoints_tau_pi_2)
-
-
              elif gt in  {"xx", "yy", "mxxm", "myym"}:
                  n_array.append(npoints_tau_pi)
-
-
-             elif gt[0] == "t":
-                 pass
              else:
                  pass
-
 
          phase_reset_seq = "resetOscPhase();\n"
          self._awg.load_sequence(phase_reset_seq)
@@ -299,7 +292,7 @@ class QubitGatesSet:
          self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
          time.sleep(3)
 
-         self._sequence_code = make_gateset_sequencer(n_array, len(self._gate_string), continuous=continuous, trigger=trigger)
+         self._sequence_code = make_gateset_sequencer(n_array, len(self._gate_string) , continuous=continuous, trigger=trigger)
          self._awg.load_sequence(self._sequence_code)
          #time.sleep(3)
 
