@@ -108,7 +108,6 @@ class MultiQubitGatesSet:
 
          daq = self._awg._daq
          dev = self._awg._connection_settings["hdawg_id"]
-         awg_index = awg_idxs
          waveforms_awgs = {}
          for awg_idx in awg_cores:
              waveforms = Waveforms()
