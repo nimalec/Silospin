@@ -24,7 +24,7 @@ class MultiQubitGatesSet:
          ##tau_pi_2s: dictiorary of tau_pi_2 values
 
         # iq_settings =
-         if iq_settings:
+         if iq_settings is not None:
              self._iq_settings = iq_settings
          else:
              self._iq_settings = {"0": {"i_sin": 1, "q_sin": 2, "i_out": 1, "q_out": 2, "iq_offset": 0, "osc": 1, "freq": 60e6 , "i_amp": 0.5, "q_amp": 0.5},
@@ -35,12 +35,12 @@ class MultiQubitGatesSet:
 
          tau_pi_default = 200e-9
          tau_pi_2_default = 100e-9
-         if taus_pi:
+         if taus_pi is not None:
              self._taus_pi = taus_pi
          else:
              self._taus_pi = {"0": tau_pi_default, "1": tau_pi_default, "2": tau_pi_default, "3": tau_pi_default}
 
-         if taus_pi_2:
+         if taus_pi_2 is not None:
              self._taus_pi_2 = taus_pi_2
          else:
              self._taus_pi_2 = {"0": tau_pi_2_default, "1": tau_pi_2_default, "2": tau_pi_2_default, "3": tau_pi_2_default}
