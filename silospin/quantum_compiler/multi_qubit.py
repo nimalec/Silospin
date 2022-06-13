@@ -12,7 +12,7 @@ from silospin.quantum_compiler.qc_helpers import make_command_table, make_gatese
 
 
 class MultiQubitGatesSet:
-     def __init__(self, gate_strings, awg, iq_settings=None, sample_rate=2.4e9, taus_pi = None, tau_pi2 = None, continuous=False, trigger = False):
+     def __init__(self, gate_strings, awg, iq_settings=None, sample_rate=2.4e9, taus_pi = None, taus_pi2 = None, continuous=False, trigger = False):
          ##ensure 4x2 channel grouping
          ##
          ##
