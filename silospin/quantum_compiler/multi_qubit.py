@@ -69,6 +69,7 @@ class MultiQubitGatesSet:
          n_arrays = {}
          sequences = {}
          phase_reset_seq = "resetOscPhase();\n"
+         print(awg_cores)
 
          for awg_idx in awg_cores:
              i_idx = channel_idxs[str(awg_idx)][0]
