@@ -121,12 +121,12 @@ class MultiQubitGatesSet:
              for gt in self._gate_strings[str(awg_idx)]:
                  if gt in {"x", "y", "xxx", "yyy"}:
                      waveforms.assign_waveform(slot = ii, wave1 = waves_tau_pi_2[str(awg_idx)])
-                     waveforms_awgs[waves_tau_pi[str(awg_idx)]] = waves_tau_pi_2[str(awg_idx)]
+                     waveforms_awgs[str(awg_idx)] = waves_tau_pi_2[str(awg_idx)]
                      ii += 1
 
                  elif gt in  {"xx", "yy", "mxxm", "myym"}:
                      waveforms.assign_waveform(slot = ii, wave1 =waves_tau_pi[str(awg_idx)])
-                     waveforms_awgs[waves_tau_pi[str(awg_idx)]] = waves_tau_pi[str(awg_idx)]
+                     waveforms_awgs[str(awg_idx)] = waves_tau_pi[str(awg_idx)]
                      ii += 1
                  else:
                      pass
