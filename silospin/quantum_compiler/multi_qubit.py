@@ -77,9 +77,11 @@ class MultiQubitGatesSet:
              osc_idx = channel_osc_idxs[str(awg_idx)]
              # self._awg._hdawg.sigouts[i_idx].on(0)
              # self._awg._hdawg.sigouts[q_idx].on(0)
+             print(i_idx)
+             print(q_idx)
              self._awg._hdawg.sigouts[i_idx].on(1)
              self._awg._hdawg.sigouts[q_idx].on(1)
-             self._awg.set_osc_freq(osc_idx, self._iq_settings[str(awg_idx)]["freq"])
+            # self._awg.set_osc_freq(osc_idx, self._iq_settings[str(awg_idx)]["freq"])
              # self._awg.set_sine(i_idx+1, osc_idx)
              # self._awg.set_sine(q_idx+1, osc_idx)
              # self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["i_sin"], 1, self._iq_settings[str(awg_idx)]["i_amp"])
