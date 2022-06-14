@@ -123,13 +123,13 @@ class MultiQubitGatesSet:
                      waveforms.assign_waveform(slot = ii, wave1 = waves_tau_pi_2[str(awg_idx)])
                      ii += 1
 
-         #         elif gt in  {"xx", "yy", "mxxm", "myym"}:
-         #             waveforms.assign_waveform(slot = ii, wave1 =waves_tau_pi[str(awg_idx)])
-         #             ii += 1
+                 elif gt in  {"xx", "yy", "mxxm", "myym"}:
+                     waveforms.assign_waveform(slot = ii, wave1 =waves_tau_pi[str(awg_idx)])
+                     ii += 1
                  else:
                      pass
-         #     #waveforms_awgs[waves_tau_pi[str(awg_idx)]] = waveforms
-         #     self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
+             waveforms_awgs[waves_tau_pi[str(awg_idx)]] = waveforms
+             self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
          #     daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(command_tables[str(awg_idx)]))
 
          self._waveforms =  waveforms_awgs
