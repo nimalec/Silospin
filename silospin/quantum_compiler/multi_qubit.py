@@ -107,9 +107,11 @@ class MultiQubitGatesSet:
              # #self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
              sequences[str(awg_idx)] = make_gateset_sequencer(n_arrays[str(awg_idx)], len(self._gate_strings[str(awg_idx)]) , continuous=continuous, trigger=trigger)
              self._awg.load_sequence(sequences[str(awg_idx)], awg_idx)
+             print(command_tables[str(awg_idx)])
 
          self._sequence_code = sequences
-         print(waves_tau_pi_2[str(awg_idx)])
+         #print(waves_tau_pi_2[str(awg_idx)])
+
 
          # daq = self._awg._daq
          # dev = self._awg._connection_settings["hdawg_id"]
