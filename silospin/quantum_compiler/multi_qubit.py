@@ -107,28 +107,27 @@ class MultiQubitGatesSet:
              # #self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
              sequences[str(awg_idx)] = make_gateset_sequencer(n_arrays[str(awg_idx)], len(self._gate_strings[str(awg_idx)]) , continuous=continuous, trigger=trigger)
              self._awg.load_sequence(sequences[str(awg_idx)], awg_idx)
-             print(command_tables[str(awg_idx)])
 
          self._sequence_code = sequences
          #print(waves_tau_pi_2[str(awg_idx)])
 
 
-         # daq = self._awg._daq
-         # dev = self._awg._connection_settings["hdawg_id"]
-         # waveforms_awgs = {}
-         # for awg_idx in awg_cores:
-         #     waveforms = Waveforms()
-         #     ii = 0
-         #     for gt in self._gate_strings:
-         #         if gt in {"x", "y", "xxx", "yyy"}:
-         #             waveforms.assign_waveform(slot = ii, wave1 = waves_tau_pi_2[str(awg_idx)])
-         #             ii += 1
-         #
+         daq = self._awg._daq
+         dev = self._awg._connection_settings["hdawg_id"]
+         waveforms_awgs = {}
+         for awg_idx in awg_cores:
+             waveforms = Waveforms()
+             ii = 0
+             for gt in self._gate_strings[str(awg_idx)]:
+                 if gt in {"x", "y", "xxx", "yyy"}:
+                     waveforms.assign_waveform(slot = ii, wave1 = waves_tau_pi_2[str(awg_idx)])
+                     ii += 1
+
          #         elif gt in  {"xx", "yy", "mxxm", "myym"}:
          #             waveforms.assign_waveform(slot = ii, wave1 =waves_tau_pi[str(awg_idx)])
          #             ii += 1
-         #         else:
-         #             pass
+                 else:
+                     pass
          #     #waveforms_awgs[waves_tau_pi[str(awg_idx)]] = waveforms
          #     self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
          #     daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(command_tables[str(awg_idx)]))
