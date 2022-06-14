@@ -88,7 +88,7 @@ class MultiQubitGatesSet:
              waves_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2[str(awg_idx)], 0.5)
 
              n_array = []
-             for gt in self._gate_strings:
+             for gt in self._gate_strings[str(awg_idx)]:
                  if gt in {"x", "y", "xxx", "yyy"}:
                      n_array.append(npoints_tau_pi_2[str(awg_idx)])
                  elif gt in  {"xx", "yy", "mxxm", "myym"}:
