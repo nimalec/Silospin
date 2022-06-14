@@ -77,16 +77,18 @@ class MultiQubitGatesSet:
              osc_idx = channel_osc_idxs[str(awg_idx)]
              # self._awg._hdawg.sigouts[i_idx].on(0)
              # self._awg._hdawg.sigouts[q_idx].on(0)
-             print(i_idx)
-             print(q_idx)
-             self._awg._hdawg.sigouts[i_idx].on(1)
-             self._awg._hdawg.sigouts[q_idx].on(1)
-            # self._awg.set_osc_freq(osc_idx, self._iq_settings[str(awg_idx)]["freq"])
-             # self._awg.set_sine(i_idx+1, osc_idx)
-             # self._awg.set_sine(q_idx+1, osc_idx)
-             # self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["i_sin"], 1, self._iq_settings[str(awg_idx)]["i_amp"])
-             # self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["q_sin"], 2, self._iq_settings[str(awg_idx)]["q_amp"])
-             # command_tables[str(awg_idx)] = make_command_table(self._gate_strings[str(awg_idx)], self._iq_settings[str(awg_idx)], self._sample_rate)
+
+             self._awg._hdawg.sigouts[i_idx].on(0)
+             self._awg._hdawg.sigouts[q_idx].on(0)
+             self._awg.set_osc_freq(osc_idx, self._iq_settings[str(awg_idx)]["freq"])
+             self._awg.set_sine(i_idx+1, osc_idx)
+             self._awg.set_sine(q_idx+1, osc_idx)
+             self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["i_sin"], 1, self._iq_settings[str(awg_idx)]["i_amp"])
+             self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["q_sin"], 2, self._iq_settings[str(awg_idx)]["q_amp"])
+             print(self._iq_settings[str(awg_idx)]["i_sin"])
+             print(self._iq_settings[str(awg_idx)]["q_sin"])
+
+             command_tables[str(awg_idx)] = make_command_table(self._gate_strings[str(awg_idx)], self._iq_settings[str(awg_idx)], self._sample_rate)
              # npoints_tau_pi[str(awg_idx)] = ceil(self._sample_rate*self._taus_pi[str(awg_idx)]/48)*48
              # npoints_tau_pi_2[str(awg_idx)] = ceil(self._sample_rate*self._taus_pi_2[str(awg_idx)]/48)*48
              # waves_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi[str(awg_idx)], 0.5)
