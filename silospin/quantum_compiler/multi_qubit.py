@@ -75,9 +75,6 @@ class MultiQubitGatesSet:
              i_idx = channel_idxs[str(awg_idx)][0]
              q_idx = channel_idxs[str(awg_idx)][1]
              osc_idx = channel_osc_idxs[str(awg_idx)]
-             # self._awg._hdawg.sigouts[i_idx].on(0)
-             # self._awg._hdawg.sigouts[q_idx].on(0)
-
              self._awg._hdawg.sigouts[i_idx].on(0)
              self._awg._hdawg.sigouts[q_idx].on(0)
              self._awg.set_osc_freq(osc_idx, self._iq_settings[str(awg_idx)]["freq"])
@@ -85,25 +82,25 @@ class MultiQubitGatesSet:
              self._awg.set_sine(q_idx+1, osc_idx)
              self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["i_sin"], 1, self._iq_settings[str(awg_idx)]["i_amp"])
              self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["q_sin"], 2, self._iq_settings[str(awg_idx)]["q_amp"])
-             print(self._iq_settings[str(awg_idx)]["i_sin"])
-             print(self._iq_settings[str(awg_idx)]["q_sin"])
 
              command_tables[str(awg_idx)] = make_command_table(self._gate_strings[str(awg_idx)], self._iq_settings[str(awg_idx)], self._sample_rate)
-             # npoints_tau_pi[str(awg_idx)] = ceil(self._sample_rate*self._taus_pi[str(awg_idx)]/48)*48
-             # npoints_tau_pi_2[str(awg_idx)] = ceil(self._sample_rate*self._taus_pi_2[str(awg_idx)]/48)*48
-             # waves_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi[str(awg_idx)], 0.5)
-             # waves_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2[str(awg_idx)], 0.5)
-             #
-             # n_array = []
-             # for gt in self._gate_strings[str(awg_idx)]:
-             #     if gt in {"x", "y", "xxx", "yyy"}:
-             #         n_array.append(npoints_tau_pi_2[str(awg_idx)])
-             #     elif gt in  {"xx", "yy", "mxxm", "myym"}:
-             #         n_array.append(npoints_tau_pi[str(awg_idx)])
-             #     else:
-             #         pass
-             #
-             # n_arrays[str(awg_idx)] = n_array
+             npoints_tau_pi[str(awg_idx)] = ceil(self._sample_rate*self._taus_pi[str(awg_idx)]/48)*48
+             npoints_tau_pi_2[str(awg_idx)] = ceil(self._sample_rate*self._taus_pi_2[str(awg_idx)]/48)*48
+             waves_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi[str(awg_idx)], 0.5)
+             waves_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2[str(awg_idx)], 0.5)
+
+             n_array = []
+             for gt in self._gate_strings[str(awg_idx)]:
+                 if gt in {"x", "y", "xxx", "yyy"}:
+                     n_array.append(npoints_tau_pi_2[str(awg_idx)])
+                 elif gt in  {"xx", "yy", "mxxm", "myym"}:
+                     n_array.append(npoints_tau_pi[str(awg_idx)])
+                 else:
+                     pass
+
+
+             n_arrays[str(awg_idx)] = n_array
+             print(n_arrays[str(awg_idx)])
              #
              # #self._awg.load_sequence(phase_reset_seq, awg_idx)
              # #self._awg._awgs["awg"+str(awg_idx+1)].single(True)

@@ -12,10 +12,7 @@ def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0, del_phi
     ## 7 : AWG = 3 , out = 0
     ## 8 : AWG = 3 , out = 1
 
-    dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90}
-
-
-    #idx = 0
+    dPhid_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90, "p": 0}
 
     ct_idx = 0
     wv_idx = 0
