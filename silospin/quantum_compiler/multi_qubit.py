@@ -106,11 +106,11 @@ class MultiQubitGatesSet:
              # #self._awg._awgs["awg"+str(awg_idx+1)].single(True)
              # #self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
              sequences[str(awg_idx)] = make_gateset_sequencer(n_arrays[str(awg_idx)], len(self._gate_strings[str(awg_idx)]) , continuous=continuous, trigger=trigger)
-             print(sequences[str(awg_idx)])
              self._awg.load_sequence(sequences[str(awg_idx)], awg_idx)
 
-         # self._sequence_code = sequences
-         #
+         self._sequence_code = sequences
+         print(waves_tau_pi_2[str(awg_idx)])
+
          # daq = self._awg._daq
          # dev = self._awg._connection_settings["hdawg_id"]
          # waveforms_awgs = {}
@@ -130,8 +130,8 @@ class MultiQubitGatesSet:
          #     #waveforms_awgs[waves_tau_pi[str(awg_idx)]] = waveforms
          #     self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
          #     daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(command_tables[str(awg_idx)]))
-         #
-         # self._waveforms =  waveforms_awgs
+
+         self._waveforms =  waveforms_awgs
 
 
      def run_program(self, awg_idxs):
