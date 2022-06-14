@@ -130,9 +130,8 @@ class MultiQubitGatesSet:
                      ii += 1
                  else:
                      pass
-             #waveforms_awgs[waves_tau_pi[str(awg_idx)]] = waveforms
              self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
-         #     daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(command_tables[str(awg_idx)]))
+             daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(command_tables[str(awg_idx)]))
 
          self._waveforms =  waveforms_awgs
 
