@@ -92,3 +92,16 @@ def make_gateset_sequencer(n_array, n_seq, continuous=False, trigger=False):
             program = sequence_code + "setTrigger(1);\n setTrigger(0);\n" + command_code
 
     return program
+
+def make_waveform_placeholders(n_array):
+    ##Input: n_array. List of lengths for each gate operation.
+    idx = 0
+    sequence_code = ""
+    command_code = ""
+    for n in n_array:
+        n_str = str(n)
+        idx_str = str(idx)
+        line = "assignWaveIndex(placeholder("+n_str+"),"+idx_str+");\n"
+        sequence_code = sequence_code + line
+        idx+=1
+    return sequence_code
