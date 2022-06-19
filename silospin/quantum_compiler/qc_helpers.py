@@ -1,6 +1,6 @@
 from math import ceil
 
-def make_command_table(gate_string, iq_settings, sample_rate, phi_z = 0, del_phi=0):
+def make_command_table(gate_string, sample_rate, phi_z = 0, del_phi=0):
     ##Need to specify AWG and output channel.
     ## I ==> out = 0 , Q ==> out = 1.
     ## 1: AWG = 0 , out = 0
