@@ -65,8 +65,8 @@ class MultiQubitGatesSet:
                 waveforms = Waveforms()
                 npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
                 npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
-                waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, default_qubit_params[str(awg_idx)]["i_amp_pi"])
-                waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, default_qubit_params[str(awg_idx)]["i_amp_pi_2"])
+                waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
+                waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, self._qubit_parameters [str(awg_idx)]["i_amp_pi_2"])
                 n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
                 n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
                 waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
@@ -80,8 +80,8 @@ class MultiQubitGatesSet:
                 command_tables[str(awg_idx)] = make_command_table(self._gate_strings[str(awg_idx)], self._sample_rate)
 
         self._command_tables = command_tables
-        daq = self._awg._daq
-        dev = self._awg._connection_settings["hdawg_id"]
+        #daq = self._awg._daq
+        #dev = self._awg._connection_settings["hdawg_id"]
 
      ## write so that gates only need to be calibrated once (only need to keep track of tau_pi, tau_pi_2)
      ## ensure a 4x2 channel grouping
@@ -161,28 +161,28 @@ class MultiQubitGatesSet:
          #
          # self._waveforms =  waveforms_awgs
 
-    # def compile_program(self, awg_idxs=None):
-    #     phase_reset_seq = "resetOscPhase();\n"
-    #
-    #     if awg_idxs:
-    #         awg_idxs = awg_idxs
-    #     else:
-    #         awg_idxs = self._awg_idxs
-    #     for awg_idx in awg_cores:
-    #          i_idx = channel_idxs[str(awg_idx)][0]
-    #          q_idx = channel_idxs[str(awg_idx)][1]
-    #          osc_idx = channel_osc_idxs[str(awg_idx)]
-    #          self._awg._hdawg.sigouts[i_idx].on(0)
-    #          self._awg._hdawg.sigouts[q_idx].on(0)
-    #          self._awg.set_osc_freq(osc_idx, self._iq_settings[str(awg_idx)]["freq"])
-    #          self._awg.set_sine(i_idx+1, osc_idx)
-    #          self._awg.set_sine(q_idx+1, osc_idx)
-    #          self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["i_sin"], 1, self._iq_settings[str(awg_idx)]["i_amp"])
-    #          self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["q_sin"], 2, self._iq_settings[str(awg_idx)]["q_amp"])
-    #          self._awg.load_sequence(phase_reset_seq, awg_idx)
-    #          self._awg._awgs["awg"+str(awg_idx+1)].single(True)
-    #          self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
-    #          daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(command_tables[str(awg_idx)]))
+    def compile_program(self, awg_idxs=None):
+        phase_reset_seq = "resetOscPhase();\n"
+
+        if awg_idxs:
+            awg_idxs = awg_idxs
+        else:
+            awg_idxs = self._awg_idxs
+        for awg_idx in awg_cores:
+             i_idx = channel_idxs[str(awg_idx)][0]
+             q_idx = channel_idxs[str(awg_idx)][1]
+             osc_idx = channel_osc_idxs[str(awg_idx)]
+             self._awg._hdawg.sigouts[i_idx].on(0)
+             self._awg._hdawg.sigouts[q_idx].on(0)
+             self._awg.set_osc_freq(osc_idx, self._qubit_parameters[str(awg_idx)]["mod_freq"]])
+             self._awg.set_sine(i_idx+1, osc_idx)
+             self._awg.set_sine(q_idx+1, osc_idx)
+             self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["i_sin"], 1, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
+             self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["q_sin"], 2, self._qubit_parameters[str(awg_idx)]["q_amp_pi"])
+             self._awg.load_sequence(phase_reset_seq, awg_idx)
+             self._awg._awgs["awg"+str(awg_idx+1)].single(True)
+             self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
+             daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_tables[str(awg_idx)]))
 
 
 
