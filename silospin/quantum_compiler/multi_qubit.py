@@ -161,14 +161,9 @@ class MultiQubitGatesSet:
          #
          # self._waveforms =  waveforms_awgs
 
-    def compile_program(self, awg_idxs=None):
+    def compile_program(self):
         phase_reset_seq = "resetOscPhase();\n"
-
-        if awg_idxs:
-            awg_cores = awg_idxs
-        else:
-            awg_cores = self._awg_idxs
-        for awg_idx in awg_cores:
+        for awg_idx in self._awg_idxs:
              i_idx = channel_idxs[str(awg_idx)][0]
              q_idx = channel_idxs[str(awg_idx)][1]
              osc_idx = channel_osc_idxs[str(awg_idx)]
