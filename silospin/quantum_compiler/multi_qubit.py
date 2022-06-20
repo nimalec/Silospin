@@ -165,9 +165,9 @@ class MultiQubitGatesSet:
         phase_reset_seq = "resetOscPhase();\n"
 
         if awg_idxs:
-            awg_idxs = awg_idxs
+            awg_cores = awg_idxs
         else:
-            awg_idxs = self._awg_idxs
+            awg_cores = self._awg_idxs
         for awg_idx in awg_cores:
              i_idx = channel_idxs[str(awg_idx)][0]
              q_idx = channel_idxs[str(awg_idx)][1]
