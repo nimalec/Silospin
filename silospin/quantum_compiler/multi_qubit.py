@@ -71,7 +71,7 @@ class MultiQubitGatesSet:
                 n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
                 waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
                 waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
-                waveforms_qubits[str(idx)] = waveforms
+                waveforms_qubits[str(awg_idx)] = waveforms
                 place_holder_code = make_waveform_placeholders(n_array)
                 self._awg.load_sequence(place_holder_code, awg_num=awg_idx)
                 self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
