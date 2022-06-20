@@ -72,14 +72,55 @@ class MultiQubitGatesSet:
                 waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
                 waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
                 waveforms_qubits[str(awg_idx)] = waveforms
-                place_holder_code = make_waveform_placeholders(n_array)
+                command_tables[str(awg_idx)] = make_command_table(self._gate_strings[str(awg_idx)], self._sample_rate)
+                n_seq =  len(command_tables[str(awg_idx)])
+                place_holder_code = make_gateset_sequencer(n_array, n_seq, continuous=continuous, trigger=soft_trigger)
+                #place_holder_code = make_waveform_placeholders(n_array)
                 self._awg.load_sequence(place_holder_code, awg_idx=awg_idx)
                 self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
-                self._awg._awgs["awg"+str(awg_idx+1)].single(True)
-                self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
+                #self._awg._awgs["awg"+str(awg_idx+1)].single(True)
+                #self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
                 command_tables[str(awg_idx)] = make_command_table(self._gate_strings[str(awg_idx)], self._sample_rate)
 
         self._command_tables = command_tables
+        self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
+        self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+
+        #phase_reset_seq = "resetOscPhase();\n"
+        daq = self._awg._daq
+        dev = self._awg._connection_settings["hdawg_id"]
+        for awg_idx in self._awg_idxs:
+             i_idx = self._channel_idxs[str(awg_idx)][0]
+             q_idx = self._channel_idxs[str(awg_idx)][1]
+             osc_idx = self._channel_osc_idxs[str(awg_idx)]
+             self._awg._hdawg.sigouts[i_idx].on(0)
+             self._awg._hdawg.sigouts[q_idx].on(0)
+             self._awg.set_osc_freq(osc_idx, self._qubit_parameters[str(awg_idx)]["mod_freq"])
+             self._awg.set_sine(i_idx+1, osc_idx)
+             self._awg.set_sine(q_idx+1, osc_idx)
+             self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
+             self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[str(awg_idx)]["q_amp_pi"])
+             #self._awg.load_sequence(phase_reset_seq, awg_idx)
+             #self._awg._awgs["awg"+str(awg_idx+1)].single(True)
+             #self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
+             daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_tables[str(awg_idx)]))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         #daq = self._awg._daq
         #dev = self._awg._connection_settings["hdawg_id"]
 
@@ -90,8 +131,8 @@ class MultiQubitGatesSet:
     ## tau_pis: dictionary of tau_pi values
     ## tau_pi_2s: dictiorary of tau_pi_2 values
 
-        self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
-        self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+        # self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
+        # self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
 
 
          # waves_tau_pi = {}
