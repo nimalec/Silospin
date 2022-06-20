@@ -163,6 +163,8 @@ class MultiQubitGatesSet:
 
     def compile_program(self):
         phase_reset_seq = "resetOscPhase();\n"
+        daq = self._awg._daq
+        dev = self._awg._connection_settings["hdawg_id"]
         for awg_idx in self._awg_idxs:
              i_idx = self._channel_idxs[str(awg_idx)][0]
              q_idx = self._channel_idxs[str(awg_idx)][1]
@@ -172,8 +174,8 @@ class MultiQubitGatesSet:
              self._awg.set_osc_freq(osc_idx, self._qubit_parameters[str(awg_idx)]["mod_freq"])
              self._awg.set_sine(i_idx+1, osc_idx)
              self._awg.set_sine(q_idx+1, osc_idx)
-             self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["i_sin"], 1, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
-             self._awg.set_out_amp(self._iq_settings[str(awg_idx)]["q_sin"], 2, self._qubit_parameters[str(awg_idx)]["q_amp_pi"])
+             self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
+             self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[str(awg_idx)]["q_amp_pi"])
              self._awg.load_sequence(phase_reset_seq, awg_idx)
              self._awg._awgs["awg"+str(awg_idx+1)].single(True)
              self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
