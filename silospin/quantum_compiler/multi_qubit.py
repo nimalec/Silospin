@@ -59,7 +59,7 @@ class MultiQubitGatesSet:
         if waveforms_preloaded is True:
             pass
         else:
-            for awg_idx in awg_cores:
+            for awg_idx in self._awg_idxs:
                 ##consider replacing with a wrapper function
                 n_array = []
                 waveforms = Waveforms()
@@ -225,13 +225,13 @@ class MultiQubitGatesSet:
 
 
 
-    # def run_program(self, awg_idxs=None):
-    #     if awg_idxs:
-    #         awg_idxs = awg_idxs
-    #     else:
-    #         awg_idxs = self._awg_idxs
-    #     for idx in awg_idxs:
-    #         self._awg._hdawg.sigouts[self._channel_idxs[str(idx)][0]].on(1)
-    #         self._awg._hdawg.sigouts[sel._channel_idxs[str(idx)][1]].on(1)
-    #         self._awg._awgs["awg"+str(idx+1)].single(True)
-    #         self._awg._awgs["awg"+str(idx+1)].enable(True)
+    def run_program(self, awg_idxs=None):
+        if awg_idxs:
+            awg_idxs = awg_idxs
+        else:
+            awg_idxs = self._awg_idxs
+        for idx in awg_idxs:
+            self._awg._hdawg.sigouts[self._channel_idxs[str(idx)][0]].on(1)
+            self._awg._hdawg.sigouts[sel._channel_idxs[str(idx)][1]].on(1)
+            self._awg._awgs["awg"+str(idx+1)].single(True)
+            self._awg._awgs["awg"+str(idx+1)].enable(True)
