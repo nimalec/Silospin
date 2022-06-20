@@ -65,8 +65,8 @@ class MultiQubitGatesSet:
                 waveforms = Waveforms()
                 npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
                 npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
-                waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi)
-                waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2)
+                waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, default_qubit_params[str(awg_idx)]["i_amp_pi"])
+                waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, default_qubit_params[str(awg_idx)]["i_amp_pi_2"])
                 n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
                 n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
                 waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
