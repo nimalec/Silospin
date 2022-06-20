@@ -27,7 +27,7 @@ class MultiQubitGatesSet:
         # 8.
 
         default_qubit_params = {
-        "0": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6}, 
+        "0": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         "1": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
          "2": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         "3": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
@@ -65,12 +65,12 @@ class MultiQubitGatesSet:
                 waveforms = Waveforms()
                 npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(idx)]["tau_pi"]/16)*16
                 npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(idx)]["tau_pi_2"]/16)*16
-                waveforms_tau_pi[str(idx)] = rectangular(npoints_tau_pi)
-                waveforms_tau_pi_2[str(idx)] = rectangular(npoints_tau_pi_2)
-                n_array.append(len(waveforms_tau_pi[str(idx)]))
-                n_array.append(len(waveforms_tau_pi_2[str(idx)]))
-                waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(idx)])
-                waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(idx)])
+                waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi)
+                waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2)
+                n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
+                n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
+                waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
+                waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
                 waveforms_qubits[str(idx)] = waveforms
                 place_holder_code = make_waveform_placeholders(n_array)
                 self._awg.load_sequence(place_holder_code, awg_num=awg_idx)
