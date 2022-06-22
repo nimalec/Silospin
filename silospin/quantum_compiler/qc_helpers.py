@@ -112,13 +112,13 @@ def make_gateset_sequencer_fast(n_array, n_seq, continuous=False, trigger=False)
         if trigger is False:
             program = sequence_code + "while(true){\n" + command_code +"}\n"
         else:
-            program = sequence_code + "while(true){\n  setTrigger(1);\n setTrigger(0);\n" + command_code +"}\n"
+            program = sequence_code + "while(true){\n setTrigger(1);\n setTrigger(0);\n" + command_code +"}\n"
 
     else:
         if trigger is False:
             program = sequence_code + command_code
         else:
-            program = sequence_code + "setTrigger(1);\n setTrigger(0);\n" + command_code
+            program = sequence_code + "setTrigger(1);\nsetTrigger(0);\n" + command_code
 
     return program
 
