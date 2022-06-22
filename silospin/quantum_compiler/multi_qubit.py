@@ -4,7 +4,7 @@ from math import ceil
 import json
 import time
 from pkg_resources import resource_filename
-from zhinst.toolkit import Waveforms3
+from zhinst.toolkit import Waveforms 
 import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
