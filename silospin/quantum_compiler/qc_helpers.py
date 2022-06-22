@@ -170,7 +170,7 @@ def generate_reduced_command_table(gt_0, npoints_wait = [], npoints_plunger = No
             ct_idx += 1
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
-    return ct
+    return command_table 
 
 def make_waveform_placeholders(n_array):
     ##Input: n_array. List of lengths for each gate operation.

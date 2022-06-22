@@ -40,7 +40,6 @@ class MultiQubitGatesSet:
             ## Add a read csv file (make a helper function for this)
             pass
 
-
         awg_cores = []
         command_tables = {}
         cts_idxs = {}
