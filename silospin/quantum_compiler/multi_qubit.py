@@ -40,7 +40,7 @@ class MultiQubitGatesSet:
             self._qubit_parameters = default_qubit_params
 
         elif update_qubit_parameters == "-1":
-            self._qubit_parameters =  read_qubit_paramater_file(qubit_parameters_file_path)
+            self._qubit_parameters =  read_qubit_paramater_file(qubit_parameters_file_path)  
             pass
 
         awg_cores = []
