@@ -4,11 +4,11 @@ from math import ceil
 import json
 import time
 from pkg_resources import resource_filename
-from zhinst.toolkit import Waveforms
+from zhinst.toolkit import Waveforms3
 import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
-from silospin.quantum_compiler.qc_helpers import make_command_table, make_gateset_sequencer, make_waveform_placeholders
+from silospin.quantum_compiler.qc_helpers import *
 
 
 class MultiQubitGatesSet:
@@ -23,8 +23,7 @@ class MultiQubitGatesSet:
         # 4. resetOsc for all cores
         # 5. set oscillators, outputs, etc.
         # 6. load command table sequences and compile
-        # 7.
-        # 8.
+
 
         default_qubit_params = {
         "0": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
@@ -41,48 +40,54 @@ class MultiQubitGatesSet:
             ## Add a read csv file (make a helper function for this)
             pass
 
+
+
+
+
+        gt_0 = gt_seq[0]
+        ct_idxs, n_ts = make_command_table_idxs(gt_seq, sample_rate)
+        ##change later to adjust for plunger gates, and phi_z corrections
+        command_table = generate_reduced_command_table(gt_0, npoints_wait = n_ts, npoints_plunger = None, delta_iq = 0, phi_z = 0)
+
         awg_cores = []
+        command_tables = {}
+        cts_idxs = {}
         for key in gate_strings:
-            if gate_strings[key]:
+            gt_seq = gate_strings[key]
+            if gt_seq:
+                gt_0 = gt_seq[0]
+                ct_idxs, n_ts = make_command_table_idxs(gt_seq, sample_rate)
+                cts_idxs[key] = ct_idxs
+                command_table = generate_reduced_command_table(gt_0, npoints_wait = n_ts, npoints_plunger = None, delta_iq = self._qubit_parameters[key]["delta_iq"], phi_z = 0)
+                command_tables[key] = command_table
                 awg_idx = int(key)
                 awg_cores.append(awg_idx)
-                #self._awg._hdawg.awgs[awg_idx].enable(False)
-                ## add line to clear out previous sequence run
             else:
                 pass
+
         self._awg_idxs = awg_cores
+        self._command_tables = command_tables
 
         waveforms_tau_pi = {}
         waveforms_tau_pi_2 = {}
         waveforms_qubits = {}
-        command_tables = {}
-        if waveforms_preloaded is True:
-            pass
-        else:
-            for awg_idx in self._awg_idxs:
-                ##consider replacing with a wrapper function
-                n_array = []
-                waveforms = Waveforms()
-                npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
-                npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
-                waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
-                waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, self._qubit_parameters [str(awg_idx)]["i_amp_pi_2"])
-                n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
-                n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
-                waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
-                waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
-                waveforms_qubits[str(awg_idx)] = waveforms
-                command_tables[str(awg_idx)] = make_command_table(self._gate_strings[str(awg_idx)], self._sample_rate)
-                n_seq =  len(command_tables[str(awg_idx)])
-                place_holder_code = make_gateset_sequencer(n_array, n_seq, continuous=continuous, trigger=soft_trigger)
-                #place_holder_code = make_waveform_placeholders(n_array)
-                self._awg.load_sequence(place_holder_code, awg_idx=awg_idx)
-                self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
-                #self._awg._awgs["awg"+str(awg_idx+1)].single(True)
-                #self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
-                command_tables[str(awg_idx)] = make_command_table(self._gate_strings[str(awg_idx)], self._sample_rate)
 
-        self._command_tables = command_tables
+        for awg_idx in self._awg_idxs:
+            n_array = []
+            waveforms = Waveforms()
+            npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
+            npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
+            waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
+            waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, self._qubit_parameters [str(awg_idx)]["i_amp_pi_2"])
+            n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
+            n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
+            waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
+            waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
+            waveforms_qubits[str(awg_idx)] = waveforms
+            seq_code = make_gateset_sequencer_fast(n_array, cts_idxs[str(awg_idx)], continuous=continuous, trigger=soft_trigger)
+            self._awg.load_sequence(seq_code, awg_idx=awg_idx)
+            self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
+
         self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
         self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
 
@@ -104,20 +109,6 @@ class MultiQubitGatesSet:
              #self._awg._awgs["awg"+str(awg_idx+1)].single(True)
              #self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
              daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_tables[str(awg_idx)]))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -221,8 +212,6 @@ class MultiQubitGatesSet:
              self._awg._awgs["awg"+str(awg_idx+1)].single(True)
              self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
              daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_tables[str(awg_idx)]))
-
-
 
 
     def run_program(self, awg_idxs=None):
