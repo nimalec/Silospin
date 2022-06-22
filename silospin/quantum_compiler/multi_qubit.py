@@ -4,7 +4,7 @@ from math import ceil
 import json
 import time
 from pkg_resources import resource_filename
-from zhinst.toolkit import Waveforms 
+from zhinst.toolkit import Waveforms
 import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
@@ -40,14 +40,6 @@ class MultiQubitGatesSet:
             ## Add a read csv file (make a helper function for this)
             pass
 
-
-
-
-
-        gt_0 = gt_seq[0]
-        ct_idxs, n_ts = make_command_table_idxs(gt_seq, sample_rate)
-        ##change later to adjust for plunger gates, and phi_z corrections
-        command_table = generate_reduced_command_table(gt_0, npoints_wait = n_ts, npoints_plunger = None, delta_iq = 0, phi_z = 0)
 
         awg_cores = []
         command_tables = {}
