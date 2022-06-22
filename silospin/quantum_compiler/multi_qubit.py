@@ -9,7 +9,7 @@ import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.qc_helpers import *
-
+from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file
 
 class MultiQubitGatesSet:
     def __init__(self, gate_strings, awg, qubit_parameters=None, sample_rate=2.4e9, continuous=False, soft_trigger = False, waveforms_preloaded=False, update_qubit_parameters = "0", parameters_path = None):
@@ -31,13 +31,16 @@ class MultiQubitGatesSet:
          "2": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         "3": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
 
+
         if update_qubit_parameters == "1":
-             ## upload local file
             self._qubit_parameters = qubit_parameters
+            write_qubit_parameter_file(self._qubit_parameters, qubit_parameters_file_path)
+
         elif update_qubit_parameters == "0":
             self._qubit_parameters = default_qubit_params
+
         elif update_qubit_parameters == "-1":
-            ## Add a read csv file (make a helper function for this)
+            self._qubit_parameters =  read_qubit_paramater_file(qubit_parameters_file_path)
             pass
 
         awg_cores = []
@@ -58,6 +61,7 @@ class MultiQubitGatesSet:
 
         self._awg_idxs = awg_cores
         self._command_tables = command_tables
+
 
         waveforms_tau_pi = {}
         waveforms_tau_pi_2 = {}
