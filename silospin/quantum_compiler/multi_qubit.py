@@ -12,7 +12,7 @@ from silospin.quantum_compiler.qc_helpers import *
 from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file
 
 class MultiQubitGatesSet:
-    def __init__(self, gate_strings, awg, qubit_parameters=None, sample_rate=2.4e9, continuous=False, soft_trigger = False, waveforms_preloaded=False, update_qubit_parameters = "0", qubit_parameters_file_path = "qubit_parameters.csv"):
+    def __init__(self, gate_strings, awg, qubit_parameters=None, sample_rate=2.4e9, continuous=False, soft_trigger = False, waveforms_preloaded=False, update_qubit_parameters = "0", qubit_parameters_file_path = "../data/qubit_parameters/qubit_parameters.csv"):
         ##should also add fucntion to check if only one parameter needs to be updated or multiple.
         self._gate_strings = gate_strings
         self._awg = awg
