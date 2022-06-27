@@ -209,7 +209,7 @@ def make_command_table_idxs(gt_seq, sample_rate):
             phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
             ct_idx = get_ct_idx(phi_a, gt)
         elif gt[0] == "t":
-            n_t = ceil(sample_rate*int(t)*(1e-9)/48)*48
+            n_t = ceil(sample_rate*int(gt[1:len(gt)])*(1e-9)/48)*48
             if n_t in waits:
                 ct_idx = waits[str(n_t)]
             else:
