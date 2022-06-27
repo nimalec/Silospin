@@ -49,7 +49,8 @@ class MultiQubitGatesSet:
             gt_seq = gate_strings[key]
             if gt_seq:
                 gt_0 = gt_seq[0]
-                ct_idxs, n_ts = make_command_table_idxs(gt_seq, sample_rate)
+                #ct_idxs, n_ts = make_command_table_idxs(gt_seq, sample_rate)
+                ct_idxs, n_ts = make_command_table_idxs(gt_seq[1:len(gt_seq)], sample_rate)
                 cts_idxs[key] = ct_idxs
                 command_table = generate_reduced_command_table(gt_0, npoints_wait = n_ts, npoints_plunger = None, delta_iq = self._qubit_parameters[key]["delta_iq"], phi_z = 0)
                 command_tables[key] = command_table
