@@ -24,8 +24,6 @@ class MultiQubitGatesSet:
         # 5. set oscillators, outputs, etc.
         # 6. load command table sequences and compile
 
-        ##need to still work through qubit parameter issue
-
         default_qubit_params = {
         "0": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         "1": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
@@ -71,8 +69,10 @@ class MultiQubitGatesSet:
         for awg_idx in self._awg_idxs:
             n_array = []
             waveforms = Waveforms()
-            npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
-            npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
+            #npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
+            #npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
+            npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"])
+            npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"])
             waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
             waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, self._qubit_parameters [str(awg_idx)]["i_amp_pi_2"])
             n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
@@ -199,6 +199,8 @@ class MultiQubitGatesSet:
              osc_idx = self._channel_osc_idxs[str(awg_idx)]
              self._awg._hdawg.sigouts[i_idx].on(0)
              self._awg._hdawg.sigouts[q_idx].on(0)
+             self._awg._hdawg.sigouts[i_idx].on(1)
+             self._awg._hdawg.sigouts[q_idx].on(1)
              self._awg.set_osc_freq(osc_idx, self._qubit_parameters[str(awg_idx)]["mod_freq"])
              self._awg.set_sine(i_idx+1, osc_idx)
              self._awg.set_sine(q_idx+1, osc_idx)
@@ -216,7 +218,7 @@ class MultiQubitGatesSet:
         else:
             awg_idxs = self._awg_idxs
         for idx in awg_idxs:
-            self._awg._hdawg.sigouts[self._channel_idxs[str(idx)][0]].on(1)
-            self._awg._hdawg.sigouts[self._channel_idxs[str(idx)][1]].on(1)
+            #self._awg._hdawg.sigouts[self._channel_idxs[str(idx)][0]].on(1)
+            #self._awg._hdawg.sigouts[self._channel_idxs[str(idx)][1]].on(1)
             self._awg._awgs["awg"+str(idx+1)].single(True)
             self._awg._awgs["awg"+str(idx+1)].enable(True)
