@@ -344,7 +344,6 @@ class HdawgDriver:
        self._hdawg.sines[sin_num-1].amplitudes[0](amp1)
        self._hdawg.sines[sin_num-1].amplitudes[1](amp2)
 
-       print("Sine wave set to: ", self._sines["sin"+str(sin_num)])
 
     def get_awg(self, awg_num):
        """
