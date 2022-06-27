@@ -218,8 +218,5 @@ class MultiQubitGatesSet:
         else:
             awg_idxs = self._awg_idxs
         for idx in awg_idxs:
-            print(idx)
-            #self._awg._hdawg.sigouts[self._channel_idxs[str(idx)][0]].on(1)
-            #self._awg._hdawg.sigouts[self._channel_idxs[str(idx)][1]].on(1)
             self._awg._awgs["awg"+str(idx+1)].single(True)
             self._awg._awgs["awg"+str(idx+1)].enable(True)
