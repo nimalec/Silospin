@@ -69,17 +69,17 @@ class MultiQubitGatesSet:
         for awg_idx in self._awg_idxs:
             n_array = []
             waveforms = Waveforms()
-            #npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
-            #npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
-            npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"])
-            npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"])
+            npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
+            npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
+            #npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"])
+            #npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"])
             waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
             waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, self._qubit_parameters [str(awg_idx)]["i_amp_pi_2"])
             n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
             n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
             waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
             waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
-            print(len(waveforms_tau_pi_2[str(awg_idx)]))
+            #print(len(waveforms_tau_pi_2[str(awg_idx)]))
             waveforms_qubits[str(awg_idx)] = waveforms
             seq_code = make_gateset_sequencer_fast(n_array, cts_idxs[str(awg_idx)], continuous=continuous, trigger=soft_trigger)
             self._awg.load_sequence(seq_code, awg_idx=awg_idx)
