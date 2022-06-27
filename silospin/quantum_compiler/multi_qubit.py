@@ -104,9 +104,6 @@ class MultiQubitGatesSet:
              self._awg.set_sine(q_idx+1, osc_idx)
              self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
              self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[str(awg_idx)]["q_amp_pi"])
-             #self._awg.load_sequence(phase_reset_seq, awg_idx)
-             #self._awg._awgs["awg"+str(awg_idx+1)].single(True)
-             #self._awg._awgs["awg"+str(awg_idx+1)].enable(True)
              daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_tables[str(awg_idx)]))
 
 
