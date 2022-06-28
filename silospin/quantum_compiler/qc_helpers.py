@@ -115,13 +115,15 @@ def make_gateset_sequencer_fast(n_array, n_seq, continuous=False, soft_trigger=F
             program = sequence_code + "while(true){\n setTrigger(1);\n setTrigger(0);\n" + command_code +"}\n"
 
     else:
-        if soft_trigger is False or hard_trigger is False:
-            program = sequence_code + command_code
-        elif soft_trigger is True: 
-            program = sequence_code + "setTrigger(1);\nsetTrigger(0);\n" + command_code
-            #program = sequence_code + "waitTrigger(0, 0.2);\n" + command_code
-        elif hard_trigger is True:
+        if hard_trigger is True:
             program = sequence_code + "waitTrigger(1, 0.2);\n" + command_code
+        #if soft_trigger is False or hard_trigger is False:
+    #        program = sequence_code + command_code
+#        elif soft_trigger is True:
+#            program = sequence_code + "setTrigger(1);\nsetTrigger(0);\n" + command_code
+            #program = sequence_code + "waitTrigger(0, 0.2);\n" + command_code
+#        elif hard_trigger is True:
+#            program = sequence_code + "waitTrigger(1, 0.2);\n" + command_code
 
     return program
 
