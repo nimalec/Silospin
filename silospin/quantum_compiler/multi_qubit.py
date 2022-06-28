@@ -49,7 +49,6 @@ class MultiQubitGatesSet:
             gt_seq = gate_strings[key]
             if gt_seq:
                 gt_0 = gt_seq[0]
-                #ct_idxs, n_ts = make_command_table_idxs(gt_seq, sample_rate)
                 ct_idxs, n_ts = make_command_table_idxs(gt_seq[1:len(gt_seq)], sample_rate)
                 cts_idxs[key] = ct_idxs
                 command_table = generate_reduced_command_table(gt_0, npoints_wait = n_ts, npoints_plunger = None, delta_iq = self._qubit_parameters[key]["delta_iq"], phi_z = 0)
@@ -62,7 +61,6 @@ class MultiQubitGatesSet:
         self._awg_idxs = awg_cores
         self._command_tables = command_tables
 
-
         waveforms_tau_pi = {}
         waveforms_tau_pi_2 = {}
         waveforms_qubits = {}
@@ -72,15 +70,12 @@ class MultiQubitGatesSet:
             waveforms = Waveforms()
             npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
             npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
-            #npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"])
-            #npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"])
             waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
             waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, self._qubit_parameters [str(awg_idx)]["i_amp_pi_2"])
             n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
             n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
             waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
             waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
-            #print(len(waveforms_tau_pi_2[str(awg_idx)]))
             waveforms_qubits[str(awg_idx)] = waveforms
             seq_code = make_gateset_sequencer_fast(n_array, cts_idxs[str(awg_idx)], continuous=continuous, trigger=soft_trigger)
             self._awg.load_sequence(seq_code, awg_idx=awg_idx)
@@ -96,10 +91,8 @@ class MultiQubitGatesSet:
              i_idx = self._channel_idxs[str(awg_idx)][0]
              q_idx = self._channel_idxs[str(awg_idx)][1]
              osc_idx = self._channel_osc_idxs[str(awg_idx)]
-             #self._awg._hdawg.sigouts[i_idx].on(0)
-             #self._awg._hdawg.sigouts[q_idx].on(0)
-             #self._awg._hdawg.sigouts[i_idx].on(1)
-             #self._awg._hdawg.sigouts[q_idx].on(1)
+             self._awg._hdawg.sigouts[i_idx].on(1)
+             self._awg._hdawg.sigouts[q_idx].on(1)
              self._awg.set_osc_freq(osc_idx, self._qubit_parameters[str(awg_idx)]["mod_freq"])
              self._awg.set_sine(i_idx+1, osc_idx)
              self._awg.set_sine(q_idx+1, osc_idx)
