@@ -88,7 +88,7 @@ def make_gateset_sequencer(n_array, n_seq, continuous=False, trigger=False):
 
     return program
 
-def make_gateset_sequencer_fast(n_array, n_seq, continuous=False, trigger=False):
+def make_gateset_sequencer_fast(n_array, n_seq, continuous=False, soft_trigger=False, hard_trigger=False):
     ##Input: n_array. List of lengths for each gate operation.
     idx = 0
     sequence_code = ""
@@ -109,17 +109,19 @@ def make_gateset_sequencer_fast(n_array, n_seq, continuous=False, trigger=False)
         command_code = command_code + line
 
     if continuous is True:
-        if trigger is False:
+        if soft_trigger is False:
             program = sequence_code + "while(true){\n" + command_code +"}\n"
         else:
             program = sequence_code + "while(true){\n setTrigger(1);\n setTrigger(0);\n" + command_code +"}\n"
 
     else:
-        if trigger is False:
+        if soft_trigger is False or hard_trigger is False:
             program = sequence_code + command_code
-        else:
-            #program = sequence_code + "setTrigger(1);\nsetTrigger(0);\n" + command_code
-            program = sequence_code + "waitTrigger(0, 0.2);\n" + command_code
+        elif soft_trigger is True
+            program = sequence_code + "setTrigger(1);\nsetTrigger(0);\n" + command_code
+            #program = sequence_code + "waitTrigger(0, 0.2);\n" + command_code
+        elif hard_trigger is True:
+            program = sequence_code + "waitTrigger(1, 0.2);\n" + command_code
 
     return program
 
