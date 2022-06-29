@@ -1,4 +1,5 @@
 import pandas as pd
+import re 
 
 def read_qubit_paramater_file(file_path):
     qubit_parameters = pd.read_csv(file_path)
