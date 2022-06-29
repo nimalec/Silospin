@@ -239,12 +239,10 @@ class MultiQubitGST:
         self._gate_sequences = quantum_protocol_parser(self._gst_path, qubit_lengths = qubit_lengths, qubit_set = qubits)
 
 
-        gts_0 = [] #initial gates
+        gts_0 = {0: [], 1: [], 2: [], 3: []}   #initial gates
         n_waits = {0: [], 1: [], 2: [], 3: []} #wait times
         cts_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
         command_tables = {} # command tables for each core, command_tables[awg_idx]
-        #n_t_t = 0 #number of play_zero instances accumulated across all lines
-
         n_t_ts = {0: 0, 1: 0, 2: 0, 3: 0}
 
         #Loop over number of lines in sequence file
@@ -252,11 +250,12 @@ class MultiQubitGST:
             #Define dict for ct_idx of each line, cts_idxs[awg_idx]
             cts_idxs = {}
             gate_sequence = self._gate_sequence[idx] #sequence dictionary for a line
-            gts_0.append(gate_sequence[0]) ##append initial gate sequence
+            #gts_0.append(gate_sequence[0]) ##append initial gate sequence
 
             for key in gate_sequence: #loops over qubits
                 gt_seq = gate_strings[key] #gt sequence for qubit (list)
                 if gt_seq:
+                    gts_0[key].append(gt_seq[0])
                     ct_idxs, n_ts = make_command_table_idxs_v2(len(self._gate_sequences), n_t_ts[key], gt_seq[1:len(gt_seq)], self._sample_rate)
                     n_waits[key].append(n_ts)
                     cts_idxs[key] = ct_idxs
@@ -281,7 +280,7 @@ class MultiQubitGST:
         waveforms_tau_pi = {}
         waveforms_tau_pi_2 = {}
         waveforms_qubits = {}
-
+        sequencer_code = {}
         seq_code = {}
         command_code = {}
         for awg_idx in self._awg_idxs:
@@ -297,18 +296,17 @@ class MultiQubitGST:
             waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
             waveforms_qubits[str(awg_idx)] = waveforms
             seq_code[awg_idx] =  make_waveform_placeholders(n_array)
-            command_code[awg_idx] = []
-            for line in cts_idxs_all:
-                n_seq =
-                command_code[awg_idx].append(make_gateset_sequencer_fast_v2(line_idx, line))
-
-
-
-
+            command_code[awg_idx] = ""
+            for idx in range(len(cts_idxs_all)):
+                n_seq = cts_idxs_all[idx][awg_idx]
+                #command_code[awg_idx].append(make_gateset_sequencer_fast_v2(idx, n_seq))
+                sequence = make_gateset_sequencer_fast_v2(idx, n_seq)
+                command_code[awg_idx] += sequence
+            sequencer_code[awg_idx] =  seq_code[awg_idx] + command_code[awg_idx]
 
 
         for awg_idx in self._awg_idxs:
-            self._awg.load_sequence(seq_code, awg_idx=awg_idx)
+            self._awg.load_sequence(sequencer_code[awg_idx], awg_idx=awg_idx)
             self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
 
         self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
