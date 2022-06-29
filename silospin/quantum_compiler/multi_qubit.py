@@ -230,10 +230,10 @@ class MultiQubitGST:
         "1": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         "2": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         "3": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
-        qubit_lengths = {}
+        qubit_lengths = {1: {"pi": None, "pi_2"},2: {"pi": None, "pi_2"},3: {"pi": None, "pi_2"},4: {"pi": None, "pi_2"}}
         for idx in qubits:
-            qubit_lengths[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[str(idx-1)]["tau_pi"]/16)*16
-            qubit_lengths[idx]["pi_2"] = self._qubit_parameters[str(idx-1)]["tau_pi_2"]
+            qubit_lengths[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[str(idx-1)]["tau_pi"]/48)*48
+            qubit_lengths[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[str(idx-1)]["tau_pi_2"]/48)*48
 
         #input gate sequence
         self._gate_sequences = quantum_protocol_parser(self._gst_path, qubit_lengths = qubit_lengths, qubit_set = qubits)
