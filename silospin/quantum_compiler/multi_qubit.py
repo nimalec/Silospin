@@ -230,7 +230,7 @@ class MultiQubitGST:
         "1": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         "2": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         "3": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
-        qubit_lengths = {1: {"pi": None, "pi_2"},2: {"pi": None, "pi_2"},3: {"pi": None, "pi_2"},4: {"pi": None, "pi_2"}}
+        qubit_lengths = {1: {"pi": None, "pi_2": None},2: {"pi": None, "pi_2": None},3: {"pi": None, "pi_2": None},4: {"pi": None, "pi_2": None}}
         for idx in qubits:
             qubit_lengths[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[str(idx-1)]["tau_pi"]/48)*48
             qubit_lengths[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[str(idx-1)]["tau_pi_2"]/48)*48
