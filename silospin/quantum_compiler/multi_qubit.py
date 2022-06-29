@@ -249,7 +249,7 @@ class MultiQubitGST:
         for idx in self._gate_sequences:
             #Define dict for ct_idx of each line, cts_idxs[awg_idx]
             cts_idxs = {}
-            gate_sequence = self._gate_sequence[idx] #sequence dictionary for a line
+            gate_sequence = self._gate_sequences[idx] #sequence dictionary for a line
             #gts_0.append(gate_sequence[0]) ##append initial gate sequence
 
             for key in gate_sequence: #loops over qubits
