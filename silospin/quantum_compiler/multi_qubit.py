@@ -253,7 +253,7 @@ class MultiQubitGST:
             #gts_0.append(gate_sequence[0]) ##append initial gate sequence
 
             for key in gate_sequence: #loops over qubits
-                gt_seq = gate_strings[key] #gt sequence for qubit (list)
+                gt_seq = gate_sequence[key] #gt sequence for qubit (list)
                 if gt_seq:
                     gts_0[key].append(gt_seq[0])
                     ct_idxs, n_ts = make_command_table_idxs_v2(len(self._gate_sequences), n_t_ts[key], gt_seq[1:len(gt_seq)], self._sample_rate)
