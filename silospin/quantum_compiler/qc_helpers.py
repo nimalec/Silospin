@@ -127,7 +127,7 @@ def make_gateset_sequencer_fast_v2(line_idx, n_seq):
         idx_str = str(n)
         line = "executeTableEntry("+idx_str+");\n"
         command_code = command_code + line
-    program = "setTrigger(1);\nsetTrigger(0);\n" + command_code + "waitTrigger(1,0.2);\n"
+    program = "setTrigger(1);\nsetTrigger(0);\n" + command_code 
     return program
 
 
