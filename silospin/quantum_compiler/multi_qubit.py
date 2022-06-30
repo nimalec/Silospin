@@ -318,7 +318,7 @@ class MultiQubitGST:
 
         daq = self._awg._daq
         dev = self._awg._connection_settings["hdawg_id"]
-        for awg_idx in self._awg_idxs:
+        for awg_idx in self._awg_cores:
              i_idx = self._channel_idxs[str(awg_idx)][0]
              q_idx = self._channel_idxs[str(awg_idx)][1]
              osc_idx = self._channel_osc_idxs[str(awg_idx)]
