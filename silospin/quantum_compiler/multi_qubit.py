@@ -220,7 +220,6 @@ class MultiQubitGatesSet:
 
 class MultiQubitGST:
     def __init__(self, gst_file_path, awg, qubits = {1,2,3,4}):
-        #specify input parameters
         self._gst_path = gst_file_path
         self._awg = awg
         self._sample_rate = 2.4e9
@@ -230,14 +229,12 @@ class MultiQubitGST:
         "1": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         "2": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         "3": {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
-        qubit_lengths = {1: {"pi": None, "pi_2": None},2: {"pi": None, "pi_2": None},3: {"pi": None, "pi_2": None},4: {"pi": None, "pi_2": None}}
+        qubit_lengths = {1: {"pi": None, "pi_2": None},2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None},4: {"pi": None, "pi_2": None}}
         for idx in qubits:
             qubit_lengths[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[str(idx-1)]["tau_pi"]/48)*48
             qubit_lengths[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[str(idx-1)]["tau_pi_2"]/48)*48
-
         #input gate sequence
         self._gate_sequences = quantum_protocol_parser(self._gst_path, qubit_lengths = qubit_lengths, qubit_set = qubits)
-
 
         gts_0 = {0: [], 1: [], 2: [], 3: []}   #initial gates
         n_waits = {0: [], 1: [], 2: [], 3: []} #wait times
@@ -276,66 +273,66 @@ class MultiQubitGST:
             command_tables[str(i)] = command_table
 
         self._command_tables = command_tables
-
-        waveforms_tau_pi = {}
-        waveforms_tau_pi_2 = {}
-        waveforms_qubits = {}
-        sequencer_code = {}
-        seq_code = {}
-        command_code = {}
-        for awg_idx in self._awg_cores:
-            n_array = []
-            waveforms = Waveforms()
-            npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
-            npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
-            waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
-            waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, self._qubit_parameters [str(awg_idx)]["i_amp_pi_2"])
-            n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
-            n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
-            waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
-            waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
-            waveforms_qubits[str(awg_idx)] = waveforms
-            seq_code[awg_idx] =  make_waveform_placeholders(n_array)
-            command_code[awg_idx] = ""
-            #command_code[awg_idx] = []
-            for idx in range(len(ct_idxs_all)):
-                n_seq = ct_idxs_all[idx][awg_idx]
-                sequence = make_gateset_sequencer_fast_v2(idx, n_seq)
-                command_code[awg_idx] = command_code[awg_idx] + sequence
-                #command_code[awg_idx].append(sequence)
-            sequencer_code[awg_idx] =  seq_code[awg_idx] + command_code[awg_idx]
-
-
-        self._sequencer_code = sequencer_code
-
-        for awg_idx in self._awg_cores:
-            #print(command_code[awg_idx][len(command_code[awg_idx])-2])
-             self._awg.load_sequence(sequencer_code[awg_idx], awg_idx=awg_idx)
-             self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
         #
-        self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
-        self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+        # waveforms_tau_pi = {}
+        # waveforms_tau_pi_2 = {}
+        # waveforms_qubits = {}
+        # sequencer_code = {}
+        # seq_code = {}
+        # command_code = {}
+        # for awg_idx in self._awg_cores:
+        #     n_array = []
+        #     waveforms = Waveforms()
+        #     npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
+        #     npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
+        #     waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
+        #     waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, self._qubit_parameters [str(awg_idx)]["i_amp_pi_2"])
+        #     n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
+        #     n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
+        #     waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
+        #     waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
+        #     waveforms_qubits[str(awg_idx)] = waveforms
+        #     seq_code[awg_idx] =  make_waveform_placeholders(n_array)
+        #     command_code[awg_idx] = ""
+        #     #command_code[awg_idx] = []
+        #     for idx in range(len(ct_idxs_all)):
+        #         n_seq = ct_idxs_all[idx][awg_idx]
+        #         sequence = make_gateset_sequencer_fast_v2(idx, n_seq)
+        #         command_code[awg_idx] = command_code[awg_idx] + sequence
+        #         #command_code[awg_idx].append(sequence)
+        #     sequencer_code[awg_idx] =  seq_code[awg_idx] + command_code[awg_idx]
 
-        daq = self._awg._daq
-        dev = self._awg._connection_settings["hdawg_id"]
-        for awg_idx in self._awg_cores:
-             i_idx = self._channel_idxs[str(awg_idx)][0]
-             q_idx = self._channel_idxs[str(awg_idx)][1]
-             osc_idx = self._channel_osc_idxs[str(awg_idx)]
-             self._awg._hdawg.sigouts[i_idx].on(1)
-             self._awg._hdawg.sigouts[q_idx].on(1)
-             self._awg.set_osc_freq(osc_idx, self._qubit_parameters[str(awg_idx)]["mod_freq"])
-             self._awg.set_sine(i_idx+1, osc_idx)
-             self._awg.set_sine(q_idx+1, osc_idx)
-             self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
-             self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[str(awg_idx)]["q_amp_pi"])
-             daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_tables[str(awg_idx)]))
 
-    def run_program(self, awg_idxs=None):
-        if awg_idxs:
-            awg_idxs = awg_idxs
-        else:
-            awg_idxs = self._awg_idxs
-        for idx in awg_idxs:
-            self._awg._awgs["awg"+str(idx+1)].single(True)
-            self._awg._awgs["awg"+str(idx+1)].enable(True)
+        # self._sequencer_code = sequencer_code
+
+        # for awg_idx in self._awg_cores:
+        #     #print(command_code[awg_idx][len(command_code[awg_idx])-2])
+        #      self._awg.load_sequence(sequencer_code[awg_idx], awg_idx=awg_idx)
+        #      self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
+        # #
+        # self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
+        # self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+
+        # daq = self._awg._daq
+        # dev = self._awg._connection_settings["hdawg_id"]
+        # for awg_idx in self._awg_cores:
+        #      i_idx = self._channel_idxs[str(awg_idx)][0]
+        #      q_idx = self._channel_idxs[str(awg_idx)][1]
+        #      osc_idx = self._channel_osc_idxs[str(awg_idx)]
+        #      self._awg._hdawg.sigouts[i_idx].on(1)
+        #      self._awg._hdawg.sigouts[q_idx].on(1)
+        #      self._awg.set_osc_freq(osc_idx, self._qubit_parameters[str(awg_idx)]["mod_freq"])
+        #      self._awg.set_sine(i_idx+1, osc_idx)
+        #      self._awg.set_sine(q_idx+1, osc_idx)
+        #      self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
+        #      self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[str(awg_idx)]["q_amp_pi"])
+        #      daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_tables[str(awg_idx)]))
+
+    # def run_program(self, awg_idxs=None):
+    #     if awg_idxs:
+    #         awg_idxs = awg_idxs
+    #     else:
+    #         awg_idxs = self._awg_idxs
+    #     for idx in awg_idxs:
+    #         self._awg._awgs["awg"+str(idx+1)].single(True)
+    #         self._awg._awgs["awg"+str(idx+1)].enable(True)
