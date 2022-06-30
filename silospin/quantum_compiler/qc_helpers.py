@@ -202,6 +202,7 @@ def generate_reduced_command_table_v2(gts_0, npoints_wait = [], npoints_plunger 
 
     idx = 0
     for gt in gts_0:
+        print(gt)
         waveform_0 = {"index": initial_gates[gt]["wave_idx"], "awgChannel0": ["sigout0","sigout1"]}
         phase_0_0 = {"value": initial_gates[gt]["phi"], "increment": False}
         phase_1_0 = {"value": initial_gates[gt]["phi"]+delta_iq+90, "increment": False}
