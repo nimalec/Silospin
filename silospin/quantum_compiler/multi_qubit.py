@@ -296,16 +296,18 @@ class MultiQubitGST:
             waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
             waveforms_qubits[str(awg_idx)] = waveforms
             seq_code[awg_idx] =  make_waveform_placeholders(n_array)
-            command_code[awg_idx] = ""
+            #command_code[awg_idx] = ""
+            command_code[awg_idx] = []
             for idx in range(len(ct_idxs_all)):
                 n_seq = ct_idxs_all[idx][awg_idx]
                 sequence = make_gateset_sequencer_fast_v2(idx, n_seq)
-                command_code[awg_idx] += sequence
-            sequencer_code[awg_idx] =  seq_code[awg_idx] + command_code[awg_idx]
+                #command_code[awg_idx] += sequence
+                command_code[awg_idx].append(sequence)
+            #sequencer_code[awg_idx] =  seq_code[awg_idx] + command_code[awg_idx]
 
         self._sequencer_code = sequencer_code
         for awg_idx in self._awg_cores:
-            self._awg.load_sequence(seq_code[awg_idx], awg_idx=awg_idx)
+            self._awg.load_sequence(seq_code[awg_idx]+command_code[awg_idx][0], awg_idx=awg_idx)
             #self._awg.load_sequence(sequencer_code[awg_idx], awg_idx=awg_idx)
         #     self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
         #
