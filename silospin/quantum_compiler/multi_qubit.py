@@ -256,10 +256,10 @@ class MultiQubitGST:
                 gt_seq = gate_sequence[key] #gt sequence for qubit (list)
                 if gt_seq:
                     gts_0[int(key)].append(gt_seq[0])
-                    ct_idxs, n_ts = make_command_table_idxs_v2(len(self._gate_sequences), n_t_ts[key], gt_seq[1:len(gt_seq)], self._sample_rate)
-                    n_waits[key].append(n_ts)
-                    cts_idxs[key] = ct_idxs
-                    n_t_ts[key] = n_t_ts[key] + len(n_ts)
+                    ct_idxs, n_ts = make_command_table_idxs_v2(len(self._gate_sequences), n_t_ts[int(key)], gt_seq[1:len(gt_seq)], self._sample_rate)
+                    n_waits[int(key)].append(n_ts)
+                    cts_idxs[int(key)] = ct_idxs
+                    n_t_ts[int(key)] = n_t_ts[int(key)] + len(n_ts)
                 else:
                     pass
             ct_idxs_all[idx] = cts_idxs
