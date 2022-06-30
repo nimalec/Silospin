@@ -309,7 +309,7 @@ class MultiQubitGST:
         self._sequencer_code = sequencer_code
 
         for awg_idx in self._awg_cores:
-            print(command_code[awg_idx][len(command_code[awg_idx])])
+            print(command_code[awg_idx][len(command_code[awg_idx])-1])
         #     self._awg.load_sequence(sequencer_code[awg_idx], awg_idx=awg_idx)
         #     self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
         #
