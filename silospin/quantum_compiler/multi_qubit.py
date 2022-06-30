@@ -301,7 +301,7 @@ class MultiQubitGST:
             for idx in range(len(ct_idxs_all)):
                 n_seq = ct_idxs_all[idx][awg_idx]
                 sequence = make_gateset_sequencer_fast_v2(idx, n_seq)
-                command_code[awg_idx] = command_code[awg_idx] + sequence
+                #command_code[awg_idx] = command_code[awg_idx] + sequence
                 command_code[awg_idx].append(sequence)
             #sequencer_code[awg_idx] =  seq_code[awg_idx] + command_code[awg_idx]
 
