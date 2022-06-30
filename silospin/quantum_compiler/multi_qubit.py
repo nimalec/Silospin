@@ -283,7 +283,7 @@ class MultiQubitGST:
         sequencer_code = {}
         seq_code = {}
         command_code = {}
-        for awg_idx in self._awg_idxs:
+        for awg_idx in self._awg_cores:
             n_array = []
             waveforms = Waveforms()
             npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
