@@ -241,7 +241,7 @@ class MultiQubitGST:
 
         gts_0 = {0: [], 1: [], 2: [], 3: []}   #initial gates
         n_waits = {0: [], 1: [], 2: [], 3: []} #wait times
-        cts_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
+        ct_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
         command_tables = {} # command tables for each core, command_tables[awg_idx]
         n_t_ts = {0: 0, 1: 0, 2: 0, 3: 0}
 
