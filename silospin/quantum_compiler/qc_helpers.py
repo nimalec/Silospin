@@ -181,7 +181,7 @@ def generate_reduced_command_table(gt_0, npoints_wait = [], npoints_plunger = No
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
 
-def generate_reduced_command_table_v2(gts_0, npoints_wait = [], npoints_plunger = None, delta_iq = 0, phi_z = 0):
+def generate_reduced_command_table_v2(gts_0, npoints_wait = [], npoints_plunger = None, delta_iq = 0, phi_z = 0, sample_rate=2.4e9):
     ## also add I/Q correction here
 
     ## npoints_wait: list of number of points for various wait durations
@@ -202,12 +202,18 @@ def generate_reduced_command_table_v2(gts_0, npoints_wait = [], npoints_plunger 
 
     idx = 0
     for gt in gts_0:
-        print(idx)
-        waveform_0 = {"index": initial_gates[gt]["wave_idx"], "awgChannel0": ["sigout0","sigout1"]}
-        phase_0_0 = {"value": initial_gates[gt]["phi"], "increment": False}
-        phase_1_0 = {"value": initial_gates[gt]["phi"]+delta_iq+90, "increment": False}
-        ct_entry_0 = {"index": idx, "waveform": waveform_0, "phase0": phase_0_0, "phase1": phase_1_0}
-        ct.append(ct_entry_0)
+        if gt in initial_gates:
+             waveform_0 = {"index": initial_gates[gt]["wave_idx"], "awgChannel0": ["sigout0","sigout1"]}
+             phase_0_0 = {"value": initial_gates[gt]["phi"], "increment": False}
+             phase_1_0 = {"value": initial_gates[gt]["phi"]+delta_iq+90, "increment": False}
+             ct_entry_0 = {"index": idx, "waveform": waveform_0, "phase0": phase_0_0, "phase1": phase_1_0}
+             ct.append(ct_entry_0)
+        elif gt[0] == "t":
+             n_t = ceil(sample_rate*int(gt[1:len(gt)])/32)*32
+             waveform_0 = {"playZero": True, "length": n_t}
+             phase_0_0 = {"value": 0 , "increment": False}
+             ct_entry_0 = {"index": idx, "waveform": waveform_0, "phase0": phase_0_0, "phase1": phase_0_0}
+             ct.append(ct_entry_0)
         idx += 1
 
     waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]}]
