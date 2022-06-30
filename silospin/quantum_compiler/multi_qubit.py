@@ -273,7 +273,7 @@ class MultiQubitGST:
         command_tables = {}
         for i in self._awg_cores:
             command_table = generate_reduced_command_table_v2(gts_0[i], npoints_wait = n_waits, npoints_plunger = None, delta_iq = self._qubit_parameters[str(i)]["delta_iq"], phi_z = 0)
-            self._command_tables[str(i)] = command_table
+            command_tables[str(i)] = command_table
 
         self._command_tables = command_tables
 
