@@ -297,8 +297,8 @@ class MultiQubitGST:
             waveforms_qubits[str(awg_idx)] = waveforms
             seq_code[awg_idx] =  make_waveform_placeholders(n_array)
             command_code[awg_idx] = ""
-            for idx in range(len(cts_idxs_all)):
-                n_seq = cts_idxs_all[idx][awg_idx]
+            for idx in range(len(ct_idxs_all)):
+                n_seq = ct_idxs_all[idx][awg_idx]
                 #command_code[awg_idx].append(make_gateset_sequencer_fast_v2(idx, n_seq))
                 sequence = make_gateset_sequencer_fast_v2(idx, n_seq)
                 command_code[awg_idx] += sequence
