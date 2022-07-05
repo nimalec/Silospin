@@ -371,6 +371,5 @@ def make_command_table_idxs_v3(gt_seq, tau_pi_s, tau_pi_2_s):
                 pass
         ct_idxs.append(ct_idx)
     return ct_idxs
-
-def generate_waveforms(qubit_gate_lengths):
-    #returns pi and pi/2 waveforms for each qubit
+#def generate_waveforms(qubit_gate_lengths):
+    #returns pi and pi/2 waveforms for each qubit\
