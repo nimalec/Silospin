@@ -429,7 +429,7 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
                 else:
                     pass
             ii += 1
-            ct_idxs[idx] = ct_idx_list
+        ct_idxs[idx] = ct_idx_list
     return ct_idxs
 
 #def generate_waveforms(qubit_gate_lengths):
