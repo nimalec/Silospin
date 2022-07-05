@@ -64,6 +64,7 @@ def gst_parser(file_path, qubit_lengths, qubit_set = {0,1,2,3}):
             length_set = []
             for item in element:
                 if len(item)>2:
+                    print(item[0])
                     seq_line[item[0]].append(item[2:len(item)])
                     qubit_length = qubit_lengths[int(item[0])][gates[item[2:len(item)]]]
                     length_set.append(qubit_length)
