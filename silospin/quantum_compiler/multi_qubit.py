@@ -362,7 +362,7 @@ class MultiQubitGST_v2:
 
         ##Generates a pulse table
         qubit_parser_lengths = {0: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 1: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 2: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 3: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}}
-        self._gate_sequences =  gst_parser(file_path, qubit_parser_lengths, qubit_set = {0,1,2,3})
+        self._gate_sequences =  gst_parser(gst_file_path, qubit_parser_lengths, qubit_set = {0,1,2,3})
 
         # ##Number of waits
         # ct_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
