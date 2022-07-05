@@ -377,12 +377,12 @@ def make_command_table_idxs_v3(gt_seq, tau_pi_s, tau_pi_2_s):
 def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
     ct_idxs = {}
     initial_gates = {"x": 0, "y": 1,  "xx": 4,  "yy": 5, "xxx": 2, "yyy": 3,  "mxxm": 5,  "myym": 7}
-    for idx in gt_seqs:
+    for idx in gt_seqs
         gate_sequence = gt_seqs[idx]
         ct_idx_list = []
-        idx = 0
+        ii = 0
         for gt in gate_sequence:
-            if idx == 0:
+            if ii == 0:
                 if gt in {"x", "y", "xxx", "yyy"}:
                     ct_idx_list.append(22)
                     ct_idx_list.append(initial_gates[gt])
@@ -396,17 +396,12 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
                         ct_idx_list.append(22)
                         ct_idx_list.append(22)
                         ct_idx_list.append(22)
-                        #ct_idx = 22
                     elif int(gt[1:len(gt)]) == tau_pi_s:
                         ct_idx_list.append(23)
                         ct_idx_list.append(23)
                         ct_idx_list.append(23)
-                        #ct_idx = 23
                     else:
                         pass
-                    # ct_idx_list.append(ct_idx)
-                    # ct_idx_list.append(ct_idx)
-                    # ct_idx_list.append(ct_idx)
                 else:
                     pass
             else:
@@ -432,7 +427,7 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
                     ct_idx_list.append(ct_idx)
                 else:
                     pass
-            idx += 1
+            ii += 1
             ct_idxs[idx] = ct_idx_list
     return ct_idxs
 
