@@ -364,16 +364,16 @@ class MultiQubitGST_v2:
         qubit_parser_lengths = {0: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 1: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 2: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 3: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}}
         #self._gate_sequences =  gst_parser(gst_file_path, qubit_parser_lengths, qubit_set = {0,1,2,3})
         self._gate_sequences =  quantum_protocol_parser(gst_file_path, qubit_parser_lengths, qubit_set = {1,2,3,4})
+        self._command_table = generate_reduced_command_table_v3(npoints_pi_2_standard, npoints_pi_standard)
 
         ##Number of waits
         ct_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
         for idx in self._gate_sequences:
-             cts_idxs = {}
              gate_sequence = self._gate_sequences[idx]
+             print(gate_sequence)
              ct_idxs_all[idx] = make_command_table_idxs_v4(gate_sequence, tau_pi_standard, tau_pi_2_standard)
 
-        self._ct_idxs = ct_idxs_all   
-        self._command_table = generate_reduced_command_table_v3(npoints_pi_2_standard, npoints_pi_standard)
+        self._ct_idxs = ct_idxs_all
 
         # waveforms_tau_pi = {}
         # waveforms_tau_pi_2 = {}
