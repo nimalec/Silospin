@@ -365,7 +365,7 @@ class MultiQubitGST_v2:
         #self._gate_sequences =  gst_parser(gst_file_path, qubit_parser_lengths, qubit_set = {0,1,2,3})
         self._gate_sequences =  quantum_protocol_parser(gst_file_path, qubit_parser_lengths, qubit_set = {1,2,3,4})
 
-        # ##Number of waits
+        ##Number of waits
         # ct_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
         # command_tables = {} # command tables for each core, command_tables[awg_idx]
         #
@@ -382,13 +382,13 @@ class MultiQubitGST_v2:
         #         else:
         #             pass
         #     ct_idxs_all[idx] = cts_idxs
-        #
-        # command_tables = {}
-        # for i in self._awg_cores:
-        #     command_table =  generate_reduced_command_table_v3(n_pi_2, n_pi)
-        #     command_tables[str(i)] = command_table
-        #
-        # self._command_tables = command_tables
+
+        command_tables = {}
+        for i in self._awg_cores:
+            command_table =  generate_reduced_command_table_v3(npoints_pi_2_standard, npoints_pi_standard)
+            command_tables[str(i)] = command_table
+
+        self._command_tables = command_tables
 
         # waveforms_tau_pi = {}
         # waveforms_tau_pi_2 = {}

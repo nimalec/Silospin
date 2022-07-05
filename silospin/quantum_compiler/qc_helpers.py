@@ -260,9 +260,11 @@ def generate_reduced_command_table_v3(n_pi_2, n_pi):
     ## 1. Loop through initial gates
     ct_idx = 0
     for i in range(len(phases_0_I)):
+        ## pi/2 lengths
          ct.append({"index": ct_idx, "waveform": waves[0], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
          ct_idx += 1
     for i in range(len(phases_0_I)):
+        ## pi lengths
          ct.append({"index": ct_idx, "waveform": waves[1], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
          ct_idx += 1
 
@@ -274,7 +276,7 @@ def generate_reduced_command_table_v3(n_pi_2, n_pi):
          ct.append({"index": ct_idx, "waveform": waves[1], "phase0": phases_incr[i], "phase1": phases_incr[i]})
          ct_idx += 1
 
-   ## 3. Loop through incremented phases
+   ## 3. Append waits to command table
     ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2}, "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
     ct.append({"index": ct_idx+1, "waveform": {"playZero": True, "length": n_pi}, "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
 
