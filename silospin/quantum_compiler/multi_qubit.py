@@ -364,40 +364,40 @@ class MultiQubitGST_v2:
         qubit_parser_lengths = {0: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 1: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 2: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 3: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}}
         self._gate_sequences = quantum_protocol_parser(self._gst_path, qubit_lengths = qubit_parser_lengths, qubit_set = qubits)
 
-        ##Number of waits
-        ct_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
-        command_tables = {} # command tables for each core, command_tables[awg_idx]
+        # ##Number of waits
+        # ct_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
+        # command_tables = {} # command tables for each core, command_tables[awg_idx]
+        #
+        # #Loop over number of lines in sequence file
+        # for idx in self._gate_sequences:
+        #     cts_idxs = {}
+        #     gate_sequence = self._gate_sequences[idx] #sequence dictionary for a line
+        #
+        #     for key in gate_sequence: #loops over qubits
+        #         gt_seq = gate_sequence[key] #gt sequence for qubit (list)
+        #         if gt_seq:
+        #             ct_idxs = make_command_table_idxs_v3(gt_seq, tau_pi_s, tau_pi_2_s)
+        #             cts_idxs[int(key)] = ct_idxs
+        #         else:
+        #             pass
+        #     ct_idxs_all[idx] = cts_idxs
+        #
+        # command_tables = {}
+        # for i in self._awg_cores:
+        #     command_table =  generate_reduced_command_table_v3(n_pi_2, n_pi)
+        #     command_tables[str(i)] = command_table
+        #
+        # self._command_tables = command_tables
 
-        #Loop over number of lines in sequence file
-        for idx in self._gate_sequences:
-            cts_idxs = {}
-            gate_sequence = self._gate_sequences[idx] #sequence dictionary for a line
-
-            for key in gate_sequence: #loops over qubits
-                gt_seq = gate_sequence[key] #gt sequence for qubit (list)
-                if gt_seq:
-                    ct_idxs = make_command_table_idxs_v3(gt_seq, tau_pi_s, tau_pi_2_s)
-                    cts_idxs[int(key)] = ct_idxs
-                else:
-                    pass
-            ct_idxs_all[idx] = cts_idxs
-
-        command_tables = {}
-        for i in self._awg_cores:
-            command_table =  generate_reduced_command_table_v3(n_pi_2, n_pi)
-            command_tables[str(i)] = command_table
-
-        self._command_tables = command_tables
-
-        waveforms_tau_pi = {}
-        waveforms_tau_pi_2 = {}
-        waveforms_qubits = {}
-        sequencer_code = {}
-        seq_code = {}
-        command_code = {}
-        for awg_idx in self._awg_cores:
-            n_array = []
-            waveforms = Waveforms()
+        # waveforms_tau_pi = {}
+        # waveforms_tau_pi_2 = {}
+        # waveforms_qubits = {}
+        # sequencer_code = {}
+        # seq_code = {}
+        # command_code = {}
+        # for awg_idx in self._awg_cores:
+        #     n_array = []
+        #     waveforms = Waveforms()
         #     npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
         #     npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
         #     waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
