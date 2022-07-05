@@ -366,29 +366,14 @@ class MultiQubitGST_v2:
         self._gate_sequences =  quantum_protocol_parser(gst_file_path, qubit_parser_lengths, qubit_set = {1,2,3,4})
 
         ##Number of waits
-        # ct_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
-        # command_tables = {} # command tables for each core, command_tables[awg_idx]
-        #
-        # #Loop over number of lines in sequence file
-        # for idx in self._gate_sequences:
-        #     cts_idxs = {}
-        #     gate_sequence = self._gate_sequences[idx] #sequence dictionary for a line
-        #
-        #     for key in gate_sequence: #loops over qubits
-        #         gt_seq = gate_sequence[key] #gt sequence for qubit (list)
-        #         if gt_seq:
-        #             ct_idxs = make_command_table_idxs_v3(gt_seq, tau_pi_s, tau_pi_2_s)
-        #             cts_idxs[int(key)] = ct_idxs
-        #         else:
-        #             pass
-        #     ct_idxs_all[idx] = cts_idxs
+        ct_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
+        for idx in self._gate_sequences:
+             cts_idxs = {}
+             gate_sequence = self._gate_sequences[idx]
+             ct_idxs_all[idx] = make_command_table_idxs_v4(gate_sequence, tau_pi_standard, tau_pi_2_standard)
 
-        command_tables = {}
-        for i in self._awg_cores:
-            command_table =  generate_reduced_command_table_v3(npoints_pi_2_standard, npoints_pi_standard)
-            command_tables[str(i)] = command_table
-
-        self._command_tables = command_tables
+        self._ct_idxs = ct_idxs_all   
+        self._command_table = generate_reduced_command_table_v3(npoints_pi_2_standard, npoints_pi_standard)
 
         # waveforms_tau_pi = {}
         # waveforms_tau_pi_2 = {}
@@ -442,7 +427,7 @@ class MultiQubitGST_v2:
         #      self._awg.set_sine(q_idx+1, osc_idx)
         #      self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
         #      self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[str(awg_idx)]["q_amp_pi"])
-        #      daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_tables[str(awg_idx)]))
+        #      daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_table))
 
     # def run_program(self, awg_idxs=None):
     #     if awg_idxs:

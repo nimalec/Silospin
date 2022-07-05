@@ -300,13 +300,13 @@ def make_waveform_placeholders(n_array):
 
 def get_ct_idx(phi_a, gt):
     ct_idx_table = {
-    "0": {"x": 1, "y": 1, "xxx": 1, "yyy": 1,  "xx": 8, "yy": 8, "mxxm": 8, "myym": 8},
-    "90" : {"x": 2, "y": 2, "xxx": 2, "yyy": 2,  "xx": 9, "yy": 9, "mxxm": 9, "myym": 9},
-    "180" : {"x": 3, "y": 3, "xxx": 3, "yyy": 3,  "xx": 10, "yy": 10, "mxxm": 10, "myym":10} ,
-    "270": {"x": 4, "y": 4, "xxx": 4, "yyy": 4 ,  "xx": 11, "yy": 11, "mxxm": 11, "myym": 11},
-    "-90" : {"x": 5, "y": 5, "xxx": 5, "yyy": 5,  "xx": 12, "yy": 12, "mxxm": 12, "myym": 12},
-    "-180" : {"x": 6, "y": 6, "xxx": 6, "yyy": 6,  "xx": 13, "yy": 13, "mxxm": 13, "myym": 13},
-    "-270": {"x": 7, "y": 7,  "xxx": 7, "yyy": 7,  "xx": 14, "yy": 14, "mxxm": 14, "myym": 14}}
+    "0": {"x": 8, "y": 8, "xxx": 8, "yyy": 8,  "xx": 15, "yy": 15, "mxxm": 15, "myym": 15},
+    "90" : {"x": 9, "y": 9, "xxx": 9, "yyy": 9,  "xx": 16, "yy": 16, "mxxm": 16, "myym": 16},
+    "180" : {"x": 10, "y": 10, "xxx": 10, "yyy": 10,  "xx": 17, "yy": 17, "mxxm": 17, "myym":17} ,
+    "270": {"x": 11, "y": 11, "xxx": 11, "yyy": 11, "xx": 17, "yy": 17, "mxxm": 17, "myym": 17},
+    "-90" : {"x": 12, "y": 12, "xxx": 12, "yyy": 12,  "xx": 18, "yy": 18, "mxxm": 18, "myym": 18},
+    "-180" : {"x": 13, "y": 13, "xxx": 13, "yyy": 13,  "xx": 19, "yy": 19, "mxxm": 19, "myym": 19},
+    "-270": {"x": 14, "y": 14,  "xxx": 14, "yyy": 14,  "xx": 20, "yy": 20, "mxxm": 20, "myym": 20}}
     return ct_idx_table[str(int(phi_a))][gt]
 
 def make_command_table_idxs(gt_seq, sample_rate):
@@ -373,5 +373,60 @@ def make_command_table_idxs_v3(gt_seq, tau_pi_s, tau_pi_2_s):
                 pass
         ct_idxs.append(ct_idx)
     return ct_idxs
+
+def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
+    ct_idxs = {}
+    initial_gates = {"x": 0, "y": 1,  "xx": 4,  "yy": 5, "xxx": 2, "yyy": 3,  "mxxm": 5,  "myym": 7}
+    for idx in gt_seqs:
+        gate_sequence = gt_seqs[idx]
+        ct_idx_list = []
+        idx = 0
+        for gt in gate_sequence:
+            if idx == 0:
+                if gt in {"x", "y", "xxx", "yyy"}:
+                    ct_idx_list.append(22)
+                    ct_idx_list.append(initial_gates[gt])
+                    ct_idx_list.append(22)
+                elif gt in {"xx", "yy", "mxxm", "myym"}:
+                    ct_idx_list.append(23)
+                    ct_idx_list.append(initial_gates[gt])
+                    ct_idx_list.append(23)
+                elif gt[0] == "t":
+                    if int(gt[1:len(gt)]) == tau_pi_2_s:
+                        ct_idx = 22
+                    elif int(gt[1:len(gt)]) == tau_pi_s:
+                        ct_idx = 23
+                    ct_idx_list.append(ct_idx)
+                    ct_idx_list.append(ct_idx)
+                    ct_idx_list.append(ct_idx)
+                else:
+                    pass
+            else:
+                phi_l = 0
+                if gt[0] in {"x", "y", "m"}:
+                    phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
+                    ct_idx = get_ct_idx(phi_a, gt)
+                    if gt in {"x", "y", "xxx", "yyy"}:
+                        ct_idx_list.append(22)
+                        ct_idx_list.append(ct_idx)
+                        ct_idx_list.append(22)
+                    else:
+                        ct_idx_list.append(23)
+                        ct_idx_list.append(ct_idx)
+                        ct_idx_list.append(23)
+                elif gt[0] == "t":
+                    if int(gt[1:len(gt)]) == tau_pi_2_s:
+                        ct_idx = 22
+                    elif int(gt[1:len(gt)]) == tau_pi_s:
+                        ct_idx = 23
+                    ct_idx_list.append(ct_idx)
+                    ct_idx_list.append(ct_idx)
+                    ct_idx_list.append(ct_idx)
+                else:
+                    pass
+            idx += 1
+            ct_idxs[idx] = ct_idx_list
+    return ct_idxs
+
 #def generate_waveforms(qubit_gate_lengths):
     #returns pi and pi/2 waveforms for each qubit\
