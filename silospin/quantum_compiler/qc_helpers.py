@@ -127,7 +127,7 @@ def make_gateset_sequencer_fast_v2(line_idx, n_seq):
         idx_str = str(n)
         line = "executeTableEntry("+idx_str+");\n"
         command_code = command_code + line
-    program = "setTrigger(1);\nsetTrigger(0);\n" + command_code 
+    program = "setTrigger(1);\nsetTrigger(0);\n" + command_code
     return program
 
 
@@ -241,6 +241,45 @@ def generate_reduced_command_table_v2(gts_0, npoints_wait = [], npoints_plunger 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
 
+def generate_reduced_command_table_v3(n_pi_2, n_pi):
+    ##Note: very simplified. Does not include Z, plungers, and edge cases for combo of pi and pi/2 pulses.
+    ## ct_idx = 0-7 ==> initial gates
+    ## ct_idx = 8-14 ==> pi_2 pulses (0,90, 180, 270, -90, -180, -270)
+    ## ct_idx = 15-22 ==> pi pulses (0,90, 180, 270, -90, -180, -270)
+    ## ct_idx = 23 - 25 ==> standard pulse delays
+
+    initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": 90, "wave_idx": 0}, "xxx": {"phi": 180, "wave_idx": 0}, "yyy": {"phi": -90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": 90, "wave_idx": 1}, "mxxm": {"phi": 180, "wave_idx": 1}, "myym": {"phi": -90, "wave_idx": 1}}
+    ct = []
+    waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]}]
+    #Initial phases
+    phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
+    phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
+    #Incremented phases
+    phases_incr = [{"value": 0, "increment": True}, {"value": 90, "increment": True}, {"value": 180, "increment": True}, {"value": 270, "increment": True}, {"value": -90, "increment": True},  {"value": -180, "increment": True},{"value": -270, "increment": True}]
+
+    ## 1. Loop through initial gates
+    ct_idx = 0
+    for i in range(len(phases_0_I)):
+         ct.append({"index": ct_idx, "waveform": waves[0], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+         ct_idx += 1
+    for i in range(len(phases_0_I)):
+         ct.append({"index": ct_idx, "waveform": waves[1], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+         ct_idx += 1
+
+    ## 2. Loop through incremented phases
+    for i in range(len(phases_incr)):
+         ct.append({"index": ct_idx, "waveform": waves[0], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+         ct_idx += 1
+    for i in range(len(phases_incr)):
+         ct.append({"index": ct_idx, "waveform": waves[1], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+         ct_idx += 1
+
+   ## 3. Loop through incremented phases
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2}, "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ct.append({"index": ct_idx+1, "waveform": {"playZero": True, "length": n_pi}, "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
+
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
+    return command_table
 
 def make_waveform_placeholders(n_array):
     ##Input: n_array. List of lengths for each gate operation.
@@ -315,3 +354,23 @@ def make_command_table_idxs_v2(n_gt0, n_t_t, gt_seq, sample_rate):
             pass
         ct_idxs.append(ct_idx)
     return ct_idxs, n_ts
+
+def make_command_table_idxs_v3(gt_seq, tau_pi_s, tau_pi_2_s):
+    ct_idxs = []
+    phi_l = 0
+    for gt in gt_seq:
+        if gt[0] in {"x", "y", "m"}:
+            phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
+            ct_idx = get_ct_idx(phi_a, gt) ## need to edit
+        elif gt[0] == "t":
+            if int(gt[1:len(gt)]) == tau_pi_2_s:
+                ct_idx = 22
+            elif int(gt[1:len(gt)]) == tau_pi_s:
+                ct_idx = 23
+            else:
+                pass
+        ct_idxs.append(ct_idx)
+    return ct_idxs
+
+def generate_waveforms(qubit_gate_lengths):
+    #returns pi and pi/2 waveforms for each qubit

@@ -47,3 +47,31 @@ def quantum_protocol_parser(file_path, qubit_lengths, qubit_set = {1,2,3,4}):
         #sequence_table[idx] = sequence_line
         sequence_table[idx] = seq_line
     return sequence_table
+
+def gst_parser(file_path, qubit_lengths, qubit_set = {0,1,2,3}):
+    sequence_table = {}
+    gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
+    df = pd.read_csv(file_path, header = None, skiprows=1)
+    df = df[0:3]
+
+    for idx in range(len(df)):
+        line = df.values[idx][0].split(";")[0:len(df.values[idx][0].split(";"))-1]
+        seq_line = {0: [], 1: [], 2: [] , 3: []}
+
+        for elem in line:
+            element = re.split('\(| \)', elem)
+            idx_set = set()
+            length_set = []
+            for item in element:
+                if len(item)>2:
+                    seq_line[item[0]].append(item[2:len(item)])
+                    qubit_length = qubit_lengths[int(item[0])][gates[item[2:len(item)]]]
+                    length_set.append(qubit_length)
+                else:
+                    pass
+            max_gt_len = max(length_set)
+            diff_set = qubit_set.difference(idx_set)
+            for item in diff_set:
+                seq_line[item].append("t"+str(max_gt_len) )
+        sequence_table[idx] = seq_line
+    return sequence_table
