@@ -377,7 +377,7 @@ def make_command_table_idxs_v3(gt_seq, tau_pi_s, tau_pi_2_s):
 def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
     ct_idxs = {}
     initial_gates = {"x": 0, "y": 1,  "xx": 4,  "yy": 5, "xxx": 2, "yyy": 3,  "mxxm": 5,  "myym": 7}
-    for idx in gt_seqs
+    for idx in gt_seqs:
         gate_sequence = gt_seqs[idx]
         ct_idx_list = []
         ii = 0
