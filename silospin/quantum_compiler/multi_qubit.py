@@ -351,8 +351,8 @@ class MultiQubitGST_v2:
         tau_pi_2_standard_idx = np.argmax(tau_pi_2_set)
         tau_pi_2_standard = np.max(tau_pi_2_set)
         tau_pi_standard = 2*tau_pi_2_standard
-        npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/32)*32
-        npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/32)*32
+        npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/48)*48
+        npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/48)*48
         qubit_lengths = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
 
         ##Generates pulse lengths for all qubits
@@ -371,7 +371,8 @@ class MultiQubitGST_v2:
         for idx in self._gate_sequences:
              gate_sequence = self._gate_sequences[idx]
              print(gate_sequence)
-             ct_idxs_all[idx] = make_command_table_idxs_v4(gate_sequence, tau_pi_standard, tau_pi_2_standard)
+             #ct_idxs_all[idx] = make_command_table_idxs_v4(gate_sequence, tau_pi_standard, tau_pi_2_standard)
+             ct_idxs_all[idx] = make_command_table_idxs_v4(gate_sequence, tau_pi_s, tau_pi_2_s)
 
         self._ct_idxs = ct_idxs_all
 
