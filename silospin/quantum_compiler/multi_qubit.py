@@ -357,8 +357,10 @@ class MultiQubitGST_v2:
 
         ##Generates pulse lengths for all qubits
         for idx in qubits:
-            qubit_lengths[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/48)*48
-            qubit_lengths[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/48)*48
+            #qubit_lengths[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/48)*48
+            #qubit_lengths[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/48)*48
+            qubit_lengths[idx]["pi"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
+            qubit_lengths[idx]["pi_2"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
 
         ##Generates a pulse table
         qubit_parser_lengths = {0: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 1: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 2: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 3: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}}
