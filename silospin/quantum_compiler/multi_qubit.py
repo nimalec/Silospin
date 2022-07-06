@@ -371,8 +371,11 @@ class MultiQubitGST_v2:
         for idx in qubits:
             #qubit_lengths[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/48)*48
             #qubit_lengths[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/48)*48
-            qubit_lengths[idx]["pi"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
-            qubit_lengths[idx]["pi_2"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
+            # qubit_lengths[idx]["pi"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
+            # qubit_lengths[idx]["pi_2"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
+            qubit_lengths[idx]["pi"] = ceil(tau_pi_standard_new*1e9)
+            qubit_lengths[idx]["pi_2"] = ceil(tau_pi_2_standard_new*1e9)
+
 
 
 
