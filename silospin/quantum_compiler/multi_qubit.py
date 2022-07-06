@@ -359,8 +359,8 @@ class MultiQubitGST_v2:
         npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/48)*48
 
         ##convert back to time
-        tau_pi_2_standard_new = ceil(npoints_pi_2_standard/self._sample_rate)
-        tau_pi_standard_new = ceil(npoints_pi_standard/self._sample_rate)
+        tau_pi_2_standard_new = ceil((npoints_pi_2_standard/self._sample_rate)*1e9)
+        tau_pi_standard_new = ceil((npoints_pi_standard/self._sample_rate)*1e9)
         print(tau_pi_2_standard_new)
         qubit_lengths = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
 
