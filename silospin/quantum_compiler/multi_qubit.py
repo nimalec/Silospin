@@ -361,25 +361,17 @@ class MultiQubitGST_v2:
         ##convert back to time
         tau_pi_2_standard_new = npoints_pi_2_standard/self._sample_rate
         tau_pi_standard_new = npoints_pi_standard/self._sample_rate
-        print(ceil(tau_pi_2_standard_new*1e9))
-        print(ceil(tau_pi_standard_new*1e9))
-
 
         qubit_lengths = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
-
+        qubit_npoints = qubit_lengths
         ##Generates pulse lengths for all qubits
         for idx in qubits:
-            #qubit_lengths[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/48)*48
-            #qubit_lengths[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/48)*48
-            # qubit_lengths[idx]["pi"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
-            # qubit_lengths[idx]["pi_2"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
             qubit_lengths[idx]["pi"] = ceil(tau_pi_standard_new*1e9)
             qubit_lengths[idx]["pi_2"] = ceil(tau_pi_2_standard_new*1e9)
+            qubit_npoints[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/32)*32
+            qubit_npoints[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
 
-        ##Generates a pulse table
-        qubit_parser_lengths = {0: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 1: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 2: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 3: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}}
-        #self._gate_sequences =  gst_parser(gst_file_path, qubit_parser_lengths, qubit_set = {0,1,2,3})
-        #self._gate_sequences =  quantum_protocol_parser(gst_file_path, qubit_parser_lengths, qubit_set = {1,2,3,4})
+        self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
         self._gate_sequences =  quantum_protocol_parser(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
         self._command_table = generate_reduced_command_table_v3(npoints_pi_2_standard, npoints_pi_standard)
 
@@ -387,7 +379,6 @@ class MultiQubitGST_v2:
         ct_idxs_all = {} # command table indices, ct_idxs_all[line][awg_idx]
         for idx in self._gate_sequences:
              gate_sequence = self._gate_sequences[idx]
-             #ct_idxs_all[idx] = make_command_table_idxs_v4(gate_sequence, tau_pi_standard, tau_pi_2_standard)
              ct_idxs_all[idx] = make_command_table_idxs_v4(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
 
         self._ct_idxs = ct_idxs_all

@@ -392,7 +392,6 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
                     ct_idx_list.append(initial_gates[gt])
                     ct_idx_list.append(23)
                 elif gt[0] == "t":
-                #else:
                      if int(gt[1:len(gt)]) == tau_pi_2_s:
                          ct_idx_list.append(22)
                          ct_idx_list.append(22)
@@ -401,8 +400,10 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
                          ct_idx_list.append(23)
                          ct_idx_list.append(23)
                          ct_idx_list.append(23)
-                 # else:
-                 #    pass
+                     else:
+                         pass
+                else:
+                    pass
             else:
                 phi_l = 0
                 if gt[0] in {"x", "y", "m"}:
@@ -417,8 +418,6 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
                         ct_idx_list.append(ct_idx)
                         ct_idx_list.append(23)
                 elif gt[0] == "t":
-                    print(int(gt[1:len(gt)]))
-                    print(tau_pi_2_s)
                     if int(gt[1:len(gt)]) == tau_pi_2_s:
                         ct_idx_list.append(22)
                         ct_idx_list.append(22)
@@ -427,19 +426,17 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
                         ct_idx_list.append(23)
                         ct_idx_list.append(23)
                         ct_idx_list.append(23)
-                    #if ceil(sample_rate*int(gt[1:len(gt)])*1e-9/48)*48 == ceil(sample_rate*tau_pi_2_s)/48)*48:
-                    #if ceil( int(gt[1:len(gt)]) == tau_pi_2_s:
-                    #    ct_idx = 22s
-                    #elif int(gt[1:len(gt)]) == tau_pi_s:
-                    #    ct_idx = 23
-                    #ct_idx_list.append(ct_idx)
-                    #ct_idx_list.append(ct_idx)
-                    #ct_idx_list.append(ct_idx)
                 else:
                     pass
             ii += 1
         ct_idxs[idx] = ct_idx_list
     return ct_idxs
 
-#def generate_waveforms(qubit_gate_lengths):
-    #returns pi and pi/2 waveforms for each qubit\
+def generate_waveforms(qubit_gate_lengths, max_idx, amp=1):
+    waveforms = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None }, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
+    npoints_s_pi  =  qubit_gate_lengths[max_idx]["pi"]
+    npoints_s_pi_2 = qubit_gate_lengths[max_idx]["pi_2"]
+    for idx in qubit_gate_lengths:
+        waveforms[idx]["pi"] = rectangular(qubit_gate_lengths[idx]["pi"], amp, min_points = npoints_s_pi)
+        waveforms[idx]["pi_2"] = rectangular(qubit_gate_lengths[idx]["pi_2"], amp, min_points = npoints_s_pi_2)
+    return waveforms

@@ -17,11 +17,8 @@ def quantum_protocol_parser(file_path, qubit_lengths, qubit_set = {1,2,3,4}):
     df = df[0:100]
 
     for idx in range(len(df)):
-        ##splits current line into a sequence
         line = df.values[idx][0].split(";")[0:len(df.values[idx][0].split(";"))-1]
         seq_line = {"0": [], "1": [], "2": [] , "3":[]} ##refer as seq_line[idx].append(new_gate)
-        #sequence_line = {}
-        #seq_line = []
         for elem in line:
             element = re.split('\(| \)', elem)
             idx_set = set()
