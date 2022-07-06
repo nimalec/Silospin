@@ -361,7 +361,9 @@ class MultiQubitGST_v2:
         ##convert back to time
         tau_pi_2_standard_new = npoints_pi_2_standard/self._sample_rate
         tau_pi_standard_new = npoints_pi_standard/self._sample_rate
-        print(tau_pi_2_standard_new)
+        print(int(tau_pi_2_standard_new*1e9))
+        print(int(tau_pi_standard_new*1e9))
+
 
         qubit_lengths = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
 
