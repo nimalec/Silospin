@@ -349,10 +349,19 @@ class MultiQubitGST_v2:
         3: {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
         tau_pi_2_set = np.array([self._qubit_parameters[0]["tau_pi_2"], self._qubit_parameters[1]["tau_pi_2"], self._qubit_parameters[2]["tau_pi_2"], self._qubit_parameters[3]["tau_pi_2"]])
         tau_pi_2_standard_idx = np.argmax(tau_pi_2_set)
+
+        ##Define standard length of pulse in time
         tau_pi_2_standard = np.max(tau_pi_2_set)
         tau_pi_standard = 2*tau_pi_2_standard
+
+        ##Define standard length of pulse in number of samples
         npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/48)*48
         npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/48)*48
+
+        ##convert back to time
+        tau_pi_2_standard_new = ceil(npoints_pi_2_standard/self._sample_rate)
+        tau_pi_standard_new = ceil(npoints_pi_standard/self._sample_rate)
+        print(tau_pi_2_standard_new)
         qubit_lengths = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
 
         ##Generates pulse lengths for all qubits
@@ -361,7 +370,7 @@ class MultiQubitGST_v2:
             #qubit_lengths[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/48)*48
             qubit_lengths[idx]["pi"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
             qubit_lengths[idx]["pi_2"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
-            print(qubit_lengths[idx]["pi_2"])
+
 
 
         ##Generates a pulse table
