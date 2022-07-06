@@ -418,6 +418,8 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
                         ct_idx_list.append(23)
                 elif gt[0] == "t":
                     #print(int(gt[1:len(gt)]))
+                    print(tau_pi_2_s)
+                    print(gt[1:len(gt)])
                     if int(gt[1:len(gt)]) == tau_pi_2_s:
                         ct_idx = 22
                     elif int(gt[1:len(gt)]) == tau_pi_s:
