@@ -388,7 +388,7 @@ class MultiQubitGST_v2:
         for idx in self._gate_sequences:
              gate_sequence = self._gate_sequences[idx]
              #ct_idxs_all[idx] = make_command_table_idxs_v4(gate_sequence, tau_pi_standard, tau_pi_2_standard)
-             ct_idxs_all[idx] = make_command_table_idxs_v4(gate_sequence, tau_pi_standard, tau_pi_2_standard, self._sample_rate)
+             ct_idxs_all[idx] = make_command_table_idxs_v4(gate_sequence, tau_pi_standard_new, tau_pi_2_standard_new)
 
         self._ct_idxs = ct_idxs_all
 
