@@ -374,7 +374,7 @@ def make_command_table_idxs_v3(gt_seq, tau_pi_s, tau_pi_2_s):
         ct_idxs.append(ct_idx)
     return ct_idxs
 
-def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
+def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s, sample_rate):
     ct_idxs = {}
     initial_gates = {"x": 0, "y": 1,  "xx": 4,  "yy": 5, "xxx": 2, "yyy": 3,  "mxxm": 5,  "myym": 7}
     for idx in gt_seqs:
@@ -417,10 +417,10 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
                         ct_idx_list.append(ct_idx)
                         ct_idx_list.append(23)
                 elif gt[0] == "t":
-                    #print(int(gt[1:len(gt)]))
-                    print(tau_pi_2_s)
-                    print(gt[1:len(gt)])
-                    if int(gt[1:len(gt)]) == tau_pi_2_s:
+                    print(ceil(sample_rate*int(gt[1:len(gt)])*1e-9/48)*48)
+                    print(ceil(sample_rate*tau_pi_2_s)/48)*48)
+                    if ceil(sample_rate*int(gt[1:len(gt)])*1e-9/48)*48 == ceil(sample_rate*tau_pi_2_s)/48)*48:
+                    #if ceil( int(gt[1:len(gt)]) == tau_pi_2_s:
                         ct_idx = 22
                     elif int(gt[1:len(gt)]) == tau_pi_s:
                         ct_idx = 23
