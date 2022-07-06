@@ -351,6 +351,7 @@ class MultiQubitGST_v2:
         tau_pi_2_standard_idx = np.argmax(tau_pi_2_set)
         tau_pi_2_standard = np.max(tau_pi_2_set)
         tau_pi_standard = 2*tau_pi_2_standard
+        print(tau_pi_2_standard)
         npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/48)*48
         npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/48)*48
         qubit_lengths = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
@@ -361,6 +362,7 @@ class MultiQubitGST_v2:
             #qubit_lengths[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/48)*48
             qubit_lengths[idx]["pi"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
             qubit_lengths[idx]["pi_2"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
+
 
         ##Generates a pulse table
         qubit_parser_lengths = {0: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 1: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 2: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 3: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}}
