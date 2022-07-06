@@ -355,8 +355,8 @@ class MultiQubitGST_v2:
         tau_pi_standard = 2*tau_pi_2_standard
 
         ##Define standard length of pulse in number of samples
-        npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/48)*48
-        npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/48)*48
+        npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/32)*32
+        npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/32)*32
 
         ##convert back to time
         tau_pi_2_standard_new = npoints_pi_2_standard/self._sample_rate
