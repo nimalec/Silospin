@@ -361,8 +361,8 @@ class MultiQubitGST_v2:
         ##convert back to time
         tau_pi_2_standard_new = npoints_pi_2_standard/self._sample_rate
         tau_pi_standard_new = npoints_pi_standard/self._sample_rate
-        print(int(tau_pi_2_standard_new*1e9))
-        print(int(tau_pi_standard_new*1e9))
+        print(ceil(tau_pi_2_standard_new*1e9))
+        print(ceil(tau_pi_standard_new*1e9))
 
 
         qubit_lengths = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
@@ -375,9 +375,6 @@ class MultiQubitGST_v2:
             # qubit_lengths[idx]["pi_2"] = ceil(self._qubit_parameters[idx]["tau_pi"]*1e9)
             qubit_lengths[idx]["pi"] = ceil(tau_pi_standard_new*1e9)
             qubit_lengths[idx]["pi_2"] = ceil(tau_pi_2_standard_new*1e9)
-
-
-
 
         ##Generates a pulse table
         qubit_parser_lengths = {0: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 1: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 2: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}, 3: {"pi": npoints_pi_standard, "pi_2": npoints_pi_2_standard}}
