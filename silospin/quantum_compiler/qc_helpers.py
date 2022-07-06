@@ -418,7 +418,8 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s, sample_rate):
                         ct_idx_list.append(23)
                 elif gt[0] == "t":
                     print(int(tau_pi_2_s))
-                    print(int(int(gt[1:len(gt)]))*1e-9))
+                    print(int(gt[1:len(gt)])*1e-9) 
+                    #print(int(int(gt[1:len(gt)]))*1e-9))
                     #if ceil(sample_rate*int(gt[1:len(gt)])*1e-9/48)*48 == ceil(sample_rate*tau_pi_2_s)/48)*48:
                     #if ceil( int(gt[1:len(gt)]) == tau_pi_2_s:
                     #    ct_idx = 22
