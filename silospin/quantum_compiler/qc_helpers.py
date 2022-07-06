@@ -1,5 +1,5 @@
 from math import ceil
-from silospin.math.math_helpers import compute_accumulated_phase
+from silospin.math.math_helpers import compute_accumulated_phase, rectangular  
 
 def make_command_table(gate_string, sample_rate, phi_z = 0, del_phi=0):
     ##Need to specify AWG and output channel.
