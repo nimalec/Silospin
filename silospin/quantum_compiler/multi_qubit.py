@@ -386,7 +386,7 @@ class MultiQubitGST_v2:
         waveforms_awg = {}
         sequencer_code = {}
         seq_code = {}
-        command_code = {0: , 1: , 2: , 3: }
+        command_code = {}
         n_array = [npoints_pi_2_standard, npoints_pi_standard]
 
         for idx in qubits:
@@ -398,13 +398,13 @@ class MultiQubitGST_v2:
 
             ##Make a sequence code
             seq_code[idx] =  make_waveform_placeholders(n_array)
-            command_code[awg_idx] = ""
+            command_code[idx] = ""
             for ii in range(len(ct_idxs_all)):
                  n_seq = ct_idxs_all[ii][idx]
                  sequence = make_gateset_sequencer_fast_v2(ii, n_seq)
 
-            command_code[awg_idx] = command_code[awg_idx] + sequence
-            sequencer_code[awg_idx] =  seq_code[awg_idx] + command_code[awg_idx]
+            command_code[idx] = command_code[idx] + sequence
+            sequencer_code[idx] =  seq_code[idx] + command_code[idx]
 
         self._sequencer_code = sequencer_code
 
