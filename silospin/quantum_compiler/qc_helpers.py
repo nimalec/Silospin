@@ -122,6 +122,7 @@ def make_gateset_sequencer_fast(n_array, n_seq, continuous=False, soft_trigger=F
     return program
 
 def make_gateset_sequencer_fast_v2(n_seq):
+    command_code = ""
     for n in n_seq:
         idx_str = str(n)
         line = "executeTableEntry("+idx_str+");\n"
