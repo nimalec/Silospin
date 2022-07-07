@@ -346,7 +346,7 @@ class MultiQubitGST_v2:
         0: {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 100e-9,  "tau_pi_2" :  50e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         1: {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 140e-9,  "tau_pi_2" :  70e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
         2: {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 120e-9,  "tau_pi_2" :  60e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
-        3: {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 150e-9,  "tau_pi_2" :  75e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
+        3: {"i_amp_pi": 0.5, "q_amp_pi": 0.5 , "i_amp_pi_2": 0.5, "q_amp_pi_2": 0.5, "tau_pi" : 160e-9,  "tau_pi_2" :  80e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
         tau_pi_2_set = np.array([self._qubit_parameters[0]["tau_pi_2"], self._qubit_parameters[1]["tau_pi_2"], self._qubit_parameters[2]["tau_pi_2"], self._qubit_parameters[3]["tau_pi_2"]])
         tau_pi_2_standard_idx = np.argmax(tau_pi_2_set)
 
@@ -361,6 +361,8 @@ class MultiQubitGST_v2:
         ##convert back to time
         tau_pi_2_standard_new = npoints_pi_2_standard/self._sample_rate
         tau_pi_standard_new = npoints_pi_standard/self._sample_rate
+        print(tau_pi_2_standard_new)
+        print(ceil(tau_pi_2_standard_new*1e9))
 
         qubit_lengths = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
         qubit_npoints = qubit_lengths
@@ -371,7 +373,6 @@ class MultiQubitGST_v2:
             qubit_npoints[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/32)*32
             qubit_npoints[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
 
-        print(qubit_lengths)
         self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
         self._gate_sequences =  quantum_protocol_parser(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
         self._command_table = generate_reduced_command_table_v3(npoints_pi_2_standard, npoints_pi_standard)
