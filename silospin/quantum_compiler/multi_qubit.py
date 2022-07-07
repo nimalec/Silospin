@@ -408,6 +408,7 @@ class MultiQubitGST_v2:
             sequencer_code[idx] =  seq_code[idx] + command_code[idx]
 
         self._sequencer_code = sequencer_code
+        self._wvfrms = waveforms_awg  
 
         for idx in qubits:
              self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
