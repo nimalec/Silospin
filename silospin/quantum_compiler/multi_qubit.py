@@ -383,36 +383,30 @@ class MultiQubitGST_v2:
 
         self._ct_idxs = ct_idxs_all
 
-        # waveforms_tau_pi = {}
-        # waveforms_tau_pi_2 = {}
-        # waveforms_qubits = {}
-        # sequencer_code = {}
-        # seq_code = {}
-        # command_code = {}
-        # for awg_idx in self._awg_cores:
-        #     n_array = []
-        #     waveforms = Waveforms()
-        #     npoints_tau_pi = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi"]/16)*16
-        #     npoints_tau_pi_2 = ceil(self._sample_rate*self._qubit_parameters[str(awg_idx)]["tau_pi_2"]/16)*16
-        #     waveforms_tau_pi[str(awg_idx)] = rectangular(npoints_tau_pi, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
-        #     waveforms_tau_pi_2[str(awg_idx)] = rectangular(npoints_tau_pi_2, self._qubit_parameters [str(awg_idx)]["i_amp_pi_2"])
-        #     n_array.append(len(waveforms_tau_pi[str(awg_idx)]))
-        #     n_array.append(len(waveforms_tau_pi_2[str(awg_idx)]))
-        #     waveforms.assign_waveform(slot = 0, wave1 = waveforms_tau_pi[str(awg_idx)])
-        #     waveforms.assign_waveform(slot = 1, wave1 = waveforms_tau_pi_2[str(awg_idx)])
-        #     waveforms_qubits[str(awg_idx)] = waveforms
-        #     seq_code[awg_idx] =  make_waveform_placeholders(n_array)
-        #     command_code[awg_idx] = ""
-        #     #command_code[awg_idx] = []
-        #     for idx in range(len(ct_idxs_all)):
-        #         n_seq = ct_idxs_all[idx][awg_idx]
-        #         sequence = make_gateset_sequencer_fast_v2(idx, n_seq)
-        #         command_code[awg_idx] = command_code[awg_idx] + sequence
-        #         #command_code[awg_idx].append(sequence)
-        #     sequencer_code[awg_idx] =  seq_code[awg_idx] + command_code[awg_idx]
+        waveforms_awg = {}
+        sequencer_code = {}
+        seq_code = {}
+        command_code = {0: , 1: , 2: , 3: }
+        n_array = [npoints_pi_2_standard, npoints_pi_standard]
 
+        for idx in qubits:
+            ##Makes waveform objects for upload
+            waveforms = Waveforms()
+            waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
+            waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
+            waveforms_awg[idx] = waveforms
 
-        # self._sequencer_code = sequencer_code
+            ##Make a sequence code
+            seq_code[idx] =  make_waveform_placeholders(n_array)
+            command_code[awg_idx] = ""
+            for ii in range(len(ct_idxs_all)):
+                 n_seq = ct_idxs_all[ii][idx]
+                 sequence = make_gateset_sequencer_fast_v2(ii, n_seq)
+
+            command_code[awg_idx] = command_code[awg_idx] + sequence
+            sequencer_code[awg_idx] =  seq_code[awg_idx] + command_code[awg_idx]
+
+        self._sequencer_code = sequencer_code
 
         # for awg_idx in self._awg_cores:
         #     #print(command_code[awg_idx][len(command_code[awg_idx])-2])
