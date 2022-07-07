@@ -400,7 +400,7 @@ class MultiQubitGST_v2:
             seq_code[idx] =  make_waveform_placeholders(n_array)
             command_code[idx] = ""
             for ii in range(len(ct_idxs_all)):
-                 n_seq = ct_idxs_all[ii][idx]
+                 n_seq = ct_idxs_all[ii][str(idx)]
                  sequence = make_gateset_sequencer_fast_v2(ii, n_seq)
 
             command_code[idx] = command_code[idx] + sequence
