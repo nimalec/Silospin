@@ -13,7 +13,7 @@ def quantum_protocol_parser(file_path, qubit_lengths, qubit_set = {1,2,3,4}):
     sequence_table = {}
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1)
-    df = df[0:100]
+    #df = df[0:100]
 
     for idx in range(len(df)):
         line = df.values[idx][0].split(";")[0:len(df.values[idx][0].split(";"))-1]
@@ -48,7 +48,6 @@ def gst_parser(file_path, qubit_lengths, qubit_set = {0,1,2,3}):
     sequence_table = {}
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1)
-    df = df[0:3]
 
     for idx in range(len(df)):
         line = df.values[idx][0].split(";")[0:len(df.values[idx][0].split(";"))-1]
