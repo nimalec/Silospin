@@ -394,7 +394,7 @@ class MultiQubitGST_v2:
             waveforms = Waveforms()
             waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
             waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
-            waveforms_awg[idx] = waveform
+            waveforms_awg[idx] = waveforms  
             ##Make a sequence code
             seq_code[idx] =  make_waveform_placeholders(n_array)
             command_code[idx] = ""
