@@ -401,7 +401,8 @@ class MultiQubitGST_v2:
             command_code[idx] = ""
             for ii in range(len(ct_idxs_all)):
                  n_seq = ct_idxs_all[ii][str(idx)]
-                 sequence = make_gateset_sequencer_fast_v2(ii, n_seq)
+                 sequence = make_gateset_sequencer_fast_v2(n_seq)
+                 sequence += sequence
         #
             command_code[idx] = command_code[idx] + sequence
             sequencer_code[idx] =  seq_code[idx] + command_code[idx]
