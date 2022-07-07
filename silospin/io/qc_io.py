@@ -10,7 +10,6 @@ def write_qubit_parameter_file(qubit_parameters, file_path):
     param_df.to_csv(file_path)
 
 def quantum_protocol_parser(file_path, qubit_lengths, qubit_set = {1,2,3,4}):
-    ##  qubit_lengths = {1 : {"pi": 64, "pi_2": 32}, 2 : {"pi": 65, "pi_2": 34}}
     sequence_table = {}
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1)
