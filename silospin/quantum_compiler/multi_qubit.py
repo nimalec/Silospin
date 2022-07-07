@@ -394,8 +394,6 @@ class MultiQubitGST_v2:
             waveforms = Waveforms()
             waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
             waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
-            print(self._waveforms[idx]["pi_2"])
-            print(self._waveforms[idx]["pi"])
             waveforms_awg[idx] = waveforms
             ##Make a sequence code
             seq_code[idx] =  make_waveform_placeholders(n_array)
@@ -421,18 +419,18 @@ class MultiQubitGST_v2:
         daq = self._awg._daq
         dev = self._awg._connection_settings["hdawg_id"]
 
-        # for awg_idx in self._awg_cores:
-        #      i_idx = self._channel_idxs[str(awg_idx)][0]
-        #      q_idx = self._channel_idxs[str(awg_idx)][1]
-        #      osc_idx = self._channel_osc_idxs[str(awg_idx)]
-        #      self._awg._hdawg.sigouts[i_idx].on(1)
-        #      self._awg._hdawg.sigouts[q_idx].on(1)
-        #      self._awg.set_osc_freq(osc_idx, self._qubit_parameters[str(awg_idx)]["mod_freq"])
-        #      self._awg.set_sine(i_idx+1, osc_idx)
-        #      self._awg.set_sine(q_idx+1, osc_idx)
-        #      self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
-        #      self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[str(awg_idx)]["q_amp_pi"])
-        #      daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_table))
+        for idx in qubits:
+             i_idx = self._channel_idxs[str(idx)][0]
+             q_idx = self._channel_idxs[str(idx)][1]
+             osc_idx = self._channel_osc_idxs[str(idx)]
+             self._awg._hdawg.sigouts[i_idx].on(1)
+             self._awg._hdawg.sigouts[q_idx].on(1)
+             self._awg.set_osc_freq(osc_idx, self._qubit_parameters[str(idx)]["mod_freq"])
+             self._awg.set_sine(i_idx+1, osc_idx)
+             self._awg.set_sine(q_idx+1, osc_idx)
+             self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[str(awg_idx)]["i_amp_pi"])
+             self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[str(awg_idx)]["q_amp_pi"])
+             daq.setVector(f"/{dev}/awgs/{awg_idx}/commandtable/data", json.dumps(self._command_table))
 
     # def run_program(self, awg_idxs=None):
     #     if awg_idxs:
