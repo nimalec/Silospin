@@ -411,13 +411,14 @@ class MultiQubitGST_v2:
 
         for idx in qubits:
              self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
-             self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms)
-        #
-        # self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
-        # self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+             self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
 
-        # daq = self._awg._daq
-        # dev = self._awg._connection_settings["hdawg_id"]
+        self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
+        self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+
+        daq = self._awg._daq
+        dev = self._awg._connection_settings["hdawg_id"]
+
         # for awg_idx in self._awg_cores:
         #      i_idx = self._channel_idxs[str(awg_idx)][0]
         #      q_idx = self._channel_idxs[str(awg_idx)][1]
