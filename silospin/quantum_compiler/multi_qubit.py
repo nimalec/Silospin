@@ -411,7 +411,7 @@ class MultiQubitGST_v2:
 
         for idx in qubits:
              self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
-             self._awg._awgs["awg"+str(awg_idx+1)].write_to_waveform_memory(waveforms)
+             self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms)
         #
         # self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
         # self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
