@@ -370,7 +370,6 @@ class MultiQubitGST_v2:
             qubit_lengths[idx]["pi_2"] = ceil(tau_pi_2_standard_new*1e9)
             qubit_npoints[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/32)*32
             qubit_npoints[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
-        print(qubit_lengths)
 
         self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
         self._gate_sequences =  quantum_protocol_parser(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
@@ -390,24 +389,24 @@ class MultiQubitGST_v2:
         command_code = {}
         n_array = [npoints_pi_2_standard, npoints_pi_standard]
 
-        # for idx in qubits:
-        #     ##Makes waveform objects for upload
-        #     waveforms = Waveforms()
-        #     waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
-        #     waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
-        #     waveforms_awg[idx] = waveforms
+        for idx in qubits:
+            ##Makes waveform objects for upload
+            waveforms = Waveforms()
+            waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
+            waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
+            waveforms_awg[idx] = waveforms
         #
-        #     ##Make a sequence code
-        #     seq_code[idx] =  make_waveform_placeholders(n_array)
-        #     command_code[idx] = ""
-        #     for ii in range(len(ct_idxs_all)):
-        #          n_seq = ct_idxs_all[ii][str(idx)]
-        #          sequence = make_gateset_sequencer_fast_v2(ii, n_seq)
+            ##Make a sequence code
+            seq_code[idx] =  make_waveform_placeholders(n_array)
+            command_code[idx] = ""
+            for ii in range(len(ct_idxs_all)):
+                 n_seq = ct_idxs_all[ii][str(idx)]
+                 sequence = make_gateset_sequencer_fast_v2(ii, n_seq)
         #
-        #     command_code[idx] = command_code[idx] + sequence
-        #     sequencer_code[idx] =  seq_code[idx] + command_code[idx]
-        #
-        # self._sequencer_code = sequencer_code
+            command_code[idx] = command_code[idx] + sequence
+            sequencer_code[idx] =  seq_code[idx] + command_code[idx]
+
+        self._sequencer_code = sequencer_code
 
         # for awg_idx in self._awg_cores:
         #     #print(command_code[awg_idx][len(command_code[awg_idx])-2])
