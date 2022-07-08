@@ -440,3 +440,7 @@ def generate_waveforms(qubit_gate_lengths, max_idx, amp=1):
         waveforms[idx]["pi"] = rectangular(qubit_gate_lengths[idx]["pi"], amp, min_points = npoints_s_pi)
         waveforms[idx]["pi_2"] = rectangular(qubit_gate_lengths[idx]["pi_2"], amp, min_points = npoints_s_pi_2)
     return waveforms
+
+def make_ramsey_sequencer(n_start, n_stop, dn, n_rect, n_av):
+    sequence = "var i;\nconst n_start="+str(n_start)+";\nconst n_stop="+str(n_stop)+ ";\nconst dn="+str(dn)+";\nconst n_samp="+str(n_rect)+";\nwave pulse=rect(n_samp,1);\n\nfor (i = n_start; i < n_stop; i = i + dn){\n   repeat("+str(n_av)+"){\n     setTrigger(1);setTrigger(0);\n     playWave(pulse);\n     waitWave();\n     playZero(i);\n     waitWave();\n     playWave(pulse);\n     waitWave();\n   }\n}"
+    return sequence

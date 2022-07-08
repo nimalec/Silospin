@@ -403,7 +403,7 @@ class MultiQubitGST_v2:
                  n_seq = ct_idxs_all[ii][str(idx)]
                  seq = make_gateset_sequencer_fast_v2(n_seq)
                  sequence += seq
-        #
+
             command_code[idx] = command_code[idx] + sequence
             sequencer_code[idx] =  seq_code[idx] + command_code[idx]
 
@@ -440,3 +440,30 @@ class MultiQubitGST_v2:
         for idx in awg_idxs:
             self._awg._awgs["awg"+str(idx+1)].single(True)
             self._awg._awgs["awg"+str(idx+1)].enable(True)
+
+class MultiQubitRamseyTypes:
+    ##should generalize for all qubits ==> only change will be pulse type
+    def __init__(self, t_range, npoints_t, npoints_av, taus_pulse, axis = "x", sample_rate = 2.4e9):
+        ##taus_pulse  ==> dictionary
+        self._sample_rate = sample_rate
+        t_start = t_range[0]
+        t_end = t_range[1]
+        n_start = ceil(t_range[0]*sample_rate/32)*32
+        dn = ceil(((t_range[1]-t_range[0])/npoints_t)*sample_rate/16)*16
+        n_end = ceil(t_range[1]*sample_rate/dn)*dn
+        n_steps = int(n_end/dn)
+        t_steps = []
+        n_s = []
+        for i in range(n_start, n_end, dn):
+            n_s.append(i)
+            t_steps.append(i/sample_rate)
+
+        n_durations = []
+        self._sequences = {}
+        for idx in taus_pulse:
+            n_rect = ceil(self._sample_rate*taus_pulse[idx]/32)*32
+            self._sequences[idx] = make_ramsey_sequencer(n_start, n_end, dn, n_rect, npoints_av)
+
+
+        self._n_samples = n_s
+        self._tau_steps  = t_steps
