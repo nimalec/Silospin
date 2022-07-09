@@ -492,7 +492,7 @@ class MultiQubitRamseyTypes:
 
 class MultiQubitRabiTypes:
     ##should generalize for all qubits ==> only change will be pulse type
-    def __init__(self, awg, t_range, npoints_t, npoints_av, tau_wait, axis = "x", sample_rate = 2.4e9):
+    def __init__(self, awg, t_range, npoints_t, npoints_av, tau_wait, qubits, axis = "x", sample_rate = 2.4e9):
         ##taus_pulse  ==> dictionary
         self._sample_rate = sample_rate
         self._awg = awg
@@ -511,11 +511,8 @@ class MultiQubitRabiTypes:
             t_steps.append(i/sample_rate)
 
         n_durations = []
-        qubits = []
         self._sequences = {}
-        for idx in taus_pulse:
-            qubits.append(idx)
-            n_rect = ceil(self._sample_rate*taus_pulse[idx]/32)*32
+        for idx in qubits:
             self._sequences[idx] = make_rabi_sequencer(n_start, n_end, dn, n_wait, npoints_av)
             self._awg.load_sequence(self._sequences[idx], awg_idx=idx)
             if axis == "x":
