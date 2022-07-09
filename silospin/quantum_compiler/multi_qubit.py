@@ -455,6 +455,7 @@ class MultiQubitRamseyTypes:
         n_steps = int(n_end/dn)
         t_steps = []
         n_s = []
+        self._channel_idxs = {0: [0,1], 1: [2,3], 2: [4,5], 3: [6,7]}
         for i in range(n_start, n_end, dn):
             n_s.append(i)
             t_steps.append(i/sample_rate)
@@ -465,7 +466,14 @@ class MultiQubitRamseyTypes:
             n_rect = ceil(self._sample_rate*taus_pulse[idx]/32)*32
             self._sequences[idx] = make_ramsey_sequencer(n_start, n_end, dn, n_rect, npoints_av)
             self._awg.load_sequence(self._sequences[idx], awg_idx=idx)
-
+            if axis == "x":
+                self._awg.set_phase(self._channel_idxs[idx][0]+1, 0)
+                self._awg.set_phase(self._channel_idxs[idx][1]+1, 90)
+            elif axis == "y":
+                self._awg.set_phase(self._channel_idxs[idx][0]+1, 90)
+                self._awg.set_phase(self._channel_idxs[idx][1]+1, 180)
+            else:
+                pass
 
         self._n_samples = n_s
         self._tau_steps  = t_steps
