@@ -489,3 +489,53 @@ class MultiQubitRamseyTypes:
         for idx in awg_idxs:
             self._awg._awgs["awg"+str(idx+1)].single(True)
             self._awg._awgs["awg"+str(idx+1)].enable(True)
+
+class MultiQubitRabiTypes:
+    ##should generalize for all qubits ==> only change will be pulse type
+    def __init__(self, awg, t_range, npoints_t, npoints_av, tau_wait, axis = "x", sample_rate = 2.4e9):
+        ##taus_pulse  ==> dictionary
+        self._sample_rate = sample_rate
+        self._awg = awg
+        t_start = t_range[0]
+        t_end = t_range[1]
+        n_wait = ceil(tau_wait*sample_rate/32)*32
+        n_start = ceil(t_range[0]*sample_rate/48)*48
+        dn = ceil(((t_range[1]-t_range[0])/npoints_t)*sample_rate/16)*16
+        n_end = ceil(t_range[1]*sample_rate/dn)*dn
+        n_steps = int(n_end/dn)
+        t_steps = []
+        n_s = []
+        self._channel_idxs = {0: [0,1], 1: [2,3], 2: [4,5], 3: [6,7]}
+        for i in range(n_start, n_end, dn):
+            n_s.append(i)
+            t_steps.append(i/sample_rate)
+
+        n_durations = []
+        qubits = []
+        self._sequences = {}
+        for idx in taus_pulse:
+            qubits.append(idx)
+            n_rect = ceil(self._sample_rate*taus_pulse[idx]/32)*32
+            self._sequences[idx] = make_rabi_sequencer(n_start, n_end, dn, n_wait, npoints_av)
+            self._awg.load_sequence(self._sequences[idx], awg_idx=idx)
+            if axis == "x":
+                self._awg.set_phase(self._channel_idxs[idx][0]+1, 0)
+                self._awg.set_phase(self._channel_idxs[idx][1]+1, 90)
+            elif axis == "y":
+                self._awg.set_phase(self._channel_idxs[idx][0]+1, 90)
+                self._awg.set_phase(self._channel_idxs[idx][1]+1, 180)
+            else:
+                pass
+
+        self._n_samples = n_s
+        self._tau_steps  = t_steps
+        self._awg_idxs = qubits
+
+    def run_program(self, awg_idxs=None):
+        if awg_idxs:
+            awg_idxs = awg_idxs
+        else:
+            awg_idxs = self._awg_idxs
+        for idx in awg_idxs:
+            self._awg._awgs["awg"+str(idx+1)].single(True)
+            self._awg._awgs["awg"+str(idx+1)].enable(True)
