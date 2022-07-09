@@ -461,8 +461,10 @@ class MultiQubitRamseyTypes:
             t_steps.append(i/sample_rate)
 
         n_durations = []
+        qubits = []
         self._sequences = {}
         for idx in taus_pulse:
+            qubits.append(idx)
             n_rect = ceil(self._sample_rate*taus_pulse[idx]/32)*32
             self._sequences[idx] = make_ramsey_sequencer(n_start, n_end, dn, n_rect, npoints_av)
             self._awg.load_sequence(self._sequences[idx], awg_idx=idx)
@@ -477,3 +479,13 @@ class MultiQubitRamseyTypes:
 
         self._n_samples = n_s
         self._tau_steps  = t_steps
+        self._awg_idxs = qubits
+
+    def run_program(self, awg_idxs=None):
+        if awg_idxs:
+            awg_idxs = awg_idxs
+        else:
+            awg_idxs = self._awg_idxs
+        for idx in awg_idxs:
+            self._awg._awgs["awg"+str(idx+1)].single(True)
+            self._awg._awgs["awg"+str(idx+1)].enable(True)
