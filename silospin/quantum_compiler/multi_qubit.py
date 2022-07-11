@@ -408,7 +408,7 @@ class MultiQubitGST_v2:
                      if idx == trigger_channel:
                          seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
                      else:
-                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
+                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
                  sequence += seq
 
             command_code[idx] = command_code[idx] + sequence
