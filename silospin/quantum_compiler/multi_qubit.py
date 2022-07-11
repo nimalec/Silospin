@@ -401,14 +401,15 @@ class MultiQubitGST_v2:
             sequence = ""
             for ii in range(len(ct_idxs_all)):
                  n_seq = ct_idxs_all[ii][str(idx)]
-                 seq = make_gateset_sequencer_fast_v2(n_seq)
-                 # if hard_trigger == False:
-                 #     seq = make_gateset_sequencer_fast_v2(n_seq)
-                 # else:
-                 #     if idx == trigger_channel:
-                 #         seq =make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
-                 #     else:
-                 #         seq =make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
+                 #seq = make_gateset_sequencer_fast_v2(n_seq)
+                 if hard_trigger == False:
+                     seq = make_gateset_sequencer_fast_v2(n_seq)
+                 else:
+                     if idx == trigger_channel:
+                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
+                     else:
+                         #seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
+                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
                  sequence += seq
 
             command_code[idx] = command_code[idx] + sequence
