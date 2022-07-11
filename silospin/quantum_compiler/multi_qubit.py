@@ -408,8 +408,7 @@ class MultiQubitGST_v2:
                      if idx == trigger_channel:
                          seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
                      else:
-                         #seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
-                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
+                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
                  sequence += seq
 
             command_code[idx] = command_code[idx] + sequence
@@ -417,9 +416,9 @@ class MultiQubitGST_v2:
 
         self._sequencer_code = sequencer_code
 
-        for idx in qubits:
-             self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
-             self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
+        # for idx in qubits:
+        #      self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
+        #      self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
 
         self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
         self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
