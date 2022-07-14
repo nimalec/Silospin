@@ -59,8 +59,8 @@ def quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunge
         #q_seq_line[q_idx-1] = []
         q_seq_line[q_idx] = []
     ##Loop through plunger channels
-    for p_idx in plunger_channels:
-        p_seq_line[p_idx-1] = []
+    # for p_idx in plunger_channels:
+    #     p_seq_line[p_idx] = []
 
     for idx in range(len(df)):
         ##Single line obtained from Pandas data frame
@@ -80,8 +80,8 @@ def quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunge
                         #pulse_length = plunger_lengths[item[2:len(item)]]
                         #length_set.append(pulse_length)
                     else:
-                        #q_seq_line[int(item[0])-1].append(item[2:len(item)])
-                        q_seq_line[int(item[0])].append(item[2:len(item)])
+                        q_seq_line[int(item[0])-1].append(item[2:len(item)])
+                        #q_seq_line[int(item[0])].append(item[2:len(item)])
                         if item[2] == "t":
                             length_set.append(int(item[2:len(item)]))
                             q_idx_set.add(int(item[0]))
@@ -101,8 +101,8 @@ def quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunge
                 q_diff_set = qubit_cores.difference(q_idx_set)
                 p_diff_set = plunger_channels.difference(p_idx_set)
                 for item in q_diff_set:
-                    #q_seq_line[item-1].append("t"+str(max_gt_len))
-                    q_seq_line[item].append("t"+str(max_gt_len))
+                    q_seq_line[item-1].append("t"+str(max_gt_len))
+                    #q_seq_line[item].append("t"+str(max_gt_len))
                 # for item in p_diff_set:
                 #     p_seq_line[item].append("t"+str(max_gt_len))
         qubit_sequence_table[idx] = q_seq_line
