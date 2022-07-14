@@ -79,7 +79,7 @@ def quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunge
                         #pulse_length = plunger_lengths[item[2:len(item)]]
                         #length_set.append(pulse_length)
                     else:
-                        q_seq_line[str(int(item[0]))].append(item[2:len(item)])
+                        q_seq_line[int(item[0])].append(item[2:len(item)])
                         if item[2] == "t":
                             length_set.append(int(item[2:len(item)]))
                             q_idx_set.add(int(item[0]))
