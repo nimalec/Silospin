@@ -56,10 +56,10 @@ def quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunge
 
     ##Loop through qubit cores
     for q_idx in qubit_cores:
-        q_seq_line[q_idx] = []
+        q_seq_line[q_idx-1] = []
     ##Loop through plunger channels
     for p_idx in plunger_channels:
-        p_seq_line[str(q_idx)] = []
+        p_seq_line[p_idx-1] = []
 
     for idx in range(len(df)):
         ##Single line obtained from Pandas data frame
@@ -74,12 +74,12 @@ def quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunge
             for item in element:
                 if len(item)>2:
                     if item[2] == "p":
-                        p_seq_line[str(int(item[0]))].append(item[2:len(item)])
+                        p_seq_line[int(item[0])].append(item[2:len(item)])
                         p_idx_set.add(int(item[0]))
                         #pulse_length = plunger_lengths[item[2:len(item)]]
                         #length_set.append(pulse_length)
                     else:
-                        q_seq_line[int(item[0])].append(item[2:len(item)])
+                        q_seq_line[int(item[0])-1].append(item[2:len(item)])
                         if item[2] == "t":
                             length_set.append(int(item[2:len(item)]))
                             q_idx_set.add(int(item[0]))
@@ -88,7 +88,7 @@ def quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunge
                         else:
                             qubit_length = qubit_lengths[int(item[0])][gates[item[2:len(item)]]]
                             length_set.append(qubit_length)
-                            q_idx_set.add(int(item[0]))
+                            q_idx_set.add(int(item[0])-1)
                 else:
                     pass
 
