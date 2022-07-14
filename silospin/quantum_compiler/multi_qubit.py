@@ -464,9 +464,9 @@ class MultiQubitGST_v3:
         for awg_idx in self._channel_mapping:
             end_idx = len(self._channel_mapping[awg_idx])
             if self._channel_mapping[awg_idx][0] == "q":
-                qubits.append((awg_idx, int(qubit_mapping[awg_idx][1:end_idx])))
+                qubits.append((awg_idx, int(self._channel_mapping[awg_idx][1:end_idx])))
             elif self._channel_mapping[awg_idx][0] == "p":
-                plungers.append((awg_idx,qubit_mapping[awg_idx][1:end_idx]))
+                plungers.append((awg_idx,self._channel_mapping[awg_idx][1:end_idx]))
             else:
                 pass
 
