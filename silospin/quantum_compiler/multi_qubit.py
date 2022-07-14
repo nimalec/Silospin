@@ -448,6 +448,137 @@ class MultiQubitGST_v2:
             self._awg._awgs["awg"+str(idx+1)].single(True)
             self._awg._awgs["awg"+str(idx+1)].enable(True)
 
+class MultiQubitGST_v3:
+    def __init__(self, gst_file_path, awg, qubit_parameters, channel_mapping, trig_settings = {"hard_trig": False, "trig_channel": 0}, sample_rate = 2.4e9):
+
+        self._gst_path = gst_file_path
+        self._awg = awg
+        self._channel_mapping = channel_mapping
+        self._sample_rate = sample_rate
+        self._qubit_parameters = qubit_parameters
+
+        ##Insert mapping function here:
+        ## Channel types:  qidx w/ idx = {0, N}. pidx w/ idx = {0, N}.  P0 -> P01, P1 -> P12, etc.
+        qubits = [] ##list of channels used for qubits
+        plungers = [] ##list of channels used for plunger gates
+        for awg_idx in self._channel_mapping:
+            end_idx = len(self._channel_mapping[awg_idx])
+            if self._channel_mapping[awg_idx][0] == "q":
+                qubits.append((awg_idx, int(qubit_mapping[awg_idx][1:end_idx])))
+            elif self._channel_mapping[awg_idx][0] == "p":
+                plungers.append((awg_idx,qubit_mapping[awg_idx][1:end_idx]))
+            else:
+                pass
+
+        ## Defines set of time delays and standard pulse lengths
+        tau_2_set = []
+        qubit_lengths = {}
+        qubit_npoints = {}
+        for q in qubits:
+            tau_2_set.append(self._qubit_parameters[q[1]]["tau_pi_2"])
+            qubit_lengths[q_idx] = {"pi": None, "pi_2": None}
+            qubit_npoints[q_idx] = {"pi": None, "pi_2": None}
+
+        tau_2_set = np.array(tau_2_set)
+        tau_pi_2_standard_idx = np.argmax(tau_pi_2_set)
+        tau_pi_2_standard = np.max(tau_pi_2_set)
+        tau_pi_standard = 2*tau_pi_2_standard
+        npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/32)*32
+        npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/32)*32
+        tau_pi_2_standard_new = npoints_pi_2_standard/self._sample_rate
+        tau_pi_standard_new = npoints_pi_standard/self._sample_rate
+
+        ##Generates pulse lengths for all qubits
+        for q in qubits:
+            if self._sample_rate*ceil(self._qubit_parameters[q[1]]["tau_pi"]/32)*32 ==  npoints_pi_standard:
+                tau_pi_2_standard_idx = q[1]
+            else:
+                pass
+            qubit_lengths[q[1]] = {"pi": ceil(tau_pi_standard_new*1e9), "pi_2": ceil(tau_pi_2_standard_new*1e9)}
+            qubit_npoints[q[1]] = {"pi": ceil(self._sample_rate*self._qubit_parameters[q[1]]["tau_pi"]/32)*32, "pi_2": ceil(self._sample_rate*self._qubit_parameters[q[1]]["tau_pi_2"]/32)*32}
+
+        self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
+
+        ##Modify to account for Z and plunger gates
+        #self._gate_sequences =  quantum_protocol_parser(gst_file_path, qubit_lengths, qubit_channels = set(qubits), plunger_channels={})
+        self._gate_sequences =  quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunger_channels)
+
+        ct_idxs_all = {}
+        ## Loop over number of lines
+        for idx in self._gate_sequences:
+             gate_sequence = self._gate_sequences[idx]
+             ct_idxs_all[idx], arbZ = make_command_table_idxs_v4(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
+
+        self._ct_idxs = ct_idxs_all
+        ## Separate command table for each AWG channel
+        self._command_table = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ)
+
+        waveforms_awg = {}
+        sequencer_code = {}
+        seq_code = {}
+        command_code = {}
+        n_array = [npoints_pi_2_standard, npoints_pi_standard]
+
+        ## Loop over qubit awg idx
+        for q in qubits:
+            waveforms = Waveforms()
+            waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[q[0]]["pi_2"])
+            waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[q[0]]["pi"])
+            waveforms_awg[q[0]] = waveforms
+            ##Make a sequence code
+            seq_code[q[0]] =  make_waveform_placeholders(n_array)
+            command_code[q[0]] = ""
+            sequence = ""
+            for ii in range(len(ct_idxs_all)):
+                 n_seq = ct_idxs_all[ii][str(q[0])]
+                 #seq = make_gateset_sequencer_fast_v2(n_seq)
+                 if hard_trigger == False:
+                     seq = make_gateset_sequencer_fast_v2(n_seq)
+                 else:
+                     if q[0] == trigger_channel:
+                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
+                     else:
+                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
+                 sequence += seq
+
+            command_code[q[0]] = command_code[idx] + sequence
+            sequencer_code[q[0]] =  seq_code[idx] + command_code[idx]
+
+        self._sequencer_code = sequencer_code
+
+        for q in qubits:
+             self._awg.load_sequence(sequencer_code[q[0]], awg_idx=q[0])
+             self._awg._awgs["awg"+str(q[0]+1)].write_to_waveform_memory(waveforms_awg[q[0]])
+
+        # self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
+        # self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+        #
+        # daq = self._awg._daq
+        # dev = self._awg._connection_settings["hdawg_id"]
+
+        # for q in qubits:
+        #      i_idx = self._channel_idxs[str(q[0])][0]
+        #      q_idx = self._channel_idxs[str(q[0])][1]
+        #      osc_idx = self._channel_osc_idxs[str(q[0])]
+        #      self._awg._hdawg.sigouts[i_idx].on(1)
+        #      self._awg._hdawg.sigouts[q_idx].on(1)
+        #      self._awg.set_osc_freq(osc_idx, self._qubit_parameters[int(q[1:len(q)])]["mod_freq"])
+        #      self._awg.set_sine(i_idx+1, osc_idx)
+        #      self._awg.set_sine(q_idx+1, osc_idx)
+        #      self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[int(q[1:len(q)])]["i_amp_pi"])
+        #      self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[int(q[1:len(q)])]["q_amp_pi"])
+        #      daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_table))
+
+    # def run_program(self, awg_idxs=None):
+    #     if awg_idxs:
+    #         awg_idxs = awg_idxs
+    #     else:
+    #         awg_idxs = self._awg_idxs
+    #     for idx in awg_idxs:
+    #         self._awg._awgs["awg"+str(idx+1)].single(True)
+    #         self._awg._awgs["awg"+str(idx+1)].enable(True)
+
+
 class MultiQubitRamseyTypes:
     ##should generalize for all qubits ==> only change will be pulse type
     def __init__(self, awg, t_range, npoints_t, npoints_av, taus_pulse, axis = "x", sample_rate = 2.4e9):

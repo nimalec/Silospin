@@ -297,6 +297,58 @@ def generate_reduced_command_table_v3(n_pi_2, n_pi):
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
 
+
+def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
+    ##Note: very simplified. Does not include Z, plungers, and edge cases for combo of pi and pi/2 pulses.
+    ## ct_idx = 0-7 ==> initial gates
+    ## ct_idx = 8-14 ==> pi_2 pulses (0,90, 180, 270, -90, -180, -270)
+    ## ct_idx = 15-22 ==> pi pulses (0,90, 180, 270, -90, -180, -270)
+    ## ct_idx = 23 - 25 ==> standard pulse delays
+
+    initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": 90, "wave_idx": 0}, "xxx": {"phi": 180, "wave_idx": 0}, "yyy": {"phi": -90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": 90, "wave_idx": 1}, "mxxm": {"phi": 180, "wave_idx": 1}, "myym": {"phi": -90, "wave_idx": 1}}
+    ct = []
+    waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]}]
+    #Initial phases
+    phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
+    phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
+    #Incremented phases
+    phases_incr = [{"value": 0, "increment": True}, {"value": 90, "increment": True}, {"value": 180, "increment": True}, {"value": 270, "increment": True}, {"value": -90, "increment": True},  {"value": -180, "increment": True},{"value": -270, "increment": True}]
+
+    ## 1. Loop through initial gates
+    ct_idx = 0
+    for i in range(len(phases_0_I)):
+        ## pi/2 lengths
+         ct.append({"index": ct_idx, "waveform": waves[0], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+         ct_idx += 1
+    for i in range(len(phases_0_I)):
+        ## pi lengths
+         ct.append({"index": ct_idx, "waveform": waves[1], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+         ct_idx += 1
+
+    ## 2. Loop through incremented phases
+    for i in range(len(phases_incr)):
+         ct.append({"index": ct_idx, "waveform": waves[0], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+         ct_idx += 1
+    for i in range(len(phases_incr)):
+         ct.append({"index": ct_idx, "waveform": waves[1], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+         ct_idx += 1
+
+   ## 3. Append waits to command table
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2}, "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ct.append({"index": ct_idx+1, "waveform": {"playZero": True, "length": n_pi}, "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
+
+    ## 4. Append Arbitrary Z rotations
+    if len(arbZ) == 0:
+        pass
+    else:
+        for item in arbZ:
+            ct.append({"index": item[0], "phase0": {"value": item[1], "increment": True}, "phase1": {"value": item[1],  "increment": True}})
+
+
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
+    return command_table
+
+
 def make_waveform_placeholders(n_array):
     ##Input: n_array. List of lengths for each gate operation.
     idx = 0
@@ -445,6 +497,60 @@ def make_command_table_idxs_v4(gt_seqs, tau_pi_s, tau_pi_2_s):
             ii += 1
         ct_idxs[idx] = ct_idx_list
     return ct_idxs
+
+##Includes Z-implementation
+def make_command_table_idxs_v5(gt_seqs, tau_pi_s, tau_pi_2_s):
+    arbZ = []
+    ct_idxs = {}
+    initial_gates = {"x": 0, "y": 1,  "xx": 4,  "yy": 5, "xxx": 2, "yyy": 3,  "mxxm": 5,  "myym": 7}
+    arbZ_counter = 24
+    for idx in gt_seqs:
+        gate_sequence = gt_seqs[idx]
+        ct_idx_list = []
+        ii = 0
+        for gt in gate_sequence:
+            if ii == 0:
+                if gt in {"x", "y", "xxx", "yyy"}:
+                    ct_idx_list.append(initial_gates[gt])
+                elif gt in {"xx", "yy", "mxxm", "myym"}:
+                    ct_idx_list.append(initial_gates[gt])
+                elif gt[0] == "t":
+                     if int(gt[1:len(gt)]) == tau_pi_2_s:
+                         ct_idx_list.append(22)
+                     elif int(gt[1:len(gt)]) == tau_pi_s:
+                         ct_idx_list.append(23)
+                     else:
+                         pass
+                elif gt[0] == "z":
+                    ct_idx_list.append(arbZ_counter)
+                    arbZ.append((arbZ_counter, float(gt[1:len(gt)-1])))
+                    arbZ_counter += 1
+
+                else:
+                    pass
+            else:
+                phi_l = 0
+                if gt[0] in {"x", "y", "m"}:
+                    phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
+                    ct_idx = get_ct_idx(phi_a, gt)
+                    if gt in {"x", "y", "xxx", "yyy"}:
+                        ct_idx_list.append(ct_idx)
+                    else:
+                        ct_idx_list.append(ct_idx)
+                elif gt[0] == "t":
+                    if int(gt[1:len(gt)]) == tau_pi_2_s:
+                        ct_idx_list.append(22)
+                    elif int(gt[1:len(gt)]) == tau_pi_s:
+                        ct_idx_list.append(23)
+                elif gt[0] == "z":
+                    ct_idx_list.append(arbZ_counter)
+                    arbZ.append((arbZ_counter, float(gt[1:len(gt)-1])))
+                    arbZ_counter += 1
+                else:
+                    pass
+            ii += 1
+        ct_idxs[idx] = ct_idx_list
+    return ct_idxs, arbZ
 
 def generate_waveforms(qubit_gate_lengths, max_idx, amp=1):
     waveforms = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None }, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
