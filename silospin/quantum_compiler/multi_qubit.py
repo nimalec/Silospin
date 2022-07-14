@@ -501,7 +501,8 @@ class MultiQubitGST_v3:
 
         ##Modify to account for Z and plunger gates
         #self._gate_sequences =  quantum_protocol_parser(gst_file_path, qubit_lengths, qubit_channels = set(qubits), plunger_channels={})
-        self._gate_sequences =  quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunger_channels)
+
+        self._gate_sequences =  quantum_protocol_parser_csv_v2(self._gst_path, qubit_lengths, qubit_cores={0,1,2}, plunger_channels={3})
 
         ct_idxs_all = {}
         ## Loop over number of lines
