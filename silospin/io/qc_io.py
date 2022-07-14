@@ -110,6 +110,7 @@ def quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunge
         #     qubit_line[q] = q_seq_line[q][0:len(q_seq_line[q])/2]
         # qubit_sequence_table[idx] = qubit_line
         qubit_sequence_table[idx] = q_seq_line
+        print(qubit_sequence_table[idx])
 
         #plunger_sequence_table[idx] = p_seq_line
     return qubit_sequence_table, plunger_sequence_table
