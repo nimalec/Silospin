@@ -505,13 +505,12 @@ class MultiQubitGST_v3:
         self._gate_sequences, self._plunger_sequences =  quantum_protocol_parser_csv_v2(self._gst_path, qubit_lengths, qubit_cores={0,1,2}, plunger_channels={3})
 
         ct_idxs_all = {}
-        print(self._gate_sequences)
-        ## Loop over number of lines
-        # for idx in self._gate_sequences:
-        #      gate_sequence = self._gate_sequences[idx]
-        #      ct_idxs_all[idx], arbZ = make_command_table_idxs_v4(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
+        # Loop over number of lines
+        for idx in self._gate_sequences:
+             gate_sequence = self._gate_sequences[idx]
+             ct_idxs_all[idx], arbZ = make_command_table_idxs_v4(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
 
-        # self._ct_idxs = ct_idxs_all
+        self._ct_idxs = ct_idxs_all
         # ## Separate command table for each AWG channel
         # self._command_table = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ)
         #
