@@ -471,15 +471,15 @@ class MultiQubitGST_v3:
                 pass
 
         ## Defines set of time delays and standard pulse lengths
-        tau_2_set = []
+        tau_pi_2_set = []
         qubit_lengths = {}
         qubit_npoints = {}
         for q in qubits:
-            tau_2_set.append(self._qubit_parameters[q[1]]["tau_pi_2"])
+            tau_pi_2_set.append(self._qubit_parameters[q[1]]["tau_pi_2"])
             qubit_lengths[q[0]] = {"pi": None, "pi_2": None}
             qubit_npoints[q[0]] = {"pi": None, "pi_2": None}
 
-        tau_2_set = np.array(tau_2_set)
+        tau_pi_2_set = np.array(tau_pi_2_set)
         tau_pi_2_standard_idx = np.argmax(tau_pi_2_set)
         tau_pi_2_standard = np.max(tau_pi_2_set)
         tau_pi_standard = 2*tau_pi_2_standard
