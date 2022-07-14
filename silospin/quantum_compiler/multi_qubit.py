@@ -508,7 +508,7 @@ class MultiQubitGST_v3:
         # Loop over number of lines
         for idx in self._gate_sequences:
              gate_sequence = self._gate_sequences[idx]
-             ct_idxs_all[idx], arbZ = make_command_table_idxs_v4(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
+             ct_idxs_all[idx], arbZ = make_command_table_idxs_v5(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
 
         self._ct_idxs = ct_idxs_all
         # ## Separate command table for each AWG channel
