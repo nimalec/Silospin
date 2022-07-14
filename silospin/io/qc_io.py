@@ -105,11 +105,11 @@ def quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunge
                     #q_seq_line[item].append("t"+str(max_gt_len))
                 # for item in p_diff_set:
                 #     p_seq_line[item].append("t"+str(max_gt_len))
-        qubit_line = {}
-        for q in q_seq_line:
-            qubit_line[q] = q_seq_line[q][0:len(q_seq_line[q])/2]
-        qubit_sequence_table[idx] = qubit_line
-        #qubit_sequence_table[idx] = q_seq_line
+        # qubit_line = {}
+        # for q in q_seq_line:
+        #     qubit_line[q] = q_seq_line[q][0:len(q_seq_line[q])/2]
+        # qubit_sequence_table[idx] = qubit_line
+        qubit_sequence_table[idx] = q_seq_line
         #plunger_sequence_table[idx] = p_seq_line
     return qubit_sequence_table, plunger_sequence_table
 
