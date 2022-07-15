@@ -580,6 +580,16 @@ class MultiQubitGST_v3:
     #         self._awg._awgs["awg"+str(idx+1)].enable(True)
 
 
+
+
+
+
+
+
+
+
+
+
 class MultiQubitRamseyTypes:
     ##should generalize for all qubits ==> only change will be pulse type
     def __init__(self, awg, t_range, npoints_t, npoints_av, taus_pulse, axis = "x", sample_rate = 2.4e9):

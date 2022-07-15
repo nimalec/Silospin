@@ -139,7 +139,8 @@ def make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True):
         command_code = command_code + line
 
     if trig_channel == True:
-        trig_program = "waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n"
+        #trig_program = "waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n"
+        trig_program = "waitDigTrigger(1);\nsetDIO(1);\nsetDIO(0);\nwaitDIOTrigger();\n"
     else:
         trig_program = "waitDIOTrigger();\n"
     program = trig_program + command_code
@@ -361,8 +362,6 @@ def make_waveform_placeholders(n_array):
         sequence_code = sequence_code + line
         idx+=1
     return sequence_code
-
-
 
 def get_ct_idx(phi_a, gt):
     ct_idx_table = {

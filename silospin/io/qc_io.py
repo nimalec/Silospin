@@ -115,6 +115,38 @@ def quantum_protocol_parser_csv_v2(file_path, qubit_lengths, qubit_cores, plunge
         #plunger_sequence_table[idx] = p_seq_line
     return qubit_sequence_table, plunger_sequence_table
 
+def quantum_protocol_parser_Zarb(file_path, qubit_lengths, qubit_set = {1,2,3,4}):
+    sequence_table = {}
+    gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
+    df = pd.read_csv(file_path, header = None, skiprows=1)
+    for idx in range(len(df)):
+        line = df.values[idx][0].split(";")[0:len(df.values[idx][0].split(";"))-1]
+        seq_line = {"0": [], "1": [], "2": [] , "3":[]}
+        for elem in line:
+            element = re.split('\(| \)', elem)
+            idx_set = set()
+            length_set = []
+            for item in element:
+                if len(item)>2:
+                    seq_line[str(int(item[0])-1)].append(item[2:len(item)])
+                    idx_set.add(int(item[0]))
+                    if item[2] == "t":
+                        length_set.append(int(item[2:len(item)]))
+                    elif item[2] == "z":
+                        length_set.append(32)
+                        pass
+                    else:
+                        qubit_length = qubit_lengths[int(item[0])][gates[item[2:len(item)]]]
+                        length_set.append(qubit_length)
+                else:
+                    pass
+            max_gt_len = max(length_set)
+            diff_set = qubit_set.difference(idx_set)
+            for item in diff_set:
+                seq_line[str(item-1)].append("t"+str(max_gt_len) )
+        sequence_table[idx] = seq_line
+    return sequence_table
+
 def quantum_protocol_parser_str(file_path, qubit_lengths, qubit_set = {1,2,3,4}):
     sequence_table = {}
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
