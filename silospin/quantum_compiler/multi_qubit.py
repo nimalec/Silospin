@@ -626,7 +626,7 @@ class MultiQubitGST_v4:
         for idx in self._gate_sequences:
              gate_sequence = self._gate_sequences[idx]
              ct_idxs_all[idx], arbZ = make_command_table_idxs_v5(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
-             command_tables[idx] = generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=arbZ)
+             command_tables[idx] = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
 
         self._ct_idxs = ct_idxs_all
         self._command_tables = command_tables
