@@ -616,9 +616,7 @@ class MultiQubitGST_v4:
             qubit_npoints[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
 
         self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
-
-        ##Re
-        self._gate_sequences =  quantum_protocol_parser(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
+        self._gate_sequences = quantum_protocol_parser_Zarb(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
 
         ##Command table stuff
         ct_idxs_all = {}
