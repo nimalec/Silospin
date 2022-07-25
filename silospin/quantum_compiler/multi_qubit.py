@@ -631,62 +631,62 @@ class MultiQubitGST_v4:
         self._ct_idxs = ct_idxs_all
         self._command_tables = command_tables
         #
-        # waveforms_awg = {}
-        # sequencer_code = {}
-        # seq_code = {}
-        # command_code = {}
-        # n_array = [npoints_pi_2_standard, npoints_pi_standard]
-        #
-        # for idx in qubits:
-        #     ##Makes waveform objects for upload
-        #     waveforms = Waveforms()
-        #     waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
-        #     waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
-        #     waveforms_awg[idx] = waveforms
-        #     ##Make a sequence code
-        #     seq_code[idx] =  make_waveform_placeholders(n_array)
-        #     command_code[idx] = ""
-        #     sequence = ""
-        #     for ii in range(len(ct_idxs_all)):
-        #          n_seq = ct_idxs_all[ii][str(idx)]
-        #          #seq = make_gateset_sequencer_fast_v2(n_seq)
-        #          if hard_trigger == False:
-        #              seq = make_gateset_sequencer_fast_v2(n_seq)
-        #          else:
-        #              if idx == trigger_channel:
-        #                  seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
-        #              else:
-        #                  seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
-        #          sequence += seq
-        #
-        #     command_code[idx] = command_code[idx] + sequence
-        #     sequencer_code[idx] =  seq_code[idx] + command_code[idx]
-        #
-        # self._sequencer_code = sequencer_code
-        #
-        # for idx in qubits:
-        #      self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
-        #      self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
-        #
-        # self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
-        # self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
-        #
-        # daq = self._awg._daq
-        # dev = self._awg._connection_settings["hdawg_id"]
-        #
-        # for idx in qubits:
-        #      i_idx = self._channel_idxs[str(idx)][0]
-        #      q_idx = self._channel_idxs[str(idx)][1]
-        #      osc_idx = self._channel_osc_idxs[str(idx)]
-        #      self._awg._hdawg.sigouts[i_idx].on(1)
-        #      self._awg._hdawg.sigouts[q_idx].on(1)
-        #      self._awg.set_osc_freq(osc_idx, self._qubit_parameters[idx]["mod_freq"])
-        #      self._awg.set_sine(i_idx+1, osc_idx)
-        #      self._awg.set_sine(q_idx+1, osc_idx)
-        #      self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[idx]["i_amp_pi"])
-        #      self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[idx]["q_amp_pi"])
-        #      daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables[idx-1]))
-    #
+        waveforms_awg = {}
+        sequencer_code = {}
+        seq_code = {}
+        command_code = {}
+        n_array = [npoints_pi_2_standard, npoints_pi_standard]
+
+        for idx in qubits:
+            ##Makes waveform objects for upload
+            waveforms = Waveforms()
+            waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
+            waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
+            waveforms_awg[idx] = waveforms
+            ##Make a sequence code
+            seq_code[idx] =  make_waveform_placeholders(n_array)
+            command_code[idx] = ""
+            sequence = ""
+            for ii in range(len(ct_idxs_all)):
+                 n_seq = ct_idxs_all[ii][str(idx)]
+                 #seq = make_gateset_sequencer_fast_v2(n_seq)
+                 if hard_trigger == False:
+                     seq = make_gateset_sequencer_fast_v2(n_seq)
+                 else:
+                     if idx == trigger_channel:
+                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
+                     else:
+                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
+                 sequence += seq
+
+            command_code[idx] = command_code[idx] + sequence
+            sequencer_code[idx] =  seq_code[idx] + command_code[idx]
+
+        self._sequencer_code = sequencer_code
+
+        for idx in qubits:
+             self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
+             self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
+
+        self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
+        self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+
+        daq = self._awg._daq
+        dev = self._awg._connection_settings["hdawg_id"]
+
+        for idx in qubits:
+             i_idx = self._channel_idxs[str(idx)][0]
+             q_idx = self._channel_idxs[str(idx)][1]
+             osc_idx = self._channel_osc_idxs[str(idx)]
+             self._awg._hdawg.sigouts[i_idx].on(1)
+             self._awg._hdawg.sigouts[q_idx].on(1)
+             self._awg.set_osc_freq(osc_idx, self._qubit_parameters[idx]["mod_freq"])
+             self._awg.set_sine(i_idx+1, osc_idx)
+             self._awg.set_sine(q_idx+1, osc_idx)
+             self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[idx]["i_amp_pi"])
+             self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[idx]["q_amp_pi"])
+             daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables[idx-1]))
+
     # def run_program(self, awg_idxs=None):
     #     if awg_idxs:
     #         awg_idxs = awg_idxs
