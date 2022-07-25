@@ -685,7 +685,7 @@ class MultiQubitGST_v4:
              self._awg.set_sine(q_idx+1, osc_idx)
              self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[idx]["i_amp_pi"])
              self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[idx]["q_amp_pi"])
-             daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables[idx]))
+             daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables[0]))
 
     # def run_program(self, awg_idxs=None):
     #     if awg_idxs:
