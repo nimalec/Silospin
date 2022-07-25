@@ -350,6 +350,37 @@ def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
     return command_table
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def make_waveform_placeholders(n_array):
     ##Input: n_array. List of lengths for each gate operation.
     idx = 0
@@ -550,6 +581,62 @@ def make_command_table_idxs_v5(gt_seqs, tau_pi_s, tau_pi_2_s):
             ii += 1
         ct_idxs[idx] = ct_idx_list
     return ct_idxs, arbZ
+
+def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
+    arbZ = []
+    ct_idxs = {}
+    initial_gates = {"x": 0, "y": 1,  "xx": 4,  "yy": 5, "xxx": 2, "yyy": 3,  "mxxm": 5,  "myym": 7}
+    arbZ_counter = 24 + n_arbZ
+    for idx in gt_seqs:
+        gate_sequence = gt_seqs[idx]
+        ct_idx_list = []
+        ii = 0
+        for gt in gate_sequence:
+            if ii == 0:
+                if gt in {"x", "y", "xxx", "yyy"}:
+                    ct_idx_list.append(initial_gates[gt])
+                elif gt in {"xx", "yy", "mxxm", "myym"}:
+                    ct_idx_list.append(initial_gates[gt])
+                elif gt[0] == "t":
+                     if int(gt[1:len(gt)]) == tau_pi_2_s:
+                         ct_idx_list.append(22)
+                     elif int(gt[1:len(gt)]) == tau_pi_s:
+                         ct_idx_list.append(23)
+                     else:
+                         pass
+                elif gt[0] == "z":
+                    ct_idx_list.append(arbZ_counter)
+                    arbZ.append((arbZ_counter, float(gt[1:len(gt)-1])))
+                    arbZ_counter += 1
+
+                else:
+                    pass
+            else:
+                phi_l = 0
+                if gt[0] in {"x", "y", "m"}:
+                    phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
+                    ct_idx = get_ct_idx(phi_a, gt)
+                    if gt in {"x", "y", "xxx", "yyy"}:
+                        ct_idx_list.append(ct_idx)
+                    else:
+                        ct_idx_list.append(ct_idx)
+                elif gt[0] == "t":
+                    if int(gt[1:len(gt)]) == tau_pi_2_s:
+                        ct_idx_list.append(22)
+                    elif int(gt[1:len(gt)]) == tau_pi_s:
+                        ct_idx_list.append(23)
+                elif gt[0] == "z":
+                    ct_idx_list.append(arbZ_counter)
+                    arbZ.append((arbZ_counter, float(gt[1:len(gt)-1])))
+                    arbZ_counter += 1
+                else:
+                    pass
+            ii += 1
+        ct_idxs[idx] = ct_idx_list
+    return ct_idxs, arbZ
+
+
+
 
 def generate_waveforms(qubit_gate_lengths, max_idx, amp=1):
     waveforms = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None }, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
