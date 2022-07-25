@@ -127,7 +127,7 @@ def make_gateset_sequencer_fast_v2(n_seq):
         idx_str = str(n)
         line = "executeTableEntry("+idx_str+");\n"
         command_code = command_code + line
-    program = "setTrigger(1);\nsetTrigger(0);\n" + command_code
+    program = "setTrigger(1);\nsetTrigger(0);\n" + command_code + "waitWave();\n"
     return program
 
 
@@ -348,38 +348,6 @@ def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def make_waveform_placeholders(n_array):
     ##Input: n_array. List of lengths for each gate operation.
