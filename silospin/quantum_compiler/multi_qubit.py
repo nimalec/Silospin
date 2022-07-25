@@ -618,17 +618,17 @@ class MultiQubitGST_v4:
         self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
         self._gate_sequences = quantum_protocol_parser_Zarb(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
 
-        # ##Command table stuff. loop over number of lines:
-        # ct_idxs_all = {}
-        # command_tables = {}
-        # for idx in self._gate_sequences:
-        #      gate_sequence = self._gate_sequences[idx]
-        #      ct_idxs_all[idx], arbZ = make_command_table_idxs_v5(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
-        #      ## Need to change up implementation ==> 1 ct per qubit for all lines.
-        #      command_tables[idx] = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
-        #
-        # self._ct_idxs = ct_idxs_all
-        # self._command_tables = command_tables
+        ##Command table stuff. loop over number of lines:
+        ct_idxs_all = {}
+        command_tables = {}
+        for idx in self._gate_sequences:
+             gate_sequence = self._gate_sequences[idx]
+             ct_idxs_all[idx], arbZ = make_command_table_idxs_v5(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
+             ## Need to change up implementation ==> 1 ct per qubit for all lines.
+             command_tables[idx] = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
+
+        self._ct_idxs = ct_idxs_all
+        self._command_tables = command_tables
         #
         # waveforms_awg = {}
         # sequencer_code = {}
