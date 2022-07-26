@@ -343,8 +343,8 @@ def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
         pass
     else:
         for item in arbZ:
+            print(item)
             ct.append({"index": item[0], "phase0": {"value": item[1], "increment": True}, "phase1": {"value": item[1],  "increment": True}})
-
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
@@ -577,7 +577,6 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
                     ct_idx_list.append(arbZ_counter)
                     arbZ.append((arbZ_counter, float(gt[1:len(gt)])))
                     arbZ_counter += 1
-
                 else:
                     pass
             else:
@@ -585,10 +584,12 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
                 if gt[0] in {"x", "y", "m"}:
                     phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
                     ct_idx = get_ct_idx(phi_a, gt)
+
                     if gt in {"x", "y", "xxx", "yyy"}:
                         ct_idx_list.append(ct_idx)
                     else:
                         ct_idx_list.append(ct_idx)
+
                 elif gt[0] == "t":
                     if int(gt[1:len(gt)]) == tau_pi_2_s:
                         ct_idx_list.append(22)
