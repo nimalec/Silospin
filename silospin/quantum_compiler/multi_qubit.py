@@ -86,7 +86,6 @@ class MultiQubitGatesSet:
         self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
         self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
 
-        #phase_reset_seq = "resetOscPhase();\n"
         daq = self._awg._daq
         dev = self._awg._connection_settings["hdawg_id"]
         for awg_idx in self._awg_idxs:
@@ -621,16 +620,25 @@ class MultiQubitGST_v4:
         ##Command table stuff. loop over number of lines:
         ct_idxs_all = {}
         command_tables = {}
+
+        ##Keeps track of all arbZs for command table
+        #arbZs = []
+        ##keeps track of number of arbZs
+        #n_arbZ = 0
         for idx in self._gate_sequences:
              gate_sequence = self._gate_sequences[idx]
              ##Implement to generate just 1 command table for all lines, all qubits.
              ct_idxs_all[idx], arbZ = make_command_table_idxs_v5(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
+             #ct_idxs_all[idx], arbZ = make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ)
+             #n_arbZ += len(arbZ)
+             #arbZs.append(arbZ)
              ## Need to change up implementation ==> 1 ct per qubit for all lines.
-             command_tables[idx] = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
+             #command_tables[idx] = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
 
+        command_tables = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
         self._ct_idxs = ct_idxs_all
         self._command_tables = command_tables
-        #
+
         waveforms_awg = {}
         sequencer_code = {}
         seq_code = {}
@@ -638,7 +646,6 @@ class MultiQubitGST_v4:
         n_array = [npoints_pi_2_standard, npoints_pi_standard]
 
         for idx in qubits:
-            ##Makes waveform objects for upload
             waveforms = Waveforms()
             waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
             waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
@@ -649,7 +656,6 @@ class MultiQubitGST_v4:
             sequence = ""
             for ii in range(len(ct_idxs_all)):
                  n_seq = ct_idxs_all[ii][str(idx)]
-                 #seq = make_gateset_sequencer_fast_v2(n_seq)
                  if hard_trigger == False:
                      seq = make_gateset_sequencer_fast_v2(n_seq)
                  else:
@@ -695,6 +701,7 @@ class MultiQubitGST_v4:
         for idx in awg_idxs:
             self._awg._awgs["awg"+str(idx+1)].single(True)
             self._awg._awgs["awg"+str(idx+1)].enable(True)
+
 
 class MultiQubitRamseyTypes:
     ##should generalize for all qubits ==> only change will be pulse type

@@ -575,7 +575,6 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
                          pass
                 elif gt[0] == "z":
                     ct_idx_list.append(arbZ_counter)
-                    #arbZ.append((arbZ_counter, float(gt[1:len(gt)-1])))
                     arbZ.append((arbZ_counter, float(gt[1:len(gt)])))
                     arbZ_counter += 1
 
@@ -597,16 +596,13 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
                         ct_idx_list.append(23)
                 elif gt[0] == "z":
                     ct_idx_list.append(arbZ_counter)
-                    arbZ.append((arbZ_counter, float(gt[1:len(gt)-1])))
+                    arbZ.append((arbZ_counter, float(gt[1:len(gt)])))
                     arbZ_counter += 1
                 else:
                     pass
             ii += 1
         ct_idxs[idx] = ct_idx_list
     return ct_idxs, arbZ
-
-
-
 
 def generate_waveforms(qubit_gate_lengths, max_idx, amp=1):
     waveforms = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None }, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
