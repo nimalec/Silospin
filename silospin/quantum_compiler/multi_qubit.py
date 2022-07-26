@@ -633,7 +633,7 @@ class MultiQubitGST_v4:
              #n_arbZ += len(arbZ)
              #arbZs.append(arbZ)
              ## Need to change up implementation ==> 1 ct per qubit for all lines.
-             #command_tables[idx] = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
+             command_tables[idx] = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
 
         command_tables = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
         self._ct_idxs = ct_idxs_all
