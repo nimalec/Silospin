@@ -543,7 +543,7 @@ def make_command_table_idxs_v5(gt_seqs, tau_pi_s, tau_pi_2_s):
                 elif gt[0] == "z":
                     ct_idx_list.append(arbZ_counter)
                     #arbZ.append((arbZ_counter, float(gt[1:len(gt)-1])))
-                    arbZ.append((arbZ_counter, float(gt[1:len(gt)])))
+                    arbZ.append((arbZ_counter, float(gt[1:len(gt)-1])))
                     arbZ_counter += 1
                 else:
                     pass
