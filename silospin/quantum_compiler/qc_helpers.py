@@ -117,7 +117,7 @@ def make_gateset_sequencer_fast(n_array, n_seq, continuous=False, soft_trigger=F
     else:
         if hard_trigger is True:
             #program = sequence_code + "waitDigTrigger(1);\n setDIO(1);\n wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n" + command_code
-            program = sequence_code + "waitDigTrigger(2);\n setDIO(1);\n wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n" + command_code
+            program = sequence_code + "waitDigTrigger(1);\n setDIO(1);\n wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n" + command_code
         elif soft_trigger is True:
             program = sequence_code + "setTrigger(1);\nsetTrigger(0);\n" + command_code
     return program
@@ -141,7 +141,7 @@ def make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True):
 
     if trig_channel == True:
         #trig_program = "resetOscPhase();\nwaitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n"
-        trig_program = "resetOscPhase();\nwaitDigTrigger(2);\nsetDIO(1);wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n"
+        trig_program = "resetOscPhase();\nwaitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n"
         #trig_program = "waitDigTrigger(1);\nsetDIO(1);\nsetDIO(0);\nwaitDIOTrigger();\n"
     else:
         trig_program = "waitDIOTrigger();\n"
