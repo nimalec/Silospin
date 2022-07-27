@@ -343,7 +343,6 @@ def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
         pass
     else:
         for item in arbZ:
-            print(item)
             ct.append({"index": item[0], "phase0": {"value": item[1], "increment": True}, "phase1": {"value": item[1],  "increment": True}})
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
