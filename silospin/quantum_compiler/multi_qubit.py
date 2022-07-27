@@ -757,6 +757,7 @@ class MultiQubitGST_v5:
              n_arbZ += len(arbZ)
              arbZs.append(arbZ)
              #command_tables[idx] = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
+        ##Need to replace arbZ with a tuple ....
         print(arbZs)
         arbZs = list(np.array(arbZs).flatten())
         command_tables = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZs)
