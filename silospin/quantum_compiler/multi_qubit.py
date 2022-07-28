@@ -721,17 +721,15 @@ class MultiQubitGST_v5:
         tau_pi_2_standard = np.max(tau_pi_2_set)
         tau_pi_standard = 2*tau_pi_2_standard
 
-        ##Define standard length of pulse in number of samples
         npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/32)*32
         npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/32)*32
 
-        ##convert back to time
         tau_pi_2_standard_new = npoints_pi_2_standard/self._sample_rate
         tau_pi_standard_new = npoints_pi_standard/self._sample_rate
 
         qubit_lengths = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
         qubit_npoints = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
-        ##Generates pulse lengths for all qubits
+
         for idx in qubits:
             qubit_lengths[idx]["pi"] = ceil(tau_pi_standard_new*1e9)
             qubit_lengths[idx]["pi_2"] = ceil(tau_pi_2_standard_new*1e9)
@@ -741,27 +739,15 @@ class MultiQubitGST_v5:
         self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
         self._gate_sequences = quantum_protocol_parser_Zarb(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
 
-        ##Command table stuff. loop over number of lines:
         ct_idxs_all = {}
-        #command_tables = {}
-
-        ##Keeps track of all arbZs for command table
         arbZs = []
-        ##keeps track of number of arbZs
         n_arbZ = 0
         for idx in self._gate_sequences:
              gate_sequence = self._gate_sequences[idx]
-             ##Implement to generate just 1 command table for all lines, all qubits.
-             #ct_idxs_all[idx], arbZ = make_command_table_idxs_v5(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9))
              ct_idxs_all[idx], arbZ = make_command_table_idxs_v6(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9), n_arbZ)
-             #n_arbZ += arbZ[len(arbZ)-1][0]
              n_arbZ += len(arbZ)
-             #print(arbZ)
              arbZs.append(arbZ)
-             #command_tables[idx] = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ)
-        ##Need to replace arbZ with a tuple ....
-        #print(arbZs)
-        #arbZs = list(np.array(arbZs).flatten())
+
         arbZ_s = []
         for lst in arbZs:
             for i in lst:
