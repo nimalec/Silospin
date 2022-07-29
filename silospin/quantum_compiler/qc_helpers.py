@@ -583,9 +583,10 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
                     pass
             else:
                 phi_l = 0
+                print(phi_l)
                 if gt[0] in {"x", "y", "m"}:
                     phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
-                    print(phi_a)
+                    #print(phi_a)
                     ct_idx = get_ct_idx(phi_a, gt)
 
                     if gt in {"x", "y", "xxx", "yyy"}:
