@@ -308,14 +308,17 @@ def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
     ## ct_idx = 15-22 ==> pi pulses (0,90, 180, 270, -90, -180, -270)
     ## ct_idx = 23 - 25 ==> standard pulse delays
 
-    #initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": 90, "wave_idx": 0}, "xxx": {"phi": 180, "wave_idx": 0}, "yyy": {"phi": -90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": 90, "wave_idx": 1}, "mxxm": {"phi": 180, "wave_idx": 1}, "myym": {"phi": -90, "wave_idx": 1}}
-    initial_gates = {"y": {"phi": 0, "wave_idx": 0}, "x": {"phi": 90, "wave_idx": 0}, "yyy": {"phi": 180, "wave_idx": 0}, "xxx": {"phi": -90, "wave_idx": 0}, "yy": {"phi": 0, "wave_idx": 1}, "xx": {"phi": 90, "wave_idx": 1}, "myym": {"phi": 180, "wave_idx": 1}, "mxxm": {"phi": -90, "wave_idx": 1}}
-    
+    initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": 90, "wave_idx": 0}, "xxx": {"phi": 180, "wave_idx": 0}, "yyy": {"phi": -90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": 90, "wave_idx": 1}, "mxxm": {"phi": 180, "wave_idx": 1}, "myym": {"phi": -90, "wave_idx": 1}}
+    #initial_gates = {"y": {"phi": 0, "wave_idx": 0}, "x": {"phi": 90, "wave_idx": 0}, "yyy": {"phi": 180, "wave_idx": 0}, "xxx": {"phi": -90, "wave_idx": 0}, "yy": {"phi": 0, "wave_idx": 1}, "xx": {"phi": 90, "wave_idx": 1}, "myym": {"phi": 180, "wave_idx": 1}, "mxxm": {"phi": -90, "wave_idx": 1}}
+
     ct = []
     waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]}]
     #Initial phases
+    #phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
+    #phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
     phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
     phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
+
     #Incremented phases
     phases_incr = [{"value": 0, "increment": True}, {"value": 90, "increment": True}, {"value": 180, "increment": True}, {"value": 270, "increment": True}, {"value": -90, "increment": True},  {"value": -180, "increment": True},{"value": -270, "increment": True}]
 
