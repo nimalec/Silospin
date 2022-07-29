@@ -316,8 +316,9 @@ def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
     #Initial phases
     #phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
     #phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
-    phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
-    phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
+    phases_0_I = [{"value": 0}, {"value": -90}, {"value": -180}, {"value": 90}]
+    phases_0_Q = [{"value": -90}, {"value": -180}, {"value": -270}, {"value": 0}]
+
 
     #Incremented phases
     phases_incr = [{"value": 0, "increment": True}, {"value": 90, "increment": True}, {"value": 180, "increment": True}, {"value": 270, "increment": True}, {"value": -90, "increment": True},  {"value": -180, "increment": True},{"value": -270, "increment": True}]
