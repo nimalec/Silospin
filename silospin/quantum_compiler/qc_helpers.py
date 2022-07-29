@@ -559,20 +559,15 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
     initial_gates = {"x": 0, "y": 1,  "xx": 4,  "yy": 5, "xxx": 2, "yyy": 3,  "mxxm": 5,  "myym": 7}
     arbZ_counter = 24 + n_arbZ
     phi_ls_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90}
-    #phi_l = phi_ls_gt[gt_seqs['0'][0]]
-    #phi_l = 0
 
     for idx in gt_seqs:
         gate_sequence = gt_seqs[idx]
         ct_idx_list = []
-        #phi_l = 0
-        #phi_l = phi_ls_gt[gt_seqs[idx][0]]
         gt_0 = gt_seqs[idx][0]
         if gt_0[0] in {"x", "y", "m"}:
             phi_l = phi_ls_gt[gt_0]
         else:
             phi_l = 0
-
         ii = 0
         for gt in gate_sequence:
             if ii == 0:
