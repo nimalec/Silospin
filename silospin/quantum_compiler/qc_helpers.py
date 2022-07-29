@@ -314,10 +314,12 @@ def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
     ct = []
     waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]}]
     #Initial phases
-    #phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
-    #phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
-    phases_0_I = [{"value": 90}, {"value": -90}, {"value": -180}, {"value": 90}]
-    phases_0_Q = [{"value": -90}, {"value": -180}, {"value": -270}, {"value": 0}]
+    # phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
+    # phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
+    # phases_0_I = [{"value": 90}, {"value": -90}, {"value": -180}, {"value": 90}]
+    # phases_0_Q = [{"value": -90}, {"value": -180}, {"value": -270}, {"value": 0}]
+    phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
+    phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
 
 
     #Incremented phases
