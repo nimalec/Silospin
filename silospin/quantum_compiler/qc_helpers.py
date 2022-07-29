@@ -313,7 +313,7 @@ def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
     #Initial phases
     phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
     phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
-    
+
     #Incremented phases
     phases_incr = [{"value": 0, "increment": True}, {"value": 90, "increment": True}, {"value": 180, "increment": True}, {"value": 270, "increment": True}, {"value": -90, "increment": True},  {"value": -180, "increment": True},{"value": -270, "increment": True}]
     #phases_incr = [{"value": 0, "increment": True}, {"value": 90, "increment": True}, {"value": 180, "increment": True}, {"value": 270, "increment": True}, {"value": -90, "increment": True},  {"value": -180, "increment": True},{"value": -270, "increment": True}]
@@ -585,6 +585,7 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
                 phi_l = 0
                 if gt[0] in {"x", "y", "m"}:
                     phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
+                    print(phi_a)
                     ct_idx = get_ct_idx(phi_a, gt)
 
                     if gt in {"x", "y", "xxx", "yyy"}:
