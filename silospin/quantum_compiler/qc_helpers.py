@@ -308,7 +308,9 @@ def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
     ## ct_idx = 15-22 ==> pi pulses (0,90, 180, 270, -90, -180, -270)
     ## ct_idx = 23 - 25 ==> standard pulse delays
 
-    initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": 90, "wave_idx": 0}, "xxx": {"phi": 180, "wave_idx": 0}, "yyy": {"phi": -90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": 90, "wave_idx": 1}, "mxxm": {"phi": 180, "wave_idx": 1}, "myym": {"phi": -90, "wave_idx": 1}}
+    #initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": 90, "wave_idx": 0}, "xxx": {"phi": 180, "wave_idx": 0}, "yyy": {"phi": -90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": 90, "wave_idx": 1}, "mxxm": {"phi": 180, "wave_idx": 1}, "myym": {"phi": -90, "wave_idx": 1}}
+    initial_gates = {"y": {"phi": 0, "wave_idx": 0}, "x": {"phi": 90, "wave_idx": 0}, "yyy": {"phi": 180, "wave_idx": 0}, "xxx": {"phi": -90, "wave_idx": 0}, "yy": {"phi": 0, "wave_idx": 1}, "xx": {"phi": 90, "wave_idx": 1}, "myym": {"phi": 180, "wave_idx": 1}, "mxxm": {"phi": -90, "wave_idx": 1}}
+    
     ct = []
     waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]}]
     #Initial phases
