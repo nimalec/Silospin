@@ -307,17 +307,26 @@ def generate_reduced_command_table_v4(n_pi_2, n_pi, arbZ=[]):
     ## ct_idx = 8-14 ==> pi_2 pulses (0,90, 180, 270, -90, -180, -270)
     ## ct_idx = 15-22 ==> pi pulses (0,90, 180, 270, -90, -180, -270)
     ## ct_idx = 23 - 25 ==> standard pulse delays
-    initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": 90, "wave_idx": 0}, "xxx": {"phi": 180, "wave_idx": 0}, "yyy": {"phi": -90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": 90, "wave_idx": 1}, "mxxm": {"phi": 180, "wave_idx": 1}, "myym": {"phi": -90, "wave_idx": 1}}
+
+    #initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": 90, "wave_idx": 0}, "xxx": {"phi": 180, "wave_idx": 0}, "yyy": {"phi": -90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": 90, "wave_idx": 1}, "mxxm": {"phi": 180, "wave_idx": 1}, "myym": {"phi": -90, "wave_idx": 1}}
+    initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": -90, "wave_idx": 0}, "xxx": {"phi": -180, "wave_idx": 0}, "yyy": {"phi": 90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": -90, "wave_idx": 1}, "mxxm": {"phi": -180, "wave_idx": 1}, "myym": {"phi": 90, "wave_idx": 1}}
+
     ct = []
     waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]}]
     #Initial phases
-    phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
-    phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
+    # phases_0_I = [{"value": 0}, {"value": 90}, {"value": 180}, {"value": -90}]
+    # phases_0_Q = [{"value": 90}, {"value": 180}, {"value": 270}, {"value": 0}]
+
+    phases_0_I = [{"value": 0}, {"value": -90}, {"value": -180}, {"value": 90}]
+    phases_0_Q = [{"value": -90}, {"value": -180}, {"value": -270}, {"value": 0}]
+
+
+
 
     #Incremented phases
-    phases_incr = [{"value": 0, "increment": True}, {"value": 90, "increment": True}, {"value": 180, "increment": True}, {"value": 270, "increment": True}, {"value": -90, "increment": True},  {"value": -180, "increment": True},{"value": -270, "increment": True}]
     #phases_incr = [{"value": 0, "increment": True}, {"value": 90, "increment": True}, {"value": 180, "increment": True}, {"value": 270, "increment": True}, {"value": -90, "increment": True},  {"value": -180, "increment": True},{"value": -270, "increment": True}]
-    #phases_incr = [{"value": 0, "increment": True}, {"value": -90, "increment": True}, {"value": -180, "increment": True}, {"value": -270, "increment": True}, {"value": 90, "increment": True},  {"value": 180, "increment": True},{"value": 270, "increment": True}]
+    phases_incr = [{"value": 0, "increment": True}, {"value": -90, "increment": True}, {"value": -180, "increment": True}, {"value": -270, "increment": True}, {"value": 90, "increment": True},  {"value": 180, "increment": True},{"value": 270, "increment": True}]
+
 
     ## 1. Loop through initial gates
     ct_idx = 0
@@ -558,7 +567,8 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
     ct_idxs = {}
     initial_gates = {"x": 0, "y": 1,  "xx": 4,  "yy": 5, "xxx": 2, "yyy": 3,  "mxxm": 5,  "myym": 7}
     arbZ_counter = 24 + n_arbZ
-    phi_ls_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90}
+    #phi_ls_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90}
+    phi_ls_gt = {"x":  0, "y": -90, "xx":  0, "yy": -90 , "xxx":  -180, "yyy": 90, "mxxm": -180, "myym": 90}
 
     for idx in gt_seqs:
         gate_sequence = gt_seqs[idx]
@@ -592,7 +602,6 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
                 if gt[0] in {"x", "y", "m"}:
                     phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
                     ct_idx = get_ct_idx(phi_a, gt)
-                    print(ct_idx)
 
                     if gt in {"x", "y", "xxx", "yyy"}:
                         ct_idx_list.append(ct_idx)
