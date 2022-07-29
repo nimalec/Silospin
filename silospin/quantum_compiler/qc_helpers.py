@@ -566,7 +566,13 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
         gate_sequence = gt_seqs[idx]
         ct_idx_list = []
         #phi_l = 0
-        phi_l = phi_ls_gt[gt_seqs[idx][0]]
+        #phi_l = phi_ls_gt[gt_seqs[idx][0]]
+        gt_0 = gt_seqs[idx][0]
+        if gt_0[0] in {"x", "y", "m"}:
+            phi_l = phi_ls_gt[gt_0]
+        else:
+            phi_l = 0
+
         ii = 0
         for gt in gate_sequence:
             if ii == 0:
