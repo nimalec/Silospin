@@ -558,6 +558,8 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
     ct_idxs = {}
     initial_gates = {"x": 0, "y": 1,  "xx": 4,  "yy": 5, "xxx": 2, "yyy": 3,  "mxxm": 5,  "myym": 7}
     arbZ_counter = 24 + n_arbZ
+
+    phi_l = 0
     for idx in gt_seqs:
         gate_sequence = gt_seqs[idx]
         ct_idx_list = []
@@ -582,9 +584,8 @@ def make_command_table_idxs_v6(gt_seqs, tau_pi_s, tau_pi_2_s, n_arbZ):
                 else:
                     pass
             else:
-                phi_l = 0
+                #phi_l = 0
                 if gt[0] in {"x", "y", "m"}:
-                    print(gt)
                     phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
                     #print(phi_a)
                     ct_idx = get_ct_idx(phi_a, gt)
