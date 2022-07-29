@@ -131,7 +131,8 @@ def quantum_protocol_parser_Zarb(file_path, qubit_lengths, qubit_set = {1,2,3,4}
                     seq_line[str(int(item[0])-1)].append(item[2:len(item)])
                     idx_set.add(int(item[0]))
                     if item[2] == "t":
-                        length_set.append(int(item[2:len(item)]))
+                        #length_set.append(int(item[2:len(item)]))
+                        length_set.append(int(item[3:len(item)]))
                     elif item[2] == "z":
                         length_set.append(32)
                         pass
