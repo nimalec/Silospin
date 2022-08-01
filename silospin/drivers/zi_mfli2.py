@@ -5,7 +5,7 @@ import zhinst.toolkit as tk
 import numpy as np
 
 class MFLI2:
-    def __init__(self, dev_id, server_host = "localhost", server_port = 8004, api_level = 1, sigins = None, dmods = None, oscs = None, sigouts = None, trig_settings = None):
+    def __init__(self, device_id, server_host = "localhost", server_port = 8004, api_level = 1, sigins = None, dmods = None, oscs = None, sigouts = None, trig_settings = None):
         """
          Constructor for MFLI driver.
 
