@@ -80,6 +80,6 @@ class MFLI2:
 
         buffer_size = self._daq_module.getInt("buffersize")
         self._signal_path = "/%s/demods/%d/sample.r" % (device, demod_index)
-        if repetitions > 1:
-            signal_path += ".avg"
+        if self._trigger_settings["repeats"] > 1:
+            self._signal_path += ".avg"
         self._daq_module.subscribe(self._signal_path)
