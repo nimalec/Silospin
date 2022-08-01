@@ -3,6 +3,7 @@ import zhinst
 import zhinst.utils
 import zhinst.toolkit as tk
 import numpy as np
+import time 
 
 class MFLI2:
     def __init__(self, device_id, server_host = "localhost", server_port = 8004, api_level = 1, sigins = None, dmods = None, oscs = None, sigouts = None, trig_settings = None):
@@ -33,7 +34,7 @@ class MFLI2:
         in_channel = 0
         osc_index = 0
         out_channel = 0
-        out_mixer_channel = 0 
+        out_mixer_channel = 0
         ##make list of settings to upload to daq
         self._lockin_settings = [
         ["/%s/sigins/%d/ac" % (device, in_channel), self._sigins[0]["ac"]],
