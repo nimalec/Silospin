@@ -31,7 +31,8 @@ class MFLI2:
 
         demod_index = 0
         in_channel = 0
-        osc_index = 0  
+        osc_index = 0
+        out_channel = 0 
         ##make list of settings to upload to daq
         self._lockin_settings = [
         ["/%s/sigins/%d/ac" % (device, in_channel), self._sigins[0]["ac"]],
