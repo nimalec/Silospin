@@ -30,13 +30,13 @@ class MFLI2:
         self._sigouts = {0: {"on": 1, "enable":  1, "range": 1 , "amplitude": 1}}
 
         demod_index = 0
-        in_channel = 0  
+        in_channel = 0
         ##make list of settings to upload to daq
         self._lockin_settings = [
         ["/%s/sigins/%d/ac" % (device, in_channel), self._sigins[0]["ac"]],
         ["/%s/sigins/%d/range" % (device, in_channel), self._sigins[0]["range"]],
-        ["/%s/demods/%d/enable" % (device, demod_index), self._sigins[0]["enable"]],
-        ["/%s/demods/%d/rate" % (device, demod_index), self._sigins[0]["rate"]],
+        ["/%s/demods/%d/enable" % (device, demod_index), self._demods[0]["enable"]],
+        ["/%s/demods/%d/rate" % (device, demod_index), self._demods[0]["rate"]],
         ["/%s/demods/%d/adcselect" % (device, demod_index), 0],
         ["/%s/demods/%d/order" % (device, demod_index), self._demods[0]["order"]],
         ["/%s/demods/%d/timeconstant" % (device, demod_index),  self._demods[0]["timeconstant"]],
