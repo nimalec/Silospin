@@ -78,7 +78,7 @@ class MFLI2:
         self._daq_module.set("duration", self._trigger_settings["trig_duration"])
         self._daq_module.set("grid/cols", n_samples)
 
-        buffer_size = daq_module.getInt("buffersize")
+        buffer_size = self._daq_module.getInt("buffersize")
         self._signal_path = "/%s/demods/%d/sample.r" % (device, demod_index)
         if repetitions > 1:
             signal_path += ".avg"
