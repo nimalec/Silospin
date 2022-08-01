@@ -85,3 +85,4 @@ class MFLI2:
         self._daq_module.subscribe(self._signal_path)
         return_flat_data_dict = True
         data = self._daq_module.read(return_flat_data_dict)
+        self._samples = data[self._signal_path]
