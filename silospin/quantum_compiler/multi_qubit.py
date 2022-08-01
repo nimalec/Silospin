@@ -703,7 +703,7 @@ class MultiQubitGST_v4:
             self._awg._awgs["awg"+str(idx+1)].enable(True)
 
 class MultiQubitGST_v5:
-    def __init__(self, gst_file_path, awg, qubits = [0,1,2,3], hard_trigger = False, trigger_channel=0):
+    def __init__(self, gst_file_path, awg, qubits = [0,1,2,3], hard_trigger = False, trigger_channel=0, n_av = 1):
         self._gst_path = gst_file_path
         self._awg = awg
         self._sample_rate = 2.4e9
@@ -777,9 +777,11 @@ class MultiQubitGST_v5:
                      seq = make_gateset_sequencer_fast_v2(n_seq)
                  else:
                      if idx == trigger_channel:
-                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
+                         #seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
+                         seq = make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=True)
                      else:
-                         seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
+                         #seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
+                         seq = make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=False)
                  sequence += seq
 
             command_code[idx] = command_code[idx] + sequence
