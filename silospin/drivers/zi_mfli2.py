@@ -66,7 +66,7 @@ class MFLI2:
         trigger_path = "/%s/demods/%d/sample.trigin1" % (self._device, demod_index)
         self._trigger_settings =  {"type": 1, "level": 0.8,  "edge": 1, "n_pulses": 2, "repeats": 1, "trig_path": trigger_path,
         "trig_count": 1, "hold_count": 0, "hold_time": 0, "delay":  0, "gridmode": 4, "trig_duration": 0.8}
-        n_samples =  int(self._demods[0]["rate"]*self._trigger_settings["trigger_duration"])
+        n_samples =  int(self._demods[0]["rate"]*self._trigger_settings["trig_duration"])
 
         self._daq_module.set("triggernode",self._trigger_settings["trig_path"])
         self._daq_module.set("type", self._trigger_settings["type"])
