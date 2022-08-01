@@ -3,7 +3,7 @@ import zhinst
 import zhinst.utils
 import zhinst.toolkit as tk
 import numpy as np
-import time 
+import time
 
 class MFLI2:
     def __init__(self, device_id, server_host = "localhost", server_port = 8004, api_level = 1, sigins = None, dmods = None, oscs = None, sigouts = None, trig_settings = None):
@@ -66,7 +66,7 @@ class MFLI2:
         trigger_path = "/%s/demods/%d/sample.trigin1" % (self._device, demod_index)
         self._trigger_settings =  {"type": 1, "level": 0.8,  "edge": 1, "n_pulses": 2, "repeats": 1, "trig_path": trigger_path,
         "trig_count": 1, "hold_count": 0, "hold_time": 0, "delay":  0, "gridmode": 4, "trig_duration": 0.8}
-        n_samples =  int(self._demods[0]["rate"]*self._trigger_settings[0]["trigger_duration"])
+        n_samples =  int(self._demods[0]["rate"]*self._trigger_settings["trigger_duration"])
 
         self._daq_module.set("triggernode",self._trigger_settings["trig_path"])
         self._daq_module.set("type", self._trigger_settings["type"])
