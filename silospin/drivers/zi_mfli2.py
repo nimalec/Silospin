@@ -14,7 +14,7 @@ class MFLI2:
            None.
         """
 
-        self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "connection_status" : False}
+        self._connection_settings = {"hdawg_id" : device_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "connection_status" : False}
         (daq, device, _) = zhinst.utils.create_api_session(device_id, apilevel_example, server_host=server_host, server_port=server_port)
         self._daq = daq
         self._device = device
