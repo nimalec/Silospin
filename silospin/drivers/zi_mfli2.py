@@ -83,3 +83,5 @@ class MFLI2:
         if self._trigger_settings["repeats"] > 1:
             self._signal_path += ".avg"
         self._daq_module.subscribe(self._signal_path)
+        return_flat_data_dict = True
+        data = self._daq_module.read(return_flat_data_dict)
