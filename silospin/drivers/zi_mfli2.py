@@ -123,7 +123,7 @@ class MFLI2:
            returned_signal_paths = [
             signal_path.lower() for signal_path in data_read.keys()
             ]
-           progress = daq_module.progress()[0]
+
            for signal_path in signal_paths:
                if signal_path.lower() in returned_signal_paths:
                    for index, signal_burst in enumerate(data_read[signal_path.lower()]):
