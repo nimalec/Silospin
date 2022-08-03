@@ -94,7 +94,7 @@ class MFLI2:
         # self._data = data
         #self._samples = data[self._signal_path]
 
-    def record_data_daq_continuous(self, signals, total_duration, burst_duration):
+    def record_data_daq_continuous(self, total_duration, burst_duration):
         ##Signal paths among: demods/0/sample (".x", ".y"), Aux, Scope modules
         ##Acquisiton time in seconds
         ## Trig type: 0 (cont. triggering), 6 (HW triggering), etc.
