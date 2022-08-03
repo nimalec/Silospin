@@ -119,7 +119,7 @@ class MFLI2:
         ts0 = np.nan
 
         def read_data_update_plot(data, timestamp0):
-           data_read = daq_module.read(True)
+           data_read = self._daq_module.read(True)
            returned_signal_paths = [
             signal_path.lower() for signal_path in data_read.keys()
             ]
