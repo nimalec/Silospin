@@ -846,8 +846,8 @@ class MultiQubitRamseyTypes:
         for idx in taus_pulse:
             qubits.append(idx)
             n_rect = ceil(self._sample_rate*taus_pulse[idx]/32)*32
+            self._sequences[idx] = make_ramsey_sequencer_v2(n_start, n_end, dn, n_rect, npoints_av, n_fr)
             #self._sequences[idx] = make_ramsey_sequencer(n_start, n_end, dn, n_rect, npoints_av)
-            self._sequences[idx] = make_ramsey_sequencer(n_start, n_end, dn, n_rect, npoints_av)
             self._awg.load_sequence(self._sequences[idx], awg_idx=idx)
             if axis == "x":
                 self._awg.set_phase(self._channel_idxs[idx][0]+1, 0)
