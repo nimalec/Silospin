@@ -118,7 +118,7 @@ class MFLI2:
         clockbase = float(self._daq.getInt(f"/{device}/clockbase"))
         ts0 = np.nan
 
-       def read_data_update_plot(data, timestamp0):
+        def read_data_update_plot(data, timestamp0):
            data_read = daq_module.read(True)
            returned_signal_paths = [
             signal_path.lower() for signal_path in data_read.keys()
@@ -142,14 +142,14 @@ class MFLI2:
 
            return data, timestamp0
 
-    self._data_module.execute()
-    t_update = 0.9*burst_duration
-    while not self._daq_module.finished():
+     self._data_module.execute()
+     t_update = 0.9*burst_duration
+     while not self._daq_module.finished():
         t0_loop = time.time()
         data, ts0 = read_data_update_plot(data, ts0)
         time.sleep(max(0, t_update - (time.time() - t0_loop)))
-    data, _ = read_data_update_plot(data, ts0)
-    return data
+     data, _ = read_data_update_plot(data, ts0)
+     return data
 
 
 
