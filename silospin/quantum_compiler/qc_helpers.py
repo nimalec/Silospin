@@ -658,3 +658,12 @@ def make_ramsey_sequencer(n_start, n_stop, dn, n_rect, n_av):
 def make_rabi_sequencer(n_start, n_stop, dn, n_wait, n_av):
     sequence = "cvar i;\nconst n_start="+str(n_start)+";\nconst n_stop="+str(n_stop)+ ";\nconst dn="+str(dn)+";\nconst n_wait="+str(n_wait)+";\n  \nfor (i = n_start; i < n_stop; i = i + dn){\n   repeat("+str(n_av)+"){\n     setTrigger(1);setTrigger(0);\n     playWave(rect(i,1));\n     waitWave();\n     playZero(n_wait);\n     waitWave();\n   }\n}"
     return sequence
+
+
+def make_ramsey_sequencer_v2(n_start, n_stop, dn, n_rect, n_av, n_fr):
+    sequence = "cvar i;\nconst n_start="+str(n_start)+";\nconst n_stop="+str(n_stop)+ ";\nconst dn="+str(dn)+";\nconst n_samp="+str(n_rect)+";\nwave pulse=rect(n_samp,1);\n\n"+"repeat("+str(n_fr)+"){\n"+"for (i = n_start; i < n_stop; i = i + dn){\n   repeat("+str(n_av)+"){\n     setTrigger(1);setTrigger(0);\n     playWave(pulse);\n     waitWave();\n     playZero(i);\n     waitWave();\n     playWave(pulse);\n     waitWave();\n   }\n}}"
+    return sequence
+
+def make_rabi_sequencer_v2(n_start, n_stop, dn, n_wait, n_av, n_fr):
+    sequence = "cvar i;\nconst n_start="+str(n_start)+";\nconst n_stop="+str(n_stop)+ ";\nconst dn="+str(dn)+";\nconst n_wait="+str(n_wait)+";\n  \nfor (i = n_start; i < n_stop; i = i + dn){\n   repeat("+str(n_av)+"){\n     setTrigger(1);setTrigger(0);\n     playWave(rect(i,1));\n     waitWave();\n     playZero(n_wait);\n     waitWave();\n   }\n}"
+    return sequence

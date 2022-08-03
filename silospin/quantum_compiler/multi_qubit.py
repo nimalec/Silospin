@@ -823,7 +823,7 @@ class MultiQubitGST_v5:
 
 class MultiQubitRamseyTypes:
     ##should generalize for all qubits ==> only change will be pulse type
-    def __init__(self, awg, t_range, npoints_t, npoints_av, taus_pulse, axis = "x", sample_rate = 2.4e9):
+    def __init__(self, awg, t_range, npoints_t, npoints_av, taus_pulse, axis = "x", sample_rate = 2.4e9, n_fr=1):
         ##taus_pulse  ==> dictionary
         self._sample_rate = sample_rate
         self._awg = awg
@@ -846,7 +846,8 @@ class MultiQubitRamseyTypes:
         for idx in taus_pulse:
             qubits.append(idx)
             n_rect = ceil(self._sample_rate*taus_pulse[idx]/32)*32
-            self._sequences[idx] = make_ramsey_sequencer(n_start, n_end, dn, n_rect, npoints_av)
+            #self._sequences[idx] = make_ramsey_sequencer(n_start, n_end, dn, n_rect, npoints_av)
+            self._sequences[idx] = make_ramsey_sequencer_v2(n_start, n_end, dn, n_rect, npoints_av, n_fr)
             self._awg.load_sequence(self._sequences[idx], awg_idx=idx)
             if axis == "x":
                 self._awg.set_phase(self._channel_idxs[idx][0]+1, 0)
