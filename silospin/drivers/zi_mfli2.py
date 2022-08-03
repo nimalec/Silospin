@@ -108,7 +108,7 @@ class MFLI2:
         signal_paths = []
         demod_path = f"/{device}/demods/0/sample"
         signal_paths.append(".x")
-        signal_paths.append(".y")
+        #signal_paths.append(".y")
 
         ##make signal paths
         data = {}
@@ -149,6 +149,7 @@ class MFLI2:
            data, ts0 = read_data_update_plot(data, ts0)
            time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0)
+
         return data
 
 
