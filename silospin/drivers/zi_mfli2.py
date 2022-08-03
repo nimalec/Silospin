@@ -15,11 +15,17 @@ class MFLI2:
            None.
         """
         (daq, device, _) = zhinst.utils.create_api_session(device_id, api_level, server_host=server_host, server_port=server_port)
-        self._connection_settings = {"mfli_id" : device_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "connection_status" : False}
+        self._connection_settings = {"mfli_id" : device, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "connection_status" : False}
         self._daq = daq
         self._device = device
         zhinst.utils.disable_everything(self._daq, self._device)
         zhinst.utils.api_server_version_check(self._daq)
+        self._daq_module = self._daq.dataAcquisitionModule()
+        self._daq_module.set("device", device)
+        self._daq_module.set("grid/mode", 4)
+        self._daq_sample_rate = 857000
+
+
 
         ##setting for Signal input (0 refers to channel 0)
         # self._sigins = {0: {"ac": 0, "imp50": 0, "range": 1}}
@@ -88,6 +94,68 @@ class MFLI2:
         # self._data = data
         #self._samples = data[self._signal_path]
 
-    #def record_data_daq():
+    def record_data_daq_continuous(self, signals, total_duration, burst_duration):
+        ##Signal paths among: demods/0/sample (".x", ".y"), Aux, Scope modules
+        ##Acquisiton time in seconds
+        ## Trig type: 0 (cont. triggering), 6 (HW triggering), etc.
+        n_cols = int(np.ceil(self._daq_sample_rate*burst_duration))
+        n_bursts = int(np.ceil(total_duration/burst_duration))
+        self._daq_module.set("type", 0)
+        self._daq_module.set("count", n_bursts)
+        self._daq_module.set("duration", burst_duration)
+        self._daq_module.set("grid/cols", n_cols)
+        device = self._connection_settings["mfli_id"]
+        signal_paths = []
+        demod_path = f"/{device}/demods/0/sample"
+        signal_paths.append(".x")
+        signal_paths.append(".y")
+
+        ##make signal paths
+        data = {}
+        for pth in signal_paths:
+            self._daq_module.subscribe(pth)
+            data[pth] = []
+        clockbase = float(self._daq.getInt(f"/{device}/clockbase"))
+        ts0 = np.nan
+
+       def read_data_update_plot(data, timestamp0):
+           data_read = daq_module.read(True)
+           returned_signal_paths = [
+            signal_path.lower() for signal_path in data_read.keys()
+            ]
+           progress = daq_module.progress()[0]
+           for signal_path in signal_paths:
+               if signal_path.lower() in returned_signal_paths:
+                   for index, signal_burst in enumerate(data_read[signal_path.lower()]):
+                       if np.any(np.isnan(timestamp0)):
+                           timestamp0 = signal_burst["timestamp"][0, 0]
+                       t = (signal_burst["timestamp"][0, :] - timestamp0) / clockbase
+                       value = signal_burst["value"][0, :]
+                       num_samples = len(signal_burst["value"][0, :])
+                       dt = (
+                           signal_burst["timestamp"][0, -1]
+                           - signal_burst["timestamp"][0, 0]
+                       ) / clockbase
+                       data[signal_path].append(signal_burst)
+               else:
+                   pass
+
+           return data, timestamp0
+
+    self._data_module.execute()
+    t_update = 0.9*burst_duration
+    while not self._daq_module.finished():
+        t0_loop = time.time()
+        data, ts0 = read_data_update_plot(data, ts0)
+        time.sleep(max(0, t_update - (time.time() - t0_loop)))
+    data, _ = read_data_update_plot(data, ts0)
+    return data
+
+
+
+
+
+
+
 
     #def record_data_scope():
