@@ -104,9 +104,9 @@ class MFLI2:
         self._daq_module.set("count", n_bursts)
         self._daq_module.set("duration", burst_duration)
         self._daq_module.set("grid/cols", n_cols)
-        self._daq.set(f"/{device}/demods/0/enable",1)
-
         device = self._connection_settings["mfli_id"]
+        
+        self._daq.set(f"/{device}/demods/0/enable",1)
         signal_paths = []
         demod_path = f"/{device}/demods/0/sample"
         signal_paths.append(".x")
