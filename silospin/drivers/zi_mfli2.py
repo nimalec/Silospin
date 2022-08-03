@@ -142,7 +142,7 @@ class MFLI2:
 
            return data, timestamp0
 
-        self._data_module.execute()
+        self._daq_module.execute()
         t_update = 0.9*burst_duration
         while not self._daq_module.finished():
            t0_loop = time.time()
