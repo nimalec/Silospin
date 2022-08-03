@@ -142,14 +142,14 @@ class MFLI2:
 
            return data, timestamp0
 
-      self._data_module.execute()
-      t_update = 0.9*burst_duration
-      while not self._daq_module.finished():
-        t0_loop = time.time()
-        data, ts0 = read_data_update_plot(data, ts0)
-        time.sleep(max(0, t_update - (time.time() - t0_loop)))
-      data, _ = read_data_update_plot(data, ts0)
-      return data
+        self._data_module.execute()
+        t_update = 0.9*burst_duration
+        while not self._daq_module.finished():
+           t0_loop = time.time()
+           data, ts0 = read_data_update_plot(data, ts0)
+           time.sleep(max(0, t_update - (time.time() - t0_loop)))
+        data, _ = read_data_update_plot(data, ts0)
+        return data
 
 
 
