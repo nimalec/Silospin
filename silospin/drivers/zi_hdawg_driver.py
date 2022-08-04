@@ -75,6 +75,7 @@ class HdawgDriver:
 
         self._command_tables =  {"awg1": self._hdawg.awgs[0].commandtable(), "awg2": self._hdawg.awgs[1].commandtable(), "awg3": self._hdawg.awgs[2].commandtable(), "awg4": self._hdawg.awgs[3].commandtable()}
         self._sequences =  {"awg1": self._hdawg.awgs[0].sequencer(), "awg2": self._hdawg.awgs[0].sequencer(), "awg3": self._hdawg.awgs[0].sequencer(), "awg4": self._hdawg.awgs[0].sequencer()}
+        self._sequences =  {"awg1": self._hdawg.awgs[0].waveform(), "awg2": self._hdawg.awgs[0].waveform(), "awg3": self._hdawg.awgs[0].waveform(), "awg4": self._hdawg.awgs[0].waveform()}
         #self._waveforms = {"awg1": self._hdawg.awgs[0].waveform(), "awg2": self._hdawg.awgs[1].waveform(), "awg3": self._hdawg.awgs[2].waveform(), "awg4": self._hdawg.awgs[3].waveform()}
 
     def get_connection_settings(self, param):
