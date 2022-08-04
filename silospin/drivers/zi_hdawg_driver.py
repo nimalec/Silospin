@@ -59,10 +59,11 @@ class HdawgDriver:
         # ##Should add exception handeling here
         self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "interface" : interface, "connection_status" : False}
         session = Session(server_host)
-        self._hdawg = session.connect_device(dev_id)
-        self._daq = session.daq_server
+        self._session = session
+        self._hdawg = self._session.connect_device(dev_id)
+        self._daq = self._session.daq_server
 
-        if session.server_port:
+        if self._session.server_port:
             self._connection_settings["connection_status"] = True
         else:
             self._connection_settings["connection_status"] = False
@@ -76,7 +77,6 @@ class HdawgDriver:
         self._command_tables =  {"awg1": self._hdawg.awgs[0].commandtable(), "awg2": self._hdawg.awgs[1].commandtable(), "awg3": self._hdawg.awgs[2].commandtable(), "awg4": self._hdawg.awgs[3].commandtable()}
         self._sequences =  {"awg1": self._hdawg.awgs[0].sequencer(), "awg2": self._hdawg.awgs[0].sequencer(), "awg3": self._hdawg.awgs[0].sequencer(), "awg4": self._hdawg.awgs[0].sequencer()}
         self._waveforms =  {"awg1": self._hdawg.awgs[0].waveform(), "awg2": self._hdawg.awgs[0].waveform(), "awg3": self._hdawg.awgs[0].waveform(), "awg4": self._hdawg.awgs[0].waveform()}
-        #self._waveforms = {"awg1": self._hdawg.awgs[0].waveform(), "awg2": self._hdawg.awgs[1].waveform(), "awg3": self._hdawg.awgs[2].waveform(), "awg4": self._hdawg.awgs[3].waveform()}
 
     def get_connection_settings(self, param):
       """
@@ -104,7 +104,10 @@ class HdawgDriver:
             raise ValueError("'param' must be a connection setting parameters.")
       except ValueError:
          raise
-
+      #
+      # if param == "connection_status":
+      #     self._connection_settings[param] =
+      #
       return self._connection_settings[param]
 
     def get_osc_freq(self, osc_num):
