@@ -21,6 +21,7 @@ class MFLI2:
         zhinst.utils.disable_everything(self._daq, self._device)
         zhinst.utils.api_server_version_check(self._daq)
         self._daq_module = self._daq.dataAcquisitionModule()
+        self._daq.set(f"/{device}/demods/0/enable",1)
         self._daq_module.set("device", device)
         self._daq_module.set("grid/mode", 4)
         self._daq_sample_rate = 857000
@@ -106,11 +107,9 @@ class MFLI2:
         self._daq_module.set("grid/cols", n_cols)
         device = self._connection_settings["mfli_id"]
 
-        self._daq.set(f"/{device}/demods/0/enable",1)
         signal_paths = []
         demod_path = f"/{device}/demods/0/sample"
         signal_paths.append(".x")
-        #signal_paths.append(".y")
 
         ##make signal paths
         data = {}
@@ -151,14 +150,7 @@ class MFLI2:
            data, ts0 = read_data_update_plot(data, ts0)
            time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0)
-
         return data
-
-
-
-
-
-
 
 
     #def record_data_scope():
