@@ -104,10 +104,15 @@ class HdawgDriver:
             raise ValueError("'param' must be a connection setting parameters.")
       except ValueError:
          raise
-      #
-      # if param == "connection_status":
-      #     self._connection_settings[param] =
-      #
+
+      if param == "connection_status":
+          if self._session.server_port:
+              self._connection_settings[param] = True
+          else:
+               self._connection_settings[param] = False
+      else:
+          pass
+
       return self._connection_settings[param]
 
     def get_osc_freq(self, osc_num):
