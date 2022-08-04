@@ -80,8 +80,8 @@ class HdawgDriver:
 
 
 
-    def disconnect_awg(self, param):
-        self._session.disconnect_device()
+    def disconnect_awg(self):
+        self._session.disconnect_device(self._connection_settings["hdawg_id"])
 
     def get_connection_settings(self, param):
       """
