@@ -78,6 +78,11 @@ class HdawgDriver:
         self._sequences =  {"awg1": self._hdawg.awgs[0].sequencer(), "awg2": self._hdawg.awgs[0].sequencer(), "awg3": self._hdawg.awgs[0].sequencer(), "awg4": self._hdawg.awgs[0].sequencer()}
         self._waveforms =  {"awg1": self._hdawg.awgs[0].waveform(), "awg2": self._hdawg.awgs[0].waveform(), "awg3": self._hdawg.awgs[0].waveform(), "awg4": self._hdawg.awgs[0].waveform()}
 
+
+
+    def disconnect_awg(self, param):
+        self._session.disconnect_device()
+
     def get_connection_settings(self, param):
       """
         Getter function for HDAWG connection settings.
