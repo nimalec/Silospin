@@ -483,6 +483,7 @@ class HdawgDriver:
         -------
         Python sequence program (str).
        """
+       self._sequences["awg"+str(awg_idx+1)] = self._hdawg.awgs[awg_idx].sequencer(),
        return self._sequences["awg"+str(awg_idx+1)]
 
     # def load_sequence(self, seq):
