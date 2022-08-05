@@ -544,7 +544,6 @@ class HdawgDriver:
 
        #self._waveforms["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].waveform()
        return self._hdawg.awgs[awg_num-1].waveform()
-     #  return self._waveforms["awg"+str(awg_num)]
 
     def get_run_status(self, awg_num):
        """

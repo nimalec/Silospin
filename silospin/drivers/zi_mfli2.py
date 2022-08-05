@@ -18,15 +18,12 @@ class MFLI2:
         self._connection_settings = {"mfli_id" : device, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "connection_status" : False}
         self._daq = daq
         self._device = device
-        zhinst.utils.disable_everything(self._daq, self._device)
         zhinst.utils.api_server_version_check(self._daq)
+        self._daq.set(f"/{self._device}/demods/0/enable",1)
         self._daq_module = self._daq.dataAcquisitionModule()
-        self._daq.set(f"/{device}/demods/0/enable",1)
-        self._daq_module.set("device", device)
+        self._daq_module.set("device", self._device)
         self._daq_module.set("grid/mode", 4)
         self._daq_sample_rate = 857000
-
-
 
         ##setting for Signal input (0 refers to channel 0)
         # self._sigins = {0: {"ac": 0, "imp50": 0, "range": 1}}
@@ -109,7 +106,7 @@ class MFLI2:
 
         signal_paths = []
         demod_path = f"/{device}/demods/0/sample"
-        signal_paths.append(".x")
+        signal_paths.append(demod_path+".x")
 
         ##make signal paths
         data = {}
