@@ -24,6 +24,7 @@ class MFLI2:
         self._daq_module.set("device", self._device)
         self._daq_module.set("grid/mode", 4)
         self._daq_sample_rate = 857000
+        self._daq_data = []
 
         ##setting for Signal input (0 refers to channel 0)
         # self._sigins = {0: {"ac": 0, "imp50": 0, "range": 1}}
@@ -107,6 +108,7 @@ class MFLI2:
         signal_paths = []
         demod_path = f"/{device}/demods/0/sample"
         signal_paths.append(demod_path+".x")
+        self._demod_path = signal_paths[0]
 
         ##make signal paths
         data = {}
@@ -147,7 +149,11 @@ class MFLI2:
            data, ts0 = read_data_update_plot(data, ts0)
            time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0)
-        return data
-
+        #self._daq_data.append(data)
+        data_daq = []
+        for dat in data[self._demod_path]:
+            data_daq.append(dat["value"][0])
+        self._daq_data.append(data_daq)
+        return data_daq
 
     #def record_data_scope():
