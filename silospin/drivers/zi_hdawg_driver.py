@@ -596,7 +596,7 @@ class HdawgDriver:
              raise ValueError("'awg_num' should be between 1 and 4.")
        except ValueError:
           raise
-       self._hdawg.awgs[awg_num-1].compile()
+       self._hdawg.awgs[awg_num-1].single(True)
        #self._hdawg.awgs[awg_num-1].set("compiler/status") = 1
        #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
