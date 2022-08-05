@@ -596,10 +596,9 @@ class HdawgDriver:
              raise ValueError("'awg_num' should be between 1 and 4.")
        except ValueError:
           raise
-       self._hdawg.awgs[awg_num-1].compile()
+       #self._hdawg.awgs[awg_num-1].compile()
+       self._hdawg.awgs[awg_num-1].set("compiler/status") = 1 
        #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
-
-
 
     def load_sequence(self, program, awg_idx=0):
         self._awgs["awg"+str(awg_idx+1)].load_sequencer_program(program)
