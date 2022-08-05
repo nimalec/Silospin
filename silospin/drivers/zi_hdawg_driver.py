@@ -569,8 +569,8 @@ class HdawgDriver:
        except ValueError:
           raise
 
-       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
-       return self._run_status["awg"+str(awg_num)]
+       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+       return self._hdawg.awgs[awg_num-1].is_running
 
 
     def compile_core(self, awg_num):

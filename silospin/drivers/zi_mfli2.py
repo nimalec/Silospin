@@ -150,9 +150,9 @@ class MFLI2:
            time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0)
         data_daq = []
+        t_grid = np.linspace(0,burst_duration,n_cols)
         for dat in data[self._demod_path]:
-            data_daq.append([np.linspace(0,burst_duration,len(dat["value"][0])), dat["value"][0]])
-            
+            data_daq.append([t_grid, dat["value"][0]])
         self._daq_data.append(data_daq)
         return data_daq
 
