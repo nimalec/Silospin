@@ -545,32 +545,32 @@ class HdawgDriver:
        #self._waveforms["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].waveform()
        return self._hdawg.awgs[awg_num-1].waveform()
 
-    def get_run_status(self, awg_num):
-       """
-        Getter function for run status of selected AWG core.
-
-        Parameters
-        ----------
-        awg_num: int
-            AWG index number between 1-4.
-
-        Returns
-        -------
-        Run status for selected AWG core [bool].
-       """
-       try:
-          if type(awg_num) is not int:
-             raise TypeError("'awg_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if awg_num < 1 or awg_num > 4:
-             raise ValueError("'awg_num' should be between 1 and 4.")
-       except ValueError:
-          raise
-
-       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
-       return self._hdawg.awgs[awg_num-1].is_running()
+    # def get_run_status(self, awg_num):
+    #    """
+    #     Getter function for run status of selected AWG core.
+    #
+    #     Parameters
+    #     ----------
+    #     awg_num: int
+    #         AWG index number between 1-4.
+    #
+    #     Returns
+    #     -------
+    #     Run status for selected AWG core [bool].
+    #    """
+    #    try:
+    #       if type(awg_num) is not int:
+    #          raise TypeError("'awg_num' should be an integer.")
+    #    except TypeError:
+    #       raise
+    #    try:
+    #       if awg_num < 1 or awg_num > 4:
+    #          raise ValueError("'awg_num' should be between 1 and 4.")
+    #    except ValueError:
+    #       raise
+    #
+    #    #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+    #    return self._hdawg.awgs[awg_num-1].is_running()
 
 
     def compile_core(self, awg_num):
@@ -597,7 +597,7 @@ class HdawgDriver:
        except ValueError:
           raise
        self._hdawg.awgs[awg_num-1].compile()
-       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
 
 
@@ -629,7 +629,7 @@ class HdawgDriver:
        except ValueError:
           raise
        self._hdawg.awgs[awg_num-1].compile_and_upload_waveforms()
-       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
     # def set_output(self):
     #  # """
@@ -680,7 +680,7 @@ class HdawgDriver:
 
        self._hdawg.awgs[awg_num-1].set_sequence_params(sequence_type="Simple")
        self._hdawg.awgs[awg_num-1].queue_waveform(wave1, wave2, delay)
-       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
     def replace_waveform(self, awg_num, wave1, wave2=[], delay=0):
        """
@@ -713,7 +713,7 @@ class HdawgDriver:
           raise
 
        self._hdawg.awgs[awg_num-1].replace_waveform(wave1, wave2, delay)
-       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
     def empty_queue(self, awg_num):
        """
@@ -739,7 +739,7 @@ class HdawgDriver:
        except ValueError:
           raise
        self._hdawg.awgs[awg_num-1].reset_queue()
-       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
 
     def run_core(self, awg_num):
@@ -766,7 +766,7 @@ class HdawgDriver:
        except ValueError:
           raise
        self._hdawg.awgs[awg_num-1].run()
-       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
 
     def stop_core(self, awg_num):
@@ -793,7 +793,7 @@ class HdawgDriver:
        except ValueError:
           raise
        self._hdawg.awgs[awg_num-1].stop()
-       self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+      # self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
 
     def upload_waveforms(self,awg_num):
