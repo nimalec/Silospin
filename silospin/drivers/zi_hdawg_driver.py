@@ -82,8 +82,7 @@ class HdawgDriver:
 
     def disconnect_awg(self):
         self._session.disconnect_device(self._connection_settings["hdawg_id"])
-        self._connection_settings["connection_status"] = False 
-
+        #self._connection_settings["connection_status"] = False
 
     def get_connection_settings(self, param):
       """
@@ -258,7 +257,9 @@ class HdawgDriver:
             raise ValueError("'sin_num' should be between 1 and 8.")
       except ValueError:
          raise
-      return self._sines["sin"+str(sin_num)]
+      sine = {"osc" : self._hdawg.sines[sin_num-1].oscselect(), "phaseshift": self._hdawg.sines[sin_num-1].phaseshift(), "harmonic" : self._hdawg.sines[sin_num-1].harmonic(), "amp1" : self._hdawg.sines[sin_num-1].amplitudes[0]() , "amp2" :self._hdawg.sines[sin_num-1].amplitudes[1]()}
+      return sine
+
 
 
     def assign_osc(self, sin_num, osc_num):
@@ -418,8 +419,8 @@ class HdawgDriver:
        except TypeError:
           raise
 
-
-       return self._sines["sin"+str(sin_num)]["amp"+str(wave_num)]
+       self._sines["sin"+str(sin_num)]["amp"+str(wave_num-1)] = self._hdawg.sines[sin_num-1].amplitudes[wave_num-1]()
+       return self._sines["sin"+str(sin_num)]["amp"+str(wave_num-1)]
 
     def set_out_amp(self, sin_num, wave_num, amp):
        """
