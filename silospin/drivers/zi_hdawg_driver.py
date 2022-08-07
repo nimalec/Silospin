@@ -81,7 +81,7 @@ class HdawgDriver:
         ##Obtain run status for each sequencer
         self._run_status = {}
         for idx in range(4):
-            status = awg._daq.getInt(f"/{self._connection_settings["hdawg_id"]}/awgs/{idx}/sequencer/status")
+            status = awg._daq.getInt(f"/{dev_id}/awgs/{idx}/sequencer/status")
             if status == 0:
                 self._run_status["awg"+int(idx+1)] = True
             else:
