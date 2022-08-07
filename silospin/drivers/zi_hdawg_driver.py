@@ -108,16 +108,16 @@ class HdawgDriver:
 
       params = {"hdawg_name", "hdawg_id",  "server_host", "server_port",  "api_level", "interface",  "connection_status"}
 
-      try:
-         if type(param) is not str:
-            raise TypeError("'param' should be a string.")
-      except TypeError:
-         raise
-      try:
-         if param not in params:
-            raise ValueError("'param' must be a connection setting parameters.")
-      except ValueError:
-         raise
+      # try:
+      #    if type(param) is not str:
+      #       raise TypeError("'param' should be a string.")
+      # except TypeError:
+      #    raise
+      # try:
+      #    if param not in params:
+      #       raise ValueError("'param' must be a connection setting parameters.")
+      # except ValueError:
+      #    raise
 
       if param == "connection_status":
           if self._session.server_port:
@@ -143,16 +143,16 @@ class HdawgDriver:
         -------
         Oscillator frequency in Hz (double).
       """
-      try:
-         if type(osc_num) is not int:
-            raise TypeError("'osc_num' should be an integer.")
-      except TypeError:
-         raise
-      try:
-         if osc_num < 1 or osc_num > 16:
-            raise ValueError("'osc_num' should be between 1 and 16.")
-      except ValueError:
-         raise
+      # try:
+      #    if type(osc_num) is not int:
+      #       raise TypeError("'osc_num' should be an integer.")
+      # except TypeError:
+      #    raise
+      # try:
+      #    if osc_num < 1 or osc_num > 16:
+      #       raise ValueError("'osc_num' should be between 1 and 16.")
+      # except ValueError:
+      #    raise
       self._oscillator_freq["osc"+str(osc_num)] = self._hdawg.oscs[osc_num-1].freq()
       return self._oscillator_freq["osc"+str(osc_num)]
 
@@ -171,16 +171,16 @@ class HdawgDriver:
         -------
         None.
       """
-      try:
-         if type(osc_num) is not int:
-            raise TypeError("'osc_num' should be an integer.")
-      except TypeError:
-         raise
-      try:
-         if osc_num < 1 or osc_num > 16:
-            raise ValueError("'osc_num' should be between 1 and 16.")
-      except ValueError:
-         raise
+      # try:
+      #    if type(osc_num) is not int:
+      #       raise TypeError("'osc_num' should be an integer.")
+      # except TypeError:
+      #    raise
+      # try:
+      #    if osc_num < 1 or osc_num > 16:
+      #       raise ValueError("'osc_num' should be between 1 and 16.")
+      # except ValueError:
+      #    raise
 
       self._oscillator_freq["osc"+str(osc_num)] = freq
       self._hdawg.oscs[osc_num-1].freq(freq)
@@ -199,16 +199,16 @@ class HdawgDriver:
         -------
         Oscillator phase in degrees (double).
       """
-      try:
-         if type(sin_num) is not int:
-            raise TypeError("'sin_num' should be an integer.")
-      except TypeError:
-         raise
-      try:
-         if sin_num < 1 or sin_num > 8:
-            raise ValueError("'sin_num' should be between 1 and 8.")
-      except ValueError:
-         raise
+      # try:
+      #    if type(sin_num) is not int:
+      #       raise TypeError("'sin_num' should be an integer.")
+      # except TypeError:
+      #    raise
+      # try:
+      #    if sin_num < 1 or sin_num > 8:
+      #       raise ValueError("'sin_num' should be between 1 and 8.")
+      # except ValueError:
+      #    raise
 
       return self._hdawg.sines[sin_num-1].phaseshift()
 
@@ -248,42 +248,42 @@ class HdawgDriver:
         -------
         Dictionary of paramaeters defining sine wave in AWG (dict).
       """
-      try:
-         if type(sin_num) is not int:
-            raise TypeError("'sin_num' should be an integer.")
-      except TypeError:
-         raise
-      try:
-         if sin_num < 1 or sin_num > 8:
-            raise ValueError("'sin_num' should be between 1 and 8.")
-      except ValueError:
-         raise
+      # try:
+      #    if type(sin_num) is not int:
+      #       raise TypeError("'sin_num' should be an integer.")
+      # except TypeError:
+      #    raise
+      # try:
+      #    if sin_num < 1 or sin_num > 8:
+      #       raise ValueError("'sin_num' should be between 1 and 8.")
+      # except ValueError:
+      #    raise
       sine = {"osc" : self._hdawg.sines[sin_num-1].oscselect(), "phaseshift": self._hdawg.sines[sin_num-1].phaseshift(), "harmonic" : self._hdawg.sines[sin_num-1].harmonic(), "amp1" : self._hdawg.sines[sin_num-1].amplitudes[0]() , "amp2" :self._hdawg.sines[sin_num-1].amplitudes[1]()}
       return sine
 
 
 
     def assign_osc(self, sin_num, osc_num):
-       try:
-          if type(sin_num) is not int:
-             raise TypeError("'sin_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if sin_num < 1 or sin_num > 8:
-             raise ValueError("'sin_num' should be between 1 and 8.")
-       except ValueError:
-          raise
-       try:
-          if type(osc_num) is not int:
-             raise TypeError("'osc_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if osc_num < 1 or osc_num > 16:
-             raise ValueError("'osc_num' should be between 1 and 16.")
-       except ValueError:
-          raise
+       # try:
+       #    if type(sin_num) is not int:
+       #       raise TypeError("'sin_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if sin_num < 1 or sin_num > 8:
+       #       raise ValueError("'sin_num' should be between 1 and 8.")
+       # except ValueError:
+       #    raise
+       # try:
+       #    if type(osc_num) is not int:
+       #       raise TypeError("'osc_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if osc_num < 1 or osc_num > 16:
+       #       raise ValueError("'osc_num' should be between 1 and 16.")
+       # except ValueError:
+       #    raise
 
        cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4}
        if self.get_updated_run_status(cores[sin_num]) == True:
@@ -317,46 +317,32 @@ class HdawgDriver:
         None.
        """
 
-       try:
-          if type(sin_num) is not int:
-             raise TypeError("'sin_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if sin_num < 1 or sin_num > 8:
-             raise ValueError("'sin_num' should be between 1 and 8.")
-       except ValueError:
-          raise
-       try:
-          if type(osc_num) is not int:
-             raise TypeError("'osc_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if osc_num < 1 or osc_num > 16:
-             raise ValueError("'osc_num' should be between 1 and 16.")
-       except ValueError:
-          raise
-       try:
-          if type(phase) is not float:
-             raise TypeError("'phase' should be a float.")
-       except TypeError:
-          raise
-       try:
-          if type(harmonic) is not int:
-             raise TypeError("'harmonic' should be an int.")
-       except TypeError:
-          raise
-       try:
-          if type(amp1) is not float:
-             raise TypeError("'amp1' should be a float.")
-       except TypeError:
-          raise
-       try:
-          if type(amp2) is not float:
-             raise TypeError("'amp2' should be a float.")
-       except TypeError:
-          raise
+       # try:
+       #    if sin_num < 1 or sin_num > 8:
+       #       raise ValueError("'sin_num' should be between 1 and 8.")
+       # except ValueError:
+       #    raise
+       # try:
+       #    if type(osc_num) is not int:
+       #       raise TypeError("'osc_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if osc_num < 1 or osc_num > 16:
+       #       raise ValueError("'osc_num' should be between 1 and 16.")
+       # except ValueError:
+       #    raise
+       # try:
+       #    if type(phase) is not float:
+       #       raise TypeError("'phase' should be a float.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if type(harmonic) is not int:
+       #       raise TypeError("'harmonic' should be an int.")
+       # except TypeError:
+       #    raise
+
 
 
        cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4}
@@ -384,17 +370,17 @@ class HdawgDriver:
         Returns
         -------
         AWG core (<zhinst.toolkit.control.node_tree.Node> object).
-       """
-       try:
-          if type(awg_num) is not int:
-             raise TypeError("'awg_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if awg_num < 1 or awg_num > 4:
-             raise ValueError("'awg_num' should be between 1 and 4.")
-       except ValueError:
-          raise
+       # """
+       # try:
+       #    if type(awg_num) is not int:
+       #       raise TypeError("'awg_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if awg_num < 1 or awg_num > 4:
+       #       raise ValueError("'awg_num' should be between 1 and 4.")
+       # except ValueError:
+       #    raise
        return self._awgs["awg"+str(awg_num)]
 
     def get_out_amp(self, sin_num, wave_num):
@@ -414,22 +400,22 @@ class HdawgDriver:
         Returns output amplitude in volts.
        """
 
-       try:
-          if type(sin_num) is not int:
-             raise TypeError("'sin_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if sin_num < 1 or sin_num > 8:
-             raise ValueError("'sin_num' should be between 1 and 8.")
-       except ValueError:
-          raise
-
-       try:
-          if type(wave_num) is not int:
-             raise TypeError("'wave_num' should be an integer.")
-       except TypeError:
-          raise
+       # try:
+       #    if type(sin_num) is not int:
+       #       raise TypeError("'sin_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if sin_num < 1 or sin_num > 8:
+       #       raise ValueError("'sin_num' should be between 1 and 8.")
+       # except ValueError:
+       #    raise
+       #
+       # try:
+       #    if type(wave_num) is not int:
+       #       raise TypeError("'wave_num' should be an integer.")
+       # except TypeError:
+       #    raise
 
 
        self._sines["sin"+str(sin_num)]["amp"+str(wave_num-1)] = self._hdawg.sines[sin_num-1].amplitudes[wave_num-1]()
@@ -454,32 +440,32 @@ class HdawgDriver:
         None.
        """
 
-       try:
-          if type(sin_num) is not int:
-             raise TypeError("'sin_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if sin_num < 1 or sin_num > 8:
-             raise ValueError("'sin_num' should be between 1 and 8.")
-       except ValueError:
-          raise
-       try:
-          if type(wave_num) is not int:
-             raise TypeError("'wave_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if type(amp) is not float:
-             raise TypeError("'amp' should be a float.")
-       except TypeError:
-          raise
-
-       try:
-          if amp > 1.0:
-             raise ValueError("Output amplitude should not exceed 0.9 volts")
-       except ValueError:
-          raise
+       # try:
+       #    if type(sin_num) is not int:
+       #       raise TypeError("'sin_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if sin_num < 1 or sin_num > 8:
+       #       raise ValueError("'sin_num' should be between 1 and 8.")
+       # except ValueError:
+       #    raise
+       # try:
+       #    if type(wave_num) is not int:
+       #       raise TypeError("'wave_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if type(amp) is not float:
+       #       raise TypeError("'amp' should be a float.")
+       # except TypeError:
+       #    raise
+       #
+       # try:
+       #    if amp > 1.0:
+       #       raise ValueError("Output amplitude should not exceed 0.9 volts")
+       # except ValueError:
+       #    raise
 
        self._hdawg.sines[sin_num-1].amplitudes[wave_num-1](amp)
        self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
@@ -551,16 +537,16 @@ class HdawgDriver:
         -------
         List of waveforms for AWG core (list of numpy arrays). (list)
        """
-       try:
-          if type(awg_num) is not int:
-             raise TypeError("'awg_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if awg_num < 1 or awg_num > 4:
-             raise ValueError("'awg_num' should be between 1 and 4.")
-       except ValueError:
-          raise
+       # try:
+       #    if type(awg_num) is not int:
+       #       raise TypeError("'awg_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if awg_num < 1 or awg_num > 4:
+       #       raise ValueError("'awg_num' should be between 1 and 4.")
+       # except ValueError:
+       #    raise
 
        #self._waveforms["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].waveform()
        return self._hdawg.awgs[awg_num-1].waveform()
@@ -602,16 +588,16 @@ class HdawgDriver:
         -------
         None.
        """
-       try:
-          if type(awg_num) is not int:
-             raise TypeError("'awg_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if awg_num < 1 or awg_num > 4:
-             raise ValueError("'awg_num' should be between 1 and 4.")
-       except ValueError:
-          raise
+       # try:
+       #    if type(awg_num) is not int:
+       #       raise TypeError("'awg_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if awg_num < 1 or awg_num > 4:
+       #       raise ValueError("'awg_num' should be between 1 and 4.")
+       # except ValueError:
+       #    raise
        self._hdawg.awgs[awg_num-1].single(True)
 
     def load_sequence(self, program, awg_idx=0):
@@ -796,16 +782,16 @@ class HdawgDriver:
         -------
         None.
        """
-       try:
-          if type(awg_num) is not int:
-             raise TypeError("'awg_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if awg_num < 1 or awg_num > 4:
-             raise ValueError("'awg_num' should be between 1 and 4.")
-       except ValueError:
-          raise
+       # try:
+       #    if type(awg_num) is not int:
+       #       raise TypeError("'awg_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if awg_num < 1 or awg_num > 4:
+       #       raise ValueError("'awg_num' should be between 1 and 4.")
+       # except ValueError:
+       #    raise
        # self._hdawg.awgs[awg_num-1].stop()
        self._hdawg.awgs[awg_num-1].enable(False)
       # self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
