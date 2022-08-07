@@ -359,6 +359,7 @@ class HdawgDriver:
 
 
        cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4}
+       print(sin_num)
        if self.get_updated_run_status(cores[sin_num]) == True:
           print("Core currently running, cannot change phase.")
        else:
@@ -673,7 +674,6 @@ class HdawgDriver:
        # self._hdawg.awgs[awg_num-1].stop()
        self._hdawg.awgs[awg_num-1].enable(False)
       # self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
-
 
     def set_command_table(self, ct, awg_index):
         dev = self._connection_settings["hdawg_id"]

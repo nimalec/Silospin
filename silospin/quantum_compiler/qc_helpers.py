@@ -33,8 +33,7 @@ def make_command_table(gate_string, sample_rate, phi_z = 0, del_phi=0):
             phase1 = {"value": 0,  "increment": True}
 
 
-        else:
-            #waveform = {"index": idx, "awgChannel0": ["sigout0","sigout1"]}
+        else: 
             waveform = {"index": wv_idx, "awgChannel0": ["sigout0","sigout1"]}
             dPhi_d = dPhid_gt[gt] + phi_z # WE SHOULD HANDLE PHI_Z SEPARATELY, I THINK AS WRITTEN THINGS WON'T WORK WHEN YOU ADD Z ROTATIONS IN. TO DO A Z WE JUST NEED TO CHECK IF THE GATE IS A Z AND IF SO WE JUST IMMEDIATELY APPLY AN INCREMENT BY THE APPROPRIATE VALUE. YOU SHOULDN'T NEED TO TRACK THE PHASE IN THAT CASE. I.E. Z GATE = A ROTATION OF THE REFERENCE FRAME.
             dPhi_a = dPhi_d - Phi_l
