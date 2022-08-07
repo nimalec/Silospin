@@ -484,10 +484,10 @@ class HdawgDriver:
        self._hdawg.sines[sin_num-1].amplitudes[wave_num-1](amp)
        self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
 
-      cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4}
-      if self.get_updated_run_status(cores[sin_num]) == True:
+       cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4}
+       if self.get_updated_run_status(cores[sin_num]) == True:
           print("Core currently running, cannot change phase.")
-      else:
+       else:
           self._hdawg.sines[sin_num-1].amplitudes[wave_num-1](amp)
           self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
 
