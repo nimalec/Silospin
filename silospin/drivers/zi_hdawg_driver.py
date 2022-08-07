@@ -83,9 +83,9 @@ class HdawgDriver:
         for idx in range(4):
             status = self._daq.getInt(f"/{dev_id}/awgs/{idx}/sequencer/status")
             if status == 0:
-                self._run_status["awg"+int(idx+1)] = True
+                self._run_status["awg"+str(idx+1)] = True
             else:
-                self._run_status["awg"+int(idx+1)] = False
+                self._run_status["awg"+str(idx+1)] = False
 
 
     def disconnect_awg(self):
