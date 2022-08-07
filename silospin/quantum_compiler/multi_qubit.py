@@ -703,7 +703,7 @@ class MultiQubitGST_v4:
             self._awg._awgs["awg"+str(idx+1)].enable(True)
 
 class MultiQubitGST_v5:
-    def __init__(self, gst_file_path, awg, qubits = [0,1,2,3], hard_trigger = False, trigger_channel=0, n_av = 1):
+    def __init__(self, gst_file_path, awg, qubits = [0,1,2,3], hard_trigger = False, trigger_channel=0, n_av = 1, n_fr = 1):
         self._gst_path = gst_file_path
         self._awg = awg
         self._sample_rate = 2.4e9
@@ -770,22 +770,21 @@ class MultiQubitGST_v5:
             ##Make a sequence code
             seq_code[idx] =  make_waveform_placeholders(n_array)
             command_code[idx] = ""
-            sequence = ""
+            ##outer frame loop
+            sequence = "repeat("+str(n_fr)+"){\n "
             for ii in range(len(ct_idxs_all)):
                  n_seq = ct_idxs_all[ii][str(idx)]
                  if hard_trigger == False:
                      seq = make_gateset_sequencer_fast_v2(n_seq)
                  else:
                      if idx == trigger_channel:
-                         #seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True)
                          seq = make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=True)
                      else:
-                         #seq = make_gateset_sequencer_hard_trigger(n_seq, trig_channel=False)
                          seq = make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=False)
                  sequence += seq
 
             command_code[idx] = command_code[idx] + sequence
-            sequencer_code[idx] =  seq_code[idx] + command_code[idx]
+            sequencer_code[idx] =  seq_code[idx] + command_code[idx] + "}"
 
         self._sequencer_code = sequencer_code
 
@@ -808,8 +807,6 @@ class MultiQubitGST_v5:
              self._awg.set_osc_freq(osc_idx, self._qubit_parameters[idx]["mod_freq"])
              self._awg.set_sine(i_idx+1, osc_idx)
              self._awg.set_sine(q_idx+1, osc_idx)
-             # self._awg.set_sine(i_idx, osc_idx)
-             # self._awg.set_sine(q_idx, osc_idx)
              self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[idx]["i_amp_pi"])
              self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[idx]["q_amp_pi"])
              daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables))
