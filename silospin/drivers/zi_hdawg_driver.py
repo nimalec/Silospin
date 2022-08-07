@@ -284,8 +284,13 @@ class HdawgDriver:
              raise ValueError("'osc_num' should be between 1 and 16.")
        except ValueError:
           raise
-       self._sines["sin"+str(sin_num)]["osc_num"] = osc_num
-       self._hdawg.sines[sin_num-1].oscselect(osc_num-1)
+
+       cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4}
+       if self.get_updated_run_status(cores[sin_num]) == True:
+          print("Core currently running, cannot change phase.")
+       else:
+          self._sines["sin"+str(sin_num)]["osc_num"] = osc_num
+          self._hdawg.sines[sin_num-1].oscselect(osc_num-1)
 
 
     def set_sine(self, sin_num, osc_num, phase=0.0, harmonic=1, amp1=1.0, amp2=1.0):
