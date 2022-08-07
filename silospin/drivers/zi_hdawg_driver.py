@@ -554,7 +554,7 @@ class HdawgDriver:
        #self._waveforms["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].waveform()
        return self._hdawg.awgs[awg_num-1].waveform()
 
-    def get_update_run_status(self, awg_num):
+    def get_updated_run_status(self, awg_num):
        """
         Getter function for run status of selected AWG core.
 
