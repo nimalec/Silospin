@@ -87,7 +87,6 @@ class HdawgDriver:
             else:
                 self._run_status["awg"+str(idx+1)] = True
 
-
     def get_all_awg_parameters(self):
         dev_id = self._connection_settings["hdawg_id"]
         self._oscillator_freq = {"osc1" : self._hdawg.oscs[0].freq(), "osc2" :self._hdawg.oscs[1].freq(), "osc3" :self._hdawg.oscs[2].freq(), "osc4" :self._hdawg.oscs[3].freq(), "osc5" :self._hdawg.oscs[4].freq(), "osc6" :self._hdawg.oscs[5].freq(), "osc7" :self._hdawg.oscs[6].freq(), "osc8" :self._hdawg.oscs[7].freq(), "osc9" :self._hdawg.oscs[8].freq(), "osc10" :self._hdawg.oscs[9].freq(), "osc11" :self._hdawg.oscs[10].freq(), "osc12" :self._hdawg.oscs[11].freq(), "osc13" :self._hdawg.oscs[12].freq(), "osc13" :self._hdawg.oscs[12].freq(), "osc14" :self._hdawg.oscs[13].freq(), "osc15" :self._hdawg.oscs[14].freq(), "osc16" :self._hdawg.oscs[15].freq()}
@@ -618,144 +617,8 @@ class HdawgDriver:
         self._awgs["awg"+str(awg_idx+1)].load_sequencer_program(program)
         self._sequences["awg"+str(awg_idx+1)] = program
 
-    # def compile_core_upload_seq(self, awg_num):
-    #    """
-    #     Compiles and uploads sequence currently on AWG core at once.
-    #
-    #     Parameters
-    #     ----------
-    #     awg_num: int
-    #         AWG index number between 1-4.
-    #
-    #     Returns
-    #     -------
-    #     None.
-    #    """
-    #    try:
-    #       if type(awg_num) is not int:
-    #          raise TypeError("'awg_num' should be an integer.")
-    #    except TypeError:
-    #       raise
-    #    try:
-    #       if awg_num < 1 or awg_num > 4:
-    #          raise ValueError("'awg_num' should be between 1 and 4.")
-    #    except ValueError:
-    #       raise
-    #    self._hdawg.awgs[awg_num-1].compile_and_upload_waveforms()
-       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
-    # def set_output(self):
-    #  # """
-    #  #  Initializes connection with HDAWG instrument via server.
-    #  #
-    #  #    First...
-    #  #
-    #  #    Parameters
-    #  #    ----------
-    #  #    additional : str, optional
-    #  #        More info to be displayed (default is None)
-    #  #
-    #  #    Returns
-    #  #    -------
-    #  #    None
-    #  #  """
-    #  test = 1
-    #
-    # def queue_waveform(self, awg_num, wave1, wave2=[], delay=0):
-    #    """
-    #     Queues waveforms onto specified AWG cores for 'Simple' or 'Custom' sequences.
-    #
-    #     Parameters
-    #     ----------
-    #     awg_num: int
-    #         AWG index number between 1-4.
-    #     wave1: array or list.
-    #         A 1D array or list representing.
-    #     wave2: array or list.
-    #         A 1D array or list representing.
-    #     delay: float
-    #         Delay of queued sequences with respect to time origin.
-    #
-    #     Returns
-    #     -------
-    #     None.
-    #    """
-    #    try:
-    #       if type(awg_num) is not int:
-    #          raise TypeError("'awg_num' should be an integer.")
-    #    except TypeError:
-    #       raise
-    #    try:
-    #       if awg_num < 1 or awg_num > 4:
-    #          raise ValueError("'awg_num' should be between 1 and 4.")
-    #    except ValueError:
-    #       raise
-    #
-    #    self._hdawg.awgs[awg_num-1].set_sequence_params(sequence_type="Simple")
-    #    self._hdawg.awgs[awg_num-1].queue_waveform(wave1, wave2, delay)
-       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
-
-    # def replace_waveform(self, awg_num, wave1, wave2=[], delay=0):
-    #    """
-    #     Replaces waveforms for specified AWG core for 'Simple' or 'Custom' sequences.
-    #
-    #     Parameters
-    #     ----------
-    #     awg_num: int
-    #         AWG index number between 1-4.
-    #     wave1: array or list.
-    #         A 1D array or list representing.
-    #     wave2: array or list.
-    #         A 1D array or list representing.
-    #     delay: float
-    #         Delay of queued sequences with respect to time origin.
-    #
-    #     Returns
-    #     -------
-    #     None.
-    #    """
-    #    try:
-    #       if type(awg_num) is not int:
-    #          raise TypeError("'awg_num' should be an integer.")
-    #    except TypeError:
-    #       raise
-    #    try:
-    #       if awg_num < 1 or awg_num > 4:
-    #          raise ValueError("'awg_num' should be between 1 and 4.")
-    #    except ValueError:
-    #       raise
-    #
-    #    self._hdawg.awgs[awg_num-1].replace_waveform(wave1, wave2, delay)
-       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
-
-    # def empty_queue(self, awg_num):
-    #    """
-    #     Resets queue for current AWG core.
-    #
-    #     Parameters
-    #     ----------
-    #     awg_num: int
-    #         AWG index number between 1-4.
-    #
-    #     Returns
-    #     -------
-    #     None.
-    #    """
-    #    try:
-    #       if type(awg_num) is not int:
-    #          raise TypeError("'awg_num' should be an integer.")
-    #    except TypeError:
-    #       raise
-    #    try:
-    #       if awg_num < 1 or awg_num > 4:
-    #          raise ValueError("'awg_num' should be between 1 and 4.")
-    #    except ValueError:
-    #       raise
-    #    self._hdawg.awgs[awg_num-1].reset_queue()
-       #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
-
-
-    def run_core(self, awg_num):
+    def compile_run_core(self, awg_num):
        """
         Resets queue for current AWG core.
 
@@ -768,17 +631,18 @@ class HdawgDriver:
         -------
         None.
        """
-       try:
-          if type(awg_num) is not int:
-             raise TypeError("'awg_num' should be an integer.")
-       except TypeError:
-          raise
-       try:
-          if awg_num < 1 or awg_num > 4:
-             raise ValueError("'awg_num' should be between 1 and 4.")
-       except ValueError:
-          raise
-       #self._hdawg.awgs[awg_num-1].run()
+       # try:
+       #    if type(awg_num) is not int:
+       #       raise TypeError("'awg_num' should be an integer.")
+       # except TypeError:
+       #    raise
+       # try:
+       #    if awg_num < 1 or awg_num > 4:
+       #       raise ValueError("'awg_num' should be between 1 and 4.")
+       # except ValueError:
+       #    raise
+       # #self._hdawg.awgs[awg_num-1].run()
+       self._hdawg.awgs[awg_num-1].single(True)
        self._hdawg.awgs[awg_num-1].enable(True)
        #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
@@ -810,71 +674,6 @@ class HdawgDriver:
        self._hdawg.awgs[awg_num-1].enable(False)
       # self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
 
-
-    # def upload_waveforms(self,awg_num):
-    #   """
-    #   Uploads waveforms currently complied and on the queue.
-    #
-    #   Parameters
-    #   ----------
-    #   awg_num: int
-    #       AWG index number between 1-4.
-    #
-    #   Returns
-    #   -------
-    #     None
-    #   """
-    #   try:
-    #      if type(awg_num) is not int:
-    #         raise TypeError("'awg_num' should be an integer.")
-    #   except TypeError:
-    #      raise
-    #   try:
-    #      if awg_num < 1 or awg_num > 4:
-    #         raise ValueError("'awg_num' should be between 1 and 4.")
-    #   except ValueError:
-    #      raise
-    #   self._hdawg.awgs[awg_num-1].upload_waveforms()
-
-    # def wait_core(self,awg_num,timeout=10,sleep_time=0.005):
-    #   """
-    #   Waits until AWG core is finished.
-    #
-    #   Parameters
-    #   ----------
-    #   awg_num: int
-    #       AWG index number between 1-4.
-    #   timeout: float
-    #       Max wait time in seconds (default set to 10 seconds).
-    #   sleep_time: float
-    #       Time to wait between requesting AWG state in seconds (default set to 0.005 seconds).
-    #
-    #   Returns
-    #   -------
-    #     None
-    #   """
-    #   try:
-    #      if type(awg_num) is not int:
-    #         raise TypeError("'awg_num' should be an integer.")
-    #   except TypeError:
-    #      raise
-    #   try:
-    #      if awg_num < 1 or awg_num > 4:
-    #         raise ValueError("'awg_num' should be between 1 and 4.")
-    #   except ValueError:
-    #      raise
-    #   try:
-    #      if type(timeout) is not float:
-    #         raise TypeError("'timeout' should be a float.")
-    #   except TypeError:
-    #      raise
-    #   try:
-    #      if type(sleep_time) is not float:
-    #         raise TypeError("'sleep_time' should be a float.")
-    #   except TypeError:
-    #      raise
-    #
-    #   self._hdawg.awgs[awg_num-1].wait_done(timeout,sleep_time)
 
     def set_command_table(self, ct, awg_index):
         dev = self._connection_settings["hdawg_id"]
