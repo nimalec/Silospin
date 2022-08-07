@@ -78,6 +78,14 @@ class HdawgDriver:
         self._sequences =  {"awg1": self._hdawg.awgs[0].sequencer(), "awg2": self._hdawg.awgs[0].sequencer(), "awg3": self._hdawg.awgs[0].sequencer(), "awg4": self._hdawg.awgs[0].sequencer()}
         self._waveforms =  {"awg1": self._hdawg.awgs[0].waveform(), "awg2": self._hdawg.awgs[0].waveform(), "awg3": self._hdawg.awgs[0].waveform(), "awg4": self._hdawg.awgs[0].waveform()}
 
+        ##Obtain run status for each sequencer
+        self._run_status = {}
+        for idx in range(4):
+            status = awg._daq.getInt(f"/{self._connection_settings["hdawg_id"]}/awgs/{idx}/sequencer/status")
+            if status == 0:
+                self._run_status["awg"+int(idx+1)] = True
+            else:
+                self._run_status["awg"+int(idx+1)] = False
 
 
     def disconnect_awg(self):
@@ -229,6 +237,7 @@ class HdawgDriver:
             raise ValueError("'sin_num' should be between 1 and 8.")
       except ValueError:
          raise
+
 
       self._hdawg.sines[sin_num-1].phaseshift(phase)
       self._sines["sin"+str(sin_num)]["phaseshift"] = phase
