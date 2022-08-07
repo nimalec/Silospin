@@ -567,6 +567,7 @@ class HdawgDriver:
         -------
         Run status for selected AWG core [bool].
        """
+       dev_id = self._connection_settings["hdawg_id"]
        for idx in range(4):
            status = self._daq.getInt(f"/{dev_id}/awgs/{idx}/sequencer/status")
            if status == 0:
