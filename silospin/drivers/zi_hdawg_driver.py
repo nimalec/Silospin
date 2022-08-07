@@ -540,7 +540,7 @@ class HdawgDriver:
         -------
         List of waveforms for AWG core (list of numpy arrays). (list)
        """
-        try:
+       try:
           if type(awg_num) is not int:
              raise TypeError("'awg_num' should be an integer.")
        except TypeError:
