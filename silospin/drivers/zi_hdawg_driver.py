@@ -355,16 +355,22 @@ class HdawgDriver:
        try:
           if type(amp2) is not float:
              raise TypeError("'amp2' should be a float.")
-       except TypeError:
+       except TypeError
           raise
 
-       self._sines["sin"+str(sin_num)] = {"osc" : osc_num, "phaseshift": phase, "harmonic" : harmonic, "amp1" : amp1, "amp2" : amp2}
-       self._hdawg.sines[sin_num-1].oscselect(osc_num-1)
-       self._hdawg.sines[sin_num-1].phaseshift(phase)
-       self._hdawg.sines[sin_num-1].harmonic(harmonic)
-       self._hdawg.sines[sin_num-1].amplitudes[0](amp1)
-       self._hdawg.sines[sin_num-1].amplitudes[1](amp2)
 
+       cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4}
+       if self.get_updated_run_status(cores[sin_num]) == True:
+          print("Core currently running, cannot change phase.")
+       else:
+          self._sines["sin"+str(sin_num)]["osc_num"] = osc_num
+          self._hdawg.sines[sin_num-1].oscselect(osc_num-1)
+          self._sines["sin"+str(sin_num)] = {"osc" : osc_num, "phaseshift": phase, "harmonic" : harmonic, "amp1" : amp1, "amp2" : amp2}
+          self._hdawg.sines[sin_num-1].oscselect(osc_num-1)
+          self._hdawg.sines[sin_num-1].phaseshift(phase)
+          self._hdawg.sines[sin_num-1].harmonic(harmonic)
+          self._hdawg.sines[sin_num-1].amplitudes[0](amp1)
+          self._hdawg.sines[sin_num-1].amplitudes[1](amp2)
 
     def get_awg(self, awg_num):
        """
@@ -425,7 +431,9 @@ class HdawgDriver:
        except TypeError:
           raise
 
+
        self._sines["sin"+str(sin_num)]["amp"+str(wave_num-1)] = self._hdawg.sines[sin_num-1].amplitudes[wave_num-1]()
+
        return self._sines["sin"+str(sin_num)]["amp"+str(wave_num-1)]
 
     def set_out_amp(self, sin_num, wave_num, amp):
@@ -476,7 +484,13 @@ class HdawgDriver:
        self._hdawg.sines[sin_num-1].amplitudes[wave_num-1](amp)
        self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
 
-
+      cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4}
+      if self.get_updated_run_status(cores[sin_num]) == True:
+          print("Core currently running, cannot change phase.")
+      else:
+          self._hdawg.sines[sin_num-1].amplitudes[wave_num-1](amp)
+          self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
+          
     def get_sequence(self, awg_idx):
        """
         Getter function for AWG sequence.
