@@ -227,20 +227,10 @@ class HdawgDriver:
         -------
         None.
       """
-      try:
-         if type(sin_num) is not int:
-            raise TypeError("'sin_num' should be an integer.")
-      except TypeError:
-         raise
-      try:
-         if sin_num < 1 or sin_num > 8:
-            raise ValueError("'sin_num' should be between 1 and 8.")
-      except ValueError:
-         raise
 
       cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4}
       if self.get_updated_run_status(cores[sin_num]) == True:
-         raise("Core currently running, cannot change phase.")
+         print("Core currently running, cannot change phase.")
       else:
           self._hdawg.sines[sin_num-1].phaseshift(phase)
           self._sines["sin"+str(sin_num)]["phaseshift"] = phase
