@@ -355,7 +355,7 @@ class HdawgDriver:
        try:
           if type(amp2) is not float:
              raise TypeError("'amp2' should be a float.")
-       except TypeError
+       except TypeError:
           raise
 
 
@@ -490,7 +490,7 @@ class HdawgDriver:
       else:
           self._hdawg.sines[sin_num-1].amplitudes[wave_num-1](amp)
           self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
-          
+
     def get_sequence(self, awg_idx):
        """
         Getter function for AWG sequence.
