@@ -540,7 +540,7 @@ class HdawgDriver:
         -------
         List of waveforms for AWG core (list of numpy arrays). (list)
        """
-       try:
+        try:
           if type(awg_num) is not int:
              raise TypeError("'awg_num' should be an integer.")
        except TypeError:
@@ -554,32 +554,29 @@ class HdawgDriver:
        #self._waveforms["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].waveform()
        return self._hdawg.awgs[awg_num-1].waveform()
 
-    # def get_run_status(self, awg_num):
-    #    """
-    #     Getter function for run status of selected AWG core.
-    #
-    #     Parameters
-    #     ----------
-    #     awg_num: int
-    #         AWG index number between 1-4.
-    #
-    #     Returns
-    #     -------
-    #     Run status for selected AWG core [bool].
-    #    """
-    #    try:
-    #       if type(awg_num) is not int:
-    #          raise TypeError("'awg_num' should be an integer.")
-    #    except TypeError:
-    #       raise
-    #    try:
-    #       if awg_num < 1 or awg_num > 4:
-    #          raise ValueError("'awg_num' should be between 1 and 4.")
-    #    except ValueError:
-    #       raise
-    #
-    #    #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
-    #    return self._hdawg.awgs[awg_num-1].is_running()
+    def get_update_run_status(self, awg_num):
+       """
+        Getter function for run status of selected AWG core.
+
+        Parameters
+        ----------
+        awg_num: int
+            AWG index number between 1-4.
+
+        Returns
+        -------
+        Run status for selected AWG core [bool].
+       """
+       for idx in range(4):
+           status = self._daq.getInt(f"/{dev_id}/awgs/{idx}/sequencer/status")
+           if status == 0:
+               self._run_status["awg"+str(idx+1)] = False
+           else:
+               self._run_status["awg"+str(idx+1)] = True
+
+       return self._run_status["awg"+str(awg_num)]
+
+
 
 
     def compile_core(self, awg_num):
