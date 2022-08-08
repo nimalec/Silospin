@@ -1,4 +1,4 @@
-from silospin.experiment.setup_experiment import init
+from silospin.experiment import setup_experiment
 
-init()
-print(awg_driver)
+setup_experiment.init()
+print(setup_experiment.awg_driver)
