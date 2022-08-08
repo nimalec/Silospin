@@ -263,8 +263,16 @@ class HdawgDriver:
         awg_idx = cores[sin_num][1]
         return self._daq.getInt(f"/{dev_id}/awgs/{awg_idx}/outputs/{ch_idx}/modulation/mode")
 
-    #def set_modulation_mode(self, sin_num, modulation):
-
+    def set_modulation_mode(self, sin_num, mode):
+        dev_id = self._connection_settings["hdawg_id"]
+        core_map = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4, 8: 4, 8: 4}
+        if self.get_updated_run_status(core_map[sin_num]) == True:
+           print("Core currently running, cannot change modulation mode.")
+        else:
+         cores = {1: [0,0], 2: [1,0], 3: [0,1], 4: [1,1], 5: [0,2], 6: [1,2], 7: [0,3], 8: [1,3]}
+         ch_idx = cores[sin_num][0]  
+         awg_idx = cores[sin_num][1]
+         self._daq.setInt(f"/{dev_id}/awgs/{awg_idx}/outputs/{ch_idx}/modulation/mode", mode)
 
     def get_sine(self, sin_num):
       """
