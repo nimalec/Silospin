@@ -147,6 +147,7 @@ def quantum_protocol_parser_Zarb(file_path, qubit_lengths, qubit_set = {1,2,3,4}
         sequence_table[idx] = seq_line
     return sequence_table
 
+
 def quantum_protocol_parser_Zarb_v2(file_path, qubit_lengths, qubit_set = {1,2,3,4}):
     sequence_table = {}
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
@@ -165,17 +166,23 @@ def quantum_protocol_parser_Zarb_v2(file_path, qubit_lengths, qubit_set = {1,2,3
                     if item[2] == "t":
                         length_set.append(int(item[3:len(item)]))
                     elif item[2] == "z":
-                        length_set.append(32)
-                        pass
+                        channel_set = {"0", "1", "2", "3"}
+                        z_idx = {str(int(item[0])-1)}
+                        diff_set_z = channel_set.difference(z_idx)
+                        for itm in diff_set_z:
+                            seq_line[itm].append("z0z")
                     else:
                         qubit_length = qubit_lengths[int(item[0])][gates[item[2:len(item)]]]
                         length_set.append(qubit_length)
                 else:
                     pass
-            max_gt_len = max(length_set)
-            diff_set = qubit_set.difference(idx_set)
-            for item in diff_set:
-                seq_line[str(item-1)].append("t"+str(max_gt_len) )
+            if len(length_set) == 0:
+                pass
+            else:
+                max_gt_len = max(length_set)
+                diff_set = qubit_set.difference(idx_set)
+                for item in diff_set:
+                    seq_line[str(item-1)].append("t"+str(max_gt_len))
         sequence_table[idx] = seq_line
     return sequence_table
 
