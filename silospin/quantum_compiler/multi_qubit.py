@@ -10,7 +10,7 @@ import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.qc_helpers import *
-from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser, gst_parser, quantum_protocol_parser_csv_v2, quantum_protocol_parser_Zarb
+from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser, gst_parser, quantum_protocol_parser_csv_v2, quantum_protocol_parser_Zarb, quantum_protocol_parser_Zarb_v2
 
 
 class MultiQubitGatesSet:
