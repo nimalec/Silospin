@@ -257,6 +257,7 @@ class HdawgDriver:
           self._sines["sin"+str(sin_num)]["phaseshift"] = phase
 
     def get_modulation_mode(self, sin_num):
+        dev_id = self._connection_settings["hdawg_id"]
         cores = {1: [0,0], 2: [1,0], 3: [0,1], 4: [1,1], 5: [0,2], 6: [1,2], 7: [0,3], 8: [1,3]}
         ch_idx = cores[sin_num][0]
         awg_idx = cores[sin_num][1]
