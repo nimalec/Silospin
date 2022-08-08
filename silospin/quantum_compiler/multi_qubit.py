@@ -802,8 +802,6 @@ class MultiQubitGST_v5:
              i_idx = self._channel_idxs[str(idx)][0]
              q_idx = self._channel_idxs[str(idx)][1]
              osc_idx = self._channel_osc_idxs[str(idx)]
-             # self._awg._hdawg.sigouts[i_idx].on(1)
-             # self._awg._hdawg.sigouts[q_idx].on(1)
              self._awg.set_osc_freq(osc_idx, self._qubit_parameters[idx]["mod_freq"])
              self._awg.set_sine(i_idx+1, osc_idx)
              self._awg.set_sine(q_idx+1, osc_idx)

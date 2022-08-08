@@ -270,7 +270,7 @@ class HdawgDriver:
            print("Core currently running, cannot change modulation mode.")
         else:
          cores = {1: [0,0], 2: [1,0], 3: [0,1], 4: [1,1], 5: [0,2], 6: [1,2], 7: [0,3], 8: [1,3]}
-         ch_idx = cores[sin_num][0]  
+         ch_idx = cores[sin_num][0]
          awg_idx = cores[sin_num][1]
          self._daq.setInt(f"/{dev_id}/awgs/{awg_idx}/outputs/{ch_idx}/modulation/mode", mode)
 
@@ -511,7 +511,7 @@ class HdawgDriver:
 
        cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4, 8: 4, 8: 4}
        if self.get_updated_run_status(cores[sin_num]) == True:
-          print("Core currently running, cannot change phase.")
+          print("Core currently running, cannot change amplitude.")
        else:
           self._hdawg.sines[sin_num-1].amplitudes[wave_num-1](amp)
           self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
