@@ -22,7 +22,7 @@ class MfliDriver:
         self._daq.set(f"/{self._device}/demods/0/enable",1)
         self._daq_module = self._daq.dataAcquisitionModule()
         self._daq_module.set("device", self._device)
-        self._daq_module.set("grid/mode", 4)
+        self._daq_module.set("grid/mode", 2)
         self._daq_sample_rate = 857000
         self._daq_data = []
 
