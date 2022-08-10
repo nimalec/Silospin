@@ -4,5 +4,5 @@ Silospin is a package responsible for the calibration, control , and benchmarkin
 Silospin interfaces with the following hardware for quantum control experiments.
 
 ![](https://github.com/nimalec/Silospin/blob/new_branch_6_5/images/waveform.png)
-![](https://github.com/nimalec/Silospin/blob/new_branch_6_5/images/pulses.png
+![](https://github.com/nimalec/Silospin/blob/new_branch_6_5/images/pulses.png)
 For details on installation instructions, please click [INSTALL.md](https://github.com/nimalec/Silospin/blob/new_branch_6_5/INSTALL.md).  
