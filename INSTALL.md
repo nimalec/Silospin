@@ -1,4 +1,4 @@
-# Install
+# Installation Instructions  
 
 ## General Dependencies
 Silospin requires Python 3.7 or newer. Python can be installed from the Python webpage (https://www.python.org/downloads/) or through Anaconda (https://www.anaconda.com/products/distribution). The package also requries NumPy (https://numpy.org/), SciPy (https://scipy.org/), and Matplotlib (https://matplotlib.org/). Install these as,
