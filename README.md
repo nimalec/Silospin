@@ -12,7 +12,7 @@ Silospin interfaces with the following hardware for quantum control experiments.
 ## Citing
 ```
 @software{silospin,
-  author       = {Nima Leclerc, Anthony Sigillito},
+  author       = {Nima Leclerc, Dr. Anthony Sigillito},
   title        = {Silospin: silospin},
   month        = aug,
   year         = 2022,
