@@ -1,8 +1,8 @@
 # Silospin
-Silospin is a package responsible for the calibration, control , and benchmarking of quantum dot processors. This is the primary codebase used by the Sigillito Group at the University of Pennsylvania. Check out our group's latest work below!
+Silospin is a package responsible for the calibration, control , and benchmarking of quantum dot processors. This is the primary codebase used by the Sigillito Group at the University of Pennsylvania. Check out our group's latest work here:
 [Sigillito Group Page](https://github.com/nimalec/Silospin/blob/new_branch_6_5/INSTALL.md).   
 
-https://www.pennqubit.com/
+
 
 Silospin interfaces with the following hardware for quantum control experiments.
 
