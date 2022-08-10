@@ -13,6 +13,7 @@ class MfliDriver:
            Returns
            -------
            None.
+
         """
         (daq, device, _) = zhinst.utils.create_api_session(device_id, api_level, server_host=server_host, server_port=server_port)
         self._connection_settings = {"mfli_id" : device, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "connection_status" : False}
@@ -21,6 +22,9 @@ class MfliDriver:
         zhinst.utils.api_server_version_check(self._daq)
         self._daq.set(f"/{self._device}/demods/0/enable",1)
         self._daq_module = self._daq.dataAcquisitionModule()
+
+        self._scope_module = self._daq.scopeModule()
+
         self._daq_module.set("device", self._device)
         self._daq_module.set("grid/mode", 2)
         self._daq_sample_rate = 857000
@@ -118,7 +122,7 @@ class MfliDriver:
         clockbase = float(self._daq.getInt(f"/{device}/clockbase"))
         ts0 = np.nan
 
-        def read_data_update_plot(data, timestamp0):
+        def read_data_update(data, timestamp0):
            data_read = self._daq_module.read(True)
            returned_signal_paths = [
             signal_path.lower() for signal_path in data_read.keys()
@@ -146,7 +150,7 @@ class MfliDriver:
         t_update = 0.9*burst_duration
         while not self._daq_module.finished():
            t0_loop = time.time()
-           data, ts0 = read_data_update_plot(data, ts0)
+           data, ts0 = read_data_update(data, ts0)
            time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0)
         data_daq = []
@@ -156,4 +160,6 @@ class MfliDriver:
         self._daq_data.append(data_daq)
         return data_daq
 
-    #def record_data_scope():
+    #def record_data_daq_continuous(self, total_duration, burst_duration):
+
+    #def record_data_scope_continuous(self, total_duration, burst_duration):
