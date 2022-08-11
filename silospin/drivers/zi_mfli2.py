@@ -23,12 +23,12 @@ class MfliDriver:
         self._daq.set(f"/{self._device}/demods/0/enable",1)
         self._daq_module = self._daq.dataAcquisitionModule()
 
-        self._scope_module = self._daq.scopeModule()
-
-        self._daq_module.set("device", self._device)
-        self._daq_module.set("grid/mode", 2)
-        self._daq_sample_rate = 857000
-        self._daq_data = []
+        # self._scope_module = self._daq.scopeModule()
+        #
+        # self._daq_module.set("device", self._device)
+        # self._daq_module.set("grid/mode", 2)
+        # self._daq_sample_rate = 857000
+        # self._daq_data = []
 
         ##setting for Signal input (0 refers to channel 0)
         # self._sigins = {0: {"ac": 0, "imp50": 0, "range": 1}}
@@ -97,69 +97,101 @@ class MfliDriver:
         # self._data = data
         #self._samples = data[self._signal_path]
 
-    def record_data_daq_continuous(self, total_duration, burst_duration):
-        ##Signal paths among: demods/0/sample (".x", ".y"), Aux, Scope modules
-        ##Acquisiton time in seconds
-        ## Trig type: 0 (cont. triggering), 6 (HW triggering), etc.
-        n_cols = int(np.ceil(self._daq_sample_rate*burst_duration))
-        n_bursts = int(np.ceil(total_duration/burst_duration))
-        self._daq_module.set("type", 0)
-        self._daq_module.set("count", n_bursts)
-        self._daq_module.set("duration", burst_duration)
-        self._daq_module.set("grid/cols", n_cols)
-        device = self._connection_settings["mfli_id"]
-
-        signal_paths = []
-        demod_path = f"/{device}/demods/0/sample"
-        signal_paths.append(demod_path+".x")
-        self._demod_path = signal_paths[0]
-
-        ##make signal paths
-        data = {}
-        for pth in signal_paths:
-            self._daq_module.subscribe(pth)
-            data[pth] = []
-        clockbase = float(self._daq.getInt(f"/{device}/clockbase"))
-        ts0 = np.nan
-
-        def read_data_update(data, timestamp0):
-           data_read = self._daq_module.read(True)
-           returned_signal_paths = [
-            signal_path.lower() for signal_path in data_read.keys()
-            ]
-
-           for signal_path in signal_paths:
-               if signal_path.lower() in returned_signal_paths:
-                   for index, signal_burst in enumerate(data_read[signal_path.lower()]):
-                       if np.any(np.isnan(timestamp0)):
-                           timestamp0 = signal_burst["timestamp"][0, 0]
-                       t = (signal_burst["timestamp"][0, :] - timestamp0) / clockbase
-                       value = signal_burst["value"][0, :]
-                       num_samples = len(signal_burst["value"][0, :])
-                       dt = (
-                           signal_burst["timestamp"][0, -1]
-                           - signal_burst["timestamp"][0, 0]
-                       ) / clockbase
-                       data[signal_path].append(signal_burst)
-               else:
-                   pass
-
-           return data, timestamp0
-
-        self._daq_module.execute()
-        t_update = 0.9*burst_duration
-        while not self._daq_module.finished():
-           t0_loop = time.time()
-           data, ts0 = read_data_update(data, ts0)
-           time.sleep(max(0, t_update - (time.time() - t0_loop)))
-        data, _ = read_data_update_plot(data, ts0)
-        data_daq = []
-        t_grid = np.linspace(0,burst_duration,n_cols)
-        for dat in data[self._demod_path]:
-            data_daq.append([t_grid, dat["value"][0]])
-        self._daq_data.append(data_daq)
-        return data_daq
+    # def record_data_daq_continuous(self, total_duration, burst_duration):
+    #     ##Signal paths among: demods/0/sample (".x", ".y"), Aux, Scope modules
+    #     ##Acquisiton time in seconds
+    #     ## Trig type: 0 (cont. triggering), 6 (HW triggering), etc.
+    #     n_cols = int(np.ceil(self._daq_sample_rate*burst_duration))
+    #     n_bursts = int(np.ceil(total_duration/burst_duration))
+    #     self._daq_module.set("type", 0)
+    #     self._daq_module.set("count", n_bursts)
+    #     self._daq_module.set("duration", burst_duration)
+    #     self._daq_module.set("grid/cols", n_cols)
+    #     device = self._connection_settings["mfli_id"]
+    #
+    #     signal_paths = []
+    #     demod_path = f"/{device}/demods/0/sample"
+    #     signal_paths.append(demod_path+".x")
+    #     self._demod_path = signal_paths[0]
+    #
+    #     ##make signal paths
+    #     data = {}
+    #     for pth in signal_paths:
+    #         self._daq_module.subscribe(pth)
+    #         data[pth] = []
+    #     clockbase = float(self._daq.getInt(f"/{device}/clockbase"))
+    #     ts0 = np.nan
+    #
+    #     def read_data_update(data, timestamp0):
+    #        data_read = self._daq_module.read(True)
+    #        returned_signal_paths = [
+    #         signal_path.lower() for signal_path in data_read.keys()
+    #         ]
+    #
+    #        for signal_path in signal_paths:
+    #            if signal_path.lower() in returned_signal_paths:
+    #                for index, signal_burst in enumerate(data_read[signal_path.lower()]):
+    #                    if np.any(np.isnan(timestamp0)):
+    #                        timestamp0 = signal_burst["timestamp"][0, 0]
+    #                    t = (signal_burst["timestamp"][0, :] - timestamp0) / clockbase
+    #                    value = signal_burst["value"][0, :]
+    #                    num_samples = len(signal_burst["value"][0, :])
+    #                    dt = (
+    #                        signal_burst["timestamp"][0, -1]
+    #                        - signal_burst["timestamp"][0, 0]
+    #                    ) / clockbase
+    #                    data[signal_path].append(signal_burst)
+    #            else:
+    #                pass
+    #
+    #        return data, timestamp0
+    #
+    #     self._daq_module.execute()
+    #     t_update = 0.9*burst_duration
+    #     while not self._daq_module.finished():
+    #        t0_loop = time.time()
+    #        data, ts0 = read_data_update(data, ts0)
+    #        time.sleep(max(0, t_update - (time.time() - t0_loop)))
+    #     data, _ = read_data_update_plot(data, ts0)
+    #     data_daq = []
+    #     t_grid = np.linspace(0,burst_duration,n_cols)
+    #     for dat in data[self._demod_path]:
+    #         data_daq.append([t_grid, dat["value"][0]])
+    #     self._daq_data.append(data_daq)
+    #     return data_daq
 
     #def record_data_daq_continuous(self, total_duration, burst_duration):
 
     #def record_data_scope_continuous(self, total_duration, burst_duration):
+
+
+class MfliDaqModule:
+    def __init__(self, mfli_driver):
+        self._mfli = mfli_driver
+        self._daq_module = self._li_driver._daq_module
+        self._history_settings = {"clearhistory": self._daq_module.getInt("clearhistory") , "duration": self._daq_module.getDouble("duration")}
+        self._trigger_settings = {"forcetrigger": self._daq_module.getInt("forcetrigger"), "bitmask": self._daq_module.getInt("bitmask"),
+        "bandwidth": self._daq_module.getDouble("bandwidth"), "bits": self._daq_module.getInt("bits"), "count":  self._daq_module.getInt("count"),
+        "delay": self._daq_module.getDouble("delay"), "edge": self._daq_module.getInt("edge"),
+        "eventcountmode": self._daq_module.getInt("eventcount/mode"), "holdoffcount": self._daq_module.getInt("holdoff/count"),
+         "holdofftime": self._daq_module.getDouble("holdoff/time"), "level": self._daq_module.getDouble("level"),
+         "pulsemax": self._daq_module.getDouble("pulse/max"), "pulsemin": self._daq_module.getDouble("pulse/min"),
+         "triggernode": self._daq_module.getString("triggernode"), "type": self._daq_module.getInt("type"), "triggered": self._daq_module.getInt("triggered")}
+
+        self._grid = {"cols": self._daq_module.getInt("grid/cols"), "direction": self._daq_module.getInt("grid/direction"),
+        "mode": self._daq_module.getInt("grid/mode"),  "overwrite": self._daq_module.getInt("grid/overwrite"),
+        "mode": self._daq_module.getInt("grid/mode"),  "rowrepetitions": self._daq_module.getInt("grid/rowrepetition"),
+        "rows": self._daq_module.getInt("grid/rows"),  "waterfall": self._daq_module.getInt("grid/waterfall")}
+
+        self._fft = {"spectrumautobw": self._daq_module.getInt("spectrum/autobandwidth"), "absolute": self._daq_module.getInt("fft/absolute"),
+         "window": self._daq_module.getInt("spectrum/window"),  "spectrumenable": self._daq_module.getInt("spectrum/enable"),
+         "spectrumoverlapped": self._daq_module.getInt("spectrum/overlapped"), "spectrumfrequencyspan": self._daq_module.getDouble("spectrum/frequencyspan")}
+
+        #self._data_streaming = { }
+
+        #self._recorded_data
+
+
+# class MfliScopeModule:
+#
+# class MfliSweeperModule:
