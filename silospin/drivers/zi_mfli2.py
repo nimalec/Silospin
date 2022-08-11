@@ -166,7 +166,8 @@ class MfliDriver:
 
 class MfliDaqModule:
     def __init__(self, mfli_driver):
-        self._mfli = mfli_driver
+        self._mfli = mfli_driver._connection_settings["mfli_id"]
+        self._dev_id = self._mfli
         self._daq_module = self._mfli._daq_module
         self._history_settings = {"clearhistory": self._daq_module.getInt("clearhistory") , "duration": self._daq_module.getDouble("duration")}
         self._trigger_settings = {"forcetrigger": self._daq_module.getInt("forcetrigger"), "bitmask": self._daq_module.getInt("bitmask"),
@@ -187,8 +188,88 @@ class MfliDaqModule:
          "spectrumoverlapped": self._daq_module.getInt("spectrum/overlapped"), "spectrumfrequencyspan": self._daq_module.getDouble("spectrum/frequencyspan")}
 
         #self._data_streaming = { }
+        self._signal_paths = set()
 
         #self._recorded_data
+
+    def get_all_daq_settings(self):
+        self._history_settings = {"clearhistory": self._daq_module.getInt("clearhistory") , "duration": self._daq_module.getDouble("duration")}
+
+        self._trigger_settings = {"forcetrigger": self._daq_module.getInt("forcetrigger"), "bitmask": self._daq_module.getInt("bitmask"),
+        "bandwidth": self._daq_module.getDouble("bandwidth"), "bits": self._daq_module.getInt("bits"), "count":  self._daq_module.getInt("count"),
+        "delay": self._daq_module.getDouble("delay"), "edge": self._daq_module.getInt("edge"),
+        "eventcountmode": self._daq_module.getInt("eventcount/mode"), "holdoffcount": self._daq_module.getInt("holdoff/count"),
+         "holdofftime": self._daq_module.getDouble("holdoff/time"), "level": self._daq_module.getDouble("level"),
+         "pulsemax": self._daq_module.getDouble("pulse/max"), "pulsemin": self._daq_module.getDouble("pulse/min"),
+         "triggernode": self._daq_module.getString("triggernode"), "type": self._daq_module.getInt("type"), "triggered": self._daq_module.getInt("triggered")}
+
+        self._grid_settings = {"cols": self._daq_module.getInt("grid/cols"), "direction": self._daq_module.getInt("grid/direction"),
+        "mode": self._daq_module.getInt("grid/mode"),  "overwrite": self._daq_module.getInt("grid/overwrite"),
+        ,  "rowrepetitions": self._daq_module.getInt("grid/rowrepetition"),
+        "rows": self._daq_module.getInt("grid/rows"),  "waterfall": self._daq_module.getInt("grid/waterfall")}
+        self._fft_settings = {"spectrumautobw": self._daq_module.getInt("spectrum/autobandwidth"), "absolute": self._daq_module.getInt("fft/absolute"),
+         "window": self._daq_module.getInt("fft/window"),  "spectrumenable": self._daq_module.getInt("spectrum/enable"),
+         "spectrumoverlapped": self._daq_module.getInt("spectrum/overlapped"), "spectrumfrequencyspan": self._daq_module.getDouble("spectrum/frequencyspan")}
+         return {"history": self._history_settings, "trigger": self._trigger_settings, "grid": self._grid_settings, "fft": self._fft_settings}
+
+    def get_history_setting(self, key):
+        if key == "clearhistory":
+            self._history_settings[key] = self._daq_module.getInt("clearhistory")
+        elif key == "duration":
+            self._history_settings[key] = self._daq_module.getDouble("duration")
+        else:
+            pass
+        return self._history_settings[key]
+
+    def get_trigger_setting(self, key):
+        setings_1 = {"forcetrigger", "bitmask" , "bits", "count",  "edge" , "type", "triggered"}
+        setings_2 = {"bandwidth", "delay", "level"}
+        if key in setings_1:
+            self._history_settings[key] = self._daq_module.getInt(key)
+        elif key in setings_2:
+            self._history_settings[key] = self._daq_module.getDouble(key)
+        elif key == "eventcountmode":
+            self._history_settings[key] = self._daq_module.getInt("eventcount/mode")
+        elif key == "holdoffcount":
+            self._history_settings[key] = self._daq_module.getInt("holdoff/count")
+        elif key == "holdofftime":
+            self._history_settings[key] = self._daq_module.getDouble("holdoff/time")
+        elif key == "pulsemax":
+            self._history_settings[key] = self._daq_module.getDouble("pulse/max")
+        elif key == "pulsemin":
+            self._history_settings[key] = self._daq_module.getDouble("pulse/min")
+        elif key == "triggernode":
+            self._history_settings[key] = self._daq_module.getString("triggernode")
+        else:
+            pass
+        return self._history_settings[key]
+
+
+    def execute(self):
+        self._daq_module.execute()
+
+    def read(self, read=False, clck_rate=6e7):
+        self._daq_module.read(read,clck_rate)
+
+    def subscribe_stream_node(self, nodes=["x", "y"]):
+        ##add assert to ensure that correct node is used
+        node_check  = {"x", "y", "r", "theta", "frequency", "auxin0", "auxin1", "xiy", "df"}
+        for nd in nodes:
+            signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
+            self._signal_paths.add(signal_path)
+            self._daq_module.subscribe(signal_path)
+
+    def unsubscribe_stream_node(self, nodes=["x", "y"]):
+        node_check  = {"x", "y", "r", "theta", "frequency", "auxin0", "auxin1", "xiy", "df"}
+        for nd in nodes:
+            signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
+            self._signal_paths.remove(signal_path)
+            self._daq_module.unsubscribe(signal_path)
+
+
+
+
+
 
 
 # class MfliScopeModule:
