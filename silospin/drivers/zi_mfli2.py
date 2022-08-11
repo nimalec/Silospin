@@ -205,8 +205,8 @@ class MfliDaqModule:
 
         self._grid_settings = {"cols": self._daq_module.getInt("grid/cols"), "direction": self._daq_module.getInt("grid/direction"),
         "mode": self._daq_module.getInt("grid/mode"),  "overwrite": self._daq_module.getInt("grid/overwrite"),
-        ,  "rowrepetitions": self._daq_module.getInt("grid/rowrepetition"),
-        "rows": self._daq_module.getInt("grid/rows"),  "waterfall": self._daq_module.getInt("grid/waterfall")}
+        ,  "rowrepetitions": self._daq_module.getInt("grid/rowrepetition"), "rows": self._daq_module.getInt("grid/rows"),  "waterfall": self._daq_module.getInt("grid/waterfall")}
+
         self._fft_settings = {"spectrumautobw": self._daq_module.getInt("spectrum/autobandwidth"), "absolute": self._daq_module.getInt("fft/absolute"),
          "window": self._daq_module.getInt("fft/window"),  "spectrumenable": self._daq_module.getInt("spectrum/enable"),
          "spectrumoverlapped": self._daq_module.getInt("spectrum/overlapped"), "spectrumfrequencyspan": self._daq_module.getDouble("spectrum/frequencyspan")}
@@ -243,6 +243,12 @@ class MfliDaqModule:
         else:
             pass
         return self._history_settings[key]
+
+    def get_grid_setting(self, key):
+        self._history_settings[key] = self._daq_module.getInt("grid/"+key)
+        return self._history_settings[key]
+
+    #def get_fft_setting(self, key):  
 
 
     def execute(self):
