@@ -167,7 +167,7 @@ class MfliDriver:
 class MfliDaqModule:
     def __init__(self, mfli_driver):
         self._mfli = mfli_driver
-        self._daq_module = self._li_driver._daq_module
+        self._daq_module = self._mfli._daq_module
         self._history_settings = {"clearhistory": self._daq_module.getInt("clearhistory") , "duration": self._daq_module.getDouble("duration")}
         self._trigger_settings = {"forcetrigger": self._daq_module.getInt("forcetrigger"), "bitmask": self._daq_module.getInt("bitmask"),
         "bandwidth": self._daq_module.getDouble("bandwidth"), "bits": self._daq_module.getInt("bits"), "count":  self._daq_module.getInt("count"),
