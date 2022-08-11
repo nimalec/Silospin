@@ -6,7 +6,7 @@ import numpy as np
 import time
 
 class MfliDriver:
-    def __init__(self, device_id, server_host = "localhost", server_port = 8004, api_level = 6, sigins = None, dmods = None, oscs = None, sigouts = None, trig_settings = None):
+    def __init__(self, device_id, server_host = "localhost", server_port = 8004, api_level = 6):
         """
          Constructor for MFLI driver.
 
@@ -20,7 +20,6 @@ class MfliDriver:
         self._daq = daq
         self._device = device
         zhinst.utils.api_server_version_check(self._daq)
-        self._daq.set(f"/{self._device}/demods/0/enable",1)
         self._daq_module = self._daq.dataAcquisitionModule()
 
         # self._scope_module = self._daq.scopeModule()
