@@ -183,7 +183,7 @@ class MfliDaqModule:
         "rows": self._daq_module.getInt("grid/rows"),  "waterfall": self._daq_module.getInt("grid/waterfall")}
 
         self._fft = {"spectrumautobw": self._daq_module.getInt("spectrum/autobandwidth"), "absolute": self._daq_module.getInt("fft/absolute"),
-         "window": self._daq_module.getInt("spectrum/window"),  "spectrumenable": self._daq_module.getInt("spectrum/enable"),
+         "window": self._daq_module.getInt("fft/window"),  "spectrumenable": self._daq_module.getInt("spectrum/enable"),
          "spectrumoverlapped": self._daq_module.getInt("spectrum/overlapped"), "spectrumfrequencyspan": self._daq_module.getDouble("spectrum/frequencyspan")}
 
         #self._data_streaming = { }
