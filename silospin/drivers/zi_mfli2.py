@@ -278,53 +278,53 @@ class MfliDaqModule:
         setings_1 = {"forcetrigger", "bitmask" , "bits", "count",  "edge" , "type", "triggered"}
         setings_2 = {"bandwidth", "delay", "level"}
         if key in setings_1:
-            self._daq_module.setInt(key, value)
+            self._daq_module.set(key, value)
             self._trigger_settings[key] = self._daq_module.getInt(key)
         elif key in setings_2:
-            self._daq_module.setDouble(key, value)
+            self._daq_module.set(key, value)
             self._trigger_settings[key] = self._daq_module.getDouble(key)
         elif key == "eventcountmode":
-            self._daq_module.setInt("eventcount/mode", value)
+            self._daq_module.set("eventcount/mode", value)
             self._trigger_settings[key] = self._daq_module.getInt("eventcount/mode")
         elif key == "holdoffcount":
-            self._daq_module.setInt("holdoff/count", value)
+            self._daq_module.set("holdoff/count", value)
             self._trigger_settings[key] = self._daq_module.getInt("holdoff/count")
         elif key == "holdofftime":
-            self._daq_module.setDouble("holdoff/time", value)
+            self._daq_module.set("holdoff/time", value)
             self._trigger_settings[key] = self._daq_module.getDouble("holdoff/time")
         elif key == "pulsemax":
-            self._daq_module.setDouble("pulse/max", value)
+            self._daq_module.set("pulse/max", value)
             self._trigger_settings[key] = self._daq_module.getDouble("pulse/max")
         elif key == "pulsemin":
-            self._daq_module.setDouble("pulse/min", value)
+            self._daq_module.set("pulse/min", value)
             self._trigger_settings[key] = self._daq_module.getDouble("pulse/min")
         elif key == "triggernode":
-            self._daq_module.setString("triggernode", value)
+            self._daq_module.set("triggernode", value)
             self._trigger_settings[key] = self._daq_module.getString("triggernode")
         else:
             pass
 
     def set_grid_setting(self, key, value):
-        self._daq_module.setDouble("grid/"+key, value)
+        self._daq_module.set("grid/"+key, value)
         self._grid_settings[key] = self._daq_module.getInt("grid/"+key)
 
     def set_fft_setting(self, key, value):
         settings_1 = {"window", "absolute"}
         if key == "spectrumautobw":
-            self._daq_module.setInt("spectrum/autobandwidth", value)
+            self._daq_module.set("spectrum/autobandwidth", value)
             self._fft_settings[key] = self._daq_module.getInt("spectrum/autobandwidth")
         elif key == "spectrumenable":
-            self._daq_module.setInt("spectrum/enable", value)
+            self._daq_module.set("spectrum/enable", value)
             self._fft_settings[key] = self._daq_module.getInt("spectrum/enable")
 
         elif key == "spectrumoverlapped":
-            self._daq_module.setInt("spectrum/overlapped", value)
+            self._daq_module.set("spectrum/overlapped", value)
             self._fft_settings[key] = self._daq_module.getInt("spectrum/overlapped")
         elif key == "spectrumfrequencyspan":
-            self._daq_module.setDouble("spectrum/frequencyspan", value)
+            self._daq_module.set("spectrum/frequencyspan", value)
             self._fft_settings[key] = self._daq_module.getDouble("spectrum/frequencyspan")
         elif key in settings_1:
-            self._daq_module.setInt("fft/"+key, value)
+            self._daq_module.set("fft/"+key, value)
             self._fft_settings[key] = self._daq_module.getInt("fft/"+key)
         else:
             pass
