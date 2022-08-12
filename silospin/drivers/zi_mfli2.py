@@ -266,10 +266,10 @@ class MfliDaqModule:
 
     def set_history_setting(self, key, value):
         if key == "clearhistory":
-            self._daq_module.setInt("clearhistory", value)
+            self._daq_module.set("clearhistory", value)
             self._history_settings[key] = self._daq_module.getInt("clearhistory")
         elif key == "duration":
-            self._daq_module.setDouble("duration", value)
+            self._daq_module.set("duration", value)
             self._history_settings[key] = self._daq_module.getDouble("duration")
         else:
             pass
