@@ -21,11 +21,11 @@ class MfliDriver:
         self._device = device
         zhinst.utils.api_server_version_check(self._daq)
         self._daq_module = self._daq.dataAcquisitionModule()
-        self._demod_settings = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable"}
+        self._demod_settings = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable")}
 
     def enable_data_transfer(self):
          self._daq.set(f"/{self._device}/demods/0/enable", 1)
-         self._demod_settings["enable"] = 1
+         self._demod_settings["enable"] = self._daq.getInt(f"/{self._device}/demods/0/enable") 
         # self._scope_module = self._daq.scopeModule()
         #
         # self._daq_module.set("device", self._device)
@@ -355,7 +355,7 @@ class MfliDaqModule:
             self._daq_module.unsubscribe(signal_path)
 
     def continuous_data_acquisition(self):
-        self._mfli.enable_data_transfer() 
+        self._mfli.enable_data_transfer()
 
 
 # class MfliScopeModule:
