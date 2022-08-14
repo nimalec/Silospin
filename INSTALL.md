@@ -17,7 +17,7 @@ $ pip install zhinst
 $ pip install zhinst-toolkit  
 ```
 
-## Silospin  
+## Silospin Installation 
 
 ```bash
 $ git clone git@github.com:nimalec/Silospin.git  
