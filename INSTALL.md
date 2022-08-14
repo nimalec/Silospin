@@ -14,10 +14,10 @@ Silospin interfaces with physical instruments from Zurich Instruments and theref
 
 ```bash
 $ pip install zhinst
-$ pip install zhinst-toolkit  
+$ pip install zhinst-toolkit   
 ```
 
-## Silospin Installation 
+## Silospin Installation
 
 ```bash
 $ git clone git@github.com:nimalec/Silospin.git  
