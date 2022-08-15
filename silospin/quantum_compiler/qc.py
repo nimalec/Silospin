@@ -10,7 +10,7 @@ import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.qc_helpers import *
-from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser_Zarb
+from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser
 
 class CompileGateSetTomographyProgram:
     """
@@ -33,17 +33,25 @@ class CompileGateSetTomographyProgram:
     _waveforms : dict
         Dictionary of rectangular 'pi' and 'pi/2' waveforms to be uploaded to each core of HDAWG. Dict keys correspond to qubit (AWG core) indices. Values are 2 element lists containing waveforms in the form of numpy arrays (['pi/2', 'pi']).
     _gate_sequences : dict
-        Dictionary
-
-
-
-
-
+        Dictionary of quantum gate sequences for each AWG core read in from GST file. Outer dictonary keys correspond to GST line number. Inner keys correspond to qubit (AWG core) indices and values are lists of gate strings.
+    _ct_idxs : dict
+        Dictionary of command table entries executed in HDAWG FPGA sequencer. Outer dictonary keys correspond to GST line number. Inner keys correspond to qubit (AWG core) indices and values are lists of gate strings.
+    _command_tables : dict
+        Command table uplaoded to HDAWG containing phase change instructions for each gate.
+    _sequencer_code : dict
+        Dictionary of sequencer code uploaded to each HDAWG coer.
+    _channel_idxs : dict
+        Grouping of channel indices for  each core.
+    _channel_osc_idxs : dict
+        Grouping of oscillator indices for  each core.
 
     Methods
     -------
-    info(additional=""):
-        Prints the person's name and age.
+    __init__(gst_file_path, awg, n_inner=1, n_outer=1, qubits=[0,1,2,3], qubit_parameters=None, external_trigger=False, trigger_channel=0)
+        Constructor object for GST compilation object.
+
+    run_program(awg_idxs):
+        Compiles and runs programs over specified awg_idxs.
     """
     def __init__(self, gst_file_path, awg, n_inner=1, n_outer=1, qubits=[0,1,2,3], qubit_parameters=None, external_trigger=False, trigger_channel=0):
         '''
@@ -98,22 +106,21 @@ class CompileGateSetTomographyProgram:
             qubit_npoints[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
 
         self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
-        self._gate_sequences = quantum_protocol_parser_Zarb(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
+        self._gate_sequences = quantum_protocol_parser(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
 
         ct_idxs_all = {}
         arbZs = []
         n_arbZ = 0
         for idx in self._gate_sequences:
              gate_sequence = self._gate_sequences[idx]
-             ct_idxs_all[idx], arbZ = make_command_table_idxs_v6(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9), n_arbZ)
+             ct_idxs_all[idx], arbZ = make_command_table_idxs(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9), n_arbZ)
              n_arbZ += len(arbZ)
              arbZs.append(arbZ)
-
         arbZ_s = []
         for lst in arbZs:
             for i in lst:
                 arbZ_s.append(i)
-        command_tables = generate_reduced_command_table_v4(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ_s)
+        command_tables = generate_reduced_command_table(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ_s)
         self._ct_idxs = ct_idxs_all
         self._command_tables = command_tables
 
@@ -128,10 +135,8 @@ class CompileGateSetTomographyProgram:
             waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
             waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
             waveforms_awg[idx] = waveforms
-            ##Make a sequence code
             seq_code[idx] =  make_waveform_placeholders(n_array)
             command_code[idx] = ""
-            ##outer frame loop
             sequence = "repeat("+str(n_outer)+"){\n "
             for ii in range(len(ct_idxs_all)):
                  n_seq = ct_idxs_all[ii][str(idx)]
@@ -143,10 +148,8 @@ class CompileGateSetTomographyProgram:
                      else:
                          seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
                  sequence += seq
-
             command_code[idx] = command_code[idx] + sequence
             sequencer_code[idx] =  seq_code[idx] + command_code[idx] + "}"
-
         self._sequencer_code = sequencer_code
 
         for idx in qubits:
@@ -182,9 +185,7 @@ class CompileGateSetTomographyProgram:
             self._awg._awgs["awg"+str(idx+1)].enable(True)
 
 class RamseyTypes:
-    ##should generalize for all qubits ==> only change will be pulse type
     def __init__(self, awg, t_range, npoints_t, npoints_av, taus_pulse, axis = "x", sample_rate = 2.4e9, n_fr=1):
-        ##taus_pulse  ==> dictionary
         self._sample_rate = sample_rate
         self._awg = awg
         t_start = t_range[0]
@@ -199,14 +200,12 @@ class RamseyTypes:
         for i in range(n_start, n_end, dn):
             n_s.append(i)
             t_steps.append(i/sample_rate)
-
         n_durations = []
         qubits = []
         self._sequences = {}
         for idx in taus_pulse:
             qubits.append(idx)
             n_rect = ceil(self._sample_rate*taus_pulse[idx]/32)*32
-            #self._sequences[idx] = make_ramsey_sequencer_v2(n_start, n_end, dn, n_rect, npoints_av, n_fr)
             self._sequences[idx] = make_ramsey_sequencer(n_start, n_end, dn, n_rect, npoints_av)
             self._awg.load_sequence(self._sequences[idx], awg_idx=idx)
             if axis == "x":
@@ -232,9 +231,7 @@ class RamseyTypes:
             self._awg._awgs["awg"+str(idx+1)].enable(True)
 
 class RabiTypes:
-    ##should generalize for all qubits ==> only change will be pulse type
     def __init__(self, awg, t_range, npoints_t, npoints_av, tau_wait, qubits, axis = "x", sample_rate = 2.4e9):
-        ##taus_pulse  ==> dictionary
         self._sample_rate = sample_rate
         self._awg = awg
         t_start = t_range[0]
@@ -250,7 +247,6 @@ class RabiTypes:
         for i in range(n_start, n_end, dn):
             n_s.append(i)
             t_steps.append(i/sample_rate)
-
         n_durations = []
         self._sequences = {}
         for idx in qubits:
@@ -264,11 +260,10 @@ class RabiTypes:
                 self._awg.set_phase(self._channel_idxs[idx][1]+1, 180)
             else:
                 pass
-
         self._n_samples = n_s
         self._tau_steps  = t_steps
         self._awg_idxs = qubits
-
+        
     def run_program(self, awg_idxs=None):
         if awg_idxs:
             awg_idxs = awg_idxs
