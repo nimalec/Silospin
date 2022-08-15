@@ -54,74 +54,7 @@ def make_command_table(gate_string, sample_rate, phi_z = 0, del_phi=0):
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct} # eventually (after the code is in a better state), we want to remove any online resources... the code should run with the computer not connected to the internet. I know this is taken directly from ZI and works, but we'll want to make things more robust.
     return command_table
 
-def make_gateset_sequencer(n_array, n_seq, continuous=False, trigger=False):
-    ##Input: n_array. List of lengths for each gate operation.
-    idx = 0
-    sequence_code = ""
-    command_code = ""
-    for n in n_array:
-        n_str = str(n)
-        idx_str = str(idx)
-        line = "assignWaveIndex(placeholder("+n_str+"),"+idx_str+");\n"
-        sequence_code = sequence_code + line
-        idx+=1
-    sequnce_code = sequence_code
-    ##Replace n_array  for command table with ct indices instead
-    #idx = 0
-    for n in range(n_seq):
-        idx_str = str(n)
-        line = "executeTableEntry("+idx_str+");\n";
-        command_code = command_code + line
-
-    if continuous is True:
-        if trigger is False:
-            program = sequence_code + "while(true){\n" + command_code +"}\n"
-        else:
-            program = sequence_code + "while(true){\n  setTrigger(1);\n setTrigger(0);\n" + command_code +"}\n"
-
-    else:
-        if trigger is False:
-            program = sequence_code + command_code
-        else:
-            program = sequence_code + "setTrigger(1);\n setTrigger(0);\n" + command_code
-
-    return program
-
-def make_gateset_sequencer_fast(n_array, n_seq, continuous=False, soft_trigger=False, hard_trigger=False):
-    ##Input: n_array. List of lengths for each gate operation.
-    idx = 0
-    sequence_code = ""
-    command_code = "executeTableEntry("+str(0)+");\n"
-    for n in n_array:
-        n_str = str(n)
-        idx_str = str(idx)
-        line = "assignWaveIndex(placeholder("+n_str+"),"+idx_str+");\n"
-        sequence_code = sequence_code + line
-        idx+=1
-    sequnce_code = sequence_code
-
-    ##Replace n_array  for command table with ct indices instead
-    #idx = 0
-    for n in n_seq:
-        idx_str = str(n)
-        line = "executeTableEntry("+idx_str+");\n";
-        command_code = command_code + line
-
-    if continuous is True:
-        if soft_trigger is False:
-            program = sequence_code + "while(true){\n" + command_code +"}\n"
-        else:
-            program = sequence_code + "while(true){\n setTrigger(1);\n setTrigger(0);\n" + command_code +"}\n"
-
-    else:
-        if hard_trigger is True:
-            #program = sequence_code + "waitDigTrigger(1);\n setDIO(1);\n wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n" + command_code
-            program = sequence_code + "waitDigTrigger(1);\n setDIO(1);\n wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n" + command_code
-        elif soft_trigger is True:
-            program = sequence_code + "setTrigger(1);\nsetTrigger(0);\n" + command_code
-    return program
-
-def make_gateset_sequencer_fast_v2(n_seq):
+def make_gateset_sequencer(n_seq):
     command_code = ""
     for n in n_seq:
         idx_str = str(n)
@@ -130,23 +63,7 @@ def make_gateset_sequencer_fast_v2(n_seq):
     program = "setTrigger(1);\nsetTrigger(0);\n" + command_code + "waitWave();\n"
     return program
 
-def make_gateset_sequencer_hard_trigger(n_seq, trig_channel=True):
-    command_code = ""
-    for n in n_seq:
-        idx_str = str(n)
-        line = "executeTableEntry("+idx_str+");\n"
-        command_code = command_code + line
-
-    if trig_channel == True:
-        trig_program = "waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\nwaitDIOTrigger();\nresetOscPhase();\n"
-        #trig_program = "waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n"
-    else:
-        trig_program = "\nwaitDIOTrigger();\nresetOscPhase();\n"
-        #trig_program = "waitDIOTrigger();\n"
-    program = trig_program + command_code
-    return program
-
-def make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=True):
+def make_gateset_sequencer_ext_trigger(n_seq, n_av, trig_channel=True):
     command_code = ""
     for n in n_seq:
         idx_str = str(n)

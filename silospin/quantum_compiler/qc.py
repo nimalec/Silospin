@@ -10,27 +10,78 @@ import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.qc_helpers import *
-from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser, gst_parser, quantum_protocol_parser_csv_v2, quantum_protocol_parser_Zarb
+from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser_Zarb
 
-class CompileGST:
-    def __init__(self, gst_file_path, awg, qubits = [0,1,2,3], hard_trigger = False, trigger_channel=0, n_av = 1, n_fr = 1):
+class CompileGateSetTomographyProgram:
+    """
+    Class representing an instance of compiler gate set tomography experiment (uses entirely rectangular waves).
+
+    ..
+
+    Attributes
+    ----------
+    _gst_path : str
+        File path for gate set tomography program being read and compiled.
+    _awg : HdawgDriver
+        Instance of HdawgDriver object, native to silospin.
+    _sample_rate : float
+        Sampling rate used by AWG. Set to 2.4 GSa/s
+    _awg_cores : list
+        List of indcices corresponding to the qubits (AWG cores) used in the program.
+    _qubit_parameters : dict
+        Dictionary of standard parameters for each qubit. Dicionary keys correspond to qubit (AWG core) indices and value is dictonary of qubit parameters (["i_amp_pi", "q_amp_pi", "i_amp_pi_2", "q_amp_pi_2", "tau_pi",  "tau_pi_2", "delta_iq", "mod_freq"]).
+    _waveforms : dict
+        Dictionary of rectangular 'pi' and 'pi/2' waveforms to be uploaded to each core of HDAWG. Dict keys correspond to qubit (AWG core) indices. Values are 2 element lists containing waveforms in the form of numpy arrays (['pi/2', 'pi']).
+    _gate_sequences : dict
+        Dictionary
+
+
+
+
+
+
+    Methods
+    -------
+    info(additional=""):
+        Prints the person's name and age.
+    """
+    def __init__(self, gst_file_path, awg, n_inner=1, n_outer=1, qubits=[0,1,2,3], qubit_parameters=None, external_trigger=False, trigger_channel=0):
+        '''
+        Constructor method for CompileGateSetTomographyProgram.
+
+        Parameters:
+            gst_file_path : str
+                File path for gate set tomography program being read and compiled.
+            awg : HdawgDriver
+                Instance of HdawgDriver object, native to silospin.
+            n_inner : int
+                Number of inner frames (for each line in GST file) to loop over.
+            n_outer : int
+                Number of outer frames (over entire GST file) to loop over.
+            qubits : list
+                List of indcices corresponding to the qubits (AWG cores) used in the program.
+            qubit_parameters : dict
+                Dictionary of standard parameters for each qubit. Dicionary keys correspond to qubit (AWG core) indices and value is dictonary of qubit parameters (["i_amp_pi", "q_amp_pi", "i_amp_pi_2", "q_amp_pi_2", "tau_pi",  "tau_pi_2", "delta_iq", "mod_freq"]).
+            external_trigger : bool
+                True if an external hardware trigger is used. False if the instrument's internal trigger is used.
+            trigger_channel : int
+                Trigger channel used if external_trigger = True.
+       '''
         self._gst_path = gst_file_path
         self._awg = awg
         self._sample_rate = 2.4e9
         self._awg_cores =  qubits
 
-        self._qubit_parameters = {
-        0: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 200e-9,  "tau_pi_2" :  100e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
-        1: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 200e-9,  "tau_pi_2" :  100e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
-        2: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 120e-9,  "tau_pi_2" :  60e-9,  "delta_iq" : 0 , "mod_freq": 60e6},
-        3: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 160e-9,  "tau_pi_2" :  80e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
+        if qubit_parameters is None:
+            self._qubit_parameters =  {0: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 200e-9,  "tau_pi_2" :  100e-9,  "delta_iq" : 0 , "mod_freq": 60e6}, 1: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 200e-9,  "tau_pi_2" :  100e-9,  "delta_iq" : 0 , "mod_freq": 60e6}, 2: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 120e-9,  "tau_pi_2" :  60e-9,  "delta_iq" : 0 ,  "mod_freq": 60e6}, 3: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 160e-9,  "tau_pi_2" :  80e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
+        else:
+            self._qubit_parameters = qubit_parameters
         tau_pi_2_set = np.array([self._qubit_parameters[0]["tau_pi_2"], self._qubit_parameters[1]["tau_pi_2"], self._qubit_parameters[2]["tau_pi_2"], self._qubit_parameters[3]["tau_pi_2"]])
         tau_pi_2_standard_idx = np.argmax(tau_pi_2_set)
 
         ##Define standard length of pulse in time
         tau_pi_2_standard = np.max(tau_pi_2_set)
         tau_pi_standard = 2*tau_pi_2_standard
-
         npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/32)*32
         npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/32)*32
 
@@ -81,16 +132,16 @@ class CompileGST:
             seq_code[idx] =  make_waveform_placeholders(n_array)
             command_code[idx] = ""
             ##outer frame loop
-            sequence = "repeat("+str(n_fr)+"){\n "
+            sequence = "repeat("+str(n_outer)+"){\n "
             for ii in range(len(ct_idxs_all)):
                  n_seq = ct_idxs_all[ii][str(idx)]
-                 if hard_trigger == False:
-                     seq = make_gateset_sequencer_fast_v2(n_seq)
+                 if external_trigger == False:
+                     seq = make_gateset_sequencer(n_seq)
                  else:
                      if idx == trigger_channel:
-                         seq = make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=True)
+                         seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
                      else:
-                         seq = make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=False)
+                         seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
                  sequence += seq
 
             command_code[idx] = command_code[idx] + sequence
@@ -129,6 +180,7 @@ class CompileGST:
         for idx in awg_idxs:
             self._awg._awgs["awg"+str(idx+1)].single(True)
             self._awg._awgs["awg"+str(idx+1)].enable(True)
+
 class RamseyTypes:
     ##should generalize for all qubits ==> only change will be pulse type
     def __init__(self, awg, t_range, npoints_t, npoints_av, taus_pulse, axis = "x", sample_rate = 2.4e9, n_fr=1):
