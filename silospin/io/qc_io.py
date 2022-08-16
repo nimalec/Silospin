@@ -89,7 +89,6 @@ def quantum_protocol_parser_v2(file_path, qubit_lengths, qubit_set = {1,2,3,4}):
                 else:
                     qubit_length = qubit_lengths[int(item[0])][gates[item[2:len(item)]]]
                     length_set.append(qubit_length)
-
             if len(length_set) == 0:
                 pass
             else:
