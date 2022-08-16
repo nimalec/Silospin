@@ -53,7 +53,7 @@ class GateSetTomographyProgram:
     run_program(awg_idxs):
         Compiles and runs programs over specified awg_idxs.
     """
-    def __init__(self, gst_file_path, awg, n_inner=1, n_outer=1, qubits=[0,1,2,3], qubit_parameters=None, external_trigger=False, trigger_channel=0):
+    def __init__(self, gst_file_path, awg, n_inner=1, n_outer=1, qubits=[0,1,2,3], qubit_parameters=None, external_trigger=True, trigger_channel=0):
         '''
         Constructor method for CompileGateSetTomographyProgram.
 
