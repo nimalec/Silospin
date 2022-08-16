@@ -12,7 +12,7 @@ from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.qc_helpers import *
 from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser, quantum_protocol_parser_v2
 
-class CompileGateSetTomographyProgram:
+class GateSetTomographyProgram:
     """
     Class representing an instance of compiler gate set tomography experiment (uses entirely rectangular waves).
 
