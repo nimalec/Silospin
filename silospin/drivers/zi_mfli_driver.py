@@ -53,7 +53,6 @@ class MfliDriver:
         "phaseadjust":  self._daq.getInt(f"/{self._device}/demods/0/phaseadjust"), "rate" : self._daq.getDouble(f"/{self._device}/demods/0/rate"),
         "sinc": self._daq.getInt(f"/{self._device}/demods/0/sinc"), "timeconstant": self._daq.getDouble(f"/{self._device}/demods/0/timeconstant")
         , "trigger": self._daq.getInt(f"/{self._device}/demods/0/trigger")}
-
         self._sigins_settings = {"ac": self._daq.getInt(f"/{self._device}/sigins/0/ac"), "autorange": self._daq.getInt(f"/{self._device}/sigins/0/autorange")
         , "diff": self._daq.getInt(f"/{self._device}/sigins/0/diff"),
         "float": self._daq.getInt(f"/{self._device}/sigins/0/float"), "imp50": self._daq.getInt(f"/{self._device}/sigins/0/imp50"),
@@ -80,6 +79,14 @@ class MfliDriver:
         elif key in settings_2:
             value = self._daq.getDouble(f"/{self._device}/demods/0/"+key)
         return value
+
+    def set_demods_settings(self, key, value):
+        settings_1 = {"enable", "adcselect","bypass", "harmonic", "order", "oscselect", "phaseadjust",  "sinc", "trigger"}
+        settings_2 = {"freq", "phaseshift", "rate", "timeconstant", "rate"}
+        if key in settings_1:
+            self._daq.set(f"/{self._device}/demods/0/"+key, value)
+        elif key in settings_2:
+            self._daq.set(f"/{self._device}/demods/0/"+key)
 
     def get_sigins_settings(self, key):
         settings_1 = {"ac", "autorange", "diff", "float","imp50", "on", "range"}
