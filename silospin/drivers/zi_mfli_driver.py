@@ -74,7 +74,7 @@ class MfliDriver:
 
     def get_demods_settings(self, key):
         settings_1 = {"enable", "adcselect","bypass", "harmonic", "order", "oscselect", "phaseadjust",  "sinc", "trigger"}
-        settings_2 = {"freq": , "phaseshift": , "rate", "timeconstant", "rate"}
+        settings_2 = {"freq", "phaseshift", "rate", "timeconstant", "rate"}
         if key in settings_1:
             value = self._daq.getInt(f"/{self._device}/demods/0/"+key)
         elif key in settings_2:
