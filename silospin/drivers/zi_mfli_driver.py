@@ -45,7 +45,6 @@ class MfliDriver:
           "on": self._daq.getInt(f"/{self._device}/currins/0/on") , "range": self._daq.getInt(f"/{self._device}/currins/0/range"), "scaling": self._daq.getDouble(f"/{self._device}/currins/0/scaling")}
         self._oscs_settings = {"freq": self._daq.getDouble(f"/{self._device}/oscs/0/freq")}
 
-
     def get_all_mfli_settings(self):
         self._demods_settings = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable"), "adcselect": self._daq.getInt(f"/{self._device}/demods/0/adcselect") ,
         "bypass": self._daq.getInt(f"/{self._device}/demods/0/bypass"), "freq": self._daq.getDouble(f"/{self._device}/demods/0/freq"), "harmonic":
@@ -54,9 +53,10 @@ class MfliDriver:
         "phaseadjust":  self._daq.getInt(f"/{self._device}/demods/0/phaseadjust"), "rate" : self._daq.getDouble(f"/{self._device}/demods/0/rate"),
         "sinc": self._daq.getInt(f"/{self._device}/demods/0/sinc"), "timeconstant": self._daq.getDouble(f"/{self._device}/demods/0/timeconstant")
         , "trigger": self._daq.getInt(f"/{self._device}/demods/0/trigger")}
+
         self._sigins_settings = {"ac": self._daq.getInt(f"/{self._device}/sigins/0/ac"), "autorange": self._daq.getInt(f"/{self._device}/sigins/0/autorange")
         , "diff": self._daq.getInt(f"/{self._device}/sigins/0/diff"),
-        "float": self._daq.getInt(f"/{self._device}/sigins/0/float"), "impt50": self._daq.getInt(f"/{self._device}/sigins/0/imp50"),
+        "float": self._daq.getInt(f"/{self._device}/sigins/0/float"), "imp50": self._daq.getInt(f"/{self._device}/sigins/0/imp50"),
          "max": self._daq.getDouble(f"/{self._device}/sigins/0/max"), "min": self._daq.getDouble(f"/{self._device}/sigins/0/min"),
         "on": self._daq.getInt(f"/{self._device}/sigins/0/on"), "range": self._daq.getInt(f"/{self._device}/sigins/0/range"), "scaling": self._daq.getInt(f"/{self._device}/sigins/0/scaling")}
         self._sigouts_settings = {"add": self._daq.getInt(f"/{self._device}/sigouts/0/add"),
@@ -72,11 +72,46 @@ class MfliDriver:
         self._oscs_settings = {"freq": self._daq.getDouble(f"/{self._device}/oscs/0/freq")}
         return {"demods": self._demods_settings, "sigins": self._sigins_settings, "sigouts": self._sigouts_settings, "currins": self._currins_settings , "oscs": self._oscs_settings}
 
+    def get_demods_settings(self, key):
+        settings_1 = {"enable", "adcselect","bypass", "harmonic", "order", "oscselect", "phaseadjust",  "sinc", "trigger"}
+        settings_2 = {"freq": , "phaseshift": , "rate", "timeconstant", "rate"}
+        if key in settings_1:
+            value = self._daq.getInt(f"/{self._device}/demods/0/"+key)
+        elif key in settings_2:
+            value = self._daq.getDouble(f"/{self._device}/demods/0/"+key)
+        return value
 
-    def enable_data_transfer(self):
-         self._daq.set(f"/{self._device}/demods/0/enable", 1)
-         self._demod_settings["enable"] = self._daq.getInt(f"/{self._device}/demods/0/enable")
-         self._scope_module = self._daq.scopeModule()
+    def get_sigins_settings(self, key):
+        settings_1 = {"ac", "autorange", "diff", "float","imp50", "on", "range"}
+        settings_2 = {"max", "min"}
+        if key in settings_1:
+            value = self._daq.getInt(f"/{self._device}/sigins/0/"+key)
+        elif key in settings_2:
+            value = self._daq.getDouble(f"/{self._device}/sigins/0/"+key)
+        return value
+
+    def get_sigouts_settings(self, key):
+        settings_1 = {"add", "autorange", "diff", "imp50", "on", "over", "range"}
+        settings_2 = {"offset"}
+        if key in settings_1:
+            value = self._daq.getInt(f"/{self._device}/sigins/0/"+key)
+        elif key in settings_2:
+            value = self._daq.getDouble(f"/{self._device}/sigins/0/"+key)
+        return value
+
+    def get_currins_settings(self, key):
+        settings_1 = {"autorange", "float", "range"}
+        settings_2 = {"max", "min", "scaling"}
+        if key in settings_1:
+            value = self._daq.getInt(f"/{self._device}/currins/0/"+key)
+        elif key in settings_2:
+            value = self._daq.getDouble(f"/{self._device}/currins/0/"+key)
+        return value
+
+    # def enable_data_transfer(self):
+    #      self._daq.set(f"/{self._device}/demods/0/enable", 1)
+    #      self._demod_settings["enable"] = self._daq.getInt(f"/{self._device}/demods/0/enable")
+    #      self._scope_module = self._daq.scopeModule()
 
     #def get_sigins_settings(self, key):
 
