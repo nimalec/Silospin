@@ -21,19 +21,19 @@ class MfliDriver:
         self._device = device
         zhinst.utils.api_server_version_check(self._daq)
         self._daq_module = self._daq.dataAcquisitionModule()
-        self._demods = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable"), "adcselect": self._daq.getInt(f"/{self._device}/demods/0/adcselect") ,
+        self._demods_settings = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable"), "adcselect": self._daq.getInt(f"/{self._device}/demods/0/adcselect") ,
         "bypass": self._daq.getInt(f"/{self._device}/demods/0/bypass"), "freq": self._daq.getDouble(f"/{self._device}/demods/0/freq"), "harmonic":
         self._daq.getInt(f"/{self._device}/demods/0/bypass"), "order": self._daq.getInt(f"/{self._device}/demods/0/order"),
         "oscselect": self._daq.getInt(f"/{self._device}/demods/0/oscselect"),   "phaseshift": self._daq.getDouble(f"/{self._device}/demods/0/phaseshift"),
         "phaseadjust":  self._daq.getInt(f"/{self._device}/demods/0/phaseadjust"), "rate" : self._daq.getDouble(f"/{self._device}/demods/0/rate"),
         "sinc": self._daq.getInt(f"/{self._device}/demods/0/sinc"), "timeconstant": self._daq.getDouble(f"/{self._device}/demods/0/timeconstant")
         , "trigger": self._daq.getInt(f"/{self._device}/demods/0/trigger")}
-        self._sigins = {"ac": self._daq.getInt(f"/{self._device}/sigins/0/ac"), "autorange": self._daq.getInt(f"/{self._device}/sigins/0/autorange")
+        self._sigins_settings = {"ac": self._daq.getInt(f"/{self._device}/sigins/0/ac"), "autorange": self._daq.getInt(f"/{self._device}/sigins/0/autorange")
         , "diff": self._daq.getInt(f"/{self._device}/sigins/0/diff"),
         "float": self._daq.getInt(f"/{self._device}/sigins/0/float"), "impt50": self._daq.getInt(f"/{self._device}/sigins/0/imp50"),
          "max": self._daq.getDouble(f"/{self._device}/sigins/0/max"), "min": self._daq.getDouble(f"/{self._device}/sigins/0/min"),
         "on": self._daq.getInt(f"/{self._device}/sigins/0/on"), "range": self._daq.getInt(f"/{self._device}/sigins/0/range"), "scaling": self._daq.getInt(f"/{self._device}/sigins/0/scaling")}
-        self._sigouts = {"add": self._daq.getInt(f"/{self._device}/sigouts/0/add"),
+        self._sigouts_settings = {"add": self._daq.getInt(f"/{self._device}/sigouts/0/add"),
         "autorange": self._daq.getInt(f"/{self._device}/sigouts/0/autorange"),
         "diff": self._daq.getInt(f"/{self._device}/sigouts/0/diff"),
         "imp50": self._daq.getInt(f"/{self._device}/sigouts/0/imp50"),
@@ -41,14 +41,45 @@ class MfliDriver:
         "on": self._daq.getDouble(f"/{self._device}/sigouts/0/on"),
         "over": self._daq.getDouble(f"/{self._device}/sigouts/0/over") ,
         "range": self._daq.getDouble(f"/{self._device}/sigouts/0/range")}
-        self._currins = {"autorange": self._daq.getInt(f"/{self._device}/currins/0/autorange"), "float": self._daq.getInt(f"/{self._device}/currins/0/float"), "max": self._daq.getDouble(f"/{self._device}/currins/0/max"), "min": self._daq.getDouble(f"/{self._device}/currins/0/min"),
+        self._currins_settings = {"autorange": self._daq.getInt(f"/{self._device}/currins/0/autorange"), "float": self._daq.getInt(f"/{self._device}/currins/0/float"), "max": self._daq.getDouble(f"/{self._device}/currins/0/max"), "min": self._daq.getDouble(f"/{self._device}/currins/0/min"),
           "on": self._daq.getInt(f"/{self._device}/currins/0/on") , "range": self._daq.getInt(f"/{self._device}/currins/0/range"), "scaling": self._daq.getDouble(f"/{self._device}/currins/0/scaling")}
-        self._oscs = {"freq": self._daq.getDouble(f"/{self._device}/oscs/0/freq")}
+        self._oscs_settings = {"freq": self._daq.getDouble(f"/{self._device}/oscs/0/freq")}
+
+
+    def get_all_mfli_settings(self):
+        self._demods_settings = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable"), "adcselect": self._daq.getInt(f"/{self._device}/demods/0/adcselect") ,
+        "bypass": self._daq.getInt(f"/{self._device}/demods/0/bypass"), "freq": self._daq.getDouble(f"/{self._device}/demods/0/freq"), "harmonic":
+        self._daq.getInt(f"/{self._device}/demods/0/bypass"), "order": self._daq.getInt(f"/{self._device}/demods/0/order"),
+        "oscselect": self._daq.getInt(f"/{self._device}/demods/0/oscselect"),   "phaseshift": self._daq.getDouble(f"/{self._device}/demods/0/phaseshift"),
+        "phaseadjust":  self._daq.getInt(f"/{self._device}/demods/0/phaseadjust"), "rate" : self._daq.getDouble(f"/{self._device}/demods/0/rate"),
+        "sinc": self._daq.getInt(f"/{self._device}/demods/0/sinc"), "timeconstant": self._daq.getDouble(f"/{self._device}/demods/0/timeconstant")
+        , "trigger": self._daq.getInt(f"/{self._device}/demods/0/trigger")}
+        self._sigins_settings = {"ac": self._daq.getInt(f"/{self._device}/sigins/0/ac"), "autorange": self._daq.getInt(f"/{self._device}/sigins/0/autorange")
+        , "diff": self._daq.getInt(f"/{self._device}/sigins/0/diff"),
+        "float": self._daq.getInt(f"/{self._device}/sigins/0/float"), "impt50": self._daq.getInt(f"/{self._device}/sigins/0/imp50"),
+         "max": self._daq.getDouble(f"/{self._device}/sigins/0/max"), "min": self._daq.getDouble(f"/{self._device}/sigins/0/min"),
+        "on": self._daq.getInt(f"/{self._device}/sigins/0/on"), "range": self._daq.getInt(f"/{self._device}/sigins/0/range"), "scaling": self._daq.getInt(f"/{self._device}/sigins/0/scaling")}
+        self._sigouts_settings = {"add": self._daq.getInt(f"/{self._device}/sigouts/0/add"),
+        "autorange": self._daq.getInt(f"/{self._device}/sigouts/0/autorange"),
+        "diff": self._daq.getInt(f"/{self._device}/sigouts/0/diff"),
+        "imp50": self._daq.getInt(f"/{self._device}/sigouts/0/imp50"),
+        "offset": self._daq.getDouble(f"/{self._device}/sigouts/0/offset"),
+        "on": self._daq.getDouble(f"/{self._device}/sigouts/0/on"),
+        "over": self._daq.getDouble(f"/{self._device}/sigouts/0/over") ,
+        "range": self._daq.getDouble(f"/{self._device}/sigouts/0/range")}
+        self._currins_settings = {"autorange": self._daq.getInt(f"/{self._device}/currins/0/autorange"), "float": self._daq.getInt(f"/{self._device}/currins/0/float"), "max": self._daq.getDouble(f"/{self._device}/currins/0/max"), "min": self._daq.getDouble(f"/{self._device}/currins/0/min"),
+          "on": self._daq.getInt(f"/{self._device}/currins/0/on") , "range": self._daq.getInt(f"/{self._device}/currins/0/range"), "scaling": self._daq.getDouble(f"/{self._device}/currins/0/scaling")}
+        self._oscs_settings = {"freq": self._daq.getDouble(f"/{self._device}/oscs/0/freq")}
+        return {"demods": self._demods_settings, "sigins": self._sigins_settings, "sigouts": self._sigouts_settings, "currins": self._currins_settings , "oscs": self._oscs_settings}
+
 
     def enable_data_transfer(self):
          self._daq.set(f"/{self._device}/demods/0/enable", 1)
          self._demod_settings["enable"] = self._daq.getInt(f"/{self._device}/demods/0/enable")
          self._scope_module = self._daq.scopeModule()
+
+    #def get_sigins_settings(self, key):
+
 
     #def record_data_daq_continuous(self, total_duration, burst_duration):
 
