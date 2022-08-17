@@ -44,12 +44,8 @@ class MfliDriver:
 
         self._currins = {"autorange": self._daq.getInt(f"/{self._device}/currins/0/autorange"), "float": self._daq.getInt(f"/{self._device}/currins/0/float"), "max": self._daq.getDouble(f"/{self._device}/currins/0/max"), "min": self._daq.getDouble(f"/{self._device}/currins/0/min"),
           "on": self._daq.getInt(f"/{self._device}/currins/0/on") , "range": self._daq.getInt(f"/{self._device}/currins/0/range"), "scaling": self._daq.getDouble(f"/{self._device}/currins/0/scaling")}
-        #self._demods
-        #self._demods =
-        #self._dios =
-        #self._extrefs
-        #self._oscs =
-        #self._sigouts =
+        self._oscs = {"freq": self._daq.getDouble(f"/{self._device}/oscs/0/freq")}
+
 
 
     def enable_data_transfer(self):
