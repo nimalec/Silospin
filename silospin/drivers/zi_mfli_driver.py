@@ -91,7 +91,7 @@ class MfliDriver:
         return value
 
     def get_sigouts_settings(self, key):
-        settings_1 = {"autorange", "diff", "imp50", "on", "over", "range"}
+        settings_1 = {"add","autorange", "diff", "imp50", "on", "over", "range"}
         settings_2 = {"offset"}
         if key in settings_1:
             value = self._daq.getInt(f"/{self._device}/sigouts/0/"+key)
