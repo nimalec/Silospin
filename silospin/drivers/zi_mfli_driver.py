@@ -38,7 +38,7 @@ class MfliDriver:
         self._sigouts = {"add": self._daq.getInt(f"/{self._device}/sigouts/0/add"),
         "autorange": self._daq.getInt(f"/{self._device}/sigouts/0/autorange"),
         "diff": self._daq.getInt(f"/{self._device}/sigouts/0/diff"),
-        "imp50": self._daq.getInt(f"/{self._device}/sigouts/0/impt50"),
+        "imp50": self._daq.getInt(f"/{self._device}/sigouts/0/imp50"),
         "offset": self._daq.getDouble(f"/{self._device}/sigouts/0/offset"),
         "on": self._daq.getDouble(f"/{self._device}/sigouts/0/on"),
         "over": self._daq.getDouble(f"/{self._device}/sigouts/0/over") ,
