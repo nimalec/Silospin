@@ -10,7 +10,7 @@ import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.qc_helpers import *
-from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser, quantum_protocol_parser_v2
+from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser 
 
 class GateSetTomographyProgram:
     """
@@ -106,7 +106,7 @@ class GateSetTomographyProgram:
             qubit_npoints[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
 
         self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
-        self._gate_sequences = quantum_protocol_parser_v2(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
+        self._gate_sequences = quantum_protocol_parser(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
 
         ct_idxs_all = {}
         arbZs = []
