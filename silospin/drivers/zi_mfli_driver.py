@@ -58,7 +58,7 @@ class MfliDriver:
     def enable_data_transfer(self):
          self._daq.set(f"/{self._device}/demods/0/enable", 1)
          self._demod_settings["enable"] = self._daq.getInt(f"/{self._device}/demods/0/enable")
-        self._scope_module = self._daq.scopeModule()
+         self._scope_module = self._daq.scopeModule()
         #
         # self._daq_module.set("device", self._device)
         # self._daq_module.set("grid/mode", 2)
