@@ -59,7 +59,7 @@ class MfliDriver:
         "float": self._daq.getInt(f"/{self._device}/sigins/0/float"), "imp50": self._daq.getInt(f"/{self._device}/sigins/0/imp50"),
          "max": self._daq.getDouble(f"/{self._device}/sigins/0/max"), "min": self._daq.getDouble(f"/{self._device}/sigins/0/min"),
         "on": self._daq.getInt(f"/{self._device}/sigins/0/on"), "range": self._daq.getInt(f"/{self._device}/sigins/0/range"), "scaling": self._daq.getInt(f"/{self._device}/sigins/0/scaling")}
-        self._sigouts_settings = {"add": self._daq.getInt(f"/{self._device}/sigouts/0/add"),
+        self._sigouts_settings = {
         "autorange": self._daq.getInt(f"/{self._device}/sigouts/0/autorange"),
         "diff": self._daq.getInt(f"/{self._device}/sigouts/0/diff"),
         "imp50": self._daq.getInt(f"/{self._device}/sigouts/0/imp50"),
@@ -91,12 +91,12 @@ class MfliDriver:
         return value
 
     def get_sigouts_settings(self, key):
-        settings_1 = {"add", "autorange", "diff", "imp50", "on", "over", "range"}
+        settings_1 = {"autorange", "diff", "imp50", "on", "over", "range"}
         settings_2 = {"offset"}
         if key in settings_1:
-            value = self._daq.getInt(f"/{self._device}/sigins/0/"+key)
+            value = self._daq.getInt(f"/{self._device}/sigouts/0/"+key)
         elif key in settings_2:
-            value = self._daq.getDouble(f"/{self._device}/sigins/0/"+key)
+            value = self._daq.getDouble(f"/{self._device}/sigouts/0/"+key)
         return value
 
     def get_currins_settings(self, key):
