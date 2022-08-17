@@ -41,7 +41,7 @@ class MfliDriver:
         "on": self._daq.getDouble(f"/{self._device}/sigouts/0/on"),
         "over": self._daq.getDouble(f"/{self._device}/sigouts/0/over") ,
         "range": self._daq.getDouble(f"/{self._device}/sigouts/0/range")}
-        self._auxins = {0: {"averaging": self._daq.getInt(f"/{self._device}/auxins/0/averaging")}, 1: {"averaging": self._daq.getInt(f"/{self._device}/auxins/0/averaging")} 
+        self._auxins = {0: {"averaging": self._daq.getInt(f"/{self._device}/auxins/0/averaging")}, 1: {"averaging": self._daq.getInt(f"/{self._device}/auxins/0/averaging")}
 
 
 
@@ -55,9 +55,9 @@ class MfliDriver:
         #self._sigouts =
 
 
-    def enable_data_transfer(self):
-         self._daq.set(f"/{self._device}/demods/0/enable", 1)
-         self._demod_settings["enable"] = self._daq.getInt(f"/{self._device}/demods/0/enable")
+    # def enable_data_transfer(self):
+    #      self._daq.set(f"/{self._device}/demods/0/enable", 1)
+    #      self._demod_settings["enable"] = self._daq.getInt(f"/{self._device}/demods/0/enable")
         # self._scope_module = self._daq.scopeModule()
         #
         # self._daq_module.set("device", self._device)
