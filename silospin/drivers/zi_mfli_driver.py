@@ -28,13 +28,11 @@ class MfliDriver:
         "phaseadjust":  self._daq.getInt(f"/{self._device}/demods/0/phaseadjust"), "rate" : self._daq.getDouble(f"/{self._device}/demods/0/rate"),
         "sinc": self._daq.getInt(f"/{self._device}/demods/0/sinc"), "timeconstant": self._daq.getDouble(f"/{self._device}/demods/0/timeconstant")
         , "trigger": self._daq.getInt(f"/{self._device}/demods/0/trigger")}
-
         self._sigins = {"ac": self._daq.getInt(f"/{self._device}/sigins/0/ac"), "autorange": self._daq.getInt(f"/{self._device}/sigins/0/autorange")
         , "diff": self._daq.getInt(f"/{self._device}/sigins/0/diff"),
         "float": self._daq.getInt(f"/{self._device}/sigins/0/float"), "impt50": self._daq.getInt(f"/{self._device}/sigins/0/imp50"),
          "max": self._daq.getDouble(f"/{self._device}/sigins/0/max"), "min": self._daq.getDouble(f"/{self._device}/sigins/0/min"),
         "on": self._daq.getInt(f"/{self._device}/sigins/0/on"), "range": self._daq.getInt(f"/{self._device}/sigins/0/range"), "scaling": self._daq.getInt(f"/{self._device}/sigins/0/scaling")}
-
         self._sigouts = {"add": self._daq.getInt(f"/{self._device}/sigouts/0/add"),
         "autorange": self._daq.getInt(f"/{self._device}/sigouts/0/autorange"),
         "diff": self._daq.getInt(f"/{self._device}/sigouts/0/diff"),
@@ -43,7 +41,11 @@ class MfliDriver:
         "on": self._daq.getDouble(f"/{self._device}/sigouts/0/on"),
         "over": self._daq.getDouble(f"/{self._device}/sigouts/0/over") ,
         "range": self._daq.getDouble(f"/{self._device}/sigouts/0/range")}
-        #self._auxins =
+        self._auxins = {0: {"averaging": self._daq.getInt(f"/{self._device}/auxins/0/averaging"), "value": self._daq.getDouble(f"/{self._device}/auxins/0/values")},
+        1: {"averaging": self._daq.getInt(f"/{self._device}/auxins/0/averaging"), "value": self._daq.getDouble(f"/{self._device}/auxins/0/values")}}
+
+
+
         #self._auxouts =
         #self._currins
         #self._demods
