@@ -41,12 +41,9 @@ class MfliDriver:
         "on": self._daq.getDouble(f"/{self._device}/sigouts/0/on"),
         "over": self._daq.getDouble(f"/{self._device}/sigouts/0/over") ,
         "range": self._daq.getDouble(f"/{self._device}/sigouts/0/range")}
-        self._auxins = {0: {"averaging": self._daq.getInt(f"/{self._device}/auxins/0/averaging")}, 1: {"averaging": self._daq.getInt(f"/{self._device}/auxins/0/averaging")}}
 
-
-
-        #self._auxouts =
-        #self._currins
+        self._currins = {"autorange": self._daq.getInt(f"/{self._device}/currins/0/autorange"), "float": self._daq.getInt(f"/{self._device}/currins/0/float"), "max": self._daq.getDouble(f"/{self._device}/currins/0/max"), "min": self._daq.getDouble(f"/{self._device}/currins/0/min"),
+          "on": self._daq.getInt(f"/{self._device}/currins/0/on") , "range": self._daq.getInt(f"/{self._device}/currins/0/range"), "scaling": self._daq.getDouble(f"/{self._device}/currins/0/scaling")}
         #self._demods
         #self._demods =
         #self._dios =
