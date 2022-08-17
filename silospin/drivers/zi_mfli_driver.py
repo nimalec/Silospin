@@ -21,7 +21,39 @@ class MfliDriver:
         self._device = device
         zhinst.utils.api_server_version_check(self._daq)
         self._daq_module = self._daq.dataAcquisitionModule()
-        self._demod_settings = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable")}
+        self._demods = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable"), "adcselect": self._daq.getInt(f"/{self._device}/demods/0/adcselect") ,
+        "bypass": self._daq.getInt(f"/{self._device}/demods/0/bypass"), "freq": self._daq.getDouble(f"/{self._device}/demods/0/freq"), "harmonic":
+        self._daq.getInt(f"/{self._device}/demods/0/bypass"), "order": self._daq.getInt(f"/{self._device}/demods/0/order"),
+        "oscselect": self._daq.getInt(f"/{self._device}/demods/0/oscselect"),   "phaseshift": self._daq.getDouble(f"/{self._device}/demods/0/phaseshift"),
+        "phaseadjust":  self._daq.getInt(f"/{self._device}/demods/0/phaseadjust"), "rate" : self._daq.getDouble(f"/{self._device}/demods/0/rate"),
+        "sinc": self._daq.getInt(f"/{self._device}/demods/0/sinc"), "timeconstant": self._daq.getDouble(f"/{self._device}/demods/0/timeconstant")
+        , "trigger": self._daq.getInt(f"/{self._device}/demods/0/trigger")}
+
+        self._sigins = {"ac": self._daq.getInt(f"/{self._device}/sigins/0/ac"), "autorange": self._daq.getInt(f"/{self._device}/sigins/0/autorange")
+        , "diff": self._daq.getInt(f"/{self._device}/sigins/0/diff"),
+          "float": self._daq.getInt(f"/{self._device}/sigins/0/float"), "impt50": self._daq.getInt(f"/{self._device}/sigins/0/imp50"),
+           "max": self._daq.getDouble(f"/{self._device}/sigins/0/max"), "min": self._daq.getDouble(f"/{self._device}/sigins/0/min"),
+            "on": self._daq.geInt(f"/{self._device}/sigins/0/on"), "range": self._daq.getInt(f"/{self._device}/sigins/0/range"), "scaling": self._daq.getInt(f"/{self._device}/sigins/0/scaling")}
+
+        self._sigouts = {"add": self._daq.getInt(f"/{self._device}/sigouts/0/add"), "amplitudes": self._daq.getDouble(f"/{self._device}/sigouts/0/amplitudes/0"),
+        "autorange": self._daq.getInt(f"/{self._device}/sigouts/0/autorange"),
+        "diff": self._daq.getInt(f"/{self._device}/sigouts/0/diff"),
+        "enables": self._daq.getInt(f"/{self._device}/sigouts/0/enables/0"),
+        "imp50": self._daq.getInt(f"/{self._device}/sigouts/0/impt50"),
+        "offset": self._daq.getDouble(f"/{self._device}/sigouts/0/offset"),
+        "on": self._daq.getDouble(f"/{self._device}/sigouts/0/on")
+        , "over": self._daq.getDouble(f"/{self._device}/sigouts/0/over") ,
+        "range": self._daq.getDouble(f"/{self._device}/sigouts/0/range")}
+        #self._auxins =
+        #self._auxouts =
+        #self._currins
+        #self._demods
+        #self._demods =
+        #self._dios =
+        #self._extrefs
+        #self._oscs =
+        #self._sigouts =
+
 
     def enable_data_transfer(self):
          self._daq.set(f"/{self._device}/demods/0/enable", 1)
@@ -354,8 +386,42 @@ class MfliDaqModule:
             self._signal_paths.remove(signal_path)
             self._daq_module.unsubscribe(signal_path)
 
-    def continuous_data_acquisition(self, signal_nodes = ["x", "y"]):
+    def continuous_data_acquisition(self, total_duration, burst_duration, signal_nodes = ["x", "y"]):
+        ##prepare daq module for cont. data acuisit
         self._mfli.enable_data_transfer()
+        self._daq_module.set("device", self._dev_id)
+        self._daq_module.set("type", 0)
+        self._daq_module.set("grid/mode", 2)
+
+        sig_paths = []
+        for nd in signal_nodes:
+            signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
+            sig_paths.append(signal_path)
+        flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
+        streaming_nodes = daq.listNodes(f"/{self._dev_id}", flags)
+        if demod_path not in (node.lower() for node in streaming_nodes):
+            print(
+            f"Device {device} does not have demodulators. Please modify the example to specify",
+            "a valid signal_path based on one or more of the following streaming nodes: ",
+            "\n".join(streaming_nodes),
+            )
+            raise Exception(
+                "Demodulator streaming nodes unavailable - see the message above for more information."
+            )
+        sample_rate = 3000
+        num_cols = int(np.ceil(sample_rate * burst_duration))
+        num_bursts = int(np.ceil(total_duration / burst_duration))
+        self._daq_module.set("count", num_bursts)
+        self._daq_module.set("duration", burst_duration)
+        self._daq_module.set("grid/cols",  num_cols)
+
+
+
+
+
+        #self._daq_module.set("device", self._dev_id)
+
+
 
 
 # class MfliScopeModule:
