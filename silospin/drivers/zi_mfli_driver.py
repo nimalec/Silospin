@@ -72,7 +72,7 @@ class MfliDriver:
         return {"demods": self._demods_settings, "sigins": self._sigins_settings, "sigouts": self._sigouts_settings, "currins": self._currins_settings , "oscs": self._oscs_settings}
 
     def get_demods_settings(self, key):
-        settings_1 = {"ac","enable", "adcselect","bypass", "harmonic", "order", "oscselect", "phaseadjust",  "sinc", "trigger"}
+        settings_1 = {"enable", "adcselect","bypass", "harmonic", "order", "oscselect", "phaseadjust",  "sinc", "trigger"}
         settings_2 = {"freq", "phaseshift", "rate", "timeconstant", "rate"}
         if key in settings_1:
             value = self._daq.getInt(f"/{self._device}/demods/0/"+key)
@@ -81,7 +81,7 @@ class MfliDriver:
         return value
 
     def set_demods_settings(self, key, value):
-        settings_1 = {"ac","enable", "adcselect","bypass", "harmonic", "order", "oscselect", "phaseadjust",  "sinc", "trigger"}
+        settings_1 = {"enable", "adcselect","bypass", "harmonic", "order", "oscselect", "phaseadjust",  "sinc", "trigger"}
         settings_2 = {"freq", "phaseshift", "rate", "timeconstant", "rate"}
         if key in settings_1:
             self._daq.set(f"/{self._device}/demods/0/"+key, value)
