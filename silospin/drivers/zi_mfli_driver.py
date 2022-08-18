@@ -380,7 +380,9 @@ class MfliDaqModule:
 
         data = {}
         for sig in sig_paths:
+            print(sig)
             data[sig] = []
+
 
         ##start here (line 182 in repo)
         self.subscribe_stream_node(sig_paths)
@@ -403,8 +405,6 @@ class MfliDaqModule:
         timeout = 1.5 * total_duration
         t0 = time.time()
         self._data = data
-
-
         #self._daq_module.set("device", self._dev_id)
 # class MfliScopeModule:
 #
