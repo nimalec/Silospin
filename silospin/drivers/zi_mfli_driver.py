@@ -4,6 +4,7 @@ import zhinst.utils
 import zhinst.toolkit as tk
 import numpy as np
 import time
+from silospin.drivers.driver_helpers import read_data_update_plot
 
 class MfliDriver:
     def __init__(self, device_id, server_host = "localhost", server_port = 8004, api_level = 6):
@@ -350,15 +351,15 @@ class MfliDaqModule:
         ##prepare daq module for cont. data acuisit
         self._mfli.enable_data_transfer()
         self._daq_module.set("device", self._dev_id)
-        self._daq_module.set("type", 0)
-        self._daq_module.set("grid/mode", 2)
+        self.set_trigger_setting("type", 0)
+        self.set_grid_setting("mode", 2)
 
         sig_paths = []
         for nd in signal_nodes:
             signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
             sig_paths.append(signal_path)
         flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
-        streaming_nodes = daq.listNodes(f"/{self._dev_id}", flags)
+        streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
         if demod_path not in (node.lower() for node in streaming_nodes):
             print(
             f"Device {device} does not have demodulators. Please modify the example to specify",
@@ -375,15 +376,33 @@ class MfliDaqModule:
         self._daq_module.set("duration", burst_duration)
         self._daq_module.set("grid/cols",  num_cols)
 
+        data = {}
+        for sig in sig_paths:
+            data[sig] = []
 
+        ##start here (line 182 in repo)
+        self.subscribe_stream_node(sig_paths)
+        clockbase = float(self._mfli.daq.getInt(f"/{device}/clockbase"))
+        ts0 = np.nan
+        read_count = 0
+        self.execute()
 
+        timeout = 1.5 * total_duration
+        t0_measurement = time.time()
+        t_update = 0.9 * burst_duration
+        while not self.finished():
+            t0_loop = time.time()
+            if time.time() - t0_measurement > timeout:
+                raise Exception(f"Timeout after {timeout} s - recording not complete." "Are the streaming nodes enabled?")
+            data, ts0 = read_data_update_plot(data, timestamp0, daq_module, signal_paths)
+            read_count += 1
+            time.sleep(max(0, t_update - (time.time() - t0_loop)))
+        data, _ = read_data_update_plot(data, ts0)
+        timeout = 1.5 * total_duration
+        t0 = time.time()
 
 
         #self._daq_module.set("device", self._dev_id)
-
-
-
-
 # class MfliScopeModule:
 #
 # class MfliSweeperModule:
