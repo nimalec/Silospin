@@ -399,7 +399,7 @@ class MfliDaqModule:
             data, ts0 = read_data_update_plot(data, timestamp0, daq_module, signal_paths, plot)
             read_count += 1
             time.sleep(max(0, t_update - (time.time() - t0_loop)))
-        data, _ = read_data_update_plot(data, timestamp0, daq_module, signal_paths, plot)
+        data, _ = read_data_update_plot(data, ts0, daq_module, signal_paths, plot)
         timeout = 1.5 * total_duration
         t0 = time.time()
         self._data = data
