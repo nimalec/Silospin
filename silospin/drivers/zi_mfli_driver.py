@@ -384,7 +384,7 @@ class MfliDaqModule:
 
         ##start here (line 182 in repo)
         self.subscribe_stream_node(sig_paths)
-        clockbase = float(self._mfli._daq.getInt(f"/{device}/clockbase"))
+        clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
         ts0 = np.nan
         read_count = 0
         self.execute()
