@@ -2,6 +2,8 @@
 import zhinst
 import zhinst.utils
 import zhinst.toolkit as tk
+from zhinst.ziPython import ziListEnum
+import matplotlib.pyplot as plt 
 import numpy as np
 import time
 from silospin.drivers.driver_helpers import read_data_update_plot
