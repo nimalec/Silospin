@@ -20,7 +20,7 @@ def read_data_update_plot(data, timestamp0, daq_module, clockbase,signal_paths,p
         else:
                 pass
 
-        Update the plot.
+    #    Update the plot.
         if plot:
             axis.set_title(f"Progress of data acquisition: {100 * progress:.2f}%.")
             plt.pause(0.01)
