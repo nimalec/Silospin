@@ -3,7 +3,7 @@ import zhinst
 import zhinst.utils
 import zhinst.toolkit as tk
 from zhinst.ziPython import ziListEnum
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 import numpy as np
 import time
 from silospin.drivers.driver_helpers import read_data_update_plot
@@ -361,6 +361,7 @@ class MfliDaqModule:
             sig_paths.append(signal_path)
         flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
         streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
+        demod_path = f"/{self._dev_id}/demods/0/sample"
         if demod_path not in (node.lower() for node in streaming_nodes):
             print(
             f"Device {device} does not have demodulators. Please modify the example to specify",
