@@ -400,6 +400,7 @@ class MfliDaqModule:
         data, _ = read_data_update_plot(data, ts0)
         timeout = 1.5 * total_duration
         t0 = time.time()
+        self._data = data  
 
 
         #self._daq_module.set("device", self._dev_id)
