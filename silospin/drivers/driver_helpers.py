@@ -1,4 +1,6 @@
 import numpy as np
+import matplotlib.pyplot as plt
+
 def read_data_update_plot(data, timestamp0, daq_module, clockbase,signal_paths,plot=False):
     data_read = daq_module.read(True)
     returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
@@ -10,17 +12,17 @@ def read_data_update_plot(data, timestamp0, daq_module, clockbase,signal_paths,p
                     timestamp0 = signal_burst["timestamp"][0, 0]
                 t = (signal_burst["timestamp"][0, :] - timestamp0) / clockbase
                 value = signal_burst["value"][0, :]
-                # if plot:
-                #     axis.plot(t, value)
+                if plot:
+                    axis.plot(t, value)
                 num_samples = len(signal_burst["value"][0, :])
                 dt = (signal_burst["timestamp"][0, -1]- signal_burst["timestamp"][0, 0]) / clockbase
                 data[signal_path].append(signal_burst)
         else:
                 pass
 
-        # Update the plot.
-        # if plot:
-        #     axis.set_title(f"Progress of data acquisition: {100 * progress:.2f}%.")
-        #     plt.pause(0.01)
-        #     fig.canvas.draw()
+        Update the plot.
+        if plot:
+            axis.set_title(f"Progress of data acquisition: {100 * progress:.2f}%.")
+            plt.pause(0.01)
+            fig.canvas.draw()
         return data, timestamp0
