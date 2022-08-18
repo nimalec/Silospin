@@ -1,3 +1,4 @@
+import numpy as np 
 def read_data_update_plot(data, timestamp0, daq_module, signal_paths,plot=False):
     data_read = daq_module.read(True)
     returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
