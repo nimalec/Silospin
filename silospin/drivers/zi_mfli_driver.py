@@ -392,7 +392,7 @@ class MfliDaqModule:
         timeout = 1.5 * total_duration
         t0_measurement = time.time()
         t_update = 0.9 * burst_duration
-        while not self.finished():
+        while not self._daq_module.finished():
             t0_loop = time.time()
             if time.time() - t0_measurement > timeout:
                 raise Exception(f"Timeout after {timeout} s - recording not complete." "Are the streaming nodes enabled?")
