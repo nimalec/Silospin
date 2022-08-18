@@ -348,7 +348,7 @@ class MfliDaqModule:
 
     def continuous_data_acquisition(self, total_duration, burst_duration, signal_nodes = ["x", "y"], plot=False):
         ##prepare daq module for cont. data acuisit
-        self._mfli.enable_data_transfer()
+        self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
         self.set_trigger_setting("type", 0)
         self.set_grid_setting("mode", 2)
