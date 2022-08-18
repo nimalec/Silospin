@@ -260,7 +260,6 @@ class MfliDaqModule:
             pass
         return self._fft_settings[key]
 
-
     def set_history_setting(self, key, value):
         if key == "clearhistory":
             self._daq_module.set("clearhistory", value)
@@ -347,7 +346,7 @@ class MfliDaqModule:
             self._signal_paths.remove(signal_path)
             self._daq_module.unsubscribe(signal_path)
 
-    def continuous_data_acquisition(self, total_duration, burst_duration, signal_nodes = ["x", "y"]):
+    def continuous_data_acquisition(self, total_duration, burst_duration, signal_nodes = ["x", "y"], plot=False):
         ##prepare daq module for cont. data acuisit
         self._mfli.enable_data_transfer()
         self._daq_module.set("device", self._dev_id)
@@ -394,13 +393,13 @@ class MfliDaqModule:
             t0_loop = time.time()
             if time.time() - t0_measurement > timeout:
                 raise Exception(f"Timeout after {timeout} s - recording not complete." "Are the streaming nodes enabled?")
-            data, ts0 = read_data_update_plot(data, timestamp0, daq_module, signal_paths)
+            data, ts0 = read_data_update_plot(data, timestamp0, daq_module, signal_paths, plot)
             read_count += 1
             time.sleep(max(0, t_update - (time.time() - t0_loop)))
-        data, _ = read_data_update_plot(data, ts0)
+        data, _ = read_data_update_plot(data, timestamp0, daq_module, signal_paths, plot)
         timeout = 1.5 * total_duration
         t0 = time.time()
-        self._data = data    
+        self._data = data
 
 
         #self._daq_module.set("device", self._dev_id)
