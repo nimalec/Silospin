@@ -380,8 +380,8 @@ class MfliDaqModule:
 
         data = {}
         for sig in sig_paths:
-            print(sig)
             data[sig] = []
+            self._daq_module.subscribe(sig)
 
 
         ##start here (line 182 in repo)
