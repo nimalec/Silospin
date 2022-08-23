@@ -24,6 +24,7 @@ class MfliDriver:
         self._device = device
         zhinst.utils.api_server_version_check(self._daq)
         self._daq_module = self._daq.dataAcquisitionModule()
+        self._scope_module = self._daq.ScopeModule()
         self._demods_settings = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable"), "adcselect": self._daq.getInt(f"/{self._device}/demods/0/adcselect") ,
         "bypass": self._daq.getInt(f"/{self._device}/demods/0/bypass"), "freq": self._daq.getDouble(f"/{self._device}/demods/0/freq"), "harmonic":
         self._daq.getInt(f"/{self._device}/demods/0/bypass"), "order": self._daq.getInt(f"/{self._device}/demods/0/order"),
@@ -188,7 +189,6 @@ class MfliDaqModule:
 
         #self._data_streaming = { }
         self._signal_paths = set()
-
         #self._recorded_data
 
     def get_all_daq_settings(self):
@@ -245,6 +245,9 @@ class MfliDaqModule:
     def get_grid_setting(self, key):
         self._grid_settings[key] = self._daq_module.getInt("grid/"+key)
         return self._grid_settings[key]
+
+    def get_osc_setting(self, key):
+        self._grid_settings[key] = self._daq_module.getDouble("grid/"+key)
 
     def get_fft_setting(self, key):
         settings_1 = {"window", "absolute"}
@@ -348,8 +351,8 @@ class MfliDaqModule:
             self._signal_paths.remove(signal_path)
             self._daq_module.unsubscribe(signal_path)
 
-    def continuous_data_acquisition(self, total_duration, burst_duration, signal_nodes = ["x", "y"]):
-        ##prepare daq module for cont. data acuisit
+    def continuous_data_acquisition_time_domain(self, total_duration, burst_duration, signal_nodes = ["x", "y"]):
+        ##prepare daq module for cont. data acquisition_time
         self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
         self.set_trigger_setting("type", 0)
@@ -383,9 +386,6 @@ class MfliDaqModule:
             data[sig] = []
             self._daq_module.subscribe(sig)
 
-
-        ##start here (line 182 in repo)
-        #self.subscribe_stream_node(sig_paths)
         clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
         ts0 = np.nan
         read_count = 0
@@ -405,7 +405,166 @@ class MfliDaqModule:
         timeout = 1.5 * total_duration
         t0 = time.time()
         self._data = data
-        #self._daq_module.set("device", self._dev_id)
-# class MfliScopeModule:
+
+    def continuous_data_acquisition_spectrum(self, freq_span, n_cols, signal_nodes = ["x", "y"]):
+        ##prepare daq module for cont. data acquisition_time
+        ## FFT settings (note: currently uses freq_span as standard)
+        time_constant = 1/(2*freq_span)
+        self.set_fft_setting("spectrumautobw", 1) #Subscribes  automatic bandwidth
+        self.set_fft_setting("absolute",1) #Centers wrt demod freq
+        self.set_fft_setting("spectrumenable",1) #Enables FFT mode of scope
+        signal_path = f"/{self._dev_id}/demods/0/sample.xiy.fft.abs" #Defines signal path for PSD
+        self.set_fft_setting("spectrumfrequencyspan", time_constant )
+
+        ##Demod settings
+        self._mfli.set_demods_settings("enable", 1) #Enables demodulator
+        self._mfli.set_demods_settings("rate", 1e6) #Sets demod rate to 1 MSa/s
+        self._mfli.set_demods_settings("freq", 0.0) #Sets demod freq. to 0
+        self._mfli.set_demods_settings("timeconstant", 2e-6) #Sets demod freq. to 0
+        time.sleep(10 * time_constant)
+
+        ##Sigins settings
+        self._mfli.set_sigins_settings("ac", 1)
+        self._mfli.set_sigins_settings("imp50", 0)
+        self._daq_module.set("device", self._dev_id)
+
+        ## Trigger and grid settings
+        self.set_trigger_setting("type", 0) #continuous
+        self.set_grid_setting("mode", 4)
+        self.set_grid_setting("cols", n_cols)
+
+
+        flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
+        streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
+        demod_path = f"/{self._dev_id}/demods/0/sample"
+        if demod_path not in (node.lower() for node in streaming_nodes):
+            print(
+            f"Device {device} does not have demodulators. Please modify the example to specify",
+            "a valid signal_path based on one or more of the following streaming nodes: ",
+            "\n".join(streaming_nodes),
+            )
+            raise Exception(
+                "Demodulator streaming nodes unavailable - see the message above for more information."
+            )
+        num_cols = int(np.ceil(sample_rate * burst_duration))
+        num_bursts = int(np.ceil(total_duration / burst_duration))
+        self._daq_module.subscribe(signal_path)
+        data = {}
+        data[signal_path] = []
+
+        clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
+        ts0 = np.nan
+        read_count = 0
+        self.execute()
+        buffer_size = self._daq_module.getInt("buffersize")
+        time.sleep(2 * buffer_size)
+        data = daq_module.read(return_flat_data_dict)
+        self._data = data
+
+    def hw_trig_data_acquisition_time_domain(self, acquisition_time, signal_nodes = ["x", "y"], trig_level = 1):
+        self._mfli.set_demods_settings("enable", 1)
+        self._daq_module.set("device", self._dev_id)
+        self.set_trigger_setting("type", 6)
+        self.set_grid_setting("mode", 4)
+        self._daq_module.set("grid/cols",  num_cols)
+        sig_paths = []
+        for nd in signal_nodes:
+            signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
+            sig_paths.append(signal_path)
+
+        self._daq_module.set("level", trig_level)
+        trigger_duration = 0.18
+        ##need to specify demod rate somewhere...
+        self._daq_module.set("duration", trigger_duration)
+        sample_count = int(demod_rate * trigger_duration)
+        trigger_duration = daq_module.getDouble("duration")
+
+        ##Replace with actual trigger path here
+        trigger_path = "/%s/demods/%d/sample.r" % (device, demod_index)
+        self._daq_module.execute()
+        if self._daq_module.finished():
+            break
+        time.sleep(1.2 * buffer_size)
+        data = daq_module.read(True)
+        clockbase = float(daq.getInt("/%s/clockbase" % device))
+        dt_seconds = (samples[0]["timestamp"][0][-1] - samples[0]["timestamp"][0][0]) / clockbase
+        self._data = data
+
+        ## Figure out sampling rate ...
+
+# class MfliScopeModule(self,mfli_driver):
+#     def __init__(self, mfli_driver):
+#         self._mfli = mfli_driver
+#         self._dev_id = self._mfli._connection_settings["mfli_id"]
+#         self._scope_module = self._mfli._scope_module
+#         self._averager_settings =  {"resamplingmode": self._scope_module.getInt("averager/resamplingmode"), "restart": self._scope_module.getInt("averager/restart"), "weight": self._scope_module.getInt("averager/weight")}
+#         self._misc_settings = {"externalscaling": self._scope_module.getDouble("externalscaling"), "error": self._scope_module.getInt("error"), "clearhistory": self._scope_module.getInt("clearhistory"), "historylength": self._scope_module.getInt("historylength"), "mode": self._scope_module.getInt("mode"), "records": self._scope_module.getInt("records")}
+#         self._save_settings = {"csvlocale": self._scope_module.getString("csvlocale"), "csvseparator": self._scope_module.getString("csvseparator"), "directory": self._scope_module.getString("directory") , "fileformat": self._scope_module.getInt("fileformat"), "save": self._scope_module.getInt("save"), "saveonread": self._scope_module.getInt("saveonread")}
+#         self._fft_settings = {"power": self._scope_module.getInt("fft/power"), "spectraldensity": self._scope_module.getInt("fft/spectraldensity"), "window": self._scope_module.getInt("fft/window")}
 #
-# class MfliSweeperModule:
+#     def get_all_scope_settings(self):
+#         self._averager_settings =  {"resamplingmode": self._scope_module.getInt("averager/resamplingmode"), "restart": self._scope_module.getInt("averager/restart"), "weight": self._scope_module.getInt("averager/weight")}
+#         self._misc_settings = {"externalscaling": self._scope_module.getDouble("externalscaling"), "error": self._scope_module.getInt("error"), "clearhistory": self._scope_module.getInt("clearhistory"), "historylength": self._scope_module.getInt("historylength"), "mode": self._scope_module.getInt("mode"), "records": self._scope_module.getInt("records")}
+#         self._save_settings = {"csvlocale": self._scope_module.getString("csvlocale"), "csvseparator": self._scope_module.getString("csvseparator"), "directory": self._scope_module.getString("directory") , "fileformat": self._scope_module.getInt("fileformat"), "save": self._scope_module.getInt("save"), "saveonread": self._scope_module.getInt("saveonread")}
+#         self._fft_settings = {"power": self._scope_module.getInt("fft/power"), "spectraldensity": self._scope_module.getInt("fft/spectraldensity"), "window": self._scope_module.getInt("fft/window")}
+#         return {"averager": self._averager_settings, "misc": self._misc_settings , "save": self._save_settings, "fft": self._fft_settings}
+#
+#    def get_averager_settings(self, key):
+#        self._averager_settings[key] = self._scope_module.getInt("averager/"+key)
+#        return self._averager_settings[key]
+#
+#    def set_averager_settings(self, key, value):
+#        self._scope_module.setInt("averager/"+key, value)
+#        self._averager_settings[key] = self._scope_module.getInt("averager/"+key)
+#
+#    def get_fft_settings(self, key):
+#        self._fft_settings[key] = self._scope_module.getInt("fft/"+key)
+#        return self._fft_settings[key]
+#
+#    def set_fft_settings(self, key, value):
+#        self._scope_module.setInt("fft/"+key, value)
+#        self._fft_settings[key] = self._scope_module.getInt("fft/"+key)
+#
+#     ## def set_save_settings
+#     ## def get_save_settings
+#     ## def set_misc_settings
+#     ## def get_misc_settings
+#
+#    def clear(self):
+#        self._scope_module.clear()
+#
+#    def execute(self):
+#        self._scope_module.execute()
+#
+#    def finish(self):
+#         self._scope_module.finish()
+#
+#    # def listNodes(self, paths):
+#    #     self._scope_module.listNodes()
+#    #def progress()
+#
+#    def read(self):
+#        self._scope_module.read(True)
+#
+#    def subscribe_stream_node(self, nodes=["x", "y"]):
+#         ##add assert to ensure that correct node is used (inccldue fft settings here)
+#         node_check  = {"x", "y", "r", "theta", "frequency", "auxin0", "auxin1", "xiy", "df"}
+#         for nd in nodes:
+#             signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
+#             self._signal_paths.add(signal_path)
+#             self._scope_module.subscribe(signal_path)
+#
+#    def unsubscribe_stream_node(self, nodes=["x", "y"]):
+#         ##add assert to ensure that correct node is used (inccldue fft settings here)
+#         node_check  = {"x", "y", "r", "theta", "frequency", "auxin0", "auxin1", "xiy", "df"}
+#         for nd in nodes:
+#             signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
+#             self._signal_paths.add(signal_path)
+#             self._scope_module.unsubscribe(signal_path)
+#
+#
+
+   #def save()
+   #def subscribe()
+
+#class MfliSweeperModule:
