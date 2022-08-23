@@ -461,36 +461,36 @@ class MfliDaqModule:
         data = daq_module.read(return_flat_data_dict)
         self._data = data
 
-    def hw_trig_data_acquisition_time_domain(self, acquisition_time, signal_nodes = ["x", "y"], trig_level = 1):
-        self._mfli.set_demods_settings("enable", 1)
-        self._daq_module.set("device", self._dev_id)
-        self.set_trigger_setting("type", 6)
-        self.set_grid_setting("mode", 4)
-        self._daq_module.set("grid/cols",  num_cols)
-        sig_paths = []
-        for nd in signal_nodes:
-            signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
-            sig_paths.append(signal_path)
-
-        self._daq_module.set("level", trig_level)
-        trigger_duration = 0.18
-        ##need to specify demod rate somewhere...
-        self._daq_module.set("duration", trigger_duration)
-        sample_count = int(demod_rate * trigger_duration)
-        trigger_duration = daq_module.getDouble("duration")
-
-        ##Replace with actual trigger path here
-        trigger_path = "/%s/demods/%d/sample.r" % (device, demod_index)
-        self._daq_module.execute()
-        if self._daq_module.finished():
-            break
-        else:
-            pass
-        time.sleep(1.2 * buffer_size)
-        data = daq_module.read(True)
-        clockbase = float(daq.getInt("/%s/clockbase" % device))
-        dt_seconds = (samples[0]["timestamp"][0][-1] - samples[0]["timestamp"][0][0]) / clockbase
-        self._data = data
+    # def hw_trig_data_acquisition_time_domain(self, acquisition_time, signal_nodes = ["x", "y"], trig_level = 1):
+    #     self._mfli.set_demods_settings("enable", 1)
+    #     self._daq_module.set("device", self._dev_id)
+    #     self.set_trigger_setting("type", 6)
+    #     self.set_grid_setting("mode", 4)
+    #     self._daq_module.set("grid/cols",  num_cols)
+    #     sig_paths = []
+    #     for nd in signal_nodes:
+    #         signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
+    #         sig_paths.append(signal_path)
+    #
+    #     self._daq_module.set("level", trig_level)
+    #     trigger_duration = 0.18
+    #     ##need to specify demod rate somewhere...
+    #     self._daq_module.set("duration", trigger_duration)
+    #     sample_count = int(demod_rate * trigger_duration)
+    #     trigger_duration = daq_module.getDouble("duration")
+    #
+    #     ##Replace with actual trigger path here
+    #     trigger_path = "/%s/demods/%d/sample.r" % (device, demod_index)
+    #     self._daq_module.execute()
+    #     if self._daq_module.finished():
+    #         break
+    #     else:
+    #         pass
+    #     time.sleep(1.2 * buffer_size)
+    #     data = daq_module.read(True)
+    #     clockbase = float(daq.getInt("/%s/clockbase" % device))
+    #     dt_seconds = (samples[0]["timestamp"][0][-1] - samples[0]["timestamp"][0][0]) / clockbase
+    #     self._data = data
 
         ## Figure out sampling rate ...
 
