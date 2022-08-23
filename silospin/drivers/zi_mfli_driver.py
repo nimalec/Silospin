@@ -336,7 +336,7 @@ class MfliDaqModule:
     def read(self, read=False, clck_rate=6e7):
         self._daq_module.read(read,clck_rate)
 
-    def subscribe_stream_node(self, nodes=["x", "y"], sample_rate=3000):
+    def subscribe_stream_node(self, nodes=["x", "y"]):
         ##add assert to ensure that correct node is used
         node_check  = {"x", "y", "r", "theta", "frequency", "auxin0", "auxin1", "xiy", "df"}
         for nd in nodes:
@@ -351,7 +351,7 @@ class MfliDaqModule:
             self._signal_paths.remove(signal_path)
             self._daq_module.unsubscribe(signal_path)
 
-    def continuous_data_acquisition_time_domain(self, total_duration, burst_duration, signal_nodes = ["x", "y"]):
+    def continuous_data_acquisition_time_domain(self, total_duration, burst_duration, signal_nodes = ["x", "y"], sample_rate=3000):
         ##prepare daq module for cont. data acquisition_time
         self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
