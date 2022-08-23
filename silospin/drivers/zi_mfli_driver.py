@@ -351,7 +351,7 @@ class MfliDaqModule:
             self._signal_paths.remove(signal_path)
             self._daq_module.unsubscribe(signal_path)
 
-    def continuous_data_acquisition_time_domain(self, total_duration, burst_duration, signal_nodes = ["x", "y"], sample_rate=3000):
+    def continuous_data_acquisition_time_domain(self, burst_duration, n_busrsts = 1, signal_nodes = ["x", "y"], sample_rate=3000):
         ##prepare daq module for cont. data acquisition_time
         self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
@@ -376,11 +376,8 @@ class MfliDaqModule:
             )
 
         num_cols = int(np.ceil(sample_rate * burst_duration))
-        num_bursts = int(np.ceil(total_duration / burst_duration))
-        print(num_cols)
-        print(num_bursts)
 
-        self._daq_module.set("count", num_bursts)
+        self._daq_module.set("count", n_bursts)
         self._daq_module.set("duration", burst_duration)
         self._daq_module.set("grid/cols",  num_cols)
 
@@ -394,18 +391,14 @@ class MfliDaqModule:
         read_count = 0
         self.execute()
 
-        timeout = 1.5 * total_duration
         t0_measurement = time.time()
         t_update = 0.9 * burst_duration
         while not self._daq_module.finished():
             t0_loop = time.time()
-            # if time.time() - t0_measurement > timeout:
-            #     raise Exception(f"Timeout after {timeout} s - recording not complete." "Are the streaming nodes enabled?")
             data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
             read_count += 1
             time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
-        timeout = 1.5 * total_duration
         t0 = time.time()
         self._data = data
 
