@@ -336,7 +336,7 @@ class MfliDaqModule:
     def read(self, read=False, clck_rate=6e7):
         self._daq_module.read(read,clck_rate)
 
-    def subscribe_stream_node(self, nodes=["x", "y"]):
+    def subscribe_stream_node(self, nodes=["x", "y"], sample_rate=3000):
         ##add assert to ensure that correct node is used
         node_check  = {"x", "y", "r", "theta", "frequency", "auxin0", "auxin1", "xiy", "df"}
         for nd in nodes:
@@ -374,7 +374,7 @@ class MfliDaqModule:
             raise Exception(
                 "Demodulator streaming nodes unavailable - see the message above for more information."
             )
-        sample_rate = 3000
+
         num_cols = int(np.ceil(sample_rate * burst_duration))
         num_bursts = int(np.ceil(total_duration / burst_duration))
         print(num_cols)
@@ -399,8 +399,8 @@ class MfliDaqModule:
         t_update = 0.9 * burst_duration
         while not self._daq_module.finished():
             t0_loop = time.time()
-            if time.time() - t0_measurement > timeout:
-                raise Exception(f"Timeout after {timeout} s - recording not complete." "Are the streaming nodes enabled?")
+            # if time.time() - t0_measurement > timeout:
+            #     raise Exception(f"Timeout after {timeout} s - recording not complete." "Are the streaming nodes enabled?")
             data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
             read_count += 1
             time.sleep(max(0, t_update - (time.time() - t0_loop)))
