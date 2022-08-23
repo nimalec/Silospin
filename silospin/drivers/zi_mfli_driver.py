@@ -484,6 +484,8 @@ class MfliDaqModule:
         self._daq_module.execute()
         if self._daq_module.finished():
             break
+        else:
+            pass
         time.sleep(1.2 * buffer_size)
         data = daq_module.read(True)
         clockbase = float(daq.getInt("/%s/clockbase" % device))
