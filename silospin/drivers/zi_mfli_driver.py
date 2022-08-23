@@ -156,13 +156,6 @@ class MfliDriver:
     #      self._demod_settings["enable"] = self._daq.getInt(f"/{self._device}/demods/0/enable")
     #      self._scope_module = self._daq.scopeModule()
 
-    #def get_sigins_settings(self, key):
-
-
-    #def record_data_daq_continuous(self, total_duration, burst_duration):
-
-    #def record_data_scope_continuous(self, total_duration, burst_duration):
-
 
 class MfliDaqModule:
     def __init__(self, mfli_driver):
@@ -189,6 +182,9 @@ class MfliDaqModule:
 
         #self._data_streaming = { }
         self._signal_paths = set()
+        self._data = []
+        #self._demod_signals_time_domain = {"x": [ ], "y": [], "r": [], "frequency": [], "phase": }
+        #self._demod_signals_freq_domain =
         #self._recorded_data
 
     def get_all_daq_settings(self):
@@ -351,7 +347,7 @@ class MfliDaqModule:
             self._signal_paths.remove(signal_path)
             self._daq_module.unsubscribe(signal_path)
 
-    def continuous_data_acquisition_time_domain(self, burst_duration, n_busrsts = 1, signal_nodes = ["x", "y"], sample_rate=3000):
+    def continuous_data_acquisition_time_domain(self, burst_duration, n_bursts = 1, signal_nodes = ["x", "y"], sample_rate=3000):
         ##prepare daq module for cont. data acquisition_time
         self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
@@ -366,14 +362,7 @@ class MfliDaqModule:
         streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
         demod_path = f"/{self._dev_id}/demods/0/sample"
         if demod_path not in (node.lower() for node in streaming_nodes):
-            print(
-            f"Device {device} does not have demodulators. Please modify the example to specify",
-            "a valid signal_path based on one or more of the following streaming nodes: ",
-            "\n".join(streaming_nodes),
-            )
-            raise Exception(
-                "Demodulator streaming nodes unavailable - see the message above for more information."
-            )
+            raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")
 
         num_cols = int(np.ceil(sample_rate * burst_duration))
 
@@ -400,7 +389,8 @@ class MfliDaqModule:
             time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
         t0 = time.time()
-        self._data = data
+
+        self._data.append(data)
 
     def continuous_data_acquisition_spectrum(self, freq_span, n_cols, signal_nodes = ["x", "y"]):
         ##prepare daq module for cont. data acquisition_time
@@ -434,14 +424,8 @@ class MfliDaqModule:
         streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
         demod_path = f"/{self._dev_id}/demods/0/sample"
         if demod_path not in (node.lower() for node in streaming_nodes):
-            print(
-            f"Device {device} does not have demodulators. Please modify the example to specify",
-            "a valid signal_path based on one or more of the following streaming nodes: ",
-            "\n".join(streaming_nodes),
-            )
-            raise Exception(
-                "Demodulator streaming nodes unavailable - see the message above for more information."
-            )
+            raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")
+
         num_cols = int(np.ceil(sample_rate * burst_duration))
         num_bursts = int(np.ceil(total_duration / burst_duration))
         self._daq_module.subscribe(signal_path)
