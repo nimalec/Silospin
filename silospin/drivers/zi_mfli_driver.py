@@ -372,6 +372,7 @@ class MfliDaqModule:
 
         data = {}
         for sig in sig_paths:
+            print(sig)
             data[sig] = []
             self._daq_module.subscribe(sig)
 
@@ -390,7 +391,10 @@ class MfliDaqModule:
         data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
         t0 = time.time()
 
-        self._data.append(data)
+        ##Flags necessary: 1. signal type , 2. time stamp, 3. actual signal
+
+
+        #self._data.append(data)
 
     def continuous_data_acquisition_spectrum(self, freq_span, n_cols, signal_nodes = ["x", "y"]):
         ##prepare daq module for cont. data acquisition_time
@@ -418,7 +422,6 @@ class MfliDaqModule:
         self.set_trigger_setting("type", 0) #continuous
         self.set_grid_setting("mode", 4)
         self.set_grid_setting("cols", n_cols)
-
 
         flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
         streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
