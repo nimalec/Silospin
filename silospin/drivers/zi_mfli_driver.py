@@ -390,6 +390,7 @@ class MfliDaqModule:
             time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
         t0 = time.time()
+        self._data = data 
 
 
         ##Flags necessary: 1. signal type , 2. time stamp, 3. actual signal
