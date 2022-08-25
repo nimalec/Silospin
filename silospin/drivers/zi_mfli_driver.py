@@ -360,8 +360,7 @@ class MfliDaqModule:
             sig_paths.append(signal_path)
         flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
         streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
-        print(streaming_nodes)
-        
+
         demod_path = f"/{self._dev_id}/demods/0/sample"
         if demod_path not in (node.lower() for node in streaming_nodes):
             raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")

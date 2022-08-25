@@ -1,33 +1,27 @@
 from math import ceil
 from silospin.math.math_helpers import compute_accumulated_phase, rectangular
 
-def channel_mapper(rf_cores, plunger_channels = {"p12": 7, "p21": 8}):
+def channel_mapper(rf_cores=[1,2,3], plunger_channels = {"p12": 7, "p21": 8}):
     ## Currently set up for only 1 HDAWG with 4 cores
-    rf_cores = set(rf_cores)
-    channel_mapping = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 8: 4}
-    core_mapping = {1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]}
-    plunger_labels = dict([(value, key) for key, value in plunger_channels.items()])
-
-    plunger_cores = set()
+    rf_cores = set(rf_cores) # awg cores used for rf bursts
+    channel_mapping = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 8: 4} #channel maping (channel -> core)
+    core_mapping = {1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]}#channel maping (core -> channel)
+    plunger_labels = dict([(value, key) for key, value in plunger_channels.items()]) #plunger gates (channel -> plunger id)
+    plunger_cores = set() #plunger cores being used
+    awg_config = {}  #awg configuration to be returend
+    ii=1
     for idx in plunger_channels:
         plunger_cores.add(channel_mapping[plunger_channels[idx]])
-
     n_cores = 4
     for idx in range(1,n_cores+1):
         if idx in rf_cores:
-            awg_config[idx] = {"ch": {"index": core_mapping[idx], "label": ["i"+str(core_mapping[idx][0]), "q"+str(core_mapping[idx][1])], "gateindex": [idx, idx]} , "rf": 1}
-        # elif idx in plunger_cores:
-        #     awg_config[idx] = {"ch": {"index": core_mapping[idx], "label": [plunger_labels[], plunger_labels[], "gateindex": [idx, idx]} , "rf": 0}
+            awg_config[idx] = {"ch": {"index": core_mapping[idx], "label": ["i"+str(ii), "q"+str(ii)], "gateindex": [idx, idx]} , "rf": 1}
+            ii +=1
+        elif idx in plunger_cores:
+            awg_config[idx] = {"ch": {"index": core_mapping[idx], "label": [plunger_labels[core_mapping[idx][0]],plunger_labels[core_mapping[idx][1]]], "gateindex": [core_mapping[idx][0], core_mapping[idx][1]]} , "rf": 0}
         else:
-            pass
-
-
-    # n_cores = 4
-    # awg_config = {}
-    # for idx in range(n_cores):
-    #     if idx in rf_cores:
-    #
-    # awg_config[idx] = {"ch": {"index": [1,2] , "label": ["i1", "q1"], "gateindex": [1, 1]} , "rf": 1}
+             pass
+    return awg_config
 
 def make_gateset_sequencer(n_seq):
     command_code = ""

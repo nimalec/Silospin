@@ -3,6 +3,7 @@ import zhinst
 import zhinst.utils
 import json
 from zhinst.toolkit import Session
+from silospin.quantum_compiler.qc_helpers import channel_mapper
 import numpy as np
 
 class HdawgDriver:
@@ -33,7 +34,7 @@ class HdawgDriver:
         Print ...
     """
 
-    def __init__(self, dev_id, server_host = "localhost", server_port = 8004, api_level = 6, interface = "1GbE"):
+    def __init__(self, dev_id, server_host = "localhost", server_port = 8004, api_level = 6, interface = "1GbE", rf_cores=[1,2,3], plunger_channels = {"p12": 7, "p21": 8}):
         """
          Constructor for HDAWG Driver.
 
@@ -56,7 +57,7 @@ class HdawgDriver:
         """
         ##Part 1: connect to instrument
         # ##Should add exception handeling here
-        self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "interface" : interface, "connection_status" : False}
+        self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "interface" : interface, "connection_status" : False, rf_cores=[1,2,3], plunger_channels = {"p12": 7, "p21": 8}}
         session = Session(server_host)
         self._session = session
         self._hdawg = self._session.connect_device(dev_id)
@@ -93,6 +94,20 @@ class HdawgDriver:
                 self._run_status["awg"+str(idx+1)] = False
             else:
                 self._run_status["awg"+str(idx+1)] = True
+
+        self._channel_mapping = channel_mapper(rf_cores, plunger_cores)
+        for idx in self._channel_mapping:
+            ch_1 = self._channel_mapping[idx]['ch']['index'][0]
+            ch_2 = self._channel_mapping[idx]['ch']['index'][1]
+            if self._channel_mapping[idx]['rf'] == 1
+                self.set_modulation_mode(ch_1, 1)
+                self.set_modulation_mode(ch_2, 1)
+            elif self._channel_mapping[idx]['rf'] == 0:
+                self.set_modulation_mode(ch_1, 0)
+                self.set_modulation_mode(ch_2, 0)
+            else:
+                pass
+
 
     def get_all_awg_parameters(self):
         dev_id = self._connection_settings["hdawg_id"]
