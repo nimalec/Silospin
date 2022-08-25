@@ -372,7 +372,6 @@ class MfliDaqModule:
 
         data = {}
         for sig in sig_paths:
-            print(sig)
             data[sig] = []
             self._daq_module.subscribe(sig)
 
@@ -390,7 +389,8 @@ class MfliDaqModule:
             time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
         t0 = time.time()
-        self._data = data 
+
+        self._data.append(data)
 
 
         ##Flags necessary: 1. signal type , 2. time stamp, 3. actual signal
@@ -433,6 +433,8 @@ class MfliDaqModule:
 
         num_cols = int(np.ceil(sample_rate * burst_duration))
         num_bursts = int(np.ceil(total_duration / burst_duration))
+
+
         self._daq_module.subscribe(signal_path)
         data = {}
         data[signal_path] = []
