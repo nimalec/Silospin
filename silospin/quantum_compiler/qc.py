@@ -10,7 +10,7 @@ import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.qc_helpers import *
-from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser
+from silospin.io.qc_io import read_qubit_paramater_file, write_qubit_parameter_file, quantum_protocol_parser, quantum_protocol_parser_v4
 
 class GateSetTomographyProgram:
     """
@@ -184,9 +184,9 @@ class GateSetTomographyProgram:
             self._awg._awgs["awg"+str(idx+1)].single(True)
             self._awg._awgs["awg"+str(idx+1)].enable(True)
 
-class GateSetTomographyProgramPlungers:
+class GateSetTomographyProgramPlunger:
     """
-    Class representing an instance of compiler gate set tomography experiment (uses entirely rectangular waves). New version, including plunger gates.
+    Class representing an instance of compiler gate set tomography experiment (uses entirely rectangular waves).
 
     ..
 
@@ -225,7 +225,7 @@ class GateSetTomographyProgramPlungers:
     run_program(awg_idxs):
         Compiles and runs programs over specified awg_idxs.
     """
-    def __init__(self, gst_file_path, awg, n_inner=1, n_outer=1, qubits=[0,1,2,3], qubit_parameters=None, external_trigger=True, trigger_channel=0):
+    def __init__(self, gst_file_path, awg, gate_parameters, n_inner=1, n_outer=1, external_trigger=True, trigger_channel=0):
         '''
         Constructor method for CompileGateSetTomographyProgram.
 
@@ -247,39 +247,54 @@ class GateSetTomographyProgramPlungers:
             trigger_channel : int
                 Trigger channel used if external_trigger = True.
        '''
+
         self._gst_path = gst_file_path
         self._awg = awg
         self._sample_rate = 2.4e9
         self._awg_cores =  qubits
+        channel_mapping = self._awg._channel_mapping
+        self._gate_parameters = gate_parameters
 
-        if qubit_parameters is None:
-            self._qubit_parameters =  {0: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 200e-9,  "tau_pi_2" :  100e-9,  "delta_iq" : 0 , "mod_freq": 60e6}, 1: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 200e-9,  "tau_pi_2" :  100e-9,  "delta_iq" : 0 , "mod_freq": 60e6}, 2: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 120e-9,  "tau_pi_2" :  60e-9,  "delta_iq" : 0 ,  "mod_freq": 60e6}, 3: {"i_amp_pi": 1.0, "q_amp_pi": 1.0 , "i_amp_pi_2": 1.0, "q_amp_pi_2": 1.0, "tau_pi" : 160e-9,  "tau_pi_2" :  80e-9,  "delta_iq" : 0 , "mod_freq": 60e6}}
-        else:
-            self._qubit_parameters = qubit_parameters
-        tau_pi_2_set = np.array([self._qubit_parameters[0]["tau_pi_2"], self._qubit_parameters[1]["tau_pi_2"], self._qubit_parameters[2]["tau_pi_2"], self._qubit_parameters[3]["tau_pi_2"]])
+
+        ##1. Append plunger gate lengths to tau_pi_2_set
+        tau_pi_2_set = np.array([self._qubit_parameters[0]["tau_pi_2"], self._qubit_parameters[1]["tau_pi_2"], self._qubit_parameters[2]["tau_pi_2"], self._qubit_parameters[3]["tau_pi_2"] ])
         tau_pi_2_standard_idx = np.argmax(tau_pi_2_set)
 
-        ##Define standard length of pulse in time
+        ##2. Define standard plunger gate lengths here
         tau_pi_2_standard = np.max(tau_pi_2_set)
         tau_pi_standard = 2*tau_pi_2_standard
         npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/32)*32
         npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/32)*32
 
+        ##3. Define standard plunger gate lengths here
         tau_pi_2_standard_new = npoints_pi_2_standard/self._sample_rate
         tau_pi_standard_new = npoints_pi_standard/self._sample_rate
 
-        qubit_lengths = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
-        qubit_npoints = {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}
+        qubit_lengths = {"rf": {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}, "plunger": {7: None, 8: None}}
+        qubit_npoints = {"rf": {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}, "plunger": {7: None, 8: None}}
 
-        for idx in qubits:
-            qubit_lengths[idx]["pi"] = ceil(tau_pi_standard_new*1e9)
-            qubit_lengths[idx]["pi_2"] = ceil(tau_pi_2_standard_new*1e9)
-            qubit_npoints[idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/32)*32
-            qubit_npoints[idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
 
+        ##generate rf_idxs and p_idxs from qubit parameters
+
+        for idx in rf_idxs:
+            ##MOdify to include plunger gates...
+            qubit_lengths["rf"][idx]["pi"] = ceil(tau_pi_standard_new*1e9)
+            qubit_lengths["rf"][idx]["pi_2"] = ceil(tau_pi_2_standard_new*1e9)
+            qubit_npoints["rf"][idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/32)*32
+            qubit_npoints["rf"][idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
+
+        ##4. Add new standard lengths here
+        for idx in p_idxs:
+            qubit_lengths["plunger"][idx] = ceil(tau_pi_standard_new*1e9)
+            qubit_npoints["plunger"][idx] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
+
+        ##5. Modify to generte plunger waveforms
         self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
-        self._gate_sequences = quantum_protocol_parser(gst_file_path, qubit_lengths, qubit_set = {1,2,3,4})
 
+        ##6. Modify to account for new gate seq format
+        self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
+
+        ##7. Modify ct_idxs to account for plunger gates
         ct_idxs_all = {}
         arbZs = []
         n_arbZ = 0
@@ -302,6 +317,7 @@ class GateSetTomographyProgramPlungers:
         command_code = {}
         n_array = [npoints_pi_2_standard, npoints_pi_standard]
 
+        ##8. Modify make_waveform_placeholder to account for plunger waveforms  (only for the relevant core). Generates sequence on given core
         for idx in qubits:
             waveforms = Waveforms()
             waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
@@ -334,6 +350,7 @@ class GateSetTomographyProgramPlungers:
         daq = self._awg._daq
         dev = self._awg._connection_settings["hdawg_id"]
 
+        ##9. Modify to only set sine waves for modulation cores
         for idx in qubits:
              i_idx = self._channel_idxs[str(idx)][0]
              q_idx = self._channel_idxs[str(idx)][1]
