@@ -144,6 +144,76 @@ def generate_reduced_command_table_v2(n_pi_2, n_pi, arbZ=[]):
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
 
+def generate_reduced_command_table_v3(pulse_lengths, arbZ=[], plungers=[]):
+    ##Generates a command table and loads onto AWG
+    ##arbZ = list cd
+    ##0-3 ==> initial gates, wv_idx = 0  (f_pi_2^pi_2) [4 elements]
+    ##4-7 ==> initial gates, wv_idx = 1 (f_pi^pi) [4 elements]
+    ##8-11 ==> initial gates, wv_idx = 2  (f_pi_2^pi) [4 elements]
+    ##12-18 ==> phase increment, wv_idx = 0  (f_pi_2^pi_2) [8 elements]
+    ##19 - 25 ==> phase increment, wv_idx = 1 (f_pi^pi) [8 elements]
+    ##26 - 32 ==> phase increment, wv_idx = 2 (f_pi_2^pi) [8 elements]
+    ##33 - 34 ==> time delay, rf pulses [2 elements]
+    ##35 - 35 + n_p ==> time delay, barrier pulses [n_p elements]
+    ## 36+n_p - 36+n_p+n_z ==>  Z gates [n_z elements]
+    ## 37 + n_z  +n_p - 37 + n_z + 2n_p ==> plunger gates [n_p elements]
+
+    (n_pi_2, n_pi) = pulse_lengths
+    initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": -90, "wave_idx": 0}, "xxx": {"phi": -180, "wave_idx": 0}, "yyy": {"phi": 90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": -90, "wave_idx": 1}, "mxxm": {"phi": -180, "wave_idx": 1}, "myym": {"phi": 90, "wave_idx": 1}}
+    ct = []
+    waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]}, {"index": 2, "awgChannel0": ["sigout0","sigout1"]}]
+    phases_0_I = [{"value": 0}, {"value": -90}, {"value": -180}, {"value": 90}]
+    phases_0_Q = [{"value": -90}, {"value": -180}, {"value": -270}, {"value": 0}]
+    phases_incr = [{"value": 0, "increment": True}, {"value": -90, "increment": True}, {"value": -180, "increment": True}, {"value": -270, "increment": True}, {"value": 90, "increment": True},  {"value": 180, "increment": True},{"value": 270, "increment": True}]
+
+    ct_idx = 0
+    for i in range(len(phases_0_I)):
+         ct.append({"index": ct_idx, "waveform": waves[0], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+         ct_idx += 1
+    for i in range(len(phases_0_I)):
+         ct.append({"index": ct_idx, "waveform": waves[1], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+         ct_idx += 1
+    for i in range(len(phases_0_I)):
+         ct.append({"index": ct_idx, "waveform": waves[2], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+         ct_idx += 1
+    for i in range(len(phases_incr)):
+         ct.append({"index": ct_idx, "waveform": waves[0], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+         ct_idx += 1
+    for i in range(len(phases_incr)):
+         ct.append({"index": ct_idx, "waveform": waves[1], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+         ct_idx += 1
+    for i in range(len(phases_incr)):
+         ct.append({"index": ct_idx, "waveform": waves[2], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+         ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2}, "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ct.append({"index": ct_idx+1, "waveform": {"playZero": True, "length": n_pi}, "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ct_idx += 1
+
+    if len(arbZ) == 0:
+        pass
+    else:
+        for item in arbZ:
+            ct.append({"index": item[0], "phase0": {"value": item[1], "increment": True}, "phase1": {"value": item[1],  "increment": True}})
+        ct_idx = item[0]
+
+    if len(plungers) == 0:
+        pass
+    else:
+        for item in plungers:
+            ct.append({"index": ct_idx+1, "waveform": {"playZero": True, "length": item[1]}, "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
+            ct_idx += 1
+    ct_idx += 1
+    if len(plungers) == 0:
+        pass
+    else:
+        for item in plungers:
+            ct.append({"index": ct_idx, "waveform": item[0], "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
+            ct_idx += 1
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
+    return command_table
+
+
+
 def make_waveform_placeholders(n_array):
     idx = 0
     sequence_code = ""

@@ -4,6 +4,7 @@ import os
 from math import ceil
 import json
 import time
+from operator import itemgetter
 from pkg_resources import resource_filename
 from zhinst.toolkit import Waveforms
 import zhinst.utils
@@ -257,25 +258,39 @@ class GateSetTomographyProgramPlunger:
 
 
         ##1. Append plunger gate lengths to tau_pi_2_set
-        tau_pi_2_set = np.array([self._qubit_parameters[0]["tau_pi_2"], self._qubit_parameters[1]["tau_pi_2"], self._qubit_parameters[2]["tau_pi_2"], self._qubit_parameters[3]["tau_pi_2"] ])
-        tau_pi_2_standard_idx = np.argmax(tau_pi_2_set)
+        tau_pi_2_set = []
+        for idx in self._gate_parameters["rf"]:
+            tau_pi_2_set.append(("rf", idx, self._gate_parameters[idx]["tau_pi_2"]))
+        # for idx in self._gate_parameters["plunger"]:
+        #     tau_pi_2_set.append(("p", idx, self._gate_parameters[idx]))
+
+        ##Define standard pi/2 w/in pi/2
+        ## tau_pi_2_standard  reps. standard pi_2 w/in pi_2 frame
+        tau_pi_2_standard = max(tau_pi_2_set,key=itemgetter(2))[2]
+        tau_pi_2_standard_type = max(tau_pi_2_set,key=itemgetter(2))[0]
+        tau_pi_2_standard_idx = max(tau_pi_2_set,key=itemgetter(2))[0]
+
+        ##Define standard pi w/in pi
+        ## tau_pi reps. standard pi w/in pi  2frame
+        tau_pi_standard = 2*tau_pi_2_standard
+        tau_pi_standard = 2*tau_pi_2_standards
 
         ##2. Define standard plunger gate lengths here
+        ##Note: need to define all other cases for standard waveforms ==> then upload and generate wvfrms
         tau_pi_2_standard = np.max(tau_pi_2_set)
         tau_pi_standard = 2*tau_pi_2_standard
         npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/32)*32
         npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/32)*32
 
         ##3. Define standard plunger gate lengths here
+        ##Modify here to account for other edge cases mentioned
         tau_pi_2_standard_new = npoints_pi_2_standard/self._sample_rate
         tau_pi_standard_new = npoints_pi_standard/self._sample_rate
 
         qubit_lengths = {"rf": {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}, "plunger": {7: None, 8: None}}
         qubit_npoints = {"rf": {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}, "plunger": {7: None, 8: None}}
 
-
         ##generate rf_idxs and p_idxs from qubit parameters
-
         for idx in rf_idxs:
             ##MOdify to include plunger gates...
             qubit_lengths["rf"][idx]["pi"] = ceil(tau_pi_standard_new*1e9)
