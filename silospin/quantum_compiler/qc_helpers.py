@@ -146,7 +146,8 @@ def generate_reduced_command_table_v2(n_pi_2, n_pi, arbZ=[]):
 
 def generate_reduced_command_table_v3(pulse_lengths, arbZ=[], plungers=[]):
     ##Generates a command table and loads onto AWG
-    ##arbZ = list cd
+    ##pulse lengths ==> tuple of standard pulse lengths (n_pi_2, n_pi) in number of points
+    ##arbZ ==> list of tuples ofcarbitrary Z rotations  
     ##0-3 ==> initial gates, wv_idx = 0  (f_pi_2^pi_2) [4 elements]
     ##4-7 ==> initial gates, wv_idx = 1 (f_pi^pi) [4 elements]
     ##8-11 ==> initial gates, wv_idx = 2  (f_pi_2^pi) [4 elements]
@@ -157,7 +158,6 @@ def generate_reduced_command_table_v3(pulse_lengths, arbZ=[], plungers=[]):
     ##35 - 35 + n_p ==> time delay, barrier pulses [n_p elements]
     ## 36+n_p - 36+n_p+n_z ==>  Z gates [n_z elements]
     ## 37 + n_z  +n_p - 37 + n_z + 2n_p ==> plunger gates [n_p elements]
-
     (n_pi_2, n_pi) = pulse_lengths
     initial_gates = {"x": {"phi": 0, "wave_idx": 0}, "y": {"phi": -90, "wave_idx": 0}, "xxx": {"phi": -180, "wave_idx": 0}, "yyy": {"phi": 90, "wave_idx": 0}, "xx": {"phi": 0, "wave_idx": 1}, "yy": {"phi": -90, "wave_idx": 1}, "mxxm": {"phi": -180, "wave_idx": 1}, "myym": {"phi": 90, "wave_idx": 1}}
     ct = []

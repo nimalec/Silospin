@@ -256,29 +256,18 @@ class GateSetTomographyProgramPlunger:
         channel_mapping = self._awg._channel_mapping
         self._gate_parameters = gate_parameters
 
-
         ##1. Append plunger gate lengths to tau_pi_2_set
         tau_pi_2_set = []
         for idx in self._gate_parameters["rf"]:
-            tau_pi_2_set.append(("rf", idx, self._gate_parameters[idx]["tau_pi_2"]))
-        # for idx in self._gate_parameters["plunger"]:
-        #     tau_pi_2_set.append(("p", idx, self._gate_parameters[idx]))
-
-        ##Define standard pi/2 w/in pi/2
-        ## tau_pi_2_standard  reps. standard pi_2 w/in pi_2 frame
+            tau_pi_2_set.append((idx, self._gate_parameters[idx]["tau_pi_2"]))
+        ##Define standard pi/2 length
         tau_pi_2_standard = max(tau_pi_2_set,key=itemgetter(2))[2]
-        tau_pi_2_standard_type = max(tau_pi_2_set,key=itemgetter(2))[0]
-        tau_pi_2_standard_idx = max(tau_pi_2_set,key=itemgetter(2))[0]
+        standard_idx = max(tau_pi_2_set,key=itemgetter(2))[0]
 
-        ##Define standard pi w/in pi
-        ## tau_pi reps. standard pi w/in pi  2frame
-        tau_pi_standard = 2*tau_pi_2_standard
-        tau_pi_standard = 2*tau_pi_2_standards
+        ##Define standard pi length
+        tau_pi_2_standard = 2*tau_pi_2_standard
 
         ##2. Define standard plunger gate lengths here
-        ##Note: need to define all other cases for standard waveforms ==> then upload and generate wvfrms
-        tau_pi_2_standard = np.max(tau_pi_2_set)
-        tau_pi_standard = 2*tau_pi_2_standard
         npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/32)*32
         npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/32)*32
 
@@ -292,7 +281,7 @@ class GateSetTomographyProgramPlunger:
 
         ##generate rf_idxs and p_idxs from qubit parameters
         for idx in rf_idxs:
-            ##MOdify to include plunger gates...
+            ##Modify to include plunger gates...
             qubit_lengths["rf"][idx]["pi"] = ceil(tau_pi_standard_new*1e9)
             qubit_lengths["rf"][idx]["pi_2"] = ceil(tau_pi_2_standard_new*1e9)
             qubit_npoints["rf"][idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/32)*32
@@ -304,7 +293,8 @@ class GateSetTomographyProgramPlunger:
             qubit_npoints["plunger"][idx] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
 
         ##5. Modify to generte plunger waveforms
-        self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
+        #self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
+        self._waveforms = generate_waveforms_v2(qubit_npoints, tau_pi_2_standard_idx, amp=1)
 
         ##6. Modify to account for new gate seq format
         self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
