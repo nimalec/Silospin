@@ -55,8 +55,8 @@ class DacDriver:
         dVx = (end_v_1-start_v_1)/n_points_1
         dVy = (end_v_2-start_v_2)/n_points_2
         #V_x, V_y = np.mgrid[start_v_1:end_v_1:dVx,start_v_2:end_v_2:dVy]
-        vx = np.arrange(start_v_1, end_v_1, dVx)
-        vy = np.arrange(start_v_2, end_v_2, dVy)
+        vx = np.arange(start_v_1, end_v_1, dVx)
+        vy = np.arange(start_v_2, end_v_2, dVy)
         V_x, V_y = np.meshgrid(vx, vy)
 
         (dim0, dim1) = np.shape(V_x)
