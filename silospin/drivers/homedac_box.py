@@ -37,5 +37,14 @@ class DacDriver:
         self._channel_configuration[channel] = float(voltage_str[0:3])
         return self._channel_configuration[channel]
 
+    def Sweep1D(self, channel, start_v, end_v, npoints):
+        if channel < 10:
+            self._dac.query("CH 0"+str(channel))
+        else:
+            self._dac.query("CH "+str(channel))
 
-    #def get_voltage(self, channel, voltage):
+        v_array = np.array(start_v,end_v,npoints)
+        for v in v_array:
+            self._dac.query("VOLT "+str(v))
+            voltage_str = self._dac.query("VOLT?")
+            self._channel_configuration[channel] = float(voltage_str[0:3])  
