@@ -48,6 +48,7 @@ class DacDriver:
             self._dac.query("VOLT "+str(v))
             voltage_str = self._dac.query("VOLT?")
             self._channel_configuration[channel] = float(voltage_str[0:3])
+        return v_array
 
 
     def Sweep2D(self, channel_1, channel_2, start_v_1, end_v_1, start_v_2, end_v_2, n_points_1, n_points_2):
@@ -59,3 +60,4 @@ class DacDriver:
             for j in range(dim1):
                 self.set_voltage(channel_1, V_x[i][j])
                 self.set_voltage(channel_2, V_y[i][j])
+        return (V_x, V_y)
