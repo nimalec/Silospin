@@ -6,13 +6,12 @@ class DacDriver:
         rm = pyvisa.ResourceManager()
         self._dev_id = dev_id
         self._dac = rm.open_resource(self._dev_id)
-        #self._id_name = self._dac.query("*IDN?")
-        n_channels = 24
+        self._id_name = self._dac.query("*IDN?")
+        n_channels = 25
         self._channel_configuration = {}
-        for i in range(1,25):
+        for i in range(1,n_channels):
             if i < 10:
                 self._dac.query("CH 0"+str(i))
-                voltage = self._dac.query("CH 0"+str(i))
             else:
                 self._dac.query("CH "+str(i))
 
