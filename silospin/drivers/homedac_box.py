@@ -18,10 +18,14 @@ class DacDriver:
             voltage = self._dac.query("VOLT?")
             self._channel_configuration[i] = float(voltage[0:3])
 
-
-
-        #self._channels
-
-    #def set_voltage(self, channel, voltage):
+    def set_voltage(self, channel, voltage):
+        if channel < 10:
+            self._dac.query("CH 0"+str(channel))
+        else:
+            self._dac.query("CH "+str(channel))
+        self._dac.query("VOLT "+str(voltage))
+        voltage_str = self._dac.query("VOLT?")
+        self._channel_configuration[channel] = float(voltage_str[0:3])
+        
     #def get_voltage(self, channel, voltage):
     #def get_voltage(self, channel, voltage):
