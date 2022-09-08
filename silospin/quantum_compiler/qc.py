@@ -260,11 +260,11 @@ class GateSetTomographyProgramPlunger:
         ##1. Append plunger gate lengths to tau_pi_2_set. Standard pi length will be defined from pi_2 length.
         tau_pi_2_set = []
         for idx in gt_param["rf"]:
-            tau_pi_2_set.append((idx, gt_param["rf"][idx]["tau_pi_2"]))
+            tau_pi_2_set.append((idx, self._gate_parameters ["rf"][idx]["tau_pi_2"]))
 
         plunger_set = []
         for idx in gt_param["p"]:
-            plunger_set.append((idx, gt_param["p"][idx]["tau"]))
+            plunger_set.append((idx, self._gate_parameters ["p"][idx]["tau"]))
 
         ##Define standard pi/2 length and corresponding gate index
         tau_pi_2_standard = max(tau_pi_2_set,key=itemgetter(1))[1]
