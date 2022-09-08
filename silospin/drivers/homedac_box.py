@@ -2,7 +2,7 @@ import pyvisa
 import numpy as np
 
 class DacDriver:
-    ##Need to include function call on LockIn continous data acquisition  ==> measure at each point  
+    ##Need to include function call on LockIn continous data acquisition  ==> measure at each point
     def __init__(self, dev_id = "ASRL3::INSTR"):
         rm = pyvisa.ResourceManager()
         self._dev_id = dev_id
@@ -25,7 +25,7 @@ class DacDriver:
             self._dac.query("CH 0"+str(channel))
         else:
             self._dac.query("CH "+str(channel))
-        self._dac.query("VOLT "+str(voltage)) # We need to be able to specify voltage to 6 digits of precision over the range from -10 to 10. Most sweeps will be something like 4.0001V -> 4.0003V. I'm not sure what the precision is - can you check this?        
+        self._dac.query("VOLT "+str(voltage)) # We need to be able to specify voltage to 6 digits of precision over the range from -10 to 10. Most sweeps will be something like 4.0001V -> 4.0003V. I'm not sure what the precision is - can you check this?
         voltage_str = self._dac.query("VOLT?")
         self._channel_configuration[channel] = float(voltage_str[0:3])
 
@@ -53,14 +53,12 @@ class DacDriver:
 
 
     def Sweep2D(self, channel_1, channel_2, start_v_1, end_v_1, start_v_2, end_v_2, n_points_1, n_points_2):
-<<<<<<< HEAD
         dVx = (end_v_1-start_v_1)/n_points_1
         dVy = (end_v_2-start_v_2)/n_points_2
-=======
+
         dVx = (end_v_1-start_v_1)/n_points_1 # I think this should be (n_points_1 - 1) - check your sweep, you seem to never hit end_v_1
         dVy = (end_v_2-start_v_2)/n_points_2# I think this should be (n_points_2 - 1)
-        #V_x, V_y = np.mgrid[start_v_1:end_v_1:dVx,start_v_2:end_v_2:dVy]
->>>>>>> 6acc74f2bcc66c737ee30d303163a03986c2f3c1
+        #V_x, V_y = np.mgrid[start_v_1:end_v_1:dVx,start_v_2:end_v_2:dVy] 
         vx = np.arange(start_v_1, end_v_1, dVx)
         vy = np.arange(start_v_2, end_v_2, dVy)
         V_x, V_y = np.meshgrid(vx, vy)
