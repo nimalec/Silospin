@@ -226,7 +226,7 @@ class GateSetTomographyProgramPlunger:
     run_program(awg_idxs):
         Compiles and runs programs over specified awg_idxs.
     """
-    def __init__(self, gst_file_path, awg, gate_parameters, n_inner=1, n_outer=1, external_trigger=True, trigger_channel=0):
+    def __init__(self, gst_file_path, awg, gate_parameters, n_inner=1, n_outer=1, external_trigger=True, trigger_channel=0, sample_rate=2.4e9):
         '''
         Constructor method for CompileGateSetTomographyProgram.
 
@@ -247,54 +247,92 @@ class GateSetTomographyProgramPlunger:
                 True if an external hardware trigger is used. False if the instrument's internal trigger is used.
             trigger_channel : int
                 Trigger channel used if external_trigger = True.
+            sample_rate : float
+                Sample rate of AWG in Sa/s.
        '''
 
         self._gst_path = gst_file_path
         self._awg = awg
-        self._sample_rate = 2.4e9
-        self._awg_cores =  qubits
+        self._sample_rate = sample_rate
         channel_mapping = self._awg._channel_mapping
         self._gate_parameters = gate_parameters
 
-        ##1. Append plunger gate lengths to tau_pi_2_set
+        ##1. Append plunger gate lengths to tau_pi_2_set. Standard pi length will be defined from pi_2 length.
         tau_pi_2_set = []
-        for idx in self._gate_parameters["rf"]:
-            tau_pi_2_set.append((idx, self._gate_parameters[idx]["tau_pi_2"]))
-        ##Define standard pi/2 length
-        tau_pi_2_standard = max(tau_pi_2_set,key=itemgetter(2))[2]
-        standard_idx = max(tau_pi_2_set,key=itemgetter(2))[0]
+        for idx in gt_param["rf"]:
+            tau_pi_2_set.append((idx, gt_param["rf"][idx]["tau_pi_2"]))
 
-        ##Define standard pi length
-        tau_pi_2_standard = 2*tau_pi_2_standard
+        plunger_set = []
+        for idx in gt_param["p"]:
+            plunger_set.append((idx, gt_param["p"][idx]["tau"]))
 
-        ##2. Define standard plunger gate lengths here
+        ##Define standard pi/2 length and corresponding gate index
+        tau_pi_2_standard = max(tau_pi_2_set,key=itemgetter(1))[1]
+        tau_pi_standard = 2*tau_pi_2_standard
+        standard_rf_idx = max(tau_pi_2_set,key=itemgetter(1))[0]
+
+        ##Define standard plunger and corresponding gate length
+        tau_p_standard = max(plunger_set,key=itemgetter(1))[1]
+        standard_p_idx = max(plunger_set,key=itemgetter(1))[0]
+
+        ##2. Defines standard npoints for each gate
         npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard/32)*32
         npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard/32)*32
+        npoints_p_standard = ceil(self._sample_rate*tau_p_standard/32)*32
 
         ##3. Define standard plunger gate lengths here
         ##Modify here to account for other edge cases mentioned
-        tau_pi_2_standard_new = npoints_pi_2_standard/self._sample_rate
-        tau_pi_standard_new = npoints_pi_standard/self._sample_rate
+        tau_pi_2_standard = npoints_pi_2_standard/self._sample_rate
+        tau_pi_standard = npoints_pi_standard/self._sample_rate
+        tau_p_standard = npoints_p_standard/self._sample_rate
 
-        qubit_lengths = {"rf": {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}, "plunger": {7: None, 8: None}}
-        qubit_npoints = {"rf": {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}, "plunger": {7: None, 8: None}}
+        ##Gate lengths (may need to modify, hold off for now)
+        # tau_pi_2_len = ceil(tau_pi_2_standard*1e9)
+        # tau_pi_len = ceil(tau_pi_standard*1e9)
+        # tau_p_len = ceil(tau_p_standard*1e9)
+
+        ## Need to change for new channel grouping
+        ## gate_npoints ==> number of points for a single gate (non-zero elements)
+        ##Should have the form: {"rf" : {1: {}, ..., 3: { } } , "p": {7: ..., 8: ...}} (uses gate index)
+        gate_npoints = {"rf": None, "plunger": None}
+        for idx in self._gate_parameters["rf"]:
+            n_pi = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi"]/32)*32
+            n_pi_2 = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi_2"]/32)*32
+            gate_npoints["rf"][idx] = {"pi": n_pi, "pi_2":n_pi_2}
+
+        for idx in self._gate_parameters["p"]:
+            n_p = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["p"]/32)*32
+            gate_npoints["plunger"][idx] = {"p": n_p}
+
+        # for i in channel_mapping:
+        #     if channel_mapping[i]["rf"] == 1:
+        #         n_pi = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi"]/32)*32
+        #         n_pi_2 = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi"]/32)*32
+        #         gate_npoints["rf"] = {"pi_2": n_pi_2, "pi": n_pi}
+        #     else:
+        #         n_p = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["p"]/32)*32
+        #         gate_npoints["plunger"] = {"p": n_p}
+
+        # gate_lengths = {"rf": {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}, "plunger": {7: None, 8: None}}
+        # gate_npoints = {"rf": {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}, "plunger": {7: None, 8: None}}
 
         ##generate rf_idxs and p_idxs from qubit parameters
         for idx in rf_idxs:
-            ##Modify to include plunger gates...
-            qubit_lengths["rf"][idx]["pi"] = ceil(tau_pi_standard_new*1e9)
-            qubit_lengths["rf"][idx]["pi_2"] = ceil(tau_pi_2_standard_new*1e9)
-            qubit_npoints["rf"][idx]["pi"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi"]/32)*32
-            qubit_npoints["rf"][idx]["pi_2"] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
+            gate_lengths["rf"][idx]["pi"] = tau_pi_len
+            gate_lengths["rf"][idx]["pi_2"] = tau_pi_2_len
+            gate_npoints["rf"][idx]["pi"] = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi"]/32)*32
+            gate_npoints["rf"][idx]["pi_2"] = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi_2"]/32)*32
 
-        ##4. Add new standard lengths here
+        ##4. Add new standard lengths here ==> need to consider specific plunger examples
+        ##Now only uses 1 plunger shape per gate: p_12 and p_21: 3 cases are
         for idx in p_idxs:
-            qubit_lengths["plunger"][idx] = ceil(tau_pi_standard_new*1e9)
-            qubit_npoints["plunger"][idx] = ceil(self._sample_rate*self._qubit_parameters[idx]["tau_pi_2"]/32)*32
+            ##Must include cases for 4 possible frames: 1. pi/2 RF w/ plunger, 2. pi RF w/ plunger, 3. plunger alone, 4. plunger w/ plunger
+            gate_lengths["p"][idx] = {"pi_2": tau_pi_2_len, "pi":  tau_pi_len, "p": ceil(self._gate_parameters["p"][idx]["tau"]*1e9) , "p_fr": tau_p_len}
+            gate_npoints["p"][idx] = ceil(self._sample_rate*self._gate_parameters["p"][idx]["tau"]/32)*32
 
         ##5. Modify to generte plunger waveforms
-        #self._waveforms = generate_waveforms(qubit_npoints, tau_pi_2_standard_idx, amp=1)
-        self._waveforms = generate_waveforms_v2(qubit_npoints, tau_pi_2_standard_idx, amp=1)
+        ## Waveform output should be separated into rf and plunger waveforms
+        self._waveforms = generate_waveforms_v3(qubit_npoints, tau_pi_2_standard_idx, amp=1)
 
         ##6. Modify to account for new gate seq format
         self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)

@@ -1,28 +1,6 @@
 from math import ceil
 from silospin.math.math_helpers import compute_accumulated_phase, rectangular
 
-
-def make_gate_parameters(tau_pi, tau_pi_2, i_amp, q_amp, mod_freq, plunger_length, plunger_amp):
-    ## index denoted by gate index (use gst format)
-    gate_parameters = {}
-    rf_params = {"i_amp": None, "q_amp": None, "tau_pi" : None,  "tau_pi_2" :  None,  "mod_freq": None}
-    plunger_params = {"tau": None, "amp": None}
-    for rf_idx in tau_pi:
-        gate_parameters["rf"][rf_idx] = rf_params
-        gate_parameters["rf"][rf_idx]["i_amp"] = i_amp[rf_idx]
-        gate_parameters["rf"][rf_idx]["q_amp"] = q_amp[rf_idx]
-        gate_parameters["rf"][rf_idx]["tau_pi"] = tau_pi[rf_idx]
-        gate_parameters["rf"][rf_idx]["tau_pi_2"] = tau_pi_2[rf_idx]
-        gate_parameters["rf"][rf_idx]["mod_freq"] = mod_freq[rf_idx]
-    for p_idx in plunger_length:
-        gate_parameters["rf"][p_idx] = plunger_params
-        gate_parameters["rf"][p_idx]["i_amp"] = plunger_length[p_idx]
-        gate_parameters["rf"][p_idx]["q_amp"] = plunger_amp[p_idx]
-    return gate_parameters
-
-##def make_gate_parameters_from_csv():
-
-
 def channel_mapper(rf_cores=[1,2,3], plunger_channels = {"p12": 7, "p21": 8}):
     ## Currently set up for only 1 HDAWG with 4 cores
     rf_cores = set(rf_cores) # awg cores used for rf bursts
@@ -44,6 +22,27 @@ def channel_mapper(rf_cores=[1,2,3], plunger_channels = {"p12": 7, "p21": 8}):
         else:
              pass
     return awg_config
+
+def make_gate_parameters(tau_pi, tau_pi_2, i_amp, q_amp, mod_freq, plunger_length, plunger_amp):
+    ## index denoted by gate index (use gst format)
+    gate_parameters = {}
+    #rf_params = {"i_amp": None, "q_amp": None, "tau_pi" : None,  "tau_pi_2" :  None,  "mod_freq": None}
+    plunger_params = {"tau": None, "p_amp": None}
+    gate_parameters["rf"] = {}
+    gate_parameters["p"] = {}
+
+    for rf_idx in tau_pi:
+        gate_parameters["rf"][rf_idx] = {"i_amp": None, "q_amp": None, "tau_pi" : None,  "tau_pi_2" :  None,  "mod_freq": None}
+        gate_parameters["rf"][rf_idx]["i_amp"] = i_amp[rf_idx]
+        gate_parameters["rf"][rf_idx]["q_amp"] = q_amp[rf_idx]
+        gate_parameters["rf"][rf_idx]["tau_pi"] = tau_pi[rf_idx]
+        gate_parameters["rf"][rf_idx]["tau_pi_2"] = tau_pi_2[rf_idx]
+        gate_parameters["rf"][rf_idx]["mod_freq"] = mod_freq[rf_idx]
+    for p_idx in plunger_length:
+        gate_parameters["p"][p_idx] = plunger_params
+        gate_parameters["p"][p_idx]["tau"] = plunger_length[p_idx]
+        gate_parameters["p"][p_idx]["p_amp"] = plunger_amp[p_idx]
+    return gate_parameters
 
 def make_gateset_sequencer(n_seq):
     command_code = ""
@@ -147,7 +146,7 @@ def generate_reduced_command_table_v2(n_pi_2, n_pi, arbZ=[]):
 def generate_reduced_command_table_v3(pulse_lengths, arbZ=[], plungers=[]):
     ##Generates a command table and loads onto AWG
     ##pulse lengths ==> tuple of standard pulse lengths (n_pi_2, n_pi) in number of points
-    ##arbZ ==> list of tuples ofcarbitrary Z rotations  
+    ##arbZ ==> list of tuples ofcarbitrary Z rotations
     ##0-3 ==> initial gates, wv_idx = 0  (f_pi_2^pi_2) [4 elements]
     ##4-7 ==> initial gates, wv_idx = 1 (f_pi^pi) [4 elements]
     ##8-11 ==> initial gates, wv_idx = 2  (f_pi_2^pi) [4 elements]
@@ -211,7 +210,6 @@ def generate_reduced_command_table_v3(pulse_lengths, arbZ=[], plungers=[]):
             ct_idx += 1
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
-
 
 
 def make_waveform_placeholders(n_array):
@@ -397,6 +395,59 @@ def generate_waveforms_v2(qubit_gate_lengths, max_idx, amp=1):
     for idx in qubit_gate_lengths:
         waveforms[idx]["pi"] = rectangular(qubit_gate_lengths[idx]["pi"], amp, min_points = npoints_s_pi)
         waveforms[idx]["pi_2"] = rectangular(qubit_gate_lengths[idx]["pi_2"], amp, min_points = npoints_s_pi_2)
+    return waveforms
+
+def generate_waveforms_v3(gate_npoints, channel_map):
+    amp = 1
+    waveforms = {}
+    for idx in channel_map:
+        if channel_map[idx]["rf"] == 1:
+            waveforms[idx] = {"pi": None, "pi_2": None, "pi_2_pifr": None}
+        elif channel_map[idx]["rf"] == 0:
+            waveforms[idx] = {"pi": None, "pi_2": None, "p": None, "p_fr": None}
+        else:
+            pass
+            
+    rf_pi_npoints = {}
+    for i in gate_npoints["rf"]:
+        rf_pi_npoints[i] = gate_npoints["rf"][i]["pi"]
+    plunger_npoints = {}
+    for i in gate_npoints["plunger"]:
+        plunger_npoints[i] = gate_npoints["plunger"][i]["p"]
+
+    ch_map_rf = {}
+    ch_map_p = {}
+    for i in ch_map:
+        if ch_map[i]["rf"] == 1:
+            rf_ch = ch_map[i]["ch"]["gateindex"][0]
+            rf_core = i
+            ch_map_rf[rf_ch] = rf_core
+        else:
+            p_ch_1 = ch_map[i]["ch"]["gateindex"][0]
+            p_ch_2 = ch_map[i]["ch"]["gateindex"][1]
+            p_core = i
+            ch_map_p[p_ch_1] = p_core
+            ch_map_p[p_ch_2] = p_core
+
+    max_rf_key = max(rf_pi_npoints, key=lambda k: rf_pi_npoints[k])
+    npoints_pi_std = gate_npoints["rf"][max_rf_key]["pi"]
+    npoints_pi_2_std = gate_npoints["rf"][max_rf_key]["pi_2"]
+
+    max_p_key = max(plunger_npoints, key=lambda k: plunger_npoints[k])
+    npoints_p_std = gate_npoints["plunger"][max_p_key]["p"]
+
+    for i in gate_npoints["rf"]:
+        idx = ch_map_rf[i]
+        waveforms[idx]["pi"] = rectangular(gate_npoints["rf"][i]["pi"], amp, min_points = npoints_pi_std)
+        waveforms[idx]["pi_2"] = rectangular(gate_npoints["rf"][i]["pi_2"], amp, min_points = npoints_pi_2_std)
+        waveforms[idx]["pi_2_pifr"] = rectangular(gate_npoints["rf"][i]["pi_2"], amp, min_points = npoints_pi_std)
+
+    for i in gate_npoints["plunger"]:
+        idx = ch_map_p[i]
+        waveforms[idx]["pi"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_pi_std)
+        waveforms[idx]["pi_2"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_pi_2_std)
+        waveforms[idx]["p"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = gate_npoints["plunger"][i]["p"])
+        waveforms[idx]["p_fr"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_p_std)
     return waveforms
 
 def make_ramsey_sequencer(n_start, n_stop, dn, n_rect, n_av):

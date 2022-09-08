@@ -2,6 +2,7 @@ import pyvisa
 import numpy as np
 
 class DacDriver:
+    ##Need to include function call on LockIn continous data acquisition  ==> measure at each point  
     def __init__(self, dev_id = "ASRL3::INSTR"):
         rm = pyvisa.ResourceManager()
         self._dev_id = dev_id
@@ -54,7 +55,6 @@ class DacDriver:
     def Sweep2D(self, channel_1, channel_2, start_v_1, end_v_1, start_v_2, end_v_2, n_points_1, n_points_2):
         dVx = (end_v_1-start_v_1)/n_points_1
         dVy = (end_v_2-start_v_2)/n_points_2
-        #V_x, V_y = np.mgrid[start_v_1:end_v_1:dVx,start_v_2:end_v_2:dVy]
         vx = np.arange(start_v_1, end_v_1, dVx)
         vy = np.arange(start_v_2, end_v_2, dVy)
         V_x, V_y = np.meshgrid(vx, vy)
