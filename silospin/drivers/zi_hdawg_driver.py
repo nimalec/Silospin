@@ -95,7 +95,7 @@ class HdawgDriver:
             else:
                 self._run_status["awg"+str(idx+1)] = True
 
-        self._channel_mapping = channel_mapper(rf_cores, plunger_cores)
+        self._channel_mapping = channel_mapper(rf_cores, plunger_channels)
         for idx in self._channel_mapping:
             ch_1 = self._channel_mapping[idx]['ch']['index'][0]
             ch_2 = self._channel_mapping[idx]['ch']['index'][1]
