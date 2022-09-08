@@ -27,7 +27,6 @@ def make_gate_parameters(tau_pi, tau_pi_2, i_amp, q_amp, mod_freq, plunger_lengt
     ## index denoted by gate index (use gst format)
     gate_parameters = {}
     #rf_params = {"i_amp": None, "q_amp": None, "tau_pi" : None,  "tau_pi_2" :  None,  "mod_freq": None}
-    plunger_params = {"tau": None, "p_amp": None}
     gate_parameters["rf"] = {}
     gate_parameters["p"] = {}
 
@@ -39,7 +38,7 @@ def make_gate_parameters(tau_pi, tau_pi_2, i_amp, q_amp, mod_freq, plunger_lengt
         gate_parameters["rf"][rf_idx]["tau_pi_2"] = tau_pi_2[rf_idx]
         gate_parameters["rf"][rf_idx]["mod_freq"] = mod_freq[rf_idx]
     for p_idx in plunger_length:
-        gate_parameters["p"][p_idx] = plunger_params
+        gate_parameters["p"][p_idx] = {"tau": None, "p_amp": None}
         gate_parameters["p"][p_idx]["tau"] = plunger_length[p_idx]
         gate_parameters["p"][p_idx]["p_amp"] = plunger_amp[p_idx]
     return gate_parameters
@@ -407,7 +406,7 @@ def generate_waveforms_v3(gate_npoints, channel_map):
             waveforms[idx] = {"pi": None, "pi_2": None, "p": None, "p_fr": None}
         else:
             pass
-            
+
     rf_pi_npoints = {}
     for i in gate_npoints["rf"]:
         rf_pi_npoints[i] = gate_npoints["rf"][i]["pi"]
