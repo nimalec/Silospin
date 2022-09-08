@@ -281,140 +281,96 @@ class GateSetTomographyProgramPlunger:
         npoints_p_standard = ceil(self._sample_rate*tau_p_standard/32)*32
 
         ##3. Define standard plunger gate lengths here
-        ##Modify here to account for other edge cases mentioned
         tau_pi_2_standard = npoints_pi_2_standard/self._sample_rate
         tau_pi_standard = npoints_pi_standard/self._sample_rate
         tau_p_standard = npoints_p_standard/self._sample_rate
 
-        ##Gate lengths (may need to modify, hold off for now)
-        # tau_pi_2_len = ceil(tau_pi_2_standard*1e9)
-        # tau_pi_len = ceil(tau_pi_standard*1e9)
-        # tau_p_len = ceil(tau_p_standard*1e9)
-
-        ## Need to change for new channel grouping
-        ## gate_npoints ==> number of points for a single gate (non-zero elements)
-        ##Should have the form: {"rf" : {1: {}, ..., 3: { } } , "p": {7: ..., 8: ...}} (uses gate index)
-        gate_npoints = {"rf": None, "plunger": None}
-        for idx in self._gate_parameters["rf"]:
-            n_pi = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi"]/32)*32
-            n_pi_2 = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi_2"]/32)*32
-            gate_npoints["rf"][idx] = {"pi": n_pi, "pi_2":n_pi_2}
-
-        for idx in self._gate_parameters["p"]:
-            n_p = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["p"]/32)*32
-            gate_npoints["plunger"][idx] = {"p": n_p}
-
-        # for i in channel_mapping:
-        #     if channel_mapping[i]["rf"] == 1:
-        #         n_pi = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi"]/32)*32
-        #         n_pi_2 = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi"]/32)*32
-        #         gate_npoints["rf"] = {"pi_2": n_pi_2, "pi": n_pi}
-        #     else:
-        #         n_p = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["p"]/32)*32
-        #         gate_npoints["plunger"] = {"p": n_p}
-
-        # gate_lengths = {"rf": {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}, "plunger": {7: None, 8: None}}
-        # gate_npoints = {"rf": {0: {"pi": None, "pi_2": None}, 1: {"pi": None, "pi_2": None}, 2: {"pi": None, "pi_2": None}, 3: {"pi": None, "pi_2": None}}, "plunger": {7: None, 8: None}}
-
-        ##generate rf_idxs and p_idxs from qubit parameters
-        for idx in rf_idxs:
-            gate_lengths["rf"][idx]["pi"] = tau_pi_len
-            gate_lengths["rf"][idx]["pi_2"] = tau_pi_2_len
-            gate_npoints["rf"][idx]["pi"] = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi"]/32)*32
-            gate_npoints["rf"][idx]["pi_2"] = ceil(self._sample_rate*self._gate_parameters["rf"][idx]["tau_pi_2"]/32)*32
-
-        ##4. Add new standard lengths here ==> need to consider specific plunger examples
-        ##Now only uses 1 plunger shape per gate: p_12 and p_21: 3 cases are
-        for idx in p_idxs:
-            ##Must include cases for 4 possible frames: 1. pi/2 RF w/ plunger, 2. pi RF w/ plunger, 3. plunger alone, 4. plunger w/ plunger
-            gate_lengths["p"][idx] = {"pi_2": tau_pi_2_len, "pi":  tau_pi_len, "p": ceil(self._gate_parameters["p"][idx]["tau"]*1e9) , "p_fr": tau_p_len}
-            gate_npoints["p"][idx] = ceil(self._sample_rate*self._gate_parameters["p"][idx]["tau"]/32)*32
-
+        gate_npoints = make_gate_npoints(self._gate_parameters, self._sample_rate)
         ##5. Modify to generte plunger waveforms
         ## Waveform output should be separated into rf and plunger waveforms
-        self._waveforms = generate_waveforms_v3(qubit_npoints, tau_pi_2_standard_idx, amp=1)
+        self._waveforms = generate_waveforms_v3(gate_npoints, channel_mapping)
 
         ##6. Modify to account for new gate seq format
         self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
 
-        ##7. Modify ct_idxs to account for plunger gates
-        ct_idxs_all = {}
-        arbZs = []
-        n_arbZ = 0
-        for idx in self._gate_sequences:
-             gate_sequence = self._gate_sequences[idx]
-             ct_idxs_all[idx], arbZ = make_command_table_idxs(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9), n_arbZ)
-             n_arbZ += len(arbZ)
-             arbZs.append(arbZ)
-        arbZ_s = []
-        for lst in arbZs:
-            for i in lst:
-                arbZ_s.append(i)
-        command_tables = generate_reduced_command_table(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ_s)
-        self._ct_idxs = ct_idxs_all
-        self._command_tables = command_tables
-
-        waveforms_awg = {}
-        sequencer_code = {}
-        seq_code = {}
-        command_code = {}
-        n_array = [npoints_pi_2_standard, npoints_pi_standard]
-
-        ##8. Modify make_waveform_placeholder to account for plunger waveforms  (only for the relevant core). Generates sequence on given core
-        for idx in qubits:
-            waveforms = Waveforms()
-            waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
-            waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
-            waveforms_awg[idx] = waveforms
-            seq_code[idx] =  make_waveform_placeholders(n_array)
-            command_code[idx] = ""
-            sequence = "repeat("+str(n_outer)+"){\n "
-            for ii in range(len(ct_idxs_all)):
-                 n_seq = ct_idxs_all[ii][str(idx)]
-                 if external_trigger == False:
-                     seq = make_gateset_sequencer(n_seq)
-                 else:
-                     if idx == trigger_channel:
-                         seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
-                     else:
-                         seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
-                 sequence += seq
-            command_code[idx] = command_code[idx] + sequence
-            sequencer_code[idx] =  seq_code[idx] + command_code[idx] + "}"
-        self._sequencer_code = sequencer_code
-
-        for idx in qubits:
-             self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
-             self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
-
-        self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
-        self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
-
-        daq = self._awg._daq
-        dev = self._awg._connection_settings["hdawg_id"]
-
-        ##9. Modify to only set sine waves for modulation cores
-        for idx in qubits:
-             i_idx = self._channel_idxs[str(idx)][0]
-             q_idx = self._channel_idxs[str(idx)][1]
-             osc_idx = self._channel_osc_idxs[str(idx)]
-             self._awg.set_osc_freq(osc_idx, self._qubit_parameters[idx]["mod_freq"])
-             self._awg.set_sine(i_idx+1, osc_idx)
-             self._awg.set_sine(q_idx+1, osc_idx)
-             self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[idx]["i_amp_pi"])
-             self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[idx]["q_amp_pi"])
-             self._awg._hdawg.sigouts[i_idx].on(1)
-             self._awg._hdawg.sigouts[q_idx].on(1)
-             daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables))
-
-    def run_program(self, awg_idxs=None):
-        if awg_idxs:
-            awg_idxs = awg_idxs
-        else:
-            awg_idxs = self._awg_idxs
-        for idx in awg_idxs:
-            self._awg._awgs["awg"+str(idx+1)].single(True)
-            self._awg._awgs["awg"+str(idx+1)].enable(True)
+    #     ##7. Modify ct_idxs to account for plunger gates
+    #     ct_idxs_all = {}
+    #     arbZs = []
+    #     n_arbZ = 0
+    #     for idx in self._gate_sequences:
+    #          gate_sequence = self._gate_sequences[idx]
+    #          ct_idxs_all[idx], arbZ = make_command_table_idxs(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9), n_arbZ)
+    #          n_arbZ += len(arbZ)
+    #          arbZs.append(arbZ)
+    #     arbZ_s = []
+    #     for lst in arbZs:
+    #         for i in lst:
+    #             arbZ_s.append(i)
+    #     command_tables = generate_reduced_command_table(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ_s)
+    #     self._ct_idxs = ct_idxs_all
+    #     self._command_tables = command_tables
+    #
+    #     waveforms_awg = {}
+    #     sequencer_code = {}
+    #     seq_code = {}
+    #     command_code = {}
+    #     n_array = [npoints_pi_2_standard, npoints_pi_standard]
+    #
+    #     ##8. Modify make_waveform_placeholder to account for plunger waveforms  (only for the relevant core). Generates sequence on given core
+    #     for idx in qubits:
+    #         waveforms = Waveforms()
+    #         waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
+    #         waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
+    #         waveforms_awg[idx] = waveforms
+    #         seq_code[idx] =  make_waveform_placeholders(n_array)
+    #         command_code[idx] = ""
+    #         sequence = "repeat("+str(n_outer)+"){\n "
+    #         for ii in range(len(ct_idxs_all)):
+    #              n_seq = ct_idxs_all[ii][str(idx)]
+    #              if external_trigger == False:
+    #                  seq = make_gateset_sequencer(n_seq)
+    #              else:
+    #                  if idx == trigger_channel:
+    #                      seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
+    #                  else:
+    #                      seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
+    #              sequence += seq
+    #         command_code[idx] = command_code[idx] + sequence
+    #         sequencer_code[idx] =  seq_code[idx] + command_code[idx] + "}"
+    #     self._sequencer_code = sequencer_code
+    #
+    #     for idx in qubits:
+    #          self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
+    #          self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
+    #
+    #     self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
+    #     self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+    #
+    #     daq = self._awg._daq
+    #     dev = self._awg._connection_settings["hdawg_id"]
+    #
+    #     ##9. Modify to only set sine waves for modulation cores
+    #     for idx in qubits:
+    #          i_idx = self._channel_idxs[str(idx)][0]
+    #          q_idx = self._channel_idxs[str(idx)][1]
+    #          osc_idx = self._channel_osc_idxs[str(idx)]
+    #          self._awg.set_osc_freq(osc_idx, self._qubit_parameters[idx]["mod_freq"])
+    #          self._awg.set_sine(i_idx+1, osc_idx)
+    #          self._awg.set_sine(q_idx+1, osc_idx)
+    #          self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[idx]["i_amp_pi"])
+    #          self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[idx]["q_amp_pi"])
+    #          self._awg._hdawg.sigouts[i_idx].on(1)
+    #          self._awg._hdawg.sigouts[q_idx].on(1)
+    #          daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables))
+    #
+    # def run_program(self, awg_idxs=None):
+    #     if awg_idxs:
+    #         awg_idxs = awg_idxs
+    #     else:
+    #         awg_idxs = self._awg_idxs
+    #     for idx in awg_idxs:
+    #         self._awg._awgs["awg"+str(idx+1)].single(True)
+    #         self._awg._awgs["awg"+str(idx+1)].enable(True)
 
 
 class RamseyTypes:
