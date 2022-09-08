@@ -101,7 +101,8 @@ class HdawgDriver:
             ch_2 = self._channel_mapping[idx]['ch']['index'][1]
             if self._channel_mapping[idx]['rf'] == 1:
                 self.set_modulation_mode(ch_1, 1)
-                self.set_modulation_mode(ch_2, 1)
+                #self.set_modulation_mode(ch_2, 1)
+                self.set_modulation_mode(ch_2, 2)
             elif self._channel_mapping[idx]['rf'] == 0:
                 self.set_modulation_mode(ch_1, 0)
                 self.set_modulation_mode(ch_2, 0)
