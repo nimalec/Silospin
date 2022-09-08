@@ -57,7 +57,7 @@ class HdawgDriver:
         """
         ##Part 1: connect to instrument
         # ##Should add exception handeling here
-        self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "interface" : interface, "connection_status" : False, rf_cores=[1,2,3], plunger_channels = {"p12": 7, "p21": 8}}
+        self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "interface" : interface, "connection_status" : False}
         session = Session(server_host)
         self._session = session
         self._hdawg = self._session.connect_device(dev_id)
