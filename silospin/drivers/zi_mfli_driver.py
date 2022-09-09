@@ -397,7 +397,7 @@ class MfliDaqModule:
         #self._data.append(data)
 
     def continuous_numeric(self, time_constant=10e-3, acquisition_time=0.001, sample_rate=3000):
-        #self._mfli.set_demods_settings("timeconstant", time_constant)
+        self._mfli.set_demods_settings("timeconstant", time_constant)
         data = self.continuous_data_acquisition_time_domain(acquisition_time, n_bursts = 1, signal_nodes = ["r"], sample_rate=sample_rate)
         #return data
         #time.sleep(0.5)
