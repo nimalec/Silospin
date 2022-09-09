@@ -12,19 +12,24 @@ class ChargeStabilitySweeps:
         self._input_voltages = []
         self._measured_voltages = []
 
-    def sweep1D(self, channel, start_v, end_v, npoints):
+    def sweep1D(self, channel, start_v, end_v, npoints, plot = False):
         self._dac._dac.query("CH "+str(channel))
         v_array = np.linspace(start_v,end_v,npoints)
         self._input_voltages.append(v_array)
-        output_voltages = []
-        for v in v_array:
-            self._dac._dac.query("VOLT "+str(v))
+        output_voltages = np.ones(npoints)
+
+        for i in range(npoints):
+            self._dac._dac.query("VOLT "+str(v_array[i]))
             time.sleep(0.1)
-            self._dac._channel_configuration[channel] = v
+            self._dac._channel_configuration[channel] = v_array[i]
             val = self._daq_mod.continuous_numeric()
-            output_voltages.append(val)
+            if i == 0:
+                output_voltages = val*output_voltages
+            else:
+                output_voltages[i] = val
+            print(output_voltages)
+            #if plot == True:
             time.sleep(0.1)
-        output_voltages = np.array(output_voltages)
         return (v_array, output_voltages)
 
 
