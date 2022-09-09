@@ -285,7 +285,7 @@ class GateSetTomographyProgramPlunger:
         tau_pi_standard = npoints_pi_standard/self._sample_rate
         tau_p_standard = npoints_p_standard/self._sample_rate
 
-        self._gate_npoints = make_gate_npoints(self._gate_parameters, self._sample_rate)
+        self._gate_npoints = gate_npoints(self._gate_parameters, self._sample_rate)
         ##5. Modify to generte plunger waveforms
         ## Waveform output should be separated into rf and plunger waveforms
         self._waveforms = generate_waveforms_v3(gate_npoints, channel_mapping)
