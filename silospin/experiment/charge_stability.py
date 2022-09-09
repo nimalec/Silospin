@@ -1,5 +1,5 @@
 from silospin.drivers.zi_mfli_driver import MfliDriver
-from silospin.drivers.zi_mfli_driver import DaqModule
+from silospin.drivers.zi_mfli_driver import MfliDaqModule as DaqModule
 from silospin.drivers.homedac_box import DacDriver
 
 class ChargeStabilitySweeps:
