@@ -469,12 +469,15 @@ def generate_waveforms_v3(gate_npoints, channel_map):
             waveforms[idx] = {"pi": None, "pi_2": None, "p": None, "p_fr": None}
         else:
             pass
+
     rf_pi_npoints = {}
     for i in gate_npoints["rf"]:
         rf_pi_npoints[i] = gate_npoints["rf"][i]["pi"]
+
     plunger_npoints = {}
     for i in gate_npoints["plunger"]:
         plunger_npoints[i] = gate_npoints["plunger"][i]["p"]
+
 
     ch_map_rf = {}
     ch_map_p = {}
@@ -489,14 +492,17 @@ def generate_waveforms_v3(gate_npoints, channel_map):
             p_core = i
             ch_map_p[p_ch_1] = p_core
             ch_map_p[p_ch_2] = p_core
+
     ## Number of points for standard pulses
     ##1. RF pules: pi and pi_2 lengths
     max_rf_key = max(rf_pi_npoints, key=lambda k: rf_pi_npoints[k])
     npoints_pi_std = gate_npoints["rf"][max_rf_key]["pi"]
     npoints_pi_2_std = gate_npoints["rf"][max_rf_key]["pi_2"]
+
     ##2. Plunger pulses: pi frame, pi_2 frame, p_other frame, p_same
     max_p_key = max(plunger_npoints, key=lambda k: plunger_npoints[k])
     npoints_p_std = gate_npoints["plunger"][max_p_key]["p"]
+
     ##Replace loop with core mapping...
     for i in gate_npoints["rf"]:
         ##Map idx to core number here...
@@ -514,7 +520,7 @@ def generate_waveforms_v3(gate_npoints, channel_map):
         waveforms[idx]["p"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = gate_npoints["plunger"][i]["p"])
         waveforms[idx]["p_fr"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_p_std)
     return waveforms
-
+    
 def make_ramsey_sequencer(n_start, n_stop, dn, n_rect, n_av):
     sequence = "cvar i;\nconst n_start="+str(n_start)+";\nconst n_stop="+str(n_stop)+ ";\nconst dn="+str(dn)+";\nconst n_samp="+str(n_rect)+";\nwave pulse=rect(n_samp,1);\n\nfor (i = n_start; i < n_stop; i = i + dn){\n   repeat("+str(n_av)+"){\n     setTrigger(1);setTrigger(0);\n     playWave(pulse);\n     waitWave();\n     playZero(i);\n     waitWave();\n     playWave(pulse);\n     waitWave();\n   }\n}"
     return sequence
