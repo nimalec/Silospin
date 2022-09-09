@@ -291,6 +291,7 @@ class GateSetTomographyProgramPlunger:
 
 
         gate_standard_lengths = {"pi_2": ceil(tau_pi_2_standard*1e9), "pi": ceil(tau_pi_standard*1e9), "p": p_dict}
+        print(gate_standard_lengths)
 
         self._gate_npoints = make_gate_npoints(self._gate_parameters, self._sample_rate)
         ##5. Modify to generte plunger waveforms
@@ -300,7 +301,7 @@ class GateSetTomographyProgramPlunger:
         ##6. Modify to account for new gate seq format
         ## Modify lengths function....
         #1.
-        self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
+        #self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
 
     #     ##7. Modify ct_idxs to account for plunger gates
     #     ct_idxs_all = {}
