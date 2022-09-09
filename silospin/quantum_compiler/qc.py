@@ -288,7 +288,7 @@ class GateSetTomographyProgramPlunger:
         self._gate_npoints = make_gate_npoints(self._gate_parameters, self._sample_rate)
         ##5. Modify to generte plunger waveforms
         ## Waveform output should be separated into rf and plunger waveforms
-        self._waveforms = generate_waveforms_v3(gate_npoints, channel_mapping)
+        self._waveforms = generate_waveforms_v3(self._gate_npoints, channel_mapping)
 
         ##6. Modify to account for new gate seq format
         self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
