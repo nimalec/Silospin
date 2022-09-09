@@ -1,7 +1,8 @@
 from silospin.drivers.zi_mfli_driver import MfliDriver
 from silospin.drivers.zi_mfli_driver import MfliDaqModule as DaqModule
 from silospin.drivers.homedac_box import DacDriver
-import numpy as np 
+import numpy as np
+import time
 
 class ChargeStabilitySweeps:
     def __init__(self, dac_id="ASRL3::INSTR", mfli_id="dev5759"):
@@ -18,10 +19,11 @@ class ChargeStabilitySweeps:
         output_voltages = []
         for v in v_array:
             self._dac._dac.query("VOLT "+str(v))
-            voltage_str = self._dac._dac.query("VOLT?")
+            time.sleep(0.1)
             self._dac._channel_configuration[channel] = v
             val = self._daq_mod.continuous_numeric()
             output_voltages.append(val)
+            time.sleep(0.1)
         output_voltages = np.array(output_voltages)
         return (v_array, output_voltages)
 
