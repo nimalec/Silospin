@@ -426,7 +426,7 @@ def generate_waveforms_v3(gate_npoints, channel_map):
 
     ch_map_rf = {}
     ch_map_p = {}
-    for i in ch_map:
+    for i in channel_map:
         if ch_map[i]["rf"] == 1:
             rf_ch = ch_map[i]["ch"]["gateindex"][0]
             rf_core = i
@@ -458,6 +458,22 @@ def generate_waveforms_v3(gate_npoints, channel_map):
         waveforms[idx]["p"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = gate_npoints["plunger"][i]["p"])
         waveforms[idx]["p_fr"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_p_std)
     return waveforms
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def make_ramsey_sequencer(n_start, n_stop, dn, n_rect, n_av):
     sequence = "cvar i;\nconst n_start="+str(n_start)+";\nconst n_stop="+str(n_stop)+ ";\nconst dn="+str(dn)+";\nconst n_samp="+str(n_rect)+";\nwave pulse=rect(n_samp,1);\n\nfor (i = n_start; i < n_stop; i = i + dn){\n   repeat("+str(n_av)+"){\n     setTrigger(1);setTrigger(0);\n     playWave(pulse);\n     waitWave();\n     playZero(i);\n     waitWave();\n     playWave(pulse);\n     waitWave();\n   }\n}"
