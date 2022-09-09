@@ -406,6 +406,59 @@ def generate_waveforms_v2(qubit_gate_lengths, max_idx, amp=1):
         waveforms[idx]["pi_2"] = rectangular(qubit_gate_lengths[idx]["pi_2"], amp, min_points = npoints_s_pi_2)
     return waveforms
 
+# def generate_waveforms_v3(gate_npoints, channel_map):
+#     amp = 1
+#     waveforms = {}
+#     for idx in channel_map:
+#         if channel_map[idx]["rf"] == 1:
+#             waveforms[idx] = {"pi": None, "pi_2": None, "pi_2_pifr": None}
+#         elif channel_map[idx]["rf"] == 0:
+#             waveforms[idx] = {"pi": None, "pi_2": None, "p": None, "p_fr": None}
+#         else:
+#             pass
+#
+#     rf_pi_npoints = {}
+#     for i in gate_npoints["rf"]:
+#         rf_pi_npoints[i] = gate_npoints["rf"][i]["pi"]
+#     plunger_npoints = {}
+#     for i in gate_npoints["plunger"]:
+#         plunger_npoints[i] = gate_npoints["plunger"][i]["p"]
+#
+#     ch_map_rf = {}
+#     ch_map_p = {}
+#     for i in channel_map:
+#         if ch_map[i]["rf"] == 1:
+#             rf_ch = ch_map[i]["ch"]["gateindex"][0]
+#             rf_core = i
+#             ch_map_rf[rf_ch] = rf_core
+#         else:
+#             p_ch_1 = ch_map[i]["ch"]["gateindex"][0]
+#             p_ch_2 = ch_map[i]["ch"]["gateindex"][1]
+#             p_core = i
+#             ch_map_p[p_ch_1] = p_core
+#             ch_map_p[p_ch_2] = p_core
+#
+#     max_rf_key = max(rf_pi_npoints, key=lambda k: rf_pi_npoints[k])
+#     npoints_pi_std = gate_npoints["rf"][max_rf_key]["pi"]
+#     npoints_pi_2_std = gate_npoints["rf"][max_rf_key]["pi_2"]
+#
+#     max_p_key = max(plunger_npoints, key=lambda k: plunger_npoints[k])
+#     npoints_p_std = gate_npoints["plunger"][max_p_key]["p"]
+#
+#     for i in gate_npoints["rf"]:
+#         idx = ch_map_rf[i]
+#         waveforms[idx]["pi"] = rectangular(gate_npoints["rf"][i]["pi"], amp, min_points = npoints_pi_std)
+#         waveforms[idx]["pi_2"] = rectangular(gate_npoints["rf"][i]["pi_2"], amp, min_points = npoints_pi_2_std)
+#         waveforms[idx]["pi_2_pifr"] = rectangular(gate_npoints["rf"][i]["pi_2"], amp, min_points = npoints_pi_std)
+#
+#     for i in gate_npoints["plunger"]:
+#         idx = ch_map_p[i]
+#         waveforms[idx]["pi"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_pi_std)
+#         waveforms[idx]["pi_2"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_pi_2_std)
+#         waveforms[idx]["p"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = gate_npoints["plunger"][i]["p"])
+#         waveforms[idx]["p_fr"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_p_std)
+#     return waveforms
+
 def generate_waveforms_v3(gate_npoints, channel_map):
     amp = 1
     waveforms = {}
@@ -416,7 +469,6 @@ def generate_waveforms_v3(gate_npoints, channel_map):
             waveforms[idx] = {"pi": None, "pi_2": None, "p": None, "p_fr": None}
         else:
             pass
-
     rf_pi_npoints = {}
     for i in gate_npoints["rf"]:
         rf_pi_npoints[i] = gate_npoints["rf"][i]["pi"]
@@ -426,7 +478,7 @@ def generate_waveforms_v3(gate_npoints, channel_map):
 
     ch_map_rf = {}
     ch_map_p = {}
-    for i in channel_map:
+    for i in ch_map:
         if ch_map[i]["rf"] == 1:
             rf_ch = ch_map[i]["ch"]["gateindex"][0]
             rf_core = i
@@ -437,43 +489,31 @@ def generate_waveforms_v3(gate_npoints, channel_map):
             p_core = i
             ch_map_p[p_ch_1] = p_core
             ch_map_p[p_ch_2] = p_core
-
+    ## Number of points for standard pulses
+    ##1. RF pules: pi and pi_2 lengths
     max_rf_key = max(rf_pi_npoints, key=lambda k: rf_pi_npoints[k])
     npoints_pi_std = gate_npoints["rf"][max_rf_key]["pi"]
     npoints_pi_2_std = gate_npoints["rf"][max_rf_key]["pi_2"]
-
+    ##2. Plunger pulses: pi frame, pi_2 frame, p_other frame, p_same
     max_p_key = max(plunger_npoints, key=lambda k: plunger_npoints[k])
     npoints_p_std = gate_npoints["plunger"][max_p_key]["p"]
-
+    ##Replace loop with core mapping...
     for i in gate_npoints["rf"]:
+        ##Map idx to core number here...
         idx = ch_map_rf[i]
         waveforms[idx]["pi"] = rectangular(gate_npoints["rf"][i]["pi"], amp, min_points = npoints_pi_std)
         waveforms[idx]["pi_2"] = rectangular(gate_npoints["rf"][i]["pi_2"], amp, min_points = npoints_pi_2_std)
         waveforms[idx]["pi_2_pifr"] = rectangular(gate_npoints["rf"][i]["pi_2"], amp, min_points = npoints_pi_std)
 
+    ##Replace loop with core mapping...
     for i in gate_npoints["plunger"]:
+        ##Map idx to core number here...
         idx = ch_map_p[i]
         waveforms[idx]["pi"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_pi_std)
         waveforms[idx]["pi_2"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_pi_2_std)
         waveforms[idx]["p"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = gate_npoints["plunger"][i]["p"])
         waveforms[idx]["p_fr"] = rectangular(gate_npoints["plunger"][i]["p"], amp, min_points = npoints_p_std)
     return waveforms
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 def make_ramsey_sequencer(n_start, n_stop, dn, n_rect, n_av):
     sequence = "cvar i;\nconst n_start="+str(n_start)+";\nconst n_stop="+str(n_stop)+ ";\nconst dn="+str(dn)+";\nconst n_samp="+str(n_rect)+";\nwave pulse=rect(n_samp,1);\n\nfor (i = n_start; i < n_stop; i = i + dn){\n   repeat("+str(n_av)+"){\n     setTrigger(1);setTrigger(0);\n     playWave(pulse);\n     waitWave();\n     playZero(i);\n     waitWave();\n     playWave(pulse);\n     waitWave();\n   }\n}"
