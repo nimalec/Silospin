@@ -52,7 +52,7 @@ def make_gateset_sequencer(n_seq):
     program = "setTrigger(1);\nsetTrigger(0);\n" + command_code + "waitWave();\n"
     return program
 
-def gate_npoints(gate_parameters, sample_rate):
+def make_gate_npoints(gate_parameters, sample_rate):
     gate_npoints = {"rf": {}, "plunger": {}}
     for idx in gate_parameters["rf"]:
         n_pi = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi"]*1e-9)
