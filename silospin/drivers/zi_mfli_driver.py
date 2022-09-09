@@ -91,7 +91,7 @@ class MfliDriver:
             self._daq.set(f"/{self._device}/demods/0/"+key, value)
             self._demods_settings[key] = self._daq.getInt(f"/{self._device}/demods/0/"+key)
         elif key in settings_2:
-            self._daq.set(f"/{self._device}/demods/0/"+key)
+            self._daq.set(f"/{self._device}/demods/0/"+key, value)
             self._demods_settings[key] = self._daq.getDouble(f"/{self._device}/demods/0/"+key)
 
     def get_sigins_settings(self, key):
@@ -110,7 +110,7 @@ class MfliDriver:
             self._daq.set(f"/{self._device}/sigins/0/"+key, value)
             self._demods_settings[key] = self._daq.getInt(f"/{self._device}/sigins/0/"+key)
         elif key in settings_2:
-            self._daq.set(f"/{self._device}/sigins/0/"+key)
+            self._daq.set(f"/{self._device}/sigins/0/"+key, value)
             self._demods_settings[key] = self._daq.getDouble(f"/{self._device}/sigins/0/"+key)
 
     def get_sigouts_settings(self, key):
@@ -130,7 +130,7 @@ class MfliDriver:
             self._daq.set(f"/{self._device}/sigouts/0/"+key, value)
         elif key in settings_2:
             self._demods_settings[key] = self._daq.getDouble(f"/{self._device}/sigouts/0/"+key)
-            self._daq.set(f"/{self._device}/sigouts/0/"+key)
+            self._daq.set(f"/{self._device}/sigouts/0/"+key, value)
 
     def get_currins_settings(self, key):
         settings_1 = {"autorange", "float", "range"}
@@ -149,7 +149,7 @@ class MfliDriver:
             self._daq.set(f"/{self._device}/currins/0/"+key, value)
         elif key in settings_2:
             self._demods_settings[key] = self._daq.getDouble(f"/{self._device}/currins/0/"+key)
-            self._daq.set(f"/{self._device}/currins/0/"+key)
+            self._daq.set(f"/{self._device}/currins/0/"+key, value)
 
     # def enable_data_transfer(self):
     #      self._daq.set(f"/{self._device}/demods/0/enable", 1)
