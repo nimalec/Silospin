@@ -52,22 +52,15 @@ def make_gateset_sequencer(n_seq):
     program = "setTrigger(1);\nsetTrigger(0);\n" + command_code + "waitWave();\n"
     return program
 
-def make_gate_npoints(gate_parameters, sample_rate):
-    gate_npoints = {"rf": None, "plunger": None}
+def gate_npoints(gate_parameters, sample_rate):
+    gate_npoints = {"rf": {}, "plunger": {}}
     for idx in gate_parameters["rf"]:
-        n_pi = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi"]/32)*32
-        n_pi_2 = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi_2"]/32)*32
-        gate_npoints["rf"][idx] = {"pi": n_pi, "pi_2":n_pi_2}
+        n_pi = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi"]*1e-9)
+        n_pi_2 = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi_2"]*1e-9)
+        gate_npoints["rf"][idx] = {"pi": n_pi, "pi_2": n_pi_2}
     for idx in gate_parameters["p"]:
-        n_p = ceil(sample_rate*gate_parameters["rf"][idx]["p"]/32)*32
+        n_p = ceil(sample_rate*gate_parameters["p"][idx]["tau"]*1e-9)
         gate_npoints["plunger"][idx] = {"p": n_p}
-    ##generate rf_idxs and p_idxs from qubit parameters
-    for idx in rf_idxs:
-        gate_npoints["rf"][idx]["pi"] = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi"]/32)*32
-        gate_npoints["rf"][idx]["pi_2"] = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi_2"]/32)*32
-    ##4. Add new standard lengths here ==> need to consider specific plunger examples
-    for idx in p_idxs:
-        gate_npoints["p"][idx] = ceil(sample_rate*gate_parameters["p"][idx]["tau"]/32)*32
     return gate_npoints
 
 def make_gateset_sequencer_ext_trigger(n_seq, n_av, trig_channel=True):
@@ -76,7 +69,6 @@ def make_gateset_sequencer_ext_trigger(n_seq, n_av, trig_channel=True):
         idx_str = str(n)
         line = "executeTableEntry("+idx_str+");\n"
         command_code = command_code + line
-
     if trig_channel == True:
         trig_program = "repeat("+str(n_av)+"){"+"waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\n"+"\nwaitDIOTrigger();\nresetOscPhase();"
     else:
