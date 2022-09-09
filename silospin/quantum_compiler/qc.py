@@ -260,11 +260,11 @@ class GateSetTomographyProgramPlunger:
         ##1. Append plunger gate lengths to tau_pi_2_set. Standard pi length will be defined from pi_2 length.
         tau_pi_2_set = []
         for idx in self._gate_parameters["rf"]:
-            tau_pi_2_set.append((idx, self._gate_parameters ["rf"][idx]["tau_pi_2"]))
+            tau_pi_2_set.append((idx, self._gate_parameters["rf"][idx]["tau_pi_2"]))
 
         plunger_set = []
         for idx in self._gate_parameters["p"]:
-            plunger_set.append((idx, self._gate_parameters ["p"][idx]["tau"]))
+            plunger_set.append((idx, self._gate_parameters["p"][idx]["tau"]))
 
         ##Define standard pi/2 length and corresponding gate index
         tau_pi_2_standard = max(tau_pi_2_set,key=itemgetter(1))[1]
@@ -285,13 +285,22 @@ class GateSetTomographyProgramPlunger:
         tau_pi_standard = npoints_pi_standard/self._sample_rate
         tau_p_standard = npoints_p_standard/self._sample_rate
 
+        p_dict = {}
+        for idx in plunger_set:
+            p_dict[plunger_set[0]] = ceil(plunger_set[0]*1e9)
+
+
+        gate_standard_lengths = {"pi_2": ceil(tau_pi_2_standard*1e9), "pi": ceil(tau_pi_standard*1e9), "p": p_dict}
+
         self._gate_npoints = make_gate_npoints(self._gate_parameters, self._sample_rate)
         ##5. Modify to generte plunger waveforms
         ## Waveform output should be separated into rf and plunger waveforms
         self._waveforms = generate_waveforms_v3(self._gate_npoints, channel_mapping)
 
         ##6. Modify to account for new gate seq format
-        #self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
+        ## Modify lengths function....
+        #1.
+        self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
 
     #     ##7. Modify ct_idxs to account for plunger gates
     #     ct_idxs_all = {}
