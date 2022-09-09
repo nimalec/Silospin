@@ -401,7 +401,7 @@ class MfliDaqModule:
         data = self.continuous_data_acquisition_time_domain(acquisition_time, n_bursts = 1, signal_nodes = ["r"], sample_rate=sample_rate)
         #return data
         #time.sleep(0.5)
-        #signal_path = f"/{self._dev_id}/demods/0/sample.r"
+        signal_path = f"/{self._dev_id}/demods/0/sample.r"
         val = np.mean(data[signal_path][0]['value'])
         return val
 
