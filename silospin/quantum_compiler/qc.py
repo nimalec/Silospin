@@ -287,7 +287,7 @@ class GateSetTomographyProgramPlunger:
 
         p_dict = {}
         for idx in plunger_set:
-            p_dict[plunger_set[0]] = ceil(plunger_set[0]*1e9)
+            p_dict[plunger_set[idx][0]] = ceil(plunger_set[idx][1]*1e9)
 
 
         gate_standard_lengths = {"pi_2": ceil(tau_pi_2_standard*1e9), "pi": ceil(tau_pi_standard*1e9), "p": p_dict}
