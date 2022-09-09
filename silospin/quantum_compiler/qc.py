@@ -291,7 +291,7 @@ class GateSetTomographyProgramPlunger:
         self._waveforms = generate_waveforms_v3(self._gate_npoints, channel_mapping)
 
         ##6. Modify to account for new gate seq format
-        self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
+        #self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
 
     #     ##7. Modify ct_idxs to account for plunger gates
     #     ct_idxs_all = {}
