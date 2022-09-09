@@ -290,7 +290,7 @@ class GateSetTomographyProgramPlunger:
             p_dict[idx[0]] = ceil(idx[1]*1e-9)
 
 
-        gate_standard_lengths = {"pi_2": ceil(tau_pi_2_standard*1-e9), "pi": ceil(tau_pi_standard*1-e9), "p": p_dict}
+        gate_standard_lengths = {"pi_2": ceil(tau_pi_2_standard*1e-9), "pi": ceil(tau_pi_standard*1e-9), "p": p_dict}
         print(gate_standard_lengths)
 
         self._gate_npoints = make_gate_npoints(self._gate_parameters, self._sample_rate)
