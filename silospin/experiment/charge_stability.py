@@ -1,6 +1,7 @@
 from silospin.drivers.zi_mfli_driver import MfliDriver
 from silospin.drivers.zi_mfli_driver import MfliDaqModule as DaqModule
 from silospin.drivers.homedac_box import DacDriver
+import numpy as np 
 
 class ChargeStabilitySweeps:
     def __init__(self, dac_id="ASRL3::INSTR", mfli_id="dev5759"):
