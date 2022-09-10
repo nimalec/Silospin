@@ -6,3 +6,4 @@ def plot1DVoltageSweep(fig, input_voltage, output_voltage, idx, channel_number):
     plt.xlabel('Barrier Gate Voltage [V]')
     plt.ylabel('Measured Voltage [V]')
     plt.title("Measured Output Voltage from Sweep on CH" + str(channel_number))
+    plt.show()
