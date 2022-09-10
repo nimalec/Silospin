@@ -32,9 +32,9 @@ class ChargeStabilitySweeps:
                 output_voltages[i] = val
 
             if plot == True:
-                #fig = plt.figure(figsize=(4,4))
+                fig = plt.figure(figsize=(4,4))
                 #plot1DVoltageSweep(fig, v_array, output_voltages, i, channel)
-                plot1DVoltageSweep(v_array, output_voltages, i, channel)
+                plot1DVoltageSweep(fig, v_array, output_voltages, i, channel)
             else:
                 pass
             time.sleep(0.1)
