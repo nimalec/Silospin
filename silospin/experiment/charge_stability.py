@@ -23,7 +23,7 @@ class ChargeStabilitySweeps:
 
         for i in range(npoints):
             self._dac._dac.query("VOLT "+str(v_array[i]))
-            time.sleep(0.1)
+            #time.sleep(0.1)
             self._dac._channel_configuration[channel] = v_array[i]
             val = self._daq_mod.continuous_numeric()
             if i == 0:
@@ -33,11 +33,10 @@ class ChargeStabilitySweeps:
 
             if plot == True:
                 fig = plt.figure(figsize=(4,4))
-                #plot1DVoltageSweep(fig, v_array, output_voltages, i, channel)
                 plot1DVoltageSweep(fig, v_array, output_voltages, i, channel)
             else:
                 pass
-            time.sleep(0.1)
+            #time.sleep(0.1)
         return (v_array, output_voltages)
 
 
