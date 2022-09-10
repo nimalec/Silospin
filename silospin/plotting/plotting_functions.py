@@ -1,6 +1,7 @@
-import matplotlib.pyplot as plt 
-def plot1DVoltageSweep(input_voltage, output_voltage, idx, channel_number):
-    plt.figure(figsize=(5, 2.7))
+import matplotlib.pyplot as plt
+import time
+def plot1DVoltageSweep(fig, input_voltage, output_voltage, idx, channel_number):
+    #plt.figure(figsize=(4,4))
     plt.plot(input_voltage[0:idx-1], output_voltage[0:idx-1], label='linear', color = "red")
     plt.xlabel('Barrier Gate Voltage [V]')
     plt.ylabel('Measured Voltage [V]')

@@ -2,6 +2,7 @@ from silospin.drivers.zi_mfli_driver import MfliDriver
 from silospin.drivers.zi_mfli_driver import MfliDaqModule as DaqModule
 from silospin.drivers.homedac_box import DacDriver
 from silospin.plotting.plotting_functions import plot1DVoltageSweep
+import matplotlib.pyplot as plt
 import numpy as np
 import time
 
@@ -30,7 +31,8 @@ class ChargeStabilitySweeps:
                 output_voltages[i] = val
 
             if plot == True:
-                plot1DVoltageSweep(v_array, output_voltages, i, channel)
+                fig = plt.figure(figsize=(4,4))
+                plot1DVoltageSweep(fig, v_array, output_voltages, i, channel)
             else:
                 pass
             time.sleep(0.1)
