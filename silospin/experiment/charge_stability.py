@@ -10,6 +10,7 @@ class ChargeStabilitySweeps:
     def __init__(self, dac_id="ASRL3::INSTR", mfli_id="dev5759"):
         self._dac = DacDriver(dac_id)
         self._mfli = MfliDriver(mfli_id)
+        daq_temp =  DaqModule(self._mfli)
         self._daq_mod =  DaqModule(self._mfli)
         self._input_voltages = []
         self._measured_voltages = []
