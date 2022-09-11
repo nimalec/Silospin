@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np 
 
 def plot1DVoltageSweep(fig, input_voltage, output_voltage, idx, channel_number):
     plt.figure(figsize=(4,4))
