@@ -59,7 +59,7 @@ class ChargeStabilitySweeps:
                 self._dac.set_voltage(channel_1, V_x[i][j])
                 self._dac.set_voltage(channel_2, V_y[i][j])
                 val = self._daq_mod.continuous_numeric()
-                if i == 0:
+                if idx == 0:
                     output_voltages = val*output_voltages
                 else:
                     output_voltages[i][j] = val
