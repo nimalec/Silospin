@@ -52,7 +52,7 @@ class ChargeStabilitySweeps:
         V_x, V_y = np.meshgrid(vx, vy)
         output_voltages = np.ones((n_points_1, n_points_2))
 
-        i = 0
+        idx = 0
         (dim0, dim1) = np.shape(V_x)
         for i in range(dim0):
             for j in range(dim1):
