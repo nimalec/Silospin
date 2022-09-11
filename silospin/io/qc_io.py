@@ -322,8 +322,6 @@ def quantum_protocol_parser_v4(file_path, qubit_lengths, channel_mapping):
     return sequence_table
 
 
-
-
 def quantum_protocol_parser_v5(file_path, qubit_lengths, channel_mapping):
     ## qubit_length has form:
     ##gate_standard_lengths = {"pi_2": ceil(tau_pi_2_standard*1e-9), "pi": ceil(tau_pi_standard*1e-9), "p": p_dict}
@@ -415,6 +413,6 @@ def quantum_protocol_parser_v5(file_path, qubit_lengths, channel_mapping):
                     rfline[str(item-1)].append("t"+str(max_gt_len))
                 for item in diff_set_plunger:
                     plungerline[item[1:len(item)]].append("t"+str(max_gt_len))
-                    
+
         sequence_table[idx] = {"rf": rfline, "plunger": plungerline}
     return sequence_table

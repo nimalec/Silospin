@@ -23,7 +23,6 @@ class ChargeStabilitySweeps:
 
         for i in range(npoints):
             self._dac._dac.query("VOLT "+str(v_array[i]))
-            #time.sleep(0.1)
             self._dac._channel_configuration[channel] = v_array[i]
             val = self._daq_mod.continuous_numeric()
             if i == 0:
@@ -36,8 +35,48 @@ class ChargeStabilitySweeps:
                 plot1DVoltageSweep(fig, v_array, output_voltages, i, channel)
             else:
                 pass
-            #time.sleep(0.1)
         return (v_array, output_voltages)
 
+    def sweep2D(self, channel_1, channel_2, start_v_1, end_v_1, start_v_2, end_v_2, n_points_1, n_points_2, plot = False):
+        dVx = (end_v_1-start_v_1)/n_points_1
+        dVy = (end_v_2-start_v_2)/n_points_2
+        vx = np.arange(start_v_1, end_v_1, dVx)
+        vy = np.arange(start_v_2, end_v_2, dVy)
+        V_x, V_y = np.meshgrid(vx, vy)
+        output_voltages = np.ones((n_points_1, n_points_2))
 
-    #def sweep2D(self,):
+        i = 0
+        (dim0, dim1) = np.shape(V_x)
+        for i in range(dim0):
+            for j in range(dim1):
+                self._dac.set_voltage(channel_1, V_x[i][j])
+                self._dac.set_voltage(channel_2, V_y[i][j])
+                val = self._daq_mod.continuous_numeric()
+                if i == 0:
+                    output_voltages = val*output_voltages
+                else:
+                    output_voltages[i][j] = val
+                print(output_voltages)
+        return (V_x, V_y)
+
+
+        # self._dac._dac.query("CH "+str(channel))
+        # v_array = np.linspace(start_v,end_v,npoints)
+        # self._input_voltages.append(v_array)
+        # output_voltages = np.ones(npoints)
+        #
+        # for i in range(npoints):
+        #     self._dac._dac.query("VOLT "+str(v_array[i]))
+        #     self._dac._channel_configuration[channel] = v_array[i]
+        #     val = self._daq_mod.continuous_numeric()
+        #     if i == 0:
+        #         output_voltages = val*output_voltages
+        #     else:
+        #         output_voltages[i] = val
+        #
+        #     if plot == True:
+        #         fig = plt.figure(figsize=(4,4))
+        #         plot1DVoltageSweep(fig, v_array, output_voltages, i, channel)
+        #     else:
+        #         pass
+        # return (v_array, output_voltages)
