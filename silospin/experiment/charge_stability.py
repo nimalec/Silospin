@@ -14,6 +14,7 @@ class ChargeStabilitySweeps:
         try:
             self._daq_mod =  DaqModule(self._mfli)
         except VisaIOError:
+            print(1)
             self._daq_mod =  DaqModule(self._mfli)
         else:
             print("Cannot Connect to Daq")
