@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-import numpy as np 
+import numpy as np
 
 def plot1DVoltageSweep(fig, input_voltage, output_voltage, idx, channel_number):
     plt.figure(figsize=(4,4))
@@ -17,5 +17,5 @@ def plot2DVoltageSweep(V_x, V_y, V_out, channel_numbers):
     cbar = fig.colorbar(c, ax=ax0)
     cbar.set_label('Output Voltage [V]', rotation=270)
     plt.xlabel('Channel ' +str(channel_numbers[0]) + ' Barrier Voltage [V]')
-    plt.xlabel('Channel ' +str(channel_numbers[1]) + ' Barrier Voltage [V]')
+    plt.ylabel('Channel ' +str(channel_numbers[1]) + ' Barrier Voltage [V]')
     plt.show()
