@@ -1,7 +1,7 @@
 from silospin.drivers.zi_mfli_driver import MfliDriver
 from silospin.drivers.zi_mfli_driver import MfliDaqModule as DaqModule
 from silospin.drivers.homedac_box import DacDriver
-from silospin.plotting.plotting_functions import plot1DVoltageSweep
+from silospin.plotting.plotting_functions import plot1DVoltageSweep, plot2DVoltageSweep
 import matplotlib.pyplot as plt
 import numpy as np
 import time
