@@ -63,6 +63,7 @@ class ChargeStabilitySweeps:
                     output_voltages = val*output_voltages
                 else:
                     output_voltages[i][j] = val
+                i += 1 
                 print(output_voltages)
         return (V_x, V_y)
 
