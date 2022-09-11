@@ -10,14 +10,14 @@ class ChargeStabilitySweeps:
     def __init__(self, dac_id="ASRL3::INSTR", mfli_id="dev5759"):
         self._dac = DacDriver(dac_id)
         self._mfli = MfliDriver(mfli_id)
-        #self._daq_mod =  DaqModule(self._mfli)
-        try:
-            self._daq_mod =  DaqModule(self._mfli)
-        except VisaIOError:
-            print(1)
-            self._daq_mod =  DaqModule(self._mfli)
-        else:
-            print("Cannot Connect to Daq")
+        self._daq_mod =  DaqModule(self._mfli)
+        # try:
+        #     self._daq_mod =  DaqModule(self._mfli)
+        # except VisaIOError:
+        #     print(1)
+        #     self._daq_mod =  DaqModule(self._mfli)
+        # else:
+        #     print("Cannot Connect to Daq")
 
         self._input_voltages = []
         self._measured_voltages = []
