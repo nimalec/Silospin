@@ -36,7 +36,6 @@ class ChargeStabilitySweeps:
                 output_voltages = val*output_voltages
             else:
                 output_voltages[i] = val
-
             if plot == True:
                 fig = plt.figure(figsize=(4,4))
                 plot1DVoltageSweep(fig, v_array, output_voltages, i, channel)
@@ -49,7 +48,6 @@ class ChargeStabilitySweeps:
         vy = np.linspace(start_v_2, end_v_2, n_points_2)
         V_x, V_y = np.meshgrid(vx, vy)
         output_voltages = np.ones((n_points_1, n_points_2))
-
         idx = 0
         (dim0, dim1) = np.shape(V_x)
         for i in range(dim0):
@@ -61,8 +59,9 @@ class ChargeStabilitySweeps:
                     output_voltages = val*output_voltages
                 else:
                     output_voltages[i][j] = val
+                if plot == True:
+                    plot2DVoltageSweep(V_x, V_y, output_voltages, (channel_1, channel_2))
                 idx += 1
-                print(output_voltages)
         return (V_x, V_y, output_voltages)
 
 
