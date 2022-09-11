@@ -45,10 +45,8 @@ class ChargeStabilitySweeps:
         return (v_array, output_voltages)
 
     def sweep2D(self, channel_1, channel_2, start_v_1, end_v_1, start_v_2, end_v_2, n_points_1, n_points_2, plot = False):
-        dVx = (end_v_1-start_v_1)/n_points_1
-        dVy = (end_v_2-start_v_2)/n_points_2
-        vx = np.arange(start_v_1, end_v_1, dVx)
-        vy = np.arange(start_v_2, end_v_2, dVy)
+        vx = np.linspace(start_v_1, end_v_1, n_points_1)
+        vy = np.linspace(start_v_2, end_v_2, n_points_2)
         V_x, V_y = np.meshgrid(vx, vy)
         output_voltages = np.ones((n_points_1, n_points_2))
 
@@ -65,7 +63,7 @@ class ChargeStabilitySweeps:
                     output_voltages[i][j] = val
                 idx += 1
                 print(output_voltages)
-        return (V_x, V_y)
+        return (V_x, V_y, output_voltages)
 
 
         # self._dac._dac.query("CH "+str(channel))
