@@ -7,7 +7,7 @@ class DacDriver:
         self._dev_id = dev_id
         self._dac = rm.open_resource(self._dev_id)
         #self._dac.baud_rate  = 250000
-        self._dac.set_visa_attribute("baud_rate", 250000)
+        #self._dac.set_visa_attribute("baud_rate", int(250000))
         self._dac.set_visa_attribute("read_termination", "\n")
         self._dac.set_visa_attribute("write_termination", "\n")
 
@@ -16,8 +16,8 @@ class DacDriver:
 
         #self._id_name = self._dac.query("*IDN?")
         #self._id_name = self._dac.query("*IDN?\n")
-        self._dac.write("*IDN?\n")
-        self._dac.read_bytes(1)
+        # self._dac.write("*IDN?\n")
+        # self._dac.read_bytes(1)
 
         n_channels = 25
         self._channel_configuration = {}
