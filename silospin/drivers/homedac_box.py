@@ -10,13 +10,16 @@ class DacDriver:
         n_channels = 25
         self._channel_configuration = {}
         for i in range(1,n_channels):
-            self._dac.query("CH "+str(i))
+            #self._dac.query("CH "+str(i))
+            self._dac.write("CH "+str(i))
             voltage = self._dac.query("VOLT?")
             self._channel_configuration[i] = float(voltage[0:3])
 
     def set_voltage(self, channel, voltage):
-        self._dac.query("CH "+str(channel))
-        self._dac.query("VOLT "+str(voltage))
+        #self._dac.query("CH "+str(channel))
+        #self._dac.query("VOLT "+str(voltage))
+        self._dac.write("CH "+str(channel))
+        self._dac.write("VOLT "+str(voltage))
         voltage_str = self._dac.query("VOLT?")
         self._channel_configuration[channel] = float(voltage_str[0:3])
 
@@ -27,10 +30,12 @@ class DacDriver:
         return self._channel_configuration[channel]
 
     def Sweep1D(self, channel, start_v, end_v, npoints):
-        self._dac.query("CH "+str(channel))
+        #self._dac.query("CH "+str(channel))
+        self._dac.write("CH "+str(channel))
         v_array = np.linspace(start_v,end_v,npoints)
         for v in v_array:
-            self._dac.query("VOLT "+str(v))
+            #self._dac.query("VOLT "+str(v))
+            self._dac.write("VOLT "+str(v))
             voltage_str = self._dac.query("VOLT?")
             self._channel_configuration[channel] = float(voltage_str[0:3])
         return v_array
