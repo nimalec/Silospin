@@ -6,7 +6,7 @@ class DacDriver:
         rm = pyvisa.ResourceManager()
         self._dev_id = dev_id
         self._dac = rm.open_resource(self._dev_id)
-        self._id_name = self._dac.query("*IDN?")
+        #self._id_name = self._dac.query("*IDN?")
         n_channels = 25
         self._channel_configuration = {}
         for i in range(1,n_channels):
