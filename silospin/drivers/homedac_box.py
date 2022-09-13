@@ -1,5 +1,6 @@
 import pyvisa
 import numpy as np
+import time  
 
 class DacDriver:
     def __init__(self, dev_id = "ASRL3::INSTR"):
