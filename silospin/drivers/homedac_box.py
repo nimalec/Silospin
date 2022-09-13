@@ -7,6 +7,9 @@ class DacDriver:
         self._dev_id = dev_id
         self._dac = rm.open_resource(self._dev_id)
         self._dac.baud_rate  = 250000
+        self._dac.read_termination = '\n'
+        self._dac.write_termination = '\n'
+
         self._id_name = self._dac.query("*IDN?")
         n_channels = 25
         self._channel_configuration = {}
