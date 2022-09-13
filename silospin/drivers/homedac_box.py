@@ -5,14 +5,14 @@ class DacDriver:
     def __init__(self, dev_id = "ASRL3::INSTR"):
         rm = pyvisa.ResourceManager()
         self._dev_id = dev_id
-        self._dac = rm.open_resource(self._dev_id)
+        self._dac = rm.open_resource(self._dev_id, baud_rate=250000)
         #self._dac.baud_rate  = 250000
         #self._dac.set_visa_attribute("baud_rate", int(250000))
-        self._dac.set_visa_attribute("read_termination", "\n")
-        self._dac.set_visa_attribute("write_termination", "\n")
-
-        self._dac.read_termination = '\n'
-        self._dac.write_termination = '\n'
+        # self._dac.set_visa_attribute("read_termination", "\n")
+        # self._dac.set_visa_attribute("write_termination", "\n")
+        #
+        # self._dac.read_termination = '\n'
+        # self._dac.write_termination = '\n'
 
         #self._id_name = self._dac.query("*IDN?")
         #self._id_name = self._dac.query("*IDN?\n")
