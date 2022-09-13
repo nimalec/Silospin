@@ -1,6 +1,6 @@
 import pyvisa
 import numpy as np
-import time  
+import time
 
 class DacDriver:
     def __init__(self, dev_id = "ASRL3::INSTR"):
@@ -18,7 +18,7 @@ class DacDriver:
         #self._id_name = self._dac.query("*IDN?")
         #self._id_name = self._dac.query("*IDN?\n")
         self._dac.write("*IDN?\n")
-        time.sleep(1)
+        time.sleep(30)
         self._dac.read_bytes(100)
 
         n_channels = 25
