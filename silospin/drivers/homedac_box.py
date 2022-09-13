@@ -7,6 +7,7 @@ class DacDriver:
         rm = pyvisa.ResourceManager()
         self._dev_id = dev_id
         self._dac = rm.open_resource(self._dev_id, baud_rate=250000)
+        print(self._dac.baud_rate)
         #self._dac = rm.open_resource(self._dev_id, baud_rate=250000, read_termination='\n', write_termination='\n')
         #self._dac.baud_rate  = 250000
         #self._dac.set_visa_attribute("baud_rate", int(250000))
