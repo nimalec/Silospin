@@ -17,6 +17,7 @@ class DacDriver:
         #self._id_name = self._dac.query("*IDN?")
         #self._id_name = self._dac.query("*IDN?\n")
         self._dac.write("*IDN?\n")
+        time.sleep(1)
         self._dac.read_bytes(100)
 
         n_channels = 25
