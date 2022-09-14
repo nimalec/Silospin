@@ -31,13 +31,13 @@ class DacDriver:
         #time.sleep(30)
         #self._dac.read_bytes(100)
 
-        n_channels = 25
-        self._channel_configuration = {}
-        for i in range(1,n_channels):
-            #self._dac.query("CH "+str(i))
-            self._dac.write("CH "+str(i))
-            voltage = self._dac.query("VOLT?")
-            self._channel_configuration[i] = float(voltage[0:3])
+        # n_channels = 25
+        # self._channel_configuration = {}
+        # for i in range(1,n_channels):
+        #     #self._dac.query("CH "+str(i))
+        #     self._dac.write("CH "+str(i))
+        #     voltage = self._dac.query("VOLT?")
+        #     self._channel_configuration[i] = float(voltage[0:3])
 
     def set_voltage(self, channel, voltage):
         #self._dac.query("CH "+str(channel))
