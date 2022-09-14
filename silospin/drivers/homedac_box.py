@@ -10,6 +10,7 @@ class DacDriver:
         #self._dac = rm.open_resource(self._dev_id, baud_rate=250000)
         #print(self._dac.baud_rate)
         self._dac = rm.open_resource(self._dev_id, baud_rate=250000, read_termination='\n', write_termination='\n', data_bits=8, parity=0, stop_bits=10)
+        print(2)
         self._dac.query("*IDN?")
         #self._dac.baud_rate  = 250000
         #self._dac.set_visa_attribute("baud_rate", int(250000))
