@@ -20,7 +20,7 @@ class DacDriver:
         #self._id_name = self._dac.query("*IDN?")
         #self._id_name = self._dac.query("*IDN?\n")
         #self._dac.write("*IDN?\n")
-        self._dac.write("*IDN?\n")
+        self._dac.write("*IDN?")
         time.sleep(0.25)
         #self._dac.read("\n")
         self._dac.read_bytes(100)
