@@ -7,7 +7,7 @@ class DacDriver:
     def __init__(self, dev_id = "ASRL3::INSTR"):
         rm = pyvisa.ResourceManager()
         self._dev_id = dev_id
-        self._dac = rm.open_resource(self._dev_id, baud_rate=250000, read_termination='\r\n', write_termination='\r\n')
+        self._dac = rm.open_resource(self._dev_id, baud_rate=250000, read_termination='\r\n', write_termination='\r\n', open_timeout=3000)
 
         self._dac.query("*IDN?")
         #self._dac.baud_rate  = 250000
