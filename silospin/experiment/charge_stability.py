@@ -10,7 +10,7 @@ class ChargeStabilitySweeps:
     def __init__(self, dac_id="ASRL3::INSTR", mfli_id="dev5759"):
         self._dac = DacDriver(dac_id)
         self._mfli = MfliDriver(mfli_id)
-        self._daq_mod =  DaqModule(self._mfli)
+        self._daq_mod =  DaqModule(self._mfli) 
         # try:
         #     self._daq_mod =  DaqModule(self._mfli)
         # except VisaIOError:
