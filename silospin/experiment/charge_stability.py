@@ -20,9 +20,8 @@ class ChargeStabilitySweeps:
         if plot == True:
             fig, ax = plt.subplots()
             def plot1Dtrace(i):
-                #self._dac.set_voltage(v_array[i])
-                #v_meas = self._daq_mod.continuous_numeric(time_constant=filter_tc)
-                v_meas = np.random.rand()
+                self._dac.set_voltage(v_array[i])
+                v_meas = self._daq_mod.continuous_numeric(time_constant=filter_tc)
                 v_outputs.append(v_meas)
                 ax.clear()
                 ax.plot(v_array[0:len(v_outputs)], v_outputs)
