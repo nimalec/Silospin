@@ -29,7 +29,14 @@ class ChargeStabilitySweeps:
             return plotter
             plt.show()
         else:
-            pass
+            v_outputs = []
+            for i in range(npoints):
+                st = time.time()
+                self._dac.set_voltage(v_array[i])
+                v_meas = self._daq_mod.continuous_numeric(time_constant=filter_tc)
+                v_outputs.append(v_meas)
+                et = time.time()
+                print(et-st)
 
 
         # for i in range(npoints):
