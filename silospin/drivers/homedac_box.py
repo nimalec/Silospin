@@ -16,22 +16,22 @@ class DacDriver:
         self._dac.query("*IDN?")
 
         if init == True:
-            self._dac.write("INIT"+"\r\n")
+            self._dac.write("INIT")
         else:
             pass
 
     def set_verbose(self, verbose):
-        self._dac.write("VERBOSE\s"+str(verbose)+"\r\n")
+        self._dac.write("VERBOSE\s"+str(verbose))
 
     def set_channel(self, channel):
-        self._dac.write("CH\s"+str(channel)+"\r\n")
+        self._dac.write("CH\s"+str(channel))
 
     def set_channel_and_voltage(self, channel, voltage):
-        self._dac.write("CH\s"+str(channel)+"\r\n")
-        self._dac.write("VOLT\s"+str(voltage)+"\r\n")
+        self._dac.write("CH\s"+str(channel))
+        self._dac.write("VOLT\s"+str(voltage))
 
     def set_voltage(self, voltage):
-        self._dac.write("VOLT\s"+str(voltage)+"\r\n")
+        self._dac.write("VOLT\s"+str(voltage))
 
         # n_channels = 25
         # self._channel_configuration = {}
