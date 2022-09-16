@@ -17,7 +17,7 @@ class ChargeStabilitySweeps:
         v_array = np.linspace(start_v,end_v,npoints)
         v_outputs = []
         if plot == True:
-            %matplotlib tk
+            #%matplotlib tk
             fig, ax = plt.subplots()
             def plot1Dtrace(i):
                 self._dac.set_voltage(v_array[i])
