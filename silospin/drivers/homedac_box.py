@@ -13,7 +13,7 @@ class DacDriver:
         # self._dac.write("VERBOSE\s"+str(verbose)+"\r\n")
         # self._dac.query("*IDN?\r\n")
         self._dac.write("VERBOSE\s"+str(verbose))
-        self._dac.query("*IDN?\r\n")
+        self._dac.query("*IDN?")
 
         if init == True:
             self._dac.write("INIT"+"\r\n")
