@@ -30,6 +30,8 @@ class ChargeStabilitySweeps:
             plt.show()
         else:
             pass
+
+
         # for i in range(npoints):
         #     self._dac.set_voltage(voltage)
         #     val = self._daq_mod.continuous_numeric()
