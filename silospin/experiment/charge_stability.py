@@ -27,6 +27,7 @@ class ChargeStabilitySweeps:
                 ax.clear()
                 ax.plot(v_array[0:len(v_outputs)], v_outputs)
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints, interval=1, repeat=False)
+            return plotter  
             plt.show()
         else:
             pass
