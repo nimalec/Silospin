@@ -396,13 +396,13 @@ class MfliDaqModule:
         ##Flags necessary: 1. signal type , 2. time stamp, 3. actual signal
         #self._data.append(data)
 
-    def continuous_numeric(self, time_constant=10e-3, acquisition_time=0.001, sample_rate=3000):
+    def continuous_numeric(self, time_constant=10e-3, acquisition_time=0.0001, sample_rate=3000):
         self._mfli.set_demods_settings("timeconstant", time_constant)
         data = self.continuous_data_acquisition_time_domain(acquisition_time, n_bursts = 1, signal_nodes = ["r"], sample_rate=sample_rate)
         #return data
         #time.sleep(0.5)
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
-        val = np.mean(data[signal_path][0]['value'])
+        val = data[signal_path][0]['value'][0]
         return val
 
     def continuous_data_acquisition_spectrum(self, freq_span, n_cols, signal_nodes = ["x", "y"]):
