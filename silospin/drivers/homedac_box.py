@@ -9,6 +9,7 @@ class DacDriver:
         baud_rate = 250000
         self._dev_id = dev_id
         self._dac = rm.open_resource(self._dev_id, baud_rate=baud_rate, read_termination=termination_char, write_termination=termination_char, timeout=4000)
+        self._dac.write("CH\s0\r\n")
         self._dac.write("VERBOSE\s"+str(verbose))
         self._dac.write("INIT")
         self._dac.query("*IDN?")
