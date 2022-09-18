@@ -14,7 +14,7 @@ class DacDriver:
             self._dac.write("INIT")
         else:
             pass
-        time.sleep(10)
+        time.sleep(2)
         self._dac.query("*IDN?")
 
     def set_verbose(self, verbose):
