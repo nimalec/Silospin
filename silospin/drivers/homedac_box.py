@@ -8,7 +8,7 @@ class DacDriver:
         rm = pyvisa.ResourceManager()
         baud_rate = 250000
         self._dev_id = dev_id
-        self._dac = rm.open_resource(self._dev_id, baud_rate=baud_rate, read_termination=termination_char, write_termination=termination_char, timeout=3000)
+        self._dac = rm.open_resource(self._dev_id, baud_rate=baud_rate, read_termination=termination_char, write_termination=termination_char, timeout=4000)
         self._dac.write("VERBOSE\s"+str(verbose))
         self._dac.write("INIT")
         self._dac.query("*IDN?")
@@ -17,6 +17,7 @@ class DacDriver:
         #     self._dac.write("INIT")
         # else:
         #     pass
+
     def set_verbose(self, verbose):
         self._dac.write("VERBOSE\s"+str(verbose))
 
