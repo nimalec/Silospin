@@ -4,22 +4,18 @@ import numpy as np
 import time
 
 class DacDriver:
-    def __init__(self, dev_id = "ASRL3::INSTR", verbose=0, init=False, termination_char = '\r\n', baud_rate=250000):
+    def __init__(self, dev_id = "ASRL3::INSTR", verbose=0, init=True, termination_char = '\r\n', baud_rate=250000):
         rm = pyvisa.ResourceManager()
         baud_rate = 250000
         self._dev_id = dev_id
         self._dac = rm.open_resource(self._dev_id, baud_rate=baud_rate, read_termination=termination_char, write_termination=termination_char, timeout=3000)
-        # self._dac.write("VERBOSE\s"+str(verbose)+"\r\n")
-        # self._dac.write("VERBOSE\s"+str(verbose)+"\r\n")
-        # self._dac.query("*IDN?\r\n")
         self._dac.write("VERBOSE\s"+str(verbose))
-        self._dac.write("INIT")
-        self._dac.query("*IDN?")
 
-        # if init == True:
-        #     self._dac.write("INIT")
-        # else:
-        #     pass
+        if init == True:
+            self._dac.write("INIT")
+        else:
+            pass
+        self._dac.query("*IDN?")
 
     def set_verbose(self, verbose):
         self._dac.write("VERBOSE\s"+str(verbose))
