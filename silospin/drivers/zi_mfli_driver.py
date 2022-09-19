@@ -462,11 +462,7 @@ class MfliDaqModule:
 
         sig_paths = []
         sig_paths.append(signal_path)
-    #    flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
-    #    streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
         demod_path = f"/{self._dev_id}/demods/0/sample"
-    #    if demod_path not in (node.lower() for node in streaming_nodes):
-    #        raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")
 
         self._daq_module.set("count", 1)
         self._daq_module.set("grid/cols",  1)
@@ -479,15 +475,15 @@ class MfliDaqModule:
         ts0 = np.nan
         read_count = 0
         self.execute()
-        t0_measurement = time.time()
-        t_update = 0.9 * burst_duration
+        #t0_measurement = time.time()
+        #t_update = 0.9 * burst_duration
         while not self._daq_module.finished():
-            t0_loop = time.time()
+        #    t0_loop = time.time()
             data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
             read_count += 1
-            time.sleep(max(0, t_update - (time.time() - t0_loop)))
+        #    time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
-        t0 = time.time()
+        #t0 = time.time()
         self._data.append(data)
 
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
