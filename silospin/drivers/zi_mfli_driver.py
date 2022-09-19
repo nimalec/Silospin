@@ -467,21 +467,7 @@ class MfliDaqModule:
 
         ##Read data function (S)
 
-        def read_data(data, daq_module, signal_paths):
-            data_read = daq_module.read(True)
-            returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
-            #progress = daq_module.progress()[0]
-            for signal_path in signal_paths:
-                if signal_path.lower() in returned_signal_paths:
-                    for index, signal_burst in enumerate(data_read[signal_path.lower()]):
-                        value = signal_burst["value"][0, :]
-                        num_samples = len(signal_burst["value"][0, :])
-                        data[signal_path].append(signal_burst)
-                else:
-                        pass
-                return data
-
-        ##Read data function (end)
+        ##Read data function (E)
 
         data = {}
         data[signal_path] = []
@@ -490,8 +476,6 @@ class MfliDaqModule:
         while not self._daq_module.finished():
             data = read_data(data, self._daq_module, sig_paths)
         data = read_data(data, self._daq_module, sig_paths)
-        self._data.append(data)
-        signal_path = f"/{self._dev_id}/demods/0/sample.r"
         val = data[signal_path][0]['value'][0]
         return val
 
