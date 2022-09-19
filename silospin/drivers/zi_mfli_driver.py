@@ -347,21 +347,37 @@ class MfliDaqModule:
             self._signal_paths.remove(signal_path)
             self._daq_module.unsubscribe(signal_path)
 
-    # def continuous_numeric(self):
-    #     self._mfli.set_demods_settings("enable", 1)
-    #     self._daq_module.set("device", self._dev_id)
-    #     self.set_trigger_setting("type", 0)
-    #     self.set_grid_setting("mode", 2)
-    #     signal_path = f"/{self._dev_id}/demods/0/sample.r"
-    #     num_cols = 1
-    #     self._daq_module.set("count", 1)
-    #     self._daq_module.set("grid/cols",  1)
-    #     self._daq_module.subscribe(signal_path)
-    #     self.execute()
-    #     while not self._daq_module.finished():
-    #
+    def continuous_numeric(self):
+        self._mfli.set_demods_settings("enable", 1)
+        self._daq_module.set("device", self._dev_id)
+        self.set_trigger_setting("type", 0)
+        self.set_grid_setting("mode", 2)
+        signal_path = f"/{self._dev_id}/demods/0/sample.r"
+        self._daq_module.set("count", 1)
+        self._daq_module.set("grid/cols",  1)
+        self._daq_module.subscribe(signal_path)
 
+        flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
+        streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
 
+        demod_path = f"/{self._dev_id}/demods/0/sample"
+        if demod_path not in (node.lower() for node in streaming_nodes):
+            raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")
+
+        clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
+        ts0 = np.nan
+
+        self.execute()
+        t0_measurement = time.time()
+        t_update = 0.9 * burst_duration
+        while not self._daq_module.finished():
+            t0_loop = time.time()
+            data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
+            time.sleep(max(0, t_update - (time.time() - t0_loop)))
+        data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
+        t0 = time.time()
+        self._data.append(data)
+        return data
 
     # def continuous_data_acquisition_time_domain(self, burst_duration, n_bursts = 1, signal_nodes = ["x", "y"], sample_rate=3000):
     #     ##prepare daq module for cont. data acquisition_time
