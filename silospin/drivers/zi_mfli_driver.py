@@ -451,7 +451,7 @@ class MfliDaqModule:
     #     val = data[signal_path][0]['value'][0]
     #     return val
 
-    def set_continuous_numeric_parameters(time_constant=10e-3):
+    def set_continuous_numeric_parameters(self, time_constant=10e-3):
         self._mfli.set_demods_settings("timeconstant", time_constant)
         self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
