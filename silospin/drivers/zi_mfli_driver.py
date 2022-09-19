@@ -419,7 +419,7 @@ class MfliDaqModule:
         num_cols = int(np.ceil(sample_rate * burst_duration))
 
         self._daq_module.set("count", n_bursts)
-        #self._daq_module.set("duration", burst_duration)
+        self._daq_module.set("duration", burst_duration)
         self._daq_module.set("grid/cols",  num_cols)
 
         data = {}
@@ -436,15 +436,13 @@ class MfliDaqModule:
         while not self._daq_module.finished():
             t0_loop = time.time()
             data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
-            #data = read_data_update_plot(data, self._daq_module, sig_paths)
             read_count += 1
             time.sleep(max(0, t_update - (time.time() - t0_loop)))
         data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
-    #    data = read_data_update_plot(data, self._daq_module, sig_paths)
         t0 = time.time()
-
         self._data.append(data)
         return data
+
 
     def continuous_numeric(self, time_constant=10e-3, acquisition_time=1e-6, sample_rate=3000):
         self._mfli.set_demods_settings("timeconstant", time_constant)
@@ -452,6 +450,50 @@ class MfliDaqModule:
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         val = data[signal_path][0]['value'][0]
         return val
+
+    def continuous_numeric(self, time_constant=10e-3):
+        self._mfli.set_demods_settings("timeconstant", time_constant)
+        self._mfli.set_demods_settings("enable", 1)
+        self._daq_module.set("device", self._dev_id)
+        self.set_trigger_setting("type", 0)
+        self.set_grid_setting("mode", 2)
+
+        ###
+        sig_paths = []
+        sig_paths.append(f"/{self._dev_id}/demods/0/sample.r")
+        flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
+        streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
+        demod_path = f"/{self._dev_id}/demods/0/sample"
+        if demod_path not in (node.lower() for node in streaming_nodes):
+            raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")
+
+        self._daq_module.set("count", 1)
+        self._daq_module.set("grid/cols",  1)
+
+        data = {}
+        for sig in sig_paths:
+            data[sig] = []
+            self._daq_module.subscribe(sig)
+
+        clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
+        ts0 = np.nan
+        read_count = 0
+        self.execute()
+        t0_measurement = time.time()
+        t_update = 0.9 * burst_duration
+        while not self._daq_module.finished():
+            t0_loop = time.time()
+            data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
+            read_count += 1
+            time.sleep(max(0, t_update - (time.time() - t0_loop)))
+        data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
+        t0 = time.time()
+        self._data.append(data)
+        #
+        signal_path = f"/{self._dev_id}/demods/0/sample.r"
+        val = data[signal_path][0]['value'][0]
+        return val
+
 
     # def continuous_numeric(self, burst_duration = 10e-6, time_constant=10e-3, sample_rate=3000):
     #     self._mfli.set_demods_settings("enable", 1)
