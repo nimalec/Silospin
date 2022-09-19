@@ -457,6 +457,7 @@ class MfliDaqModule:
         self._daq_module.set("device", self._dev_id)
         self.set_trigger_setting("type", 0)
         self.set_grid_setting("mode", 2)
+        burst_duration = 10e-6
 
         ###
         sig_paths = []
