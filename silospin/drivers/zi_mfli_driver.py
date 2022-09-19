@@ -347,6 +347,22 @@ class MfliDaqModule:
             self._signal_paths.remove(signal_path)
             self._daq_module.unsubscribe(signal_path)
 
+    # def continuous_numeric(self):
+    #     self._mfli.set_demods_settings("enable", 1)
+    #     self._daq_module.set("device", self._dev_id)
+    #     self.set_trigger_setting("type", 0)
+    #     self.set_grid_setting("mode", 2)
+    #     signal_path = f"/{self._dev_id}/demods/0/sample.r"
+    #     num_cols = 1
+    #     self._daq_module.set("count", 1)
+    #     self._daq_module.set("grid/cols",  1)
+    #     self._daq_module.subscribe(signal_path)
+    #     self.execute()
+    #     while not self._daq_module.finished():
+    #
+
+
+
     # def continuous_data_acquisition_time_domain(self, burst_duration, n_bursts = 1, signal_nodes = ["x", "y"], sample_rate=3000):
     #     ##prepare daq module for cont. data acquisition_time
     #     self._mfli.set_demods_settings("enable", 1)
