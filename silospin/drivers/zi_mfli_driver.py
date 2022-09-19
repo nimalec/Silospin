@@ -452,12 +452,44 @@ class MfliDaqModule:
     #     val = data[signal_path][0]['value'][0]
     #     return val
 
-    def continuous_numeric(self, time_constant=10e-3, sample_rate=3000):
+    def continuous_numeric(self, burst_duration = 10e-6, time_constant=10e-3, sample_rate=3000):
         self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
         self.set_trigger_setting("type", 0)
         self.set_grid_setting("mode", 2)
-        signal_path = f"/{self._dev_id}/demods/0/sample.x"
+
+        signal_path = f"/{self._dev_id}/demods/0/sample.r"
+        flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
+        streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
+        demod_path = f"/{self._dev_id}/demods/0/sample"
+        if demod_path not in (node.lower() for node in streaming_nodes):
+            raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")
+
+        num_cols = int(np.ceil(sample_rate * burst_duration))
+        self._daq_module.set("count", 1)
+        self._daq_module.set("duration", burst_duration)
+        self._daq_module.set("grid/cols",  num_cols)
+        self._daq_module.subscribe(signal_path)
+        self._daq_module.execute()
+        data = {}
+        while not self._daq_module.finished():
+            data_read = self._daq_module.read(True)
+            returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
+            if signal_path.lower() in returned_signal_paths:
+                for index, signal_burst in enumerate(data_read[signal_path.lower()]):
+                    data[signal_path].append(signal_burst)
+            else:
+                pass
+
+        return data
+
+
+
+
+
+
+
+
         #num_cols = int(np.ceil(sample_rate * burst_duration))
         self._daq_module.set("count", 1)
         self._daq_module.set("grid/cols",  1)
