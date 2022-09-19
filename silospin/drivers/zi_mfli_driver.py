@@ -347,38 +347,6 @@ class MfliDaqModule:
             self._signal_paths.remove(signal_path)
             self._daq_module.unsubscribe(signal_path)
 
-    def continuous_numeric(self, burst_duration = 1e-9):
-        data = {}
-        self._mfli.set_demods_settings("enable", 1)
-        self._daq_module.set("device", self._dev_id)
-        self.set_trigger_setting("type", 0)
-        self.set_grid_setting("mode", 2)
-        signal_path = f"/{self._dev_id}/demods/0/sample.r"
-        self._daq_module.set("count", 1)
-        self._daq_module.set("grid/cols",  1)
-        self._daq_module.subscribe(signal_path)
-
-        flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
-        streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
-
-        demod_path = f"/{self._dev_id}/demods/0/sample"
-        if demod_path not in (node.lower() for node in streaming_nodes):
-            raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")
-
-        clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
-        ts0 = np.nan
-
-        self.execute()
-        t0_measurement = time.time()
-        t_update = 0.9 * burst_duration
-        while not self._daq_module.finished():
-            t0_loop = time.time()
-            data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, [signal_path])
-            time.sleep(max(0, t_update - (time.time() - t0_loop)))
-        data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, [signal_path])
-        t0 = time.time()
-        self._data.append(data)
-        return data
 
     # def continuous_data_acquisition_time_domain(self, burst_duration, n_bursts = 1, signal_nodes = ["x", "y"], sample_rate=3000):
     #     ##prepare daq module for cont. data acquisition_time
@@ -478,12 +446,12 @@ class MfliDaqModule:
         self._data.append(data)
         return data
 
-    # def continuous_numeric(self, time_constant=10e-3, acquisition_time=1e-6, sample_rate=3000):
-    #     self._mfli.set_demods_settings("timeconstant", time_constant)
-    #     data = self.continuous_data_acquisition_time_domain(acquisition_time, n_bursts = 1, signal_nodes = ["r"], sample_rate=sample_rate)
-    #     signal_path = f"/{self._dev_id}/demods/0/sample.r"
-    #     val = data[signal_path][0]['value'][0]
-    #     return val
+    def continuous_numeric(self, time_constant=10e-3, acquisition_time=1e-6, sample_rate=3000):
+        self._mfli.set_demods_settings("timeconstant", time_constant)
+        data = self.continuous_data_acquisition_time_domain(acquisition_time, n_bursts = 1, signal_nodes = ["r"], sample_rate=sample_rate)
+        signal_path = f"/{self._dev_id}/demods/0/sample.r"
+        val = data[signal_path][0]['value'][0]
+        return val
 
     # def continuous_numeric(self, burst_duration = 10e-6, time_constant=10e-3, sample_rate=3000):
     #     self._mfli.set_demods_settings("enable", 1)
