@@ -469,18 +469,14 @@ class MfliDaqModule:
         data[signal_path] = []
         self._daq_module.subscribe(signal_path)
         clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
-        ts0 = np.nan
-        read_count = 0
-        self.execute()
+        self._mfli._daq_module.execute()
         while not self._daq_module.finished():
             data = read_data(data, self._daq_module, sig_paths)
-            read_count += 1
         data = read_data(data, self._daq_module, sig_paths)
         self._data.append(data)
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         val = data[signal_path][0]['value'][0]
         return val
-
 
     # def continuous_numeric(self, burst_duration = 10e-6, time_constant=10e-3, sample_rate=3000):
     #     self._mfli.set_demods_settings("enable", 1)
