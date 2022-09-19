@@ -464,17 +464,24 @@ class MfliDaqModule:
         demod_path = f"/{self._dev_id}/demods/0/sample"
         self._daq_module.set("count", 1)
         self._daq_module.set("grid/cols",  1)
-
-        ##Read data function (S)
         data = {}
         data[signal_path] = []
         self._daq_module.subscribe(signal_path)
         self._mfli._daq_module.execute()
+
         while not self._daq_module.finished():
-            data = read_data(data, self._daq_module, sig_paths)
+            ##Read data function (S)
+            #data = read_data(data, self._daq_module, sig_paths)
+            data_read = self._daq_module.read(True)
+            returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
+            if signal_path.lower() in returned_signal_paths:
+                for index, signal_burst in enumerate(data_read[signal_path.lower()]):
+                    value = signal_burst["value"][0, :]
+                    data[signal_path].append(signal_burst)
+            else:
+                pass
 
-
-        ##Read data function (E)
+            ##Read data function (E)
         val = data[signal_path][0]['value'][0][0]
         return val
 
