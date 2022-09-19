@@ -18,6 +18,9 @@ class DacDriver:
         time.sleep(1)
         self._dac.query("*IDN?")
 
+    def clear_buffer(self):
+        self._dac.write("*CLS")
+
     def set_verbose(self, verbose):
         self._dac.write("VERBOSE\s"+str(verbose))
 

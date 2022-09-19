@@ -358,12 +358,12 @@ class MfliDaqModule:
         for nd in signal_nodes:
             signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
             sig_paths.append(signal_path)
-        flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
-        streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
+        #flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
+        #streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
 
         demod_path = f"/{self._dev_id}/demods/0/sample"
-        if demod_path not in (node.lower() for node in streaming_nodes):
-            raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")
+        # if demod_path not in (node.lower() for node in streaming_nodes):
+        #     raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")
 
         num_cols = int(np.ceil(sample_rate * burst_duration))
 
@@ -376,25 +376,72 @@ class MfliDaqModule:
             data[sig] = []
             self._daq_module.subscribe(sig)
 
-        clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
-        ts0 = np.nan
-        read_count = 0
+        #clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
+        #ts0 = np.nan
+        #read_count = 0
         self.execute()
-        t0_measurement = time.time()
-        t_update = 0.9 * burst_duration
+        #t0_measurement = time.time()
+        #t_update = 0.9 * burst_duration
         while not self._daq_module.finished():
-            t0_loop = time.time()
-            data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
-            read_count += 1
-            time.sleep(max(0, t_update - (time.time() - t0_loop)))
-        data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
-        t0 = time.time()
-
+            #t0_loop = time.time()
+            data = read_data_update_plot(data, self._daq_module, sig_paths)
+            #read_count += 1
+            #time.sleep(max(0, t_update - (time.time() - t0_loop)))
+        #data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
+        #data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
+        data =  read_data_update_plot(data, self._daq_module, sig_paths)
+        #t0 = time.time()
         self._data.append(data)
         return data
 
         ##Flags necessary: 1. signal type , 2. time stamp, 3. actual signal
         #self._data.append(data)
+
+    #def continuous_data_acquisition_time_domain(self, burst_duration, n_bursts = 1, signal_nodes = ["x", "y"], sample_rate=3000):
+        # ##prepare daq module for cont. data acquisition_time
+        # self._mfli.set_demods_settings("enable", 1)
+        # self._daq_module.set("device", self._dev_id)
+        # self.set_trigger_setting("type", 0)
+        # self.set_grid_setting("mode", 2)
+        #
+        # sig_paths = []
+        # for nd in signal_nodes:
+        #     signal_path = f"/{self._dev_id}/demods/0/sample" + "." + nd
+        #     sig_paths.append(signal_path)
+        # flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
+        # streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
+        #
+        # demod_path = f"/{self._dev_id}/demods/0/sample"
+        # if demod_path not in (node.lower() for node in streaming_nodes):
+        #     raise Exception("Demodulator streaming nodes unavailable - see the message above for more information.")
+        #
+        # num_cols = int(np.ceil(sample_rate * burst_duration))
+        #
+        # self._daq_module.set("count", n_bursts)
+        # self._daq_module.set("duration", burst_duration)
+        # self._daq_module.set("grid/cols",  num_cols)
+        #
+        # data = {}
+        # for sig in sig_paths:
+        #     data[sig] = []
+        #     self._daq_module.subscribe(sig)
+        #
+        # clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
+        # ts0 = np.nan
+        # read_count = 0
+        # self.execute()
+        # t0_measurement = time.time()
+        # t_update = 0.9 * burst_duration
+        # while not self._daq_module.finished():
+        #     t0_loop = time.time()
+        #     data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
+        #     read_count += 1
+        #     time.sleep(max(0, t_update - (time.time() - t0_loop)))
+        # data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
+        # t0 = time.time()
+        #
+        # self._data.append(data)
+        # return
 
     def continuous_numeric(self, time_constant=10e-3, acquisition_time=1e-6, sample_rate=3000):
         self._mfli.set_demods_settings("timeconstant", time_constant)
@@ -440,7 +487,6 @@ class MfliDaqModule:
 
         num_cols = int(np.ceil(sample_rate * burst_duration))
         num_bursts = int(np.ceil(total_duration / burst_duration))
-
 
         self._daq_module.subscribe(signal_path)
         data = {}
@@ -489,8 +535,11 @@ class MfliDaqModule:
         ## Figure out sampling rate ...
 
 class MfliScopeModule:
+    ##Goals for implementation: 1. configuraiton, 2. cont. data acquisiiton w/o triggering (time domain), 3. cont. data acquisiiton w/o triggering (freq. domain),
+    ##4. get data function (get scope records), 5. triggered measuremnets ...
     def __init__(self, mfli_driver):
         self._mfli = mfli_driver
+        self._daq  = self._mfli._daq
         self._dev_id = self._mfli._connection_settings["mfli_id"]
         self._scope_module = self._mfli._scope_module
         self._averager_settings =  {"resamplingmode": self._scope_module.getInt("averager/resamplingmode"), "restart": self._scope_module.getInt("averager/restart"), "weight": self._scope_module.getInt("averager/weight")}
@@ -505,7 +554,28 @@ class MfliScopeModule:
         self._fft_settings = {"power": self._scope_module.getInt("fft/power"), "spectraldensity": self._scope_module.getInt("fft/spectraldensity"), "window": self._scope_module.getInt("fft/window")}
     #    return {"averager": self._averager_settings, "misc": self._misc_settings , "save": self._save_settings, "fft": self._fft_settings}
         return {"averager": self._averager_settings, "misc": self._misc_settings , "fft": self._fft_settings}
-#
+
+    #def continuous_scope_time_domain(self):
+    # daq.setInt("/%s/scopes/0/length" % device, scope_length)
+    # daq.setInt("/%s/scopes/0/channel" % device, 1)
+    # daq.setInt("/%s/scopes/0/channels/%d/bwlimit" % (device, scope_in_channel), 1)
+    # daq.setInt("/%s/scopes/0/channels/%d/inputselect" % (device, scope_in_channel), inputselect)
+    # scope_time = 0
+    # daq.setInt("/%s/scopes/0/time" % device, scope_time)
+    # daq.setInt("/%s/scopes/0/single" % device, 0)
+    # daq.setInt("/%s/scopes/0/trigenable" % device, 0)
+    # daq.setDouble("/%s/scopes/0/trigholdoff" % device, trigholdoff)
+    # daq.sync()
+    # scopeModule = daq.scopeModule()
+    # scopeModule.set("mode", 1)
+    # scopeModule.set("averager/weight", averager_weight)
+    # scopeModule.set("historylength", historylength)
+    # wave_nodepath = f"/{device}/scopes/0/wave"
+    # scopeModule.subscribe(wave_nodepath)
+    # data_no_trig = get_scope_records(device, daq, scopeModule, min_num_records)
+
+    #def continuous_scope_freq_domain(self):
+
 #    def get_averager_settings(self, key):
 #        self._averager_settings[key] = self._scope_module.getInt("averager/"+key)
 #        return self._averager_settings[key]
@@ -521,11 +591,6 @@ class MfliScopeModule:
 #    def set_fft_settings(self, key, value):
 #        self._scope_module.setInt("fft/"+key, value)
 #        self._fft_settings[key] = self._scope_module.getInt("fft/"+key)
-#
-#     ## def set_save_settings
-#     ## def get_save_settings
-#     ## def set_misc_settings
-#     ## def get_misc_settings
 #
 #    def clear(self):
 #        self._scope_module.clear()
