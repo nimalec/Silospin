@@ -348,7 +348,7 @@ class MfliDaqModule:
             self._daq_module.unsubscribe(signal_path)
 
     def continuous_numeric(self, burst_duration = 1e-9):
-        data = {} 
+        data = {}
         self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
         self.set_trigger_setting("type", 0)
@@ -373,9 +373,9 @@ class MfliDaqModule:
         t_update = 0.9 * burst_duration
         while not self._daq_module.finished():
             t0_loop = time.time()
-            data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
+            data, ts0 = read_data_update_plot(data, ts0, self._daq_module, clockbase, [signal_path])
             time.sleep(max(0, t_update - (time.time() - t0_loop)))
-        data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
+        data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, [signal_path])
         t0 = time.time()
         self._data.append(data)
         return data
