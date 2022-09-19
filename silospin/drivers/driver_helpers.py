@@ -19,7 +19,7 @@ def read_data_update_plot(data, timestamp0, daq_module, clockbase,signal_paths):
 
         return data, timestamp0
 
-def read_data_update_plot_v2(data, daq_module, signal_paths):
+def read_data(data, daq_module, signal_paths):
     data_read = daq_module.read(True)
     returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
     progress = daq_module.progress()[0]

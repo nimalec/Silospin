@@ -6,7 +6,7 @@ from zhinst.ziPython import ziListEnum
 import matplotlib.pyplot as plt
 import numpy as np
 import time
-from silospin.drivers.driver_helpers import read_data_update_plot
+from silospin.drivers.driver_helpers import read_data_update_plot, read_data
 
 class MfliDriver:
     def __init__(self, device_id, server_host = "localhost", server_port = 8004, api_level = 6):
@@ -473,9 +473,9 @@ class MfliDaqModule:
         read_count = 0
         self.execute()
         while not self._daq_module.finished():
-            data, ts0 = read_data_update_plot_v2(data, ts0, self._daq_module, clockbase, sig_paths)
+            data = read_data(data, ts0, self._daq_module, clockbase, sig_paths)
             read_count += 1
-        data, _ = read_data_update_plot_v2(data, ts0, self._daq_module, clockbase, sig_paths)
+        data = read_data(data, ts0, self._daq_module, clockbase, sig_paths)
         self._data.append(data)
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         val = data[signal_path][0]['value'][0]
