@@ -452,12 +452,11 @@ class MfliDaqModule:
     #     return val
 
     def continuous_numeric(self, time_constant=10e-3):
-        self._mfli.set_demods_settings("timeconstant", time_constant)
-        self._mfli.set_demods_settings("enable", 1)
+        #self._mfli.set_demods_settings("timeconstant", time_constant)
+        #self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
-        self.set_trigger_setting("type", 0)
+        #self.set_trigger_setting("type", 0)
         self.set_grid_setting("mode", 2)
-        burst_duration = 10e-6
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         sig_paths = []
         sig_paths.append(signal_path)
@@ -470,8 +469,6 @@ class MfliDaqModule:
         self._mfli._daq_module.execute()
 
         while not self._daq_module.finished():
-            ##Read data function (S)
-            #data = read_data(data, self._daq_module, sig_paths)
             data_read = self._daq_module.read(True)
             returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
             if signal_path.lower() in returned_signal_paths:
@@ -480,8 +477,6 @@ class MfliDaqModule:
                     data[signal_path].append(signal_burst)
             else:
                 pass
-
-            ##Read data function (E)
         val = data[signal_path][0]['value'][0][0]
         return val
 
