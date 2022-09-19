@@ -488,7 +488,7 @@ class MfliDaqModule:
 
         ## Figure out sampling rate ...
 
-class MfliScopeModule(self,mfli_driver):
+class MfliScopeModule:
     def __init__(self, mfli_driver):
         self._mfli = mfli_driver
         self._dev_id = self._mfli._connection_settings["mfli_id"]
