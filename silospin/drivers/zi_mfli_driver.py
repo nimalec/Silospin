@@ -418,7 +418,7 @@ class MfliDaqModule:
         num_cols = int(np.ceil(sample_rate * burst_duration))
 
         self._daq_module.set("count", n_bursts)
-        self._daq_module.set("duration", burst_duration)
+        #self._daq_module.set("duration", burst_duration)
         self._daq_module.set("grid/cols",  num_cols)
 
         data = {}
