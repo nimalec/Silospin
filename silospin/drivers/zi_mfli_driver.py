@@ -475,7 +475,7 @@ class MfliDaqModule:
         while not self._daq_module.finished():
             data = read_data(data, ts0, self._daq_module, clockbase, sig_paths)
             read_count += 1
-        data = read_data(data, ts0, self._daq_module, clockbase, sig_paths)
+        data = read_data(data, self._daq_module, sig_paths)
         self._data.append(data)
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         val = data[signal_path][0]['value'][0]
