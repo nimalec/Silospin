@@ -458,10 +458,10 @@ class MfliDaqModule:
         self.set_trigger_setting("type", 0)
         self.set_grid_setting("mode", 2)
         burst_duration = 10e-6
+        signal_path = f"/{self._dev_id}/demods/0/sample.r"
 
-        ###
         sig_paths = []
-        sig_paths.append(f"/{self._dev_id}/demods/0/sample.r")
+        sig_paths.append(signal_path)
         flags = ziListEnum.recursive | ziListEnum.absolute | ziListEnum.streamingonly
         streaming_nodes = self._mfli._daq.listNodes(f"/{self._dev_id}", flags)
         demod_path = f"/{self._dev_id}/demods/0/sample"
@@ -472,9 +472,8 @@ class MfliDaqModule:
         self._daq_module.set("grid/cols",  1)
 
         data = {}
-        for sig in sig_paths:
-            data[sig] = []
-            self._daq_module.subscribe(sig)
+        data[signal_path] = []
+        self._daq_module.subscribe(signal_path)
 
         clockbase = float(self._mfli._daq.getInt(f"/{self._dev_id}/clockbase"))
         ts0 = np.nan
@@ -490,7 +489,7 @@ class MfliDaqModule:
         data, _ = read_data_update_plot(data, ts0, self._daq_module, clockbase, sig_paths)
         t0 = time.time()
         self._data.append(data)
-        #
+
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         val = data[signal_path][0]['value'][0]
         return val
