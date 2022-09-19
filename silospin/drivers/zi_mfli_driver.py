@@ -495,7 +495,7 @@ class MfliScopeModule:
         self._scope_module = self._mfli._scope_module
         self._averager_settings =  {"resamplingmode": self._scope_module.getInt("averager/resamplingmode"), "restart": self._scope_module.getInt("averager/restart"), "weight": self._scope_module.getInt("averager/weight")}
         self._misc_settings = {"externalscaling": self._scope_module.getDouble("externalscaling"), "error": self._scope_module.getInt("error"), "clearhistory": self._scope_module.getInt("clearhistory"), "historylength": self._scope_module.getInt("historylength"), "mode": self._scope_module.getInt("mode"), "records": self._scope_module.getInt("records")}
-        self._save_settings = {"csvlocale": self._scope_module.getString("csvlocale"), "csvseparator": self._scope_module.getString("csvseparator"), "directory": self._scope_module.getString("directory") , "fileformat": self._scope_module.getInt("fileformat"), "save": self._scope_module.getInt("save"), "saveonread": self._scope_module.getInt("saveonread")}
+    #    self._save_settings = {"csvlocale": self._scope_module.getString("csvlocale"), "csvseparator": self._scope_module.getString("csvseparator"), "directory": self._scope_module.getString("directory") , "fileformat": self._scope_module.getInt("fileformat"), "save": self._scope_module.getInt("save"), "saveonread": self._scope_module.getInt("saveonread")}
         self._fft_settings = {"power": self._scope_module.getInt("fft/power"), "spectraldensity": self._scope_module.getInt("fft/spectraldensity"), "window": self._scope_module.getInt("fft/window")}
 #
 #     def get_all_scope_settings(self):
