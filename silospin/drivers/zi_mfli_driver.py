@@ -458,7 +458,7 @@ class MfliDaqModule:
         self.set_trigger_setting("type", 0)
         self.set_grid_setting("mode", 2)
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
-        num_cols = int(np.ceil(sample_rate * burst_duration))
+        #num_cols = int(np.ceil(sample_rate * burst_duration))
         self._daq_module.set("count", 1)
         self._daq_module.set("grid/cols",  1)
         self._daq_module.subscribe(signal_path)
