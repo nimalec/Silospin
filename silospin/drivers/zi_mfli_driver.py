@@ -466,6 +466,7 @@ class MfliDaqModule:
 
     def continuous_numeric(self, time_constant=10e-3):
         data = {}
+        signal_path = f"/{self._dev_id}/demods/0/sample.r"
         data[signal_path] = []
         self._daq_module.subscribe(signal_path)
         self._mfli._daq_module.execute()
