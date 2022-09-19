@@ -31,7 +31,7 @@ def read_data(data, daq_module, signal_paths):
                 data[signal_path].append(signal_burst)
         #else:
         #        pass
-        return data
+    return data
 
 # def read_data_update_plot(data, daq_module, signal_paths):
 #     data_read = daq_module.read(True)
