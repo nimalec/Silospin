@@ -473,7 +473,7 @@ class MfliDaqModule:
         read_count = 0
         self.execute()
         while not self._daq_module.finished():
-            data = read_data(data, ts0, self._daq_module, clockbase, sig_paths)
+            data = read_data(data, self._daq_module, sig_paths)
             read_count += 1
         data = read_data(data, self._daq_module, sig_paths)
         self._data.append(data)
