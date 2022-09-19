@@ -396,7 +396,7 @@ class MfliDaqModule:
         ##Flags necessary: 1. signal type , 2. time stamp, 3. actual signal
         #self._data.append(data)
 
-    def continuous_numeric(self, time_constant=10e-3, acquisition_time=0.0001, sample_rate=3000):
+    def continuous_numeric(self, time_constant=10e-3, acquisition_time=1e-6, sample_rate=3000):
         self._mfli.set_demods_settings("timeconstant", time_constant)
         data = self.continuous_data_acquisition_time_domain(acquisition_time, n_bursts = 1, signal_nodes = ["r"], sample_rate=sample_rate)
         #return data
@@ -488,15 +488,15 @@ class MfliDaqModule:
 
         ## Figure out sampling rate ...
 
-# class MfliScopeModule(self,mfli_driver):
-#     def __init__(self, mfli_driver):
-#         self._mfli = mfli_driver
-#         self._dev_id = self._mfli._connection_settings["mfli_id"]
-#         self._scope_module = self._mfli._scope_module
-#         self._averager_settings =  {"resamplingmode": self._scope_module.getInt("averager/resamplingmode"), "restart": self._scope_module.getInt("averager/restart"), "weight": self._scope_module.getInt("averager/weight")}
-#         self._misc_settings = {"externalscaling": self._scope_module.getDouble("externalscaling"), "error": self._scope_module.getInt("error"), "clearhistory": self._scope_module.getInt("clearhistory"), "historylength": self._scope_module.getInt("historylength"), "mode": self._scope_module.getInt("mode"), "records": self._scope_module.getInt("records")}
-#         self._save_settings = {"csvlocale": self._scope_module.getString("csvlocale"), "csvseparator": self._scope_module.getString("csvseparator"), "directory": self._scope_module.getString("directory") , "fileformat": self._scope_module.getInt("fileformat"), "save": self._scope_module.getInt("save"), "saveonread": self._scope_module.getInt("saveonread")}
-#         self._fft_settings = {"power": self._scope_module.getInt("fft/power"), "spectraldensity": self._scope_module.getInt("fft/spectraldensity"), "window": self._scope_module.getInt("fft/window")}
+class MfliScopeModule(self,mfli_driver):
+    def __init__(self, mfli_driver):
+        self._mfli = mfli_driver
+        self._dev_id = self._mfli._connection_settings["mfli_id"]
+        self._scope_module = self._mfli._scope_module
+        self._averager_settings =  {"resamplingmode": self._scope_module.getInt("averager/resamplingmode"), "restart": self._scope_module.getInt("averager/restart"), "weight": self._scope_module.getInt("averager/weight")}
+        self._misc_settings = {"externalscaling": self._scope_module.getDouble("externalscaling"), "error": self._scope_module.getInt("error"), "clearhistory": self._scope_module.getInt("clearhistory"), "historylength": self._scope_module.getInt("historylength"), "mode": self._scope_module.getInt("mode"), "records": self._scope_module.getInt("records")}
+        self._save_settings = {"csvlocale": self._scope_module.getString("csvlocale"), "csvseparator": self._scope_module.getString("csvseparator"), "directory": self._scope_module.getString("directory") , "fileformat": self._scope_module.getInt("fileformat"), "save": self._scope_module.getInt("save"), "saveonread": self._scope_module.getInt("saveonread")}
+        self._fft_settings = {"power": self._scope_module.getInt("fft/power"), "spectraldensity": self._scope_module.getInt("fft/spectraldensity"), "window": self._scope_module.getInt("fft/window")}
 #
 #     def get_all_scope_settings(self):
 #         self._averager_settings =  {"resamplingmode": self._scope_module.getInt("averager/resamplingmode"), "restart": self._scope_module.getInt("averager/restart"), "weight": self._scope_module.getInt("averager/weight")}
