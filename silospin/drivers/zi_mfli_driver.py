@@ -467,8 +467,10 @@ class MfliDaqModule:
         data[signal_path] = []
         self._daq_module.execute()
         data_read = self._daq_module.read(True)
-        for index, signal_burst in enumerate(data_read[signal_path.lower()]):
-            data[signal_path].append(signal_burst)
+        time.sleep(1)
+        return data_read
+        #for index, signal_burst in enumerate(data_read[signal_path.lower()]):
+        #    data[signal_path].append(signal_burst)
         #data.append()
         #val = data[signal_path][0]['value'][0]
         #signal_path = f"/{self._dev_id}/demods/0/sample.r"
