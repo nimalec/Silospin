@@ -443,7 +443,7 @@ class MfliDaqModule:
         t0 = time.time()
 
         self._data.append(data)
-        return
+        return data  
 
     def continuous_numeric(self, time_constant=10e-3, acquisition_time=1e-6, sample_rate=3000):
         self._mfli.set_demods_settings("timeconstant", time_constant)
@@ -451,7 +451,7 @@ class MfliDaqModule:
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         #val = data[signal_path][0]['value'][0]
         #return val
-        return data 
+        return data
 
     # def continuous_numeric(self, burst_duration = 10e-6, time_constant=10e-3, sample_rate=3000):
     #     self._mfli.set_demods_settings("enable", 1)
