@@ -348,6 +348,7 @@ class MfliDaqModule:
             self._daq_module.unsubscribe(signal_path)
 
     def continuous_numeric(self, burst_duration = 1e-9):
+        data = {} 
         self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
         self.set_trigger_setting("type", 0)
