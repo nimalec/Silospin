@@ -471,6 +471,9 @@ class MfliDaqModule:
     def continuous_numeric(self):
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         data_read = {}
+        for i in range(75):
+             data_read = self._daq_module.read(True)
+
         i = 0
         while not self._daq_module.finished():
             data_read = self._daq_module.read(True)
@@ -479,9 +482,7 @@ class MfliDaqModule:
                 val = data_read[signal_path.lower()][0]["value"][0]
             else:
                 pass
-            i += 1 
-        print(i)
-        #data_read = self._daq_module.read(True)
+            i += 1
         return data_read
 
         # while not self._daq_module.finished():
