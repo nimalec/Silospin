@@ -480,9 +480,9 @@ class MfliDaqModule:
                     data[signal_path].append(signal_burst)
             else:
                 pass
-        return data[signal_path][0]['value'][0]
-        #val = data[signal_path][0]['value'][0][0]
-        #return val
+        #return data[signal_path][0]['value'][0]
+        val = data[signal_path][0]['value'][0][0]
+        return val
 
     # def continuous_numeric(self, burst_duration = 10e-6, time_constant=10e-3, sample_rate=3000):
     #     self._mfli.set_demods_settings("enable", 1)
