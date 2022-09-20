@@ -465,21 +465,20 @@ class MfliDaqModule:
         self._daq_module.set("grid/cols",  1)
 
     def continuous_numeric(self, time_constant=10e-3):
-        return 1
-        # data = {}
-        # signal_path = f"/{self._dev_id}/demods/0/sample.r"
-        # data[signal_path] = []
-        # self._daq_module.subscribe(signal_path)
-        # self._mfli._daq_module.execute()
-        #
-        # while not self._daq_module.finished():
-        #     data_read = self._daq_module.read(True)
-        #     returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
-        #     if signal_path.lower() in returned_signal_paths:
-        #         val = data_read[signal_path.lower()][0]["value"][0]
-        #     else:
-        #         pass
-        # return val
+        data = {}
+        signal_path = f"/{self._dev_id}/demods/0/sample.r"
+        data[signal_path] = []
+        self._daq_module.subscribe(signal_path)
+        self._mfli._daq_module.execute()
+
+        while not self._daq_module.finished():
+            data_read = self._daq_module.read(True)
+            returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
+            if signal_path.lower() in returned_signal_paths:
+                val = data_read[signal_path.lower()][0]["value"][0]
+            else:
+                pass
+        return val
 
     # def continuous_numeric(self, burst_duration = 10e-6, time_constant=10e-3, sample_rate=3000):
     #     self._mfli.set_demods_settings("enable", 1)
