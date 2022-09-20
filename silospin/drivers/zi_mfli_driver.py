@@ -456,7 +456,7 @@ class MfliDaqModule:
         self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
         self.set_trigger_setting("type", 0)
-        self.set_grid_setting("mode", 2)
+        self.set_grid_setting("mode", 4)
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         sig_paths = []
         sig_paths.append(signal_path)
@@ -471,7 +471,7 @@ class MfliDaqModule:
         self._daq_module.subscribe(signal_path)
         self._mfli._daq_module.execute()
         data_read = self._daq_module.read(True)
-        
+
 
 
 
