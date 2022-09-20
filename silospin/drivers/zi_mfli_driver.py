@@ -1,12 +1,32 @@
 #!/usr/bin/env python
 import zhinst
 import zhinst.utils
+from zhinst import ziPython
 import zhinst.toolkit as tk
 from zhinst.ziPython import ziListEnum
 import matplotlib.pyplot as plt
 import numpy as np
 import time
 from silospin.drivers.driver_helpers import read_data_update_plot, read_data
+
+class MfliDriverChargeStability:
+    def __init__(self, dev_id = "dev5759", excluded_devices = ["dev8446", "dev5761"], sig_path="/dev5759/demods/0/sample" ):
+        host = 'localhost'
+        port=8004
+        self._signal_path = sig_path
+        self._daq_1 = zhinst.ziPython.ziDAQServer(host, port, api_level=6)
+        self._daq_1.connect()
+        self._mfli = MfliDriver(dev_id)
+        MfliDaqModule(self._mfli)
+
+    def get_sample_all(self):
+        val = self._daq_1.getSample(signal_path)
+        return val
+
+    def get_sample_r(self):
+        val = self._daq_1.getSample(signal_path)
+        return np.sqrt(val["x"]**2 + val["y"]**2)
+
 
 class MfliDriver:
     def __init__(self, device_id, server_host = "localhost", server_port = 8004, api_level = 6):
@@ -470,19 +490,13 @@ class MfliDaqModule:
 
     def continuous_numeric(self):
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
-        data_read = {}
-        for i in range(75):
-             data_read = self._daq_module.read(True)
-
-        i = 0
         while not self._daq_module.finished():
             data_read = self._daq_module.read(True)
             returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
             if signal_path.lower() in returned_signal_paths:
-                val = data_read[signal_path.lower()][0]["value"][0]
+               val = data_read[signal_path.lower()][0]["value"][0]
             else:
-                pass
-            i += 1
+                 pass
         return data_read
 
         # while not self._daq_module.finished():
