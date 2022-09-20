@@ -475,10 +475,10 @@ class MfliDaqModule:
             data_read = self._daq_module.read(True)
             returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
             if signal_path.lower() in returned_signal_paths:
-                print(data_read[signal_path.lower()][0]["value"])
-                for index, signal_burst in enumerate(data_read[signal_path.lower()]):
-                    value = signal_burst["value"][0, :]
-                    data[signal_path].append(signal_burst)
+                print(data_read[signal_path.lower()][0]["value"][0])
+                # for index, signal_burst in enumerate(data_read[signal_path.lower()]):
+                #     value = signal_burst["value"][0, :]
+                #     data[signal_path].append(signal_burst)
             else:
                 pass
         val = data[signal_path][0]['value'][0][0]
