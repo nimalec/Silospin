@@ -470,7 +470,8 @@ class MfliDaqModule:
         data[signal_path] = []
         self._daq_module.subscribe(signal_path)
         self._mfli._daq_module.execute()
-        print(1)
+        return 1
+
 
         # while not self._daq_module.finished():
         #     data_read = self._daq_module.read(True)
