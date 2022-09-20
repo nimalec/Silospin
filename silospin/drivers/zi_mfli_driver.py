@@ -469,8 +469,11 @@ class MfliDaqModule:
 
     def continuous_numeric(self):
         self._mfli._daq_module.execute()
+        i = 0
         while not self._daq_module.finished():
+            i+=1
             data_read = self._daq_module.read(True)
+        print(i)
         return data_read
 
         # while not self._daq_module.finished():
