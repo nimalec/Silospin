@@ -463,6 +463,7 @@ class MfliDaqModule:
         demod_path = f"/{self._dev_id}/demods/0/sample"
         self._daq_module.set("count", 1)
         self._daq_module.set("grid/cols",  1)
+        self._daq_module.set("refreshrate" ,500)
 
     def continuous_numeric(self, time_constant=10e-3):
         data = {}
@@ -471,9 +472,6 @@ class MfliDaqModule:
         self._daq_module.subscribe(signal_path)
         self._mfli._daq_module.execute()
         data_read = self._daq_module.read(True)
-
-
-
 
         # while not self._daq_module.finished():
         #     data_read = self._daq_module.read(True)
