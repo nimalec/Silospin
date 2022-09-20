@@ -466,9 +466,10 @@ class MfliDaqModule:
         self._daq_module.set("holdoff/time", 0)
         self._daq_module.set("refreshrate", 500)
         self._daq_module.subscribe(signal_path)
+        self._mfli._daq_module.execute()
 
     def continuous_numeric(self):
-        self._mfli._daq_module.execute()
+        #self._mfli._daq_module.execute()
         while not self._daq_module.finished():
             data_read = self._daq_module.read(True)
         return data_read
