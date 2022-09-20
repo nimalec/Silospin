@@ -473,8 +473,13 @@ class MfliDaqModule:
         #self._mfli._daq_module.execute()
         data_read = {}
         #for i in range(60):
-        while len(data_read[signal_path]) == 0:
+        while not self._daq_module.finished():
             data_read = self._daq_module.read(True)
+            returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
+            if signal_path.lower() in returned_signal_paths:
+                val = data_read[signal_path.lower()][0]["value"][0]
+            else:
+                pass
         #data_read = self._daq_module.read(True)
         return data_read
 
