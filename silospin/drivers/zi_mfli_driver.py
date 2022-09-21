@@ -25,7 +25,7 @@ class MfliDriverChargeStability:
         return val
 
     def get_sample_r(self):
-        val = self._daq_1.getSample(signal_path)
+        val = self._daq_1.getSample(self._signal_path)
         return np.sqrt(val["x"]**2 + val["y"]**2)
 
 
