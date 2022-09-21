@@ -32,11 +32,11 @@ class DacDriver:
     def set_channel_and_voltage(self, channel, voltage):
         self._dac.write("*CLS")
         self._dac.write("CH\s"+str(channel))
-        self._dac.write("VOLT\s"+"{:.6f}".format(voltage))
+        self._dac.write("VOLT\s"+"{:.9f}".format(voltage))
 
     def set_voltage(self, voltage):
         self._dac.write("*CLS")
-        self._dac.write("VOLT\s"+"{:.6f}".format(voltage))
+        self._dac.write("VOLT\s"+"{:.9f}".format(voltage))
         time.sleep(0.1)
 
     # def Sweep1D(self, channel, start_v, end_v, npoints):
