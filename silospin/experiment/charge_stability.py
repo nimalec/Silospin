@@ -32,6 +32,7 @@ class ChargeStabilitySweeps:
         else:
             v_outputs = []
             for i in range(npoints):
+                self._dac.clear_buffer()
                 self._dac.set_voltage(v_array[i])
                 #v_meas = self._mfli.get_sample_r()
                 #v_outputs.append(v_meas)
