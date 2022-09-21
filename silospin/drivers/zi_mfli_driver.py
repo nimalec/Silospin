@@ -10,14 +10,15 @@ import time
 from silospin.drivers.driver_helpers import read_data_update_plot, read_data
 
 class MfliDriverChargeStability:
-    def __init__(self, dev_id = "dev5759", excluded_devices = ["dev8446", "dev5761"], sig_path="/dev5759/demods/0/sample" ):
+    def __init__(self, dev_id = "dev5759", excluded_devices = ["dev8446", "dev5761"], sig_path="/dev5759/demods/0/sample", timeconstant = 10e-3):
         host = 'localhost'
         port=8004
         self._signal_path = sig_path
         self._daq_1 = zhinst.ziPython.ziDAQServer(host, port, api_level=6)
         self._daq_1.connect()
         self._mfli = MfliDriver(dev_id)
-        MfliDaqModule(self._mfli)
+        self._daq_mod_2 =  MfliDaqModule(self._mfli)
+        self._daq_mod_2.set_continuous_numeric_parameters(timeconstant)
 
     def get_sample_all(self):
         val = self._daq_1.getSample(signal_path)
@@ -477,16 +478,16 @@ class MfliDaqModule:
         self._daq_module.set("device", self._dev_id)
         self.set_trigger_setting("type", 0)
         self.set_grid_setting("mode", 4)
-        signal_path = f"/{self._dev_id}/demods/0/sample.r"
-        sig_paths = []
-        sig_paths.append(signal_path)
-        demod_path = f"/{self._dev_id}/demods/0/sample"
+        #signal_path = f"/{self._dev_id}/demods/0/sample.r"
+        #sig_paths = []
+        #sig_paths.append(signal_path)
+        #demod_path = f"/{self._dev_id}/demods/0/sample"
         self._daq_module.set("count", 0)
         self._daq_module.set("grid/cols", 1)
         self._daq_module.set("holdoff/time", 0)
         self._daq_module.set("refreshrate", 500)
-        self._daq_module.subscribe(signal_path)
-        self._mfli._daq_module.execute()
+        #self._daq_module.subscribe(signal_path)
+        #self._mfli._daq_module.execute()
 
     def continuous_numeric(self):
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
