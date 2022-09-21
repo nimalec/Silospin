@@ -21,7 +21,7 @@ class MfliDriverChargeStability:
         self._daq_mod_2.set_continuous_numeric_parameters(timeconstant)
 
     def get_sample_all(self):
-        val = self._daq_1.getSample(signal_path)
+        val = self._daq_1.getSample(self._signal_path)
         return val
 
     def get_sample_r(self):
