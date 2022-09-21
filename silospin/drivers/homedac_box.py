@@ -36,6 +36,7 @@ class DacDriver:
 
     def set_voltage(self, voltage):
         self._dac.write("*CLS")
+        time.sleep(0.1)
         self._dac.write("VOLT\s"+"{:.9f}".format(voltage))
         time.sleep(0.1)
 
