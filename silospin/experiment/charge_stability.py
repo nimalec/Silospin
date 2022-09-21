@@ -23,6 +23,7 @@ class ChargeStabilitySweeps:
             def plot1Dtrace(i):
                 self._dac.set_voltage(v_array[i])
                 v_meas = self._mfli.get_sample_r()
+                print(v_meas)
                 v_outputs.append(v_meas)
                 ax.clear()
                 ax.plot(v_array[0:len(v_outputs)], v_outputs)
