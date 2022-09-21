@@ -26,8 +26,8 @@ class MfliDriverChargeStability:
 
     def get_sample_r(self):
         val = self._daq_1.getSample(self._signal_path)
-        return np.sqrt(val["x"]**2 + val["y"]**2)
-
+        val_r = np.sqrt(val["x"]**2 + val["y"]**2)
+        return val_r[0]
 
 class MfliDriver:
     def __init__(self, device_id, server_host = "localhost", server_port = 8004, api_level = 6):

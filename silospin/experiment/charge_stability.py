@@ -1,5 +1,6 @@
 from silospin.drivers.zi_mfli_driver import MfliDriver
 from silospin.drivers.zi_mfli_driver import MfliDaqModule as DaqModule
+from silospin.drivers.zi_mfli_driver import MfliDriverChargeStability
 from silospin.drivers.homedac_box import DacDriver
 from silospin.plotting.plotting_functions import plot1DVoltageSweep, plot2DVoltageSweep
 import matplotlib.pyplot as plt
@@ -8,12 +9,11 @@ import numpy as np
 import time
 
 class ChargeStabilitySweeps:
-    def __init__(self, dac_id="ASRL3::INSTR", mfli_id="dev5759"):
+    def __init__(self, dac_id="ASRL3::INSTR", mfli_id="dev5759", excluded_zurich_devices= ["dev8446", "dev5761"], filter_tc=10e-3):
+        self._mfli = MfliDriverChargeStability(excluded_devices = excluded_zurich_devices, timeconstant=filter_tc)
         self._dac = DacDriver(dac_id)
-        self._mfli = MfliDriver(mfli_id)
-        self._daq_mod =  DaqModule(self._mfli)
 
-    def sweep1D(self, channel, start_v, end_v, npoints, plot = True, filter_tc =10e-3):
+    def sweep1D(self, channel, start_v, end_v, npoints, plot = True):
         ##Note: need to add external loopss
         self._dac.set_channel(channel)
         v_array = np.linspace(start_v,end_v,npoints)
@@ -22,7 +22,7 @@ class ChargeStabilitySweeps:
             fig, ax = plt.subplots()
             def plot1Dtrace(i):
                 self._dac.set_voltage(v_array[i])
-                v_meas = self._daq_mod.continuous_numeric(time_constant=filter_tc)
+                v_meas = self._mfli.get_sample_r()
                 v_outputs.append(v_meas)
                 ax.clear()
                 ax.plot(v_array[0:len(v_outputs)], v_outputs)
@@ -33,7 +33,7 @@ class ChargeStabilitySweeps:
             v_outputs = []
             for i in range(npoints):
                 self._dac.set_voltage(v_array[i])
-                v_meas = self._daq_mod.continuous_numeric(time_constant=filter_tc)
+                v_meas = self._mfli.get_sample_r()
                 v_outputs.append(v_meas)
 
 
