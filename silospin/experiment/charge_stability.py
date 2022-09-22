@@ -62,7 +62,7 @@ class ChargeStabilitySweeps:
                 V_out = output_voltages_f_t.reshape([n_points_1, n_points_2])
                 z_min = np.min(output_voltages_f_t)
                 z_max = np.max(output_voltages_f_t)
-                c = ax0.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
+                c = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
                 cbar = fig.colorbar(c, ax=ax0)
                 cbar.set_label('Output Voltage [V]', rotation=270)
                 ax.set_xlabel("Left barrier voltage [V]")
