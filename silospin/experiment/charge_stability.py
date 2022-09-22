@@ -58,6 +58,7 @@ class ChargeStabilitySweeps:
                 self._dac.set_voltage(V_y_f[i])
                 v_meas = self._mfli.get_sample_r()
                 ax.clear()
+                print(output_voltages_f)
                 output_voltages_f = v_meas*output_voltages_f
                 V_out = output_voltages_f.reshape([n_points_1, n_points_2])
                 z_min = np.min(output_voltages_f)
@@ -104,7 +105,7 @@ class ChargeStabilitySweeps:
                     c = ax0.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
                     cbar = fig.colorbar(c, ax=ax0)
         plotter = FuncAnimation(fig, plot2Dtrace, frames=n_points_1*n_points_2, interval=0.001, repeat=False)
-        return plotter 
+        return plotter
         plt.show()
 
 
