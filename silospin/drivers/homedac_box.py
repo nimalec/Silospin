@@ -38,7 +38,7 @@ class DacDriver:
 class DacDriverSerial:
     def __init__(self, dev_id = 'COM3', verbose=0, init=True, termination_char = '\n', baud_rate=250000):
         self._dev_id = dev_id
-        self._dac = serial.Serial(self._dev_id, baudrate=baudrate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,timeout=1)
+        self._dac = serial.Serial(self._dev_id, baudrate=baud_rate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,timeout=1)
         time.sleep(1)
         cmd_1 = '*IDN?\n'
         self._dac.write(cmd_1.encode('utf-8'))
