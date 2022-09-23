@@ -60,6 +60,7 @@ class DacDriverSerial:
             pass
 
     def reconnect_device(self):
+        self._dac.close() 
         self._dac = serial.Serial(self._dev_id, baudrate=self._baud_rate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,timeout=1)
 
     def set_voltage(self, voltage):
