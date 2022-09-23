@@ -52,7 +52,7 @@ class DacDriverSerial:
         cmd_3 = 'INIT\n'
 
         if init == True:
-            self._dac.write(cmd_3)
+            self._dac.write(cmd_3.encode('utf-8'))
             time.sleep(1)
         else:
             pass
