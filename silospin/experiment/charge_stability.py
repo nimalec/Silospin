@@ -120,7 +120,6 @@ class ChargeStabilitySweepsSerial:
         if plot == True:
             fig, ax = plt.subplots()
             def plot1Dtrace(i):
-                print(i)
                 if i > 500:
                     self._dac.reconnect_device()
                 else:
