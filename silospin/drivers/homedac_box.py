@@ -57,8 +57,8 @@ class DacDriverSerial:
         else:
             pass
 
-    # def set_voltage(self, voltage):
-    #     self._dac.write(str("VOLT\s"+"{:.6f}".format(voltage)).encode('utf_8')+'\r\n')
-    #
+    def set_voltage(self, voltage):
+        self._dac.write(str("VOLT\s"+"{:.6f}".format(voltage)).encode('utf_8')+'\n')
+
     # def set_channel(self, channel):
     #     self._dac.write(str("CH\s"+str(int(channel))).encode('utf_8')+'\r\n')
