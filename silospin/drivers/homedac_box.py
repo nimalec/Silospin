@@ -81,6 +81,3 @@ class DacDriverSerial:
     def set_verbose(self, verbose):
         cmd = 'VEROBSE '+str(int(verbose))+'\n'
         self._dac.write(cmd.encode('utf-8'))
-
-    def close_session(self):
-        self._dac.
