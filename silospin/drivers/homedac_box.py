@@ -48,7 +48,7 @@ class DacDriverSerial:
         outputstring_1 = ''
         outputstring_1 = self._dac.readline().decode('utf-8').strip()
         print(outputstring_1)
-        cmd_2 = 'VERBOSE\s'+str(int(verbose))+'\n'
+        cmd_2 = 'VERBOSE '+str(int(verbose))+'\n'
         self._dac.write(cmd_2.encode('utf-8'))
         time.sleep(1)
         cmd_3 = 'INIT\n'
@@ -81,5 +81,6 @@ class DacDriverSerial:
     def set_verbose(self, verbose):
         cmd = 'VEROBSE '+str(int(verbose))+'\n'
         self._dac.write(cmd.encode('utf-8'))
-        
-    def set_verbose(self, verbose):
+
+    # def close(self):
+    #    self._dac.close()
