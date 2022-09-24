@@ -64,16 +64,22 @@ class DacDriverSerial:
         self._dac = serial.Serial(self._dev_id, baudrate=self._baud_rate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,timeout=1)
 
     def set_voltage(self, voltage):
-        self._dac.write(str('VOLT\s'+'{:.6f}'.format(voltage)+'\n').encode('utf-8'))
+        cmd = 'VOLT '+ str('{:.6f}'.format(voltage))+'\n'
+        self._dac.write(cmd.encode('utf-8'))
 
     def set_channel(self, channel):
-        self._dac.write(str('CH\s'+str(int(channel))+'\n').encode('utf-8'))
+        cmd = 'CH '+str(int(channel))+'\n'
+        self._dac.write(cmd.encode('utf-8'))
 
     def set_init(self):
         self._dac.write('INIT\n'.encode('utf-8'))
 
     def set_idn(self):
-        self._dac.write('*IDN?\n'.encode('utf-8'))
+        cmd = '*IDN?\n'
+        self._dac.write(cmd.encode('utf-8'))
 
     def set_verbose(self, verbose):
-        self._dac.write(str('VEROBSE\s'+str(int(verbose))+'\n').encode('utf-8'))
+        cmd = 'VEROBSE '+str(int(verbose))+'\n'
+        self._dac.write(cmd.encode('utf-8'))
+        
+    def set_verbose(self, verbose):
