@@ -209,7 +209,6 @@ class ChargeStabilitySweepsSerial:
                     v_meas = self._mfli.get_sample_r()
                     output_voltages_f = v_meas*output_voltages_f
                     itr += 1
-
                     ax.clear()
                     V_out = output_voltages_f_t.reshape([npoints[0], npoints[1]])
                     z_min = np.min(output_voltages_f_t)
@@ -223,7 +222,7 @@ class ChargeStabilitySweepsSerial:
                     pass
 
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.001, repeat=True)
-            return (V_x, V_y, V_out)
+            return (V_x, V_y)
             plt.show()
 
         # # self._dac.set_channel(channel)
