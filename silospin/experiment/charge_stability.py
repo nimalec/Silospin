@@ -158,7 +158,7 @@ class ChargeStabilitySweepsSerial:
                     v_outer.append(v_inner)
                     v_inner.clear()
                 else:
-                    continue
+                    pass 
 
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=False)
             return plotter, v_outer
