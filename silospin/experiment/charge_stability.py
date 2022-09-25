@@ -161,11 +161,8 @@ class ChargeStabilitySweepsSerial:
                     #v_inner.clear()
                 else:
                     pass
-            if itr == npoints-2:
-                print(1)
-            else:
-                pass 
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=False)
+            print(itr)
             return plotter, v_outer
             plt.show()
         else:
