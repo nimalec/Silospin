@@ -213,7 +213,7 @@ class ChargeStabilitySweepsSerial:
                     z_min = np.min(output_voltages_new)
                     z_max = np.min(output_voltages_new)
                     c = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
-                    cbar = fig.colorbar(c, ax=ax0)
+                    cbar = fig.colorbar(c, ax=ax)
                     cbar.set_label('Output Voltage [V]', rotation=270)
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
