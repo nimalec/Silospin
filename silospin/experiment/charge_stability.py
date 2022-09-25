@@ -154,14 +154,11 @@ class ChargeStabilitySweepsSerial:
                 ax.plot(v_array[0:len(v_inner)], v_inner)
                 ax.set_xlabel("Applied barrier voltage [V]")
                 ax.set_ylabel("Measured output [V]")
-                if i == npoints-1:
-                    v_outer.append(v_inner)
-                    v_inner.clear()
+                print(i)
 
-            for j in range(n_fr):
-                plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=False)
-                return plotter, v_outer
-                plt.show()
+            plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=False)
+            return plotter, v_outer
+            plt.show()
         else:
             v_outer = []
             for j in range(n_fr):
