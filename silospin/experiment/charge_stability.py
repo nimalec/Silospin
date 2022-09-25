@@ -148,7 +148,6 @@ class ChargeStabilitySweepsSerial:
         if plot == True:
             fig, ax = plt.subplots()
             def plot1Dtrace(i):
-                itr = i
                 self._dac.set_voltage(v_array[i])
                 v_meas = self._mfli.get_sample_r()
                 v_inner.append(v_meas)
@@ -158,11 +157,10 @@ class ChargeStabilitySweepsSerial:
                 ax.set_ylabel("Measured output [V]")
                 if i == npoints-2:
                     v_outer.append(v_inner)
-                    #v_inner.clear()
+                    v_inner.clear()
                 else:
                     pass
-            plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=False)
-            print(itr)
+            plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
             return plotter, v_outer
             plt.show()
         else:
