@@ -156,10 +156,10 @@ class ChargeStabilitySweepsSerial:
                 ax.set_ylabel("Measured output [V]")
                 if i == npoints:
                     v_outer.append(v_inner)
-                    #v_inner = []
+                    v_inner.clear()
 
             for j in range(n_fr):
-                plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints, interval=0.001, repeat=False)
+                plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=False)
                 return plotter, v_outer
             plt.show()
         else:
