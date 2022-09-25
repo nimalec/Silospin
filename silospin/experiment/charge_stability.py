@@ -144,7 +144,7 @@ class ChargeStabilitySweepsSerial:
         v_array = np.linspace(start_v,end_v,npoints)
         v_outer = []
         v_inner = []
-        v_mean = None 
+        v_mean = None
         plotter = None
         if plot == True:
             fig, ax = plt.subplots()
@@ -162,8 +162,8 @@ class ChargeStabilitySweepsSerial:
                     #print(v_outer)
                     if len(v_outer) == n_fr:
                         plotter.pause()
-                        v_new = np.array(v_outer)
-                        v_mean = np.mean(v_new, axis = 0)
+                        #v_new = np.array(v_outer)
+                        #v_mean = np.mean(v_new, axis = 0)
                     else:
                         pass
                 else:
@@ -175,8 +175,8 @@ class ChargeStabilitySweepsSerial:
                     pass
 
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
-            #v_new = np.array(v_outer)
-            return plotter, v_mean
+            v_new = np.array(v_outer)
+            return plotter, v_new 
             plt.show()
         else:
             v_outer = []
