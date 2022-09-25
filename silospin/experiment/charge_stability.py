@@ -196,6 +196,7 @@ class ChargeStabilitySweepsSerial:
         V_x_f = V_x.flatten()
         V_y_f = V_y.flatten()
         output_voltages_f = output_voltages.flatten()
+        itr += 1 
 
 
         if plot == True:
