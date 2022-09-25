@@ -161,7 +161,7 @@ class ChargeStabilitySweepsSerial:
             for j in range(n_fr):
                 plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=False)
                 return plotter, v_outer
-            plt.show()
+                plt.show()
         else:
             v_outer = []
             for j in range(n_fr):
