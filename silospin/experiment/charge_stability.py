@@ -162,6 +162,8 @@ class ChargeStabilitySweepsSerial:
                     #print(v_outer)
                     if len(v_outer) == n_fr:
                         plotter.pause()
+                        v_new = np.array(v_outer)
+                        v_mean = np.mean(v_new, axis = 0)
                     else:
                         pass
                 else:
@@ -173,8 +175,8 @@ class ChargeStabilitySweepsSerial:
                     pass
 
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
-            v_new = np.array(v_outer)
-            return plotter, v_outer
+            #v_new = np.array(v_outer)
+            return plotter, v_mean
             plt.show()
         else:
             v_outer = []
