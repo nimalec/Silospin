@@ -222,8 +222,9 @@ class ChargeStabilitySweepsSerial:
                     pass
 
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.001, repeat=True)
-            return (V_x, V_y)
             plt.show()
+            return (V_x, V_y)
+
 
         # # self._dac.set_channel(channel)
         # # v_array = np.linspace(start_v,end_v,npoints)
