@@ -154,7 +154,7 @@ class ChargeStabilitySweepsSerial:
                 ax.plot(v_array[0:len(v_inner)], v_inner)
                 ax.set_xlabel("Applied barrier voltage [V]")
                 ax.set_ylabel("Measured output [V]")
-                if i == npoint-1:
+                if i == npoints-1:
                     v_outer.append(v_inner)
                     v_inner.clear()
 
