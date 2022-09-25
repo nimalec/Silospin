@@ -159,15 +159,23 @@ class ChargeStabilitySweepsSerial:
                 if len(v_inner) == npoints-1:
                     v_outer.append(v_inner)
                     v_inner.clear()
-                if i == npoints-2:
-                    #v_outer.append(v_inner)
-                    #v_inner.clear()
+                    print(v_outer)
                     if len(v_outer) == n_fr:
                         plotter.pause()
                     else:
                         pass
                 else:
                     pass
+                # 
+                # if i == npoints-2:
+                #     #v_outer.append(v_inner)
+                #     #v_inner.clear()
+                #     if len(v_outer) == n_fr:
+                #         plotter.pause()
+                #     else:
+                #         pass
+                # else:
+                #     pass
 
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
             return plotter, v_outer
