@@ -196,8 +196,8 @@ class ChargeStabilitySweepsSerial:
         V_x_f = V_x.flatten()
         V_y_f = V_y.flatten()
         output_voltages_f = output_voltages.flatten()
-        itr = 0
-        plotter = None
+
+
         if plot == True:
             fig, ax = plt.subplots()
             def plot2Dtrace(i):
@@ -207,13 +207,12 @@ class ChargeStabilitySweepsSerial:
                     self._dac.set_channel(channels[1])
                     self._dac.set_voltage(V_y_f[i])
                     v_meas = self._mfli.get_sample_r()
-                    output_voltages_f = v_meas*output_voltages_f
+                    output_voltages_new = v_meas*output_voltages_f
                     itr += 1
                     ax.clear()
-                    V_out = output_voltages_f_t.reshape([npoints[0], npoints[1]])
-                    z_min = np.min(output_voltages_f_t)
-                    z_max = np.min(output_voltages_f_t)
-                    print(V_out)
+                    V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
+                    z_min = np.min(output_voltages_new)
+                    z_max = np.min(output_voltages_new)
                     c = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
                     cbar = fig.colorbar(c, ax=ax0)
                     cbar.set_label('Output Voltage [V]', rotation=270)
