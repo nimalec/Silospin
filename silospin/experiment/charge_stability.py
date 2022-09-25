@@ -144,7 +144,7 @@ class ChargeStabilitySweepsSerial:
         v_array = np.linspace(start_v,end_v,npoints)
         v_outer = []
         v_inner = []
-        itr = 0
+        v_mean = None 
         plotter = None
         if plot == True:
             fig, ax = plt.subplots()
