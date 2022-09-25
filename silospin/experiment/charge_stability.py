@@ -144,7 +144,6 @@ class ChargeStabilitySweepsSerial:
         v_array = np.linspace(start_v,end_v,npoints)
         v_outer = []
         v_inner = []
-        v_mean = None
         plotter = None
         if plot == True:
             fig, ax = plt.subplots()
@@ -169,7 +168,6 @@ class ChargeStabilitySweepsSerial:
                     v_inner.clear()
                 else:
                     pass
-
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
             return v_outer
             plt.show()
@@ -184,6 +182,99 @@ class ChargeStabilitySweepsSerial:
                 v_outer.append(np.array(v_inner))
             v_outer = np.array(v_outer)
             return np.mean(v_outer, axis = 0)
+
+    def sweep2DFrameAverage(self, channels, v_range, npoints, n_fr = 1, plot = True):
+        ##1. Initialize array at first iteraiton, 2. update each element of array with new values,
+        ## 3. set channel, 4. update at each iteration, 5....
+        ## channeles : 2x1 tuple (channel_1, channel_2)
+        ## v_range: list of  tuples [(v_1_s, v_1_f), (v_2_s, v_2_f)]
+        ## npoints: tuple of nubmer of points in each direciton (n_1, n_2)
+        v_x = np.linspace(v_range[0][0], v_range[0][1], npoints[0])
+        v_y = np.linspace(v_range[1][0], v_range[1][1], npoints[1])
+        V_x, V_y = np.meshgrid(v_x, v_y)
+        output_voltages = np.ones((npoints[0], npoints[1]))
+        V_x_f = V_x.flatten()
+        V_y_f = V_y.flatten()
+        output_voltages_f = output_voltages.flatten()
+        itr = 0
+        plotter = None
+        if plot == True:
+            fig, ax = plt.subplots()
+            def plot2Dtrace(i):
+                if itr == 0:
+                    self._dac.set_channel(channels[0])
+                    self._dac.set_voltage(V_x_f[itr])
+                    self._dac.set_channel(channels[1])
+                    self._dac.set_voltage(V_y_f[itr])
+                    v_meas = self._mfli.get_sample_r()
+                    output_voltages_f = v_meas*output_voltages_f
+                    itr += 1
+
+                    ax.clear()
+                    V_out = output_voltages_f_t.reshape([npoints[0], npoints[1]])
+                    z_min = np.min(output_voltages_f_t)
+                    z_max = np.min(output_voltages_f_t)
+                    c = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
+                    cbar = fig.colorbar(c, ax=ax0)
+                    cbar.set_label('Output Voltage [V]', rotation=270)
+                    ax.set_xlabel("Left barrier voltage [V]")
+                    ax.set_ylabel("Right barrier voltage [V]")
+                else:
+                    pass
+
+            plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
+            return (V_x, V_y, V_out)
+            plt.show()
+
+        # # self._dac.set_channel(channel)
+        # # v_array = np.linspace(start_v,end_v,npoints)
+        # # v_outer = []
+        # # v_inner = []
+        # plotter = None
+        # if plot == True:
+        #     fig, ax = plt.subplots()
+        #     def plot2Dtrace(i):
+        #         self._dac.set_voltage(v_array[i])
+        #         v_meas = self._mfli.get_sample_r()
+        #         v_inner.append(v_meas)
+        #         ax.clear()
+        #         ax.plot(v_array[0:len(v_inner)], v_inner)
+        #         ax.set_xlabel("Applied barrier voltage [V]")
+        #         ax.set_ylabel("Measured output [V]")
+        #         if len(v_inner) == npoints-1:
+        #             v_outer.append(v_inner)
+        #             if len(v_outer) == n_fr:
+        #                 plotter.pause()
+        #             else:
+        #                 pass
+        #         else:
+        #             pass
+        #
+        #         if i == npoints-2:
+        #             v_inner.clear()
+        #         else:
+        #             pass
+        #     plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
+        #     return v_outer
+        #     plt.show()
+        # else:
+        #     v_outer = []
+        #     for j in range(n_fr):
+        #         v_inner = []
+        #         for i in range(npoints):
+        #             self._dac.set_voltage(v_array[i])
+        #             v_meas = self._mfli.get_sample_r()
+        #             v_inner.append(v_meas)
+        #         v_outer.append(np.array(v_inner))
+        #     v_outer = np.array(v_outer)
+        #     return np.mean(v_outer, axis = 0)
+        #
+
+
+
+
+
+
 
     # def sweep2D(self, channel_1, channel_2, start_v_1, end_v_1, start_v_2, end_v_2, n_points_1, n_points_2):
     #     ##Note: need to add external loopss
