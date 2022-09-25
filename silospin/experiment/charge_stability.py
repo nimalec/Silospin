@@ -113,7 +113,7 @@ class ChargeStabilitySweepsSerial:
         self._dac = DacDriverSerial(dac_id)
 
     def sweep1D(self, channel, start_v, end_v, npoints, plot = True):
-        ##Note: need to add external loopss
+        ##Note: need to add external loops
         self._dac.set_channel(channel)
         v_array = np.linspace(start_v,end_v,npoints)
         v_outputs = []
@@ -137,6 +137,38 @@ class ChargeStabilitySweepsSerial:
                 v_meas = self._mfli.get_sample_r()
                 v_outputs.append(v_meas)
             return v_outputs
+
+    def sweep1DFrameAverage(self, channel, start_v, end_v, npoints, n_fr = 1, plot = True):
+        ##Note: need to add external loops
+        self._dac.set_channel(channel)
+        v_array = np.linspace(start_v,end_v,npoints)
+        v_outer = []
+        v_inner = []
+        if plot == True:
+            fig, ax = plt.subplots()
+            def plot1Dtrace(i):
+                self._dac.set_voltage(v_array[i])
+                v_meas = self._mfli.get_sample_r()
+                v_inner.append(v_meas)
+                ax.clear()
+                ax.plot(v_array[0:len(v_inner)], v_inner)
+                ax.set_xlabel("Applied barrier voltage [V]")
+                ax.set_ylabel("Measured output [V]")
+            for i in range(n_fr):
+                plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints, interval=0.001, repeat=False)
+                return plotter, v_inner
+                plt.show()
+        else:
+            v_outer = []
+            for j in range(n_fr):
+                v_inner = []
+                for i in range(npoints):
+                    self._dac.set_voltage(v_array[i])
+                    v_meas = self._mfli.get_sample_r()
+                    v_inner.append(v_meas)
+                v_outer.append(np.array(v_inner))
+            v_outer = np.array(v_outer)
+            return np.mean(v_outer, axis = 0)
 
     # def sweep2D(self, channel_1, channel_2, start_v_1, end_v_1, start_v_2, end_v_2, n_points_1, n_points_2):
     #     ##Note: need to add external loopss
