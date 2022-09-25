@@ -145,6 +145,7 @@ class ChargeStabilitySweepsSerial:
         v_outer = []
         v_inner = []
         itr = 0
+        plotter = None
         if plot == True:
             fig, ax = plt.subplots()
             def plot1Dtrace(i):
@@ -159,7 +160,7 @@ class ChargeStabilitySweepsSerial:
                     v_outer.append(v_inner)
                     v_inner.clear()
                     if len(v_outer) == n_fr:
-                        break
+                        plotter.pause()
                     else:
                         pass
                 else:
