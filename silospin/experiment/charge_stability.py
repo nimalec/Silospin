@@ -128,7 +128,7 @@ class ChargeStabilitySweepsSerial:
                 ax.set_xlabel("Applied barrier voltage [V]")
                 ax.set_ylabel("Measured output [V]")
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints, interval=0.001, repeat=False)
-            return plotter
+            return plotter, v_outputs
             plt.show()
         else:
             v_outputs = []
@@ -136,7 +136,7 @@ class ChargeStabilitySweepsSerial:
                 self._dac.set_voltage(v_array[i])
                 v_meas = self._mfli.get_sample_r()
                 v_outputs.append(v_meas)
-        return v_outputs
+             return v_outputs
 
     # def sweep2D(self, channel_1, channel_2, start_v_1, end_v_1, start_v_2, end_v_2, n_points_1, n_points_2):
     #     ##Note: need to add external loopss
