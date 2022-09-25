@@ -158,9 +158,10 @@ class ChargeStabilitySweepsSerial:
                 ax.set_ylabel("Measured output [V]")
                 if len(v_inner) == npoints-1:
                     v_outer.append(v_inner)
+                    v_inner.clear()
                 if i == npoints-2:
                     #v_outer.append(v_inner)
-                    v_inner.clear()
+                    #v_inner.clear()
                     if len(v_outer) == n_fr:
                         plotter.pause()
                     else:
