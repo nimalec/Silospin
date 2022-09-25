@@ -201,11 +201,11 @@ class ChargeStabilitySweepsSerial:
         if plot == True:
             fig, ax = plt.subplots()
             def plot2Dtrace(i):
-                if itr == 0:
+                if i == 0:
                     self._dac.set_channel(channels[0])
-                    self._dac.set_voltage(V_x_f[itr])
+                    self._dac.set_voltage(V_x_f[i])
                     self._dac.set_channel(channels[1])
-                    self._dac.set_voltage(V_y_f[itr])
+                    self._dac.set_voltage(V_y_f[i])
                     v_meas = self._mfli.get_sample_r()
                     output_voltages_f = v_meas*output_voltages_f
                     itr += 1
