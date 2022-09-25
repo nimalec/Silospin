@@ -174,7 +174,7 @@ class ChargeStabilitySweepsSerial:
 
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
             v_new = np.array(v_outer)
-            return plotter, np.mean(v_new, axis = 0)
+            return plotter, v_outer 
             plt.show()
         else:
             v_outer = []
