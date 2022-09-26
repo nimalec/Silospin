@@ -218,9 +218,9 @@ class ChargeStabilitySweepsSerial:
                     ax.set_ylabel("Right barrier voltage [V]")
                     global v_out_temp
                     v_out_temp  = output_voltages_new
-
                 else:
                     ##need to adapt to not reset both voltages/channels each iteration
+                    print(v_out_temp)
                     ax.clear()
                     self._dac.set_channel(channels[0])
                     self._dac.set_voltage(V_x_f[i])
