@@ -212,7 +212,7 @@ class ChargeStabilitySweepsSerial:
                     V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
                     z_min = np.min(output_voltages_new)
                     z_max = np.min(output_voltages_new)
-                    cplot = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', norm=plt.Normalize(0, z_max))
+                    cplot = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', norm=plt.Normalize(0, z_max*10))
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
                     global v_out_temp
