@@ -201,13 +201,13 @@ class ChargeStabilitySweepsSerial:
             fig, ax = plt.subplots()
             def plot2Dtrace(i):
                 if i == 0:
+                    ax.clear()
                     self._dac.set_channel(channels[0])
                     self._dac.set_voltage(V_x_f[i])
                     self._dac.set_channel(channels[1])
                     self._dac.set_voltage(V_y_f[i])
                     v_meas = self._mfli.get_sample_r()
                     output_voltages_new = v_meas*output_voltages_f
-                    ax.clear()
                     V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
                     z_min = np.min(output_voltages_new)
                     z_max = np.min(output_voltages_new)
@@ -215,10 +215,27 @@ class ChargeStabilitySweepsSerial:
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
                 else:
+                    ##need to adapt to not reset both voltages/channels each iteration
+                    ax.clear()
+                    self._dac.set_channel(channels[0])
+                    self._dac.set_voltage(V_x_f[i])
+                    self._dac.set_channel(channels[1])
+                    self._dac.set_voltage(V_y_f[i])
+                    v_meas = self._mfli.get_sample_r()
+                    output_voltages_new[i] = v_meas
+                    z_min = np.min(output_voltages_new)
+                    z_max = np.min(output_voltages_new)
+                    c = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
+                    ax.set_xlabel("Left barrier voltage [V]")
+                    ax.set_ylabel("Right barrier voltage [V]")
+
+
+
+
                     pass
 
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.001, repeat=False)
-            return plotter, (V_x, V_y)
+            return (V_x, V_y), plotter
             plt.show()
 
 
