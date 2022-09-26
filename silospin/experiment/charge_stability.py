@@ -218,8 +218,6 @@ class ChargeStabilitySweepsSerial:
                     global v_out_temp
                     v_out_temp  = output_voltages_new
                 else:
-                    ##need to adapt to not reset both voltages/channels each iteration
-                    #print(v_out_temp)
                     ax.clear()
                     self._dac.set_channel(channels[0])
                     self._dac.set_voltage(V_x_f[i])
@@ -234,60 +232,10 @@ class ChargeStabilitySweepsSerial:
                     c = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
-
-
-
-
-                    pass
-
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.001, repeat=False)
-            return (V_x, V_y), plotter
+            return plotter, (V_x, V_y)
             plt.show()
 
-
-        # # self._dac.set_channel(channel)
-        # # v_array = np.linspace(start_v,end_v,npoints)
-        # # v_outer = []
-        # # v_inner = []
-        # plotter = None
-        # if plot == True:
-        #     fig, ax = plt.subplots()
-        #     def plot2Dtrace(i):
-        #         self._dac.set_voltage(v_array[i])
-        #         v_meas = self._mfli.get_sample_r()
-        #         v_inner.append(v_meas)
-        #         ax.clear()
-        #         ax.plot(v_array[0:len(v_inner)], v_inner)
-        #         ax.set_xlabel("Applied barrier voltage [V]")
-        #         ax.set_ylabel("Measured output [V]")
-        #         if len(v_inner) == npoints-1:
-        #             v_outer.append(v_inner)
-        #             if len(v_outer) == n_fr:
-        #                 plotter.pause()
-        #             else:
-        #                 pass
-        #         else:
-        #             pass
-        #
-        #         if i == npoints-2:
-        #             v_inner.clear()
-        #         else:
-        #             pass
-        #     plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
-        #     return v_outer
-        #     plt.show()
-        # else:
-        #     v_outer = []
-        #     for j in range(n_fr):
-        #         v_inner = []
-        #         for i in range(npoints):
-        #             self._dac.set_voltage(v_array[i])
-        #             v_meas = self._mfli.get_sample_r()
-        #             v_inner.append(v_meas)
-        #         v_outer.append(np.array(v_inner))
-        #     v_outer = np.array(v_outer)
-        #     return np.mean(v_outer, axis = 0)
-        #
 
 
 
