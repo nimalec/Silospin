@@ -218,7 +218,6 @@ class ChargeStabilitySweepsSerial:
                     global v_out_temp
                     v_out_temp  = output_voltages_new
                 else:
-                    ax.clear()
                     self._dac.set_channel(channels[0])
                     self._dac.set_voltage(V_x_f[i])
                     self._dac.set_channel(channels[1])
@@ -226,10 +225,11 @@ class ChargeStabilitySweepsSerial:
                     v_meas = self._mfli.get_sample_r()
                     v_out_temp[i] = v_meas
                     V_out_temp = v_out_temp.reshape([npoints[0], npoints[1]])
-                    print(V_out_temp)
                     z_min = np.min(v_out_temp)
                     z_max = np.min(v_out_temp)
-                    c = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
+                    ax.clear()
+                    ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
+                    #c = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.001, repeat=False)
