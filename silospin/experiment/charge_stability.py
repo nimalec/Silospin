@@ -232,5 +232,5 @@ class ChargeStabilitySweepsSerial:
                     ax.set_ylabel("Right barrier voltage [V]")
                 return cplot,
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.00001, repeat=False)
-            return plotter, (V_x, V_y)
+            return plotter, (V_x, V_y, v_out_temp)
             plt.show()
