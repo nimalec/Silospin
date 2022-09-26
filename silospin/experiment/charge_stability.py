@@ -226,6 +226,7 @@ class ChargeStabilitySweepsSerial:
                     v_meas = self._mfli.get_sample_r()
                     v_out_temp[i] = v_meas
                     V_out_temp = v_out_temp.reshape([npoints[0], npoints[1]])
+                    print(V_out_temp)
                     z_min = np.min(v_out_temp)
                     z_max = np.min(v_out_temp)
                     c = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
