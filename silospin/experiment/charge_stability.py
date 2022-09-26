@@ -201,7 +201,7 @@ class ChargeStabilitySweepsSerial:
         if plot == True:
             fig, ax = plt.subplots()
             def plot2Dtrace(i):
-                plt.clf() 
+                plt.clf()
                 if i == 0:
                     #ax.clear()
                     self._dac.set_channel(channels[0])
