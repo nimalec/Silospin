@@ -212,7 +212,7 @@ class ChargeStabilitySweepsSerial:
                     V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
                     z_min = np.min(output_voltages_new)
                     z_max = np.min(output_voltages_new)
-                    c = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
+                    cplot = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
                     global v_out_temp
@@ -228,10 +228,11 @@ class ChargeStabilitySweepsSerial:
                     z_min = np.min(v_out_temp)
                     z_max = np.min(v_out_temp)
                     ax.clear()
-                    ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
+                    cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
                     #c = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
+                return cplot
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.001, repeat=False)
             return plotter, (V_x, V_y)
             plt.show()
