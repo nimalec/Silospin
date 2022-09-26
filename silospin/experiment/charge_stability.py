@@ -201,9 +201,8 @@ class ChargeStabilitySweepsSerial:
         if plot == True:
             fig, ax = plt.subplots()
             def plot2Dtrace(i):
-                plt.clf()
+                ax.clear()
                 if i == 0:
-                    #ax.clear()
                     self._dac.set_channel(channels[0])
                     self._dac.set_voltage(V_x_f[i])
                     self._dac.set_channel(channels[1])
@@ -228,22 +227,15 @@ class ChargeStabilitySweepsSerial:
                     V_out_temp = v_out_temp.reshape([npoints[0], npoints[1]])
                     z_min = np.min(v_out_temp)
                     z_max = np.min(v_out_temp)
-                    #ax.clear()
-                    #plt.clf()
-                    cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
+                    #cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
+                    #cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', norm=plt.Normalize(0, 1e-6))
+                    cplot = ax.pcolor(V_x, V_y, V_out_temp, norm=plt.Normalize(0, 1e-6))
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
                 return cplot
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.001, repeat=False)
             return plotter, (V_x, V_y)
             plt.show()
-
-
-
-
-
-
-
 
     # def sweep2D(self, channel_1, channel_2, start_v_1, end_v_1, start_v_2, end_v_2, n_points_1, n_points_2):
     #     ##Note: need to add external loopss
