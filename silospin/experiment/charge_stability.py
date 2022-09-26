@@ -220,15 +220,17 @@ class ChargeStabilitySweepsSerial:
                     v_out_temp  = output_voltages_new
                 else:
                     ##need to adapt to not reset both voltages/channels each iteration
-                    print(v_out_temp)
+                    #print(v_out_temp)
                     ax.clear()
                     self._dac.set_channel(channels[0])
                     self._dac.set_voltage(V_x_f[i])
                     self._dac.set_channel(channels[1])
                     self._dac.set_voltage(V_y_f[i])
                     v_meas = self._mfli.get_sample_r()
-                    output_voltages_temp = output_voltages_new
-                    output_voltages_temp[i] = v_meas
+                    #output_voltages_temp = output_voltages_new
+                    #output_voltages_temp[i] = v_meas
+                    v_out_temp[i] = v_meas
+                    print(v_out_temp)
                     z_min = np.min(output_voltages_temp)
                     z_max = np.min(output_voltages_temp)
                     c = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
