@@ -195,6 +195,7 @@ class ChargeStabilitySweepsSerial:
         output_voltages = np.ones((npoints[0], npoints[1]))
         V_x_f = V_x.flatten()
         V_y_f = V_y.flatten()
+        global output_voltages_f
         output_voltages_f = output_voltages.flatten()
 
         if plot == True:
@@ -207,12 +208,14 @@ class ChargeStabilitySweepsSerial:
                     self._dac.set_channel(channels[1])
                     self._dac.set_voltage(V_y_f[i])
                     v_meas = self._mfli.get_sample_r()
-                    output_voltages_new = v_meas*output_voltages_f
-                    #output_voltages_f = output_voltages_new
                     #output_voltages_new = v_meas*output_voltages_f
-                    V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
-                    z_min = np.min(output_voltages_new)
-                    z_max = np.min(output_voltages_new)
+                    output_voltages_f = v_meas*output_voltages_f
+                    V_out = output_voltages_f.reshape([npoints[0], npoints[1]])
+                    #V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
+                    #z_min = np.min(output_voltages_new)
+                    #z_max = np.min(output_voltages_new)
+                    z_min = np.min(output_voltages_f)
+                    z_max = np.min(output_voltages_f)
                     c = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
