@@ -209,17 +209,16 @@ class ChargeStabilitySweepsSerial:
                     self._dac.set_voltage(V_y_f[i])
                     v_meas = self._mfli.get_sample_r()
                     output_voltages_new = v_meas*output_voltages_f
-                    #output_voltages_f = v_meas*output_voltages_f
-                    #print(output_voltages_f)
                     V_out = output_voltages_f.reshape([npoints[0], npoints[1]])
                     V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
                     z_min = np.min(output_voltages_new)
                     z_max = np.min(output_voltages_new)
-                    # z_min = np.min(output_voltages_f)
-                    # z_max = np.min(output_voltages_f)
                     c = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', vmin=z_min, vmax=z_max)
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
+                    global v_out_temp
+                    v_out_temp  = output_voltages_new
+
                 else:
                     ##need to adapt to not reset both voltages/channels each iteration
                     ax.clear()
