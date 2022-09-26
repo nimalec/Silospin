@@ -201,8 +201,9 @@ class ChargeStabilitySweepsSerial:
         if plot == True:
             fig, ax = plt.subplots()
             def plot2Dtrace(i):
+                plt.clf() 
                 if i == 0:
-                    ax.clear()
+                    #ax.clear()
                     self._dac.set_channel(channels[0])
                     self._dac.set_voltage(V_x_f[i])
                     self._dac.set_channel(channels[1])
@@ -228,9 +229,8 @@ class ChargeStabilitySweepsSerial:
                     z_min = np.min(v_out_temp)
                     z_max = np.min(v_out_temp)
                     #ax.clear()
-                    plt.clf()
+                    #plt.clf()
                     cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
-                    #c = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', vmin=z_min, vmax=z_max)
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
                 return cplot
