@@ -196,6 +196,7 @@ class ChargeStabilitySweepsSerial:
         v_array = np.linspace(start_v,end_v,npoints)
         v_outer = []
         v_inner = []
+        v_mean = []
         plotter = None
 
         ##2. If plot, define plot1Dtrace and plotter
@@ -222,9 +223,7 @@ class ChargeStabilitySweepsSerial:
                 ## if number of frames is reached, stop plotting
                 if len(v_outer) == n_fr:
                     plotter.pause()
-                    global v_mean
-                    v_mean = np.mean(np.array(v_outer),axis=0)
-                    print(v_mean)
+                    v_mean.append(np.mean(np.array(v_outer),axis=0))
                 else:
                     pass
                 if i == npoints-2:
@@ -234,8 +233,7 @@ class ChargeStabilitySweepsSerial:
 
             ##Feed into Function Animation module  and calculate mean every time step
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
-            return v_outer
-            print(v_mean)
+            return v_outer, v_mean
             plt.show()
         else:
             v_outer = []
