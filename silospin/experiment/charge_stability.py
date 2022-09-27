@@ -231,13 +231,11 @@ class ChargeStabilitySweepsSerial:
                     pass
             ##Feed into Function Animation module  and calculate mean every time step
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
-            #global v_mean
-            global v_out
-            if len(v_outer) == npoints -1:
-                v_out = np.array(v_outer)
-                return v_out
+            if len(v_outer) == n_fr*(npoints-1):
+                print(np.array(v_outer))
             else:
-                return v_outer 
+                pass
+            return v_outer
             #v_mean = np.mean(np.array(v_outer), axis = 0)
             #return v_mean
             #return v_out
