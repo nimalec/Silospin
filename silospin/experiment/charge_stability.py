@@ -228,19 +228,21 @@ class ChargeStabilitySweepsSerial:
                 else:
                     pass
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
-            #return v_outer, v_mean
-            return v_mean  
+            return v_mean
             plt.show()
         else:
             v_outer = []
             for j in range(n_fr):
                 v_inner = []
                 for i in range(npoints):
+                    st  = time.time()
                     self._dac.set_voltage(v_array[i])
                     v_meas = self._mfli.get_sample_r()
                     v_inner.append(v_meas)
+                    et  = time.time()
+                    print(et-st)
                 v_outer.append(v_inner)
-            return v_outer
+            return v_mean.append(np.mean(np.array(v_outer),axis=0))
 
     #def sweep1DExecute(self, channel, start_v, end_v, npoints, n_r = 10, n_fr = 1, plot = True):
     ##need to figure out wait time.
