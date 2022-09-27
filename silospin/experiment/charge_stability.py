@@ -111,99 +111,17 @@ class ChargeStabilitySweepsSerial:
         self._mfli = MfliDriverChargeStability(excluded_devices = excluded_zurich_devices, timeconstant=filter_tc)
         self._dac = DacDriverSerial(dac_id)
 
-    def sweep1D(self, channel, start_v, end_v, npoints, plot = True):
-        self._dac.set_channel(channel)
-        v_array = np.linspace(start_v,end_v,npoints)
-        v_outputs = []
-        if plot == True:
-            fig, ax = plt.subplots()
-            def plot1Dtrace(i):
-                self._dac.set_voltage(v_array[i])
-                v_meas = self._mfli.get_sample_r()
-                v_outputs.append(v_meas)
-                ax.clear()
-                ax.plot(v_array[0:len(v_outputs)], v_outputs)
-                ax.set_xlabel("Applied barrier voltage [V]")
-                ax.set_ylabel("Measured output [V]")
-            plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints, interval=0.001, repeat=False)
-            return plotter, v_outputs
-            plt.show()
-        else:
-            v_outputs = []
-            for i in range(npoints):
-                self._dac.set_voltage(v_array[i])
-                v_meas = self._mfli.get_sample_r()
-                v_outputs.append(v_meas)
-            return v_outputs
+    def sweep1D(self, channel, start_v, end_v, npoints, n_r = 10, n_fr = 1, plot = True):
 
-    def sweep1DFrameAverage(self, channel, start_v, end_v, npoints, n_fr = 1, plot = True):
-         ##Protocol for sweep1DFrameAverage:
-         ## 1. set channel **
-         ## 2. initialize input voltage array **
-         ## 3. initlize v_outer (stores all frames) and set as a global variable **
-         ## 4. take in repeat number as a parameter
-         ## 5. if N%N_r == 0 ==> updates plot
-         ## 6. Generate output plot
-         ## 7. Define mean as a global variable
-
-        self._dac.set_channel(channel)
-        v_array = np.linspace(start_v,end_v,npoints)
-        v_outer = []
-        v_inner = []
-        plotter = None
-        if plot == True:
-            fig, ax = plt.subplots()
-            def plot1Dtrace(i):
-                self._dac.set_voltage(v_array[i])
-                v_meas = self._mfli.get_sample_r()
-                v_inner.append(v_meas)
-                ax.clear()
-                ax.plot(v_array[0:len(v_inner)], v_inner)
-                ax.set_xlabel('Applied barrier voltage [V]')
-                ax.set_ylabel('Measured output [V]')
-                if len(v_inner) == npoints-1:
-                    v_outer.append(v_inner)
-                    if len(v_outer) == n_fr:
-                        plotter.pause()
-                    else:
-                        pass
-                else:
-                    pass
-                if i == npoints-2:
-                    v_inner.clear()
-                else:
-                    pass
-            plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
-            return v_outer
-            plt.show()
-        else:
-            v_outer = []
-            for j in range(n_fr):
-                v_inner = []
-                for i in range(npoints):
-                    self._dac.set_voltage(v_array[i])
-                    v_meas = self._mfli.get_sample_r()
-                    v_inner.append(v_meas)
-                v_outer.append(np.array(v_inner))
-            v_outer = np.array(v_outer)
-            return np.mean(v_outer, axis = 0)
-
-    def sweep1DFrameAverageRefresh(self, channel, start_v, end_v, npoints, n_r = 10, n_fr = 1, plot = True):
-        ## channel (channel index), start_v (start voltage), end_v (end voltage), npoints (total number of points in grid), n_r (refresh plot ever n_r poitns), n_fr (number of outer frames).
-
-        ##1. Initializes parameters
         self._dac.set_channel(channel)
         v_array = np.linspace(start_v,end_v,npoints)
         v_outer = []
         v_inner = []
         v_mean = []
         plotter = None
-
-        ##2. If plot, define plot1Dtrace and plotter
         if plot == True:
             fig, ax = plt.subplots()
             def plot1Dtrace(i):
-                ##set voltage, get voltage, append voltage
                 self._dac.set_voltage(v_array[i])
                 v_meas = self._mfli.get_sample_r()
                 v_inner.append(v_meas)
@@ -243,16 +161,7 @@ class ChargeStabilitySweepsSerial:
                 v_outer.append(v_inner)
             return v_mean.append(np.mean(np.array(v_outer),axis=0))
 
-    #def sweep1DExecute(self, channel, start_v, end_v, npoints, n_r = 10, n_fr = 1, plot = True):
-    ##need to figure out wait time.
-    #    v_outer = self.sweep1DFrameAverageRefresh(channel, start_v, end_v, npoints, n_r, n_fr, plot)
-
     def sweep2DFrameAverage(self, channels, v_range, npoints, n_fr = 1, plot = True):
-        ##1. Initialize array at first iteraiton, 2. update each element of array with new values,
-        ## 3. set channel, 4. update at each iteration, 5....
-        ## channeles : 2x1 tuple (channel_1, channel_2)
-        ## v_range: list of  tuples [(v_1_s, v_1_f), (v_2_s, v_2_f)]
-        ## npoints: tuple of nubmer of points in each direciton (n_1, n_2)
         v_x = np.linspace(v_range[0][0], v_range[0][1], npoints[0])
         v_y = np.linspace(v_range[1][0], v_range[1][1], npoints[1])
         V_x, V_y = np.meshgrid(v_x, v_y)
@@ -260,6 +169,54 @@ class ChargeStabilitySweepsSerial:
         V_x_f = V_x.flatten()
         V_y_f = V_y.flatten()
         global output_voltages_f
+        output_voltages_f = output_voltages.flatten()
+
+        if plot == True:
+            fig, ax = plt.subplots()
+            def plot2Dtrace(i):
+                ax.clear()
+                if i == 0:
+                    self._dac.set_channel(channels[0])
+                    self._dac.set_voltage(V_x_f[i])
+                    self._dac.set_channel(channels[1])
+                    self._dac.set_voltage(V_y_f[i])
+                    v_meas = self._mfli.get_sample_r()
+                    output_voltages_new = v_meas*output_voltages_f
+                    V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
+                    z_min = np.min(output_voltages_new)
+                    z_max = np.min(output_voltages_new)
+                    cplot = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', norm=plt.Normalize(0, 1e-6))
+                    ax.set_xlabel("Left barrier voltage [V]")
+                    ax.set_ylabel("Right barrier voltage [V]")
+                    global v_out_temp
+                    v_out_temp  = output_voltages_new
+                else:
+                    self._dac.set_channel(channels[0])
+                    self._dac.set_voltage(V_x_f[i])
+                    self._dac.set_channel(channels[1])
+                    self._dac.set_voltage(V_y_f[i])
+                    v_meas = self._mfli.get_sample_r()
+                    v_out_temp[i] = v_meas
+                    V_out_temp = v_out_temp.reshape([npoints[0], npoints[1]])
+                    z_min = np.min(v_out_temp)
+                    z_max = np.min(v_out_temp)
+                    cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', norm=plt.Normalize(0,1e-6))
+                    ax.set_xlabel("Left barrier voltage [V]")
+                    ax.set_ylabel("Right barrier voltage [V]")
+                return cplot,
+            plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.00001, repeat=False)
+            return plotter, (V_x, V_y, v_out_temp)
+            plt.show()
+
+    def sweep2DFrameAverage_v2(self, channels, v_range, npoints, n_r = 10, n_fr = 1, plot = True):
+        ##Defines initial parameters
+        v_x = np.linspace(v_range[0][0], v_range[0][1], npoints[0])
+        v_y = np.linspace(v_range[1][0], v_range[1][1], npoints[1])
+        V_x, V_y = np.meshgrid(v_x, v_y)
+        output_voltages = np.ones((npoints[0], npoints[1]))
+        V_x_f = V_x.flatten()
+        V_y_f = V_y.flatten()
+        #global output_voltages_f
         output_voltages_f = output_voltages.flatten()
 
         if plot == True:
