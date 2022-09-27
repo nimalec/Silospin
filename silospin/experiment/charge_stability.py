@@ -232,15 +232,13 @@ class ChargeStabilitySweepsSerial:
             plt.show()
         else:
             v_outer = []
+            idx = 0
             for j in range(n_fr):
                 v_inner = []
-                for i in range(npoints):
-                    st  = time.time()
+                for i in range(npoints): 
                     self._dac.set_voltage(v_array[i])
                     v_meas = self._mfli.get_sample_r()
                     v_inner.append(v_meas)
-                    et  = time.time()
-                    print(et-st)
                 v_outer.append(v_inner)
             return v_mean.append(np.mean(np.array(v_outer),axis=0))
 
