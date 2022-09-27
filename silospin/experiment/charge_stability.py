@@ -122,7 +122,6 @@ class ChargeStabilitySweepsSerial:
         if plot == True:
             fig, ax = plt.subplots()
             def plot1Dtrace(i):
-                print(i)
                 self._dac.set_voltage(v_array[i])
                 v_meas = self._mfli.get_sample_r()
                 v_inner.append(v_meas)
@@ -219,6 +218,7 @@ class ChargeStabilitySweepsSerial:
         V_x_f = V_x.flatten()
         V_y_f = V_y.flatten()
         output_voltages_f = output_voltages.flatten()
+        V_outs = []
 
         if plot == True:
             fig, ax = plt.subplots()
@@ -253,7 +253,17 @@ class ChargeStabilitySweepsSerial:
                     cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', norm=plt.Normalize(0,1e-6))
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
+                    ##Add case if...
+                    if i == npoints[0]*npoints[1]-1:
+                        V_outs.append(V_out_temp)
+                        if len(V_outs) == n_fr:
+                            plotter.pause()
+                        else:
+                            pass
+                    else:
+                        pass
+
                 return cplot,
-            plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.00001, repeat=True)
-            return plotter, (V_x, V_y, v_out_temp)
+            plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=1, repeat=True)
+            return plotter, (V_x, V_y, V_outs)
             plt.show()
