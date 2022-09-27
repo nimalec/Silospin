@@ -216,7 +216,7 @@ class ChargeStabilitySweepsSerial:
         output_voltages = np.ones((npoints[0], npoints[1]))
         V_x_f = V_x.flatten()
         V_y_f = V_y.flatten()
-        #global output_voltages_f
+        global output_voltages_f
         output_voltages_f = output_voltages.flatten()
 
         if plot == True:
