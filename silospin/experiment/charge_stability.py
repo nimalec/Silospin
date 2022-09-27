@@ -207,12 +207,10 @@ class ChargeStabilitySweepsSerial:
                 self._dac.set_voltage(v_array[i])
                 v_meas = self._mfli.get_sample_r()
                 v_inner.append(v_meas)
-                ##append to outer list
                 if len(v_inner) == npoints-1:
                     v_outer.append(v_inner)
                 else:
                     pass
-                ##plot every n_r iterations
                 if i%n_r == 0:
                     ax.clear()
                     ax.plot(v_array[0:len(v_inner)], v_inner)
@@ -220,7 +218,6 @@ class ChargeStabilitySweepsSerial:
                     ax.set_ylabel('Measured output [V]')
                 else:
                     pass
-                ## if number of frames is reached, stop plotting
                 if len(v_outer) == n_fr:
                     plotter.pause()
                     v_mean.append(np.mean(np.array(v_outer),axis=0))
@@ -230,10 +227,8 @@ class ChargeStabilitySweepsSerial:
                     v_inner.clear()
                 else:
                     pass
-
-            ##Feed into Function Animation module  and calculate mean every time step
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
-            return v_outer, v_mean
+            return v_outer, v_mean[0]
             plt.show()
         else:
             v_outer = []
