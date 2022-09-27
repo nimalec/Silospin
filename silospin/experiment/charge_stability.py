@@ -219,6 +219,7 @@ class ChargeStabilitySweepsSerial:
         V_y_f = V_y.flatten()
         output_voltages_f = output_voltages.flatten()
         V_outs = []
+        V_mean = []
 
         if plot == True:
             fig, ax = plt.subplots()
@@ -253,11 +254,12 @@ class ChargeStabilitySweepsSerial:
                     cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', norm=plt.Normalize(0,1e-6))
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
-                    ##Add case if...
+
                     if i == npoints[0]*npoints[1]-1:
                         V_outs.append(V_out_temp)
                         if len(V_outs) == n_fr:
                             plotter.pause()
+                            V_mean.append(np.mean(np.array(V_outs) ))
                         else:
                             pass
                     else:
