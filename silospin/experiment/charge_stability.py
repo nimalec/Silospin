@@ -232,9 +232,10 @@ class ChargeStabilitySweepsSerial:
             ##Feed into Function Animation module  and calculate mean every time step
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
             #global v_mean
+            global v_out = np.array(v_outer)
             #v_mean = np.mean(np.array(v_outer), axis = 0)
             #return v_mean
-            return v_outer
+            return v_out
             plt.show()
         else:
             v_outer = []
@@ -244,9 +245,12 @@ class ChargeStabilitySweepsSerial:
                     self._dac.set_voltage(v_array[i])
                     v_meas = self._mfli.get_sample_r()
                     v_inner.append(v_meas)
-                v_outer.append(np.array(v_inner))
-            v_outer = np.array(v_outer)
-            return np.mean(v_outer, axis = 0)
+                v_outer.append(v_inner)
+            return v_outer
+
+    #def sweep1DExecute(self, channel, start_v, end_v, npoints, n_r = 10, n_fr = 1, plot = True):
+    ##need to figure out wait time.
+    #    v_outer = self.sweep1DFrameAverageRefresh(channel, start_v, end_v, npoints, n_r, n_fr, plot)
 
     def sweep2DFrameAverage(self, channels, v_range, npoints, n_fr = 1, plot = True):
         ##1. Initialize array at first iteraiton, 2. update each element of array with new values,
