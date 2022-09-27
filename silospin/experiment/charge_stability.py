@@ -222,10 +222,9 @@ class ChargeStabilitySweepsSerial:
                 ## if number of frames is reached, stop plotting
                 if len(v_outer) == n_fr:
                     plotter.pause()
-                    print(1)
+                    print(np.array(v_outer))
                 else:
                     pass
-               ## Clear list every npoints-2 iteratiosn
                 if i == npoints-2:
                     v_inner.clear()
                 else:
