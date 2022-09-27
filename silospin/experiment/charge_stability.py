@@ -112,7 +112,6 @@ class ChargeStabilitySweepsSerial:
         self._dac = DacDriverSerial(dac_id)
 
     def sweep1D(self, channel, start_v, end_v, npoints, n_r = 10, n_fr = 1, plot = True):
-
         self._dac.set_channel(channel)
         v_array = np.linspace(start_v,end_v,npoints)
         v_outer = []
@@ -147,7 +146,7 @@ class ChargeStabilitySweepsSerial:
                 else:
                     pass
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=1, repeat=True)
-            return v_mean
+            return (v_array, v_mean), plotter 
             plt.show()
         else:
             v_outer = []
@@ -159,7 +158,7 @@ class ChargeStabilitySweepsSerial:
                     v_meas = self._mfli.get_sample_r()
                     v_inner.append(v_meas)
                 v_outer.append(v_inner)
-            return v_mean.append(np.mean(np.array(v_outer),axis=0))
+            return (v_array, v_mean.append(np.mean(np.array(v_outer),axis=0)))
 
     def sweep2D(self, channels, v_range, npoints, n_r = 10, n_fr = 1, plot = True):
         ##Defines initial parameters (input voltages)
