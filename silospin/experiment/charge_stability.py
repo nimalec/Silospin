@@ -220,25 +220,20 @@ class ChargeStabilitySweepsSerial:
                 else:
                     pass
                 ## if number of frames is reached, stop plotting
-                if len(v_outer) == n_fr:
+                if len(v_outer) == 1:
                     plotter.pause()
                 else:
                     pass
                ## Clear list every npoints-2 iteratiosn
                 if i == npoints-2:
                     v_inner.clear()
+                    print(i)
                 else:
                     pass
+                    
             ##Feed into Function Animation module  and calculate mean every time step
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
-            if len(v_outer) == n_fr:
-                print(np.array(v_outer))
-            else:
-                pass
             return v_outer
-            #v_mean = np.mean(np.array(v_outer), axis = 0)
-            #return v_mean
-            #return v_out
             plt.show()
         else:
             v_outer = []
