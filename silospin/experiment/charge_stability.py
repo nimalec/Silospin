@@ -189,9 +189,7 @@ class ChargeStabilitySweepsSerial:
             return np.mean(v_outer, axis = 0)
 
     def sweep1DFrameAverageRefresh(self, channel, start_v, end_v, npoints, n_r = 10, n_fr = 1, plot = True):
-        ## channel (channel index), start_v (start voltage), start_v (start voltage), 
-
-
+        ## channel (channel index), start_v (start voltage), end_v (end voltage), npoints (total number of points in grid), n_r (refresh plot ever n_r poitns), n_fr (number of outer frames).
 
         ##1. Initializes parameters
         self._dac.set_channel(channel)
@@ -204,29 +202,34 @@ class ChargeStabilitySweepsSerial:
         if plot == True:
             fig, ax = plt.subplots()
             def plot1Dtrace(i):
+                ##set voltage, get voltage, append voltage
                 self._dac.set_voltage(v_array[i])
                 v_meas = self._mfli.get_sample_r()
                 v_inner.append(v_meas)
+                ##append to outer list
                 if len(v_inner) == npoints-1:
                     v_outer.append(v_inner)
                 else:
                     pass
+                ##plot every n_r iterations
                 if i%n_r == 0:
                     ax.clear()
                     ax.plot(v_array[0:len(v_inner)], v_inner)
                     ax.set_xlabel('Applied barrier voltage [V]')
-                    ax.set_ylabel('Measured output [V]'')
+                    ax.set_ylabel('Measured output [V]')
                 else:
                     pass
+                ## if number of frames is reached, stop plotting
                 if len(v_outer) == n_fr:
                     plotter.pause()
                 else:
                     pass
-
+               ## Clear list every npoints-2 iteratiosn
                 if i == npoints-2:
                     v_inner.clear()
                 else:
                     pass
+            ##Feed into Function Animation module  and calculate mean every time step
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
             global v_mean
             v_mean = np.mean(np.array(v_outer), axis = 0)
