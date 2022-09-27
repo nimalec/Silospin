@@ -220,6 +220,7 @@ class ChargeStabilitySweepsSerial:
         output_voltages_f = output_voltages.flatten()
         V_outs = []
         V_mean = []
+        v_mean = None
 
         if plot == True:
             fig, ax = plt.subplots()
@@ -259,13 +260,13 @@ class ChargeStabilitySweepsSerial:
                         V_outs.append(V_out_temp)
                         if len(V_outs) == n_fr:
                             plotter.pause()
-                            V_mean.append(np.mean(np.array(V_outs) ))
+                            #V_mean.append(np.mean(np.array(V_outs),axis=0))
+                            v_mean = np.mean(np.array(V_outs),axis=0)
                         else:
                             pass
                     else:
                         pass
-
                 return cplot,
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=1, repeat=True)
-            return plotter, (V_x, V_y, V_outs)
+            return plotter, (V_x, V_y, v_mean)
             plt.show()
