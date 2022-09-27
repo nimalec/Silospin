@@ -298,31 +298,28 @@ class GateSetTomographyProgramPlunger:
         self._waveforms = generate_waveforms_v3(self._gate_npoints, channel_mapping)
 
         ##6. Modify to account for new gate seq format
-        ## Modify lengths function....
-
         #1. Modify this function to take in "qubit_lenghts of differnet form "
-        #self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
+        self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, qubit_lengths, channel_mapping)
 
     #     ##7. Modify ct_idxs to account for plunger gates
-    #     ct_idxs_all = {}
-    #     arbZs = []
-    #     n_arbZ = 0
-    #     for idx in self._gate_sequences:
-    #          gate_sequence = self._gate_sequences[idx]
-    #          ct_idxs_all[idx], arbZ = make_command_table_idxs(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9), n_arbZ)
-    #          n_arbZ += len(arbZ)
-    #          arbZs.append(arbZ)
-    #     arbZ_s = []
-    #     for lst in arbZs:
-    #         for i in lst:
-    #             arbZ_s.append(i)
-    #     command_tables = generate_reduced_command_table(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ_s)
-    #     self._ct_idxs = ct_idxs_all
-    #     self._command_tables = command_tables
+        # ct_idxs_all = {}
+        # arbZs = []
+        # n_arbZ = 0
+        # for idx in self._gate_sequences:
+        #      gate_sequence = self._gate_sequences[idx]
+        #      ct_idxs_all[idx], arbZ = make_command_table_idxs(gate_sequence, ceil(tau_pi_standard_new*1e9), ceil(tau_pi_2_standard_new*1e9), n_arbZ)
+        #      n_arbZ += len(arbZ)
+        #      arbZs.append(arbZ)
+        # arbZ_s = []
+        # for lst in arbZs:
+        #     for i in lst:
+        #         arbZ_s.append(i)
+        # command_tables = generate_reduced_command_table(npoints_pi_2_standard, npoints_pi_standard, arbZ=arbZ_s)
+        # self._ct_idxs = ct_idxs_all
+        # self._command_tables = command_tables
     #
     #     waveforms_awg = {}
     #     sequencer_code = {}
-    #     seq_code = {}
     #     command_code = {}
     #     n_array = [npoints_pi_2_standard, npoints_pi_standard]
     #

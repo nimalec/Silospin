@@ -14,7 +14,6 @@ class ChargeStabilitySweeps:
         self._dac = DacDriver(dac_id)
 
     def sweep1D(self, channel, start_v, end_v, npoints, plot = True):
-        ##Note: need to add external loopss
         self._dac.set_channel(channel)
         v_array = np.linspace(start_v,end_v,npoints)
         v_outputs = []
@@ -113,7 +112,6 @@ class ChargeStabilitySweepsSerial:
         self._dac = DacDriverSerial(dac_id)
 
     def sweep1D(self, channel, start_v, end_v, npoints, plot = True):
-        ##Note: need to add external loops
         self._dac.set_channel(channel)
         v_array = np.linspace(start_v,end_v,npoints)
         v_outputs = []
@@ -139,7 +137,15 @@ class ChargeStabilitySweepsSerial:
             return v_outputs
 
     def sweep1DFrameAverage(self, channel, start_v, end_v, npoints, n_fr = 1, plot = True):
-        ##Note: need to add external loops
+         ##Protocol for sweep1DFrameAverage:
+         ## 1. set channel **
+         ## 2. initialize input voltage array **
+         ## 3. initlize v_outer (stores all frames) and set as a global variable **
+         ## 4. take in repeat number as a parameter
+         ## 5. if N%N_r == 0 ==> updates plot
+         ## 6. Generate output plot
+         ## 7. Define mean as a global variable
+
         self._dac.set_channel(channel)
         v_array = np.linspace(start_v,end_v,npoints)
         v_outer = []
@@ -153,8 +159,8 @@ class ChargeStabilitySweepsSerial:
                 v_inner.append(v_meas)
                 ax.clear()
                 ax.plot(v_array[0:len(v_inner)], v_inner)
-                ax.set_xlabel("Applied barrier voltage [V]")
-                ax.set_ylabel("Measured output [V]")
+                ax.set_xlabel('Applied barrier voltage [V]')
+                ax.set_ylabel('Measured output [V]'')
                 if len(v_inner) == npoints-1:
                     v_outer.append(v_inner)
                     if len(v_outer) == n_fr:
@@ -163,13 +169,68 @@ class ChargeStabilitySweepsSerial:
                         pass
                 else:
                     pass
-
                 if i == npoints-2:
                     v_inner.clear()
                 else:
                     pass
             plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
             return v_outer
+            plt.show()
+        else:
+            v_outer = []
+            for j in range(n_fr):
+                v_inner = []
+                for i in range(npoints):
+                    self._dac.set_voltage(v_array[i])
+                    v_meas = self._mfli.get_sample_r()
+                    v_inner.append(v_meas)
+                v_outer.append(np.array(v_inner))
+            v_outer = np.array(v_outer)
+            return np.mean(v_outer, axis = 0)
+
+    def sweep1DFrameAverageRefresh(self, channel, start_v, end_v, npoints, n_r = 10, n_fr = 1, plot = True):
+        ## channel (channel index), start_v (start voltage), start_v (start voltage), 
+
+
+
+        ##1. Initializes parameters
+        self._dac.set_channel(channel)
+        v_array = np.linspace(start_v,end_v,npoints)
+        v_outer = []
+        v_inner = []
+        plotter = None
+
+        ##2. If plot, define plot1Dtrace and plotter
+        if plot == True:
+            fig, ax = plt.subplots()
+            def plot1Dtrace(i):
+                self._dac.set_voltage(v_array[i])
+                v_meas = self._mfli.get_sample_r()
+                v_inner.append(v_meas)
+                if len(v_inner) == npoints-1:
+                    v_outer.append(v_inner)
+                else:
+                    pass
+                if i%n_r == 0:
+                    ax.clear()
+                    ax.plot(v_array[0:len(v_inner)], v_inner)
+                    ax.set_xlabel('Applied barrier voltage [V]')
+                    ax.set_ylabel('Measured output [V]'')
+                else:
+                    pass
+                if len(v_outer) == n_fr:
+                    plotter.pause()
+                else:
+                    pass
+
+                if i == npoints-2:
+                    v_inner.clear()
+                else:
+                    pass
+            plotter = FuncAnimation(fig, plot1Dtrace, frames=npoints-1, interval=0.001, repeat=True)
+            global v_mean
+            v_mean = np.mean(np.array(v_outer), axis = 0)
+            return v_mean
             plt.show()
         else:
             v_outer = []
