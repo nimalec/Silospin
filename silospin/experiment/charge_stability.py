@@ -122,6 +122,7 @@ class ChargeStabilitySweepsSerial:
         if plot == True:
             fig, ax = plt.subplots()
             def plot1Dtrace(i):
+                print(i)
                 self._dac.set_voltage(v_array[i])
                 v_meas = self._mfli.get_sample_r()
                 v_inner.append(v_meas)
@@ -209,20 +210,21 @@ class ChargeStabilitySweepsSerial:
             plt.show()
 
     def sweep2DFrameAverage_v2(self, channels, v_range, npoints, n_r = 10, n_fr = 1, plot = True):
-        ##Defines initial parameters
+        ##Defines initial parameters (input voltages)
         v_x = np.linspace(v_range[0][0], v_range[0][1], npoints[0])
         v_y = np.linspace(v_range[1][0], v_range[1][1], npoints[1])
         V_x, V_y = np.meshgrid(v_x, v_y)
+        ##Defines output voltages ==> make a flattened array
         output_voltages = np.ones((npoints[0], npoints[1]))
         V_x_f = V_x.flatten()
         V_y_f = V_y.flatten()
-        global output_voltages_f
         output_voltages_f = output_voltages.flatten()
 
         if plot == True:
             fig, ax = plt.subplots()
             def plot2Dtrace(i):
                 ax.clear()
+                ## if at the first index ==> set both voltages and initialize array
                 if i == 0:
                     self._dac.set_channel(channels[0])
                     self._dac.set_voltage(V_x_f[i])
@@ -252,6 +254,6 @@ class ChargeStabilitySweepsSerial:
                     ax.set_xlabel("Left barrier voltage [V]")
                     ax.set_ylabel("Right barrier voltage [V]")
                 return cplot,
-            plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.00001, repeat=False)
+            plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=0.00001, repeat=True)
             return plotter, (V_x, V_y, v_out_temp)
             plt.show()
