@@ -237,7 +237,7 @@ class ChargeStabilitySweepsSerial:
                 v_out = np.array(v_outer)
                 return v_out
             else:
-                pass
+                return v_outer 
             #v_mean = np.mean(np.array(v_outer), axis = 0)
             #return v_mean
             #return v_out
