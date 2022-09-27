@@ -221,6 +221,7 @@ class ChargeStabilitySweepsSerial:
                 if len(v_outer) == n_fr:
                     plotter.pause()
                     v_mean.append(np.mean(np.array(v_outer),axis=0))
+                    print("Plotting finished!")
                 else:
                     pass
                 if i == npoints-2:
@@ -235,7 +236,7 @@ class ChargeStabilitySweepsSerial:
             idx = 0
             for j in range(n_fr):
                 v_inner = []
-                for i in range(npoints): 
+                for i in range(npoints):
                     self._dac.set_voltage(v_array[i])
                     v_meas = self._mfli.get_sample_r()
                     v_inner.append(v_meas)
