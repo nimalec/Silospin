@@ -222,7 +222,8 @@ class ChargeStabilitySweepsSerial:
                 ## if number of frames is reached, stop plotting
                 if len(v_outer) == n_fr:
                     plotter.pause()
-                    global v_mean = np.mean(np.array(v_outer),axis=0)
+                    global v_mean
+                    v_mean = np.mean(np.array(v_outer),axis=0)
                     print(v_mean)
                 else:
                     pass
