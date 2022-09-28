@@ -295,7 +295,7 @@ class ChargeStabilitySweepsSerial:
             pass
 
 
-    def sweep2D_v3 (self, channels, v_range, npoints, n_r = 10, n_fr = 1, plot = True):
+    def sweep2D_v3 (self, channels, v_range, npoints, n_r = 10, n_fr = 1, plot = True, v_out_min = 0, v_out_max = 1e-6):
         v_x = np.linspace(v_range[0][0], v_range[0][1], npoints[0])
         v_y = np.linspace(v_range[1][0], v_range[1][1], npoints[1])
         V_x, V_y = np.meshgrid(v_x, v_y)
