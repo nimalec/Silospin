@@ -341,7 +341,6 @@ class ChargeStabilitySweepsSerial:
                         self._dac.set_voltage(V_y_f[i])
                         v_meas = self._mfli.get_sample_r()
                         v_out_temp[i] = v_meas
-                        print(V_x_f[i])
 
                     V_out_temp = v_out_temp.reshape([npoints[0], npoints[1]])
                     z_min = np.min(v_out_temp)
