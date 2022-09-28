@@ -337,6 +337,7 @@ class ChargeStabilitySweepsSerial:
                         self._dac.set_voltage(V_y_f[i])
                         v_meas = self._mfli.get_sample_r()
                         v_out_temp[i] = v_meas
+                        print(V_x_f[i])
                     else:
                         self._dac.set_voltage(V_y_f[i])
                         v_meas = self._mfli.get_sample_r()
