@@ -25,7 +25,7 @@ def read_data(data, daq_module, signal_paths):
     for signal_path in signal_paths:
         if signal_path.lower() in returned_signal_paths:
             for index, signal_burst in enumerate(data_read[signal_path.lower()]):
-                value = signal_burst["value"][0, :] 
+                value = signal_burst["value"][0, :]
                 data[signal_path].append(signal_burst)
         else:
                 pass

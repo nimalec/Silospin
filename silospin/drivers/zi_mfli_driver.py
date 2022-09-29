@@ -452,6 +452,7 @@ class MfliDaqModule:
         ts0 = np.nan
         read_count = 0
         self.execute()
+        time.sleep(1)
         t0_measurement = time.time()
         t_update = 0.9 * burst_duration
         while not self._daq_module.finished():

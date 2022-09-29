@@ -294,7 +294,6 @@ class ChargeStabilitySweepsSerial:
         else:
             pass
 
-
     def sweep2D_v3 (self, channels, v_range, npoints, n_r = 10, n_fr = 1, plot = True, v_out_min = 0, v_out_max = 1e-6):
         v_x = np.linspace(v_range[0][0], v_range[0][1], npoints[0])
         v_y = np.linspace(v_range[1][0], v_range[1][1], npoints[1])
@@ -318,8 +317,6 @@ class ChargeStabilitySweepsSerial:
                     v_meas = self._mfli.get_sample_r()
                     output_voltages_new = v_meas*output_voltages_f
                     V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
-                    z_min = np.min(output_voltages_new)
-                    z_max = np.min(output_voltages_new)
 
                     if i%n_r == 0:
                         cplot = ax.pcolor(V_x, V_y, V_out, cmap='RdBu', norm=plt.Normalize(v_out_min, v_out_max))
@@ -341,13 +338,15 @@ class ChargeStabilitySweepsSerial:
                         self._dac.set_voltage(V_y_f[i])
                         v_meas = self._mfli.get_sample_r()
                         v_out_temp[i] = v_meas
-
                     V_out_temp = v_out_temp.reshape([npoints[0], npoints[1]])
-                    z_min = np.min(v_out_temp)
-                    z_max = np.min(v_out_temp)
-                    cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', norm=plt.Normalize(v_out_min, v_out_max))
-                    ax.set_xlabel("Left barrier voltage [V]")
-                    ax.set_ylabel("Right barrier voltage [V]")
+
+                    if i%n_r == 0:
+                        cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', norm=plt.Normalize(v_out_min, v_out_max))
+                        ax.set_xlabel("Left barrier voltage [V]")
+                        ax.set_ylabel("Right barrier voltage [V]")
+                    else:
+                        pass
+
                     if i == npoints[0]*npoints[1]-1:
                         V_outs.append(V_out_temp)
                         if len(V_outs) == n_fr:
@@ -361,3 +360,5 @@ class ChargeStabilitySweepsSerial:
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=1, repeat=True)
             return (V_x, V_y, V_mean), plotter
             plt.show()
+        else:
+            pass
