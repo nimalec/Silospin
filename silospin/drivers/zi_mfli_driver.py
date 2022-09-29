@@ -465,14 +465,6 @@ class MfliDaqModule:
         self._data.append(data)
         return data
 
-
-    # def continuous_numeric(self, time_constant=10e-3, acquisition_time=1e-6, sample_rate=3000):
-    #     self._mfli.set_demods_settings("timeconstant", time_constant)
-    #     data = self.continuous_data_acquisition_time_domain(acquisition_time, n_bursts = 1, signal_nodes = ["r"], sample_rate=sample_rate)
-    #     signal_path = f"/{self._dev_id}/demods/0/sample.r"
-    #     val = data[signal_path][0]['value'][0]
-    #     return val
-
     def set_continuous_numeric_parameters(self, time_constant=10e-3):
         self._mfli.set_demods_settings("timeconstant", time_constant)
         self._mfli.set_demods_settings("enable", 1)
@@ -480,21 +472,18 @@ class MfliDaqModule:
         self.set_trigger_setting("type", 0)
         self.set_grid_setting("mode", 4)
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
-        #sig_paths = []
-        #sig_paths.append(signal_path)
-        demod_path = f"/{self._dev_id}/demods/0/sample"
         self._daq_module.set("count", 0)
         self._daq_module.set("grid/cols", 1)
         self._daq_module.set("holdoff/time", 0)
         self._daq_module.set("refreshrate", 500)
         self._daq_module.subscribe(signal_path)
         self._mfli._daq_module.execute()
-        time.sleep(0.6)
+        time.sleep(0.5)
 
     def continuous_numeric(self):
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         data_read = self._daq_module.read(True)
-        return data_read
+        return data_read[signal_path]
 
         # while not self._daq_module.finished():
         #     data_read = self._daq_module.read(True)
