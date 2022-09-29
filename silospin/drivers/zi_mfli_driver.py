@@ -479,7 +479,7 @@ class MfliDaqModule:
         self._daq_module.set("device", self._dev_id)
         self.set_trigger_setting("type", 0)
         self.set_grid_setting("mode", 4)
-        #signal_path = f"/{self._dev_id}/demods/0/sample.r"
+        signal_path = f"/{self._dev_id}/demods/0/sample.r"
         #sig_paths = []
         #sig_paths.append(signal_path)
         demod_path = f"/{self._dev_id}/demods/0/sample"
