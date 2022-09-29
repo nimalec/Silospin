@@ -500,7 +500,7 @@ class MfliDaqModule:
                val = data_read[signal_path.lower()][0]["value"][0]
             else:
                  pass
-        return data_read
+        #return data_read
 
         # while not self._daq_module.finished():
         #     data_read = self._daq_module.read(True)
