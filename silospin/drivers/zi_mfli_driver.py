@@ -493,6 +493,7 @@ class MfliDaqModule:
 
     def continuous_numeric(self):
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
+        val = None 
         while not self._daq_module.finished():
             data_read = self._daq_module.read(True)
             returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
