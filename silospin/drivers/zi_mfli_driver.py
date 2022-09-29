@@ -499,6 +499,7 @@ class MfliDaqModule:
             returned_signal_paths = [signal_path.lower() for signal_path in data_read.keys()]
             if signal_path.lower() in returned_signal_paths:
                val = data_read[signal_path.lower()][0]["value"][0]
+               print(v_meas)
                return val
             else:
                  pass
