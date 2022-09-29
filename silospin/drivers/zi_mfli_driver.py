@@ -497,7 +497,7 @@ class MfliDaqModule:
         #print(self._daq_module.finished())
         #data_read = self._daq_module.read(True)
         data_read = self._daq_module.read(True)
-        return data_read 
+        return data_read  
 
         # while not self._daq_module.finished():
         #     data_read = self._daq_module.read(True)
