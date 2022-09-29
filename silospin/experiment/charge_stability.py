@@ -340,13 +340,15 @@ class ChargeStabilitySweepsSerial:
                         v_out_temp[i] = v_meas
                     V_out_temp = v_out_temp.reshape([npoints[0], npoints[1]])
 
-                    if i%n_r == 0:
-                        cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', norm=plt.Normalize(v_out_min, v_out_max))
-                        ax.set_xlabel("Left barrier voltage [V]")
-                        ax.set_ylabel("Right barrier voltage [V]")
-                    else:
-                        pass
-
+                    # if i%n_r == 0:
+                    #     cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', norm=plt.Normalize(v_out_min, v_out_max))
+                    #     ax.set_xlabel("Left barrier voltage [V]")
+                    #     ax.set_ylabel("Right barrier voltage [V]")
+                    # else:
+                    #     pass
+                    cplot = ax.pcolor(V_x, V_y, V_out_temp, cmap='RdBu', norm=plt.Normalize(v_out_min, v_out_max))
+                    ax.set_xlabel("Left barrier voltage [V]")
+                    ax.set_ylabel("Right barrier voltage [V]")
                     if i == npoints[0]*npoints[1]-1:
                         V_outs.append(V_out_temp)
                         if len(V_outs) == n_fr:
