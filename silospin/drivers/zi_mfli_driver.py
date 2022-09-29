@@ -473,7 +473,7 @@ class MfliDaqModule:
         self.set_grid_setting("mode", 4)
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
         self._daq_module.set("count", 0)
-        self._daq_module.set("grid/cols", 1)
+        self._daq_module.set("grid/cols", 4)
         self._daq_module.set("holdoff/time", 0)
         self._daq_module.set("refreshrate", 500)
         self._daq_module.subscribe(signal_path)
