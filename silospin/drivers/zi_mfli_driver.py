@@ -489,7 +489,7 @@ class MfliDaqModule:
         self._daq_module.set("refreshrate", 500)
         self._daq_module.subscribe(signal_path)
         self._mfli._daq_module.execute()
-        #time.sleep(0.1)
+        time.sleep(0.1)
 
     def continuous_numeric(self):
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
