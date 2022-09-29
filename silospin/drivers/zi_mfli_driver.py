@@ -469,6 +469,7 @@ class MfliDaqModule:
         self._mfli.set_demods_settings("timeconstant", time_constant)
         self._mfli.set_demods_settings("enable", 1)
         self._daq_module.set("device", self._dev_id)
+        self._daq_module.set("count", 3)
         self.set_trigger_setting("type", 0)
         self.set_grid_setting("mode", 4)
         signal_path = f"/{self._dev_id}/demods/0/sample.r"
