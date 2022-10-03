@@ -4,7 +4,7 @@ from silospin.drivers.zi_mfli_driver import MfliDriverChargeStability
 from silospin.drivers.homedac_box import DacDriver, DacDriverSerial
 from silospin.plotting.plotting_functions import plot1DVoltageSweep, plot2DVoltageSweep
 import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+from matplotlib.animation import FuncAnimation, FFMpegWriter
 import numpy as np
 import time
 
@@ -220,6 +220,9 @@ class ChargeStabilitySweepsSerial:
                     else:
                         pass
                 return cplot,
+                
+            FFwriter =FFMpegWriter()
+            plotter.save('plot2d.mp4', writer = FFwriter)
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=1, repeat=True)
             return (V_x, V_y, V_mean), plotter
             plt.show()
