@@ -360,9 +360,7 @@ class ChargeStabilitySweepsSerial:
                     else:
                         pass
                 return cplot
-                
-            FFwriter =FFMpegWriter()
-            plotter.save('plot2d.mp4', writer = FFwriter)
+
             plotter = FuncAnimation(fig, plot2Dtrace, frames=npoints[0]*npoints[1], interval=1, repeat=True)
             return (V_x, V_y, V_mean), plotter
             plt.show()
