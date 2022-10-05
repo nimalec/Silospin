@@ -153,10 +153,22 @@ class GateSetTomographyProgram:
             sequencer_code[idx] =  seq_code[idx] + command_code[idx] + "}"
         self._sequencer_code = sequencer_code
 
-        for idx in qubits:
-             self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
-             #self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
-             self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[idx])
+        # for idx in qubits:
+        #      self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
+        #      time.sleep(0.4)
+        #      #self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
+        #      self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[idx])
+
+
+        self._awg.load_sequence(sequencer_code[0], awg_idx=0)
+        self._awg.load_sequence(sequencer_code[1], awg_idx=1)
+        self._awg.load_sequence(sequencer_code[2], awg_idx=2)
+        self._awg.load_sequence(sequencer_code[3], awg_idx=3)
+
+        self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[0])
+        self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[1])
+        self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[2])
+        self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[3])
 
         self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
         self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
