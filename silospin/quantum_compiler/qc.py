@@ -133,8 +133,8 @@ class GateSetTomographyProgram:
 
         for idx in qubits:
             waveforms = Waveforms()
-            waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"])
-            waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"])
+            waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_2"]/32767)
+            waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi"]/32767)
             waveforms_awg[idx] = waveforms
             seq_code[idx] =  make_waveform_placeholders(n_array)
             command_code[idx] = ""
@@ -154,7 +154,6 @@ class GateSetTomographyProgram:
         self._sequencer_code = sequencer_code
 
         for idx in qubits:
-             print(idx)
              self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
              self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
              time.sleep(0.4)
