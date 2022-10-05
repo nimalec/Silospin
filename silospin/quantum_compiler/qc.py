@@ -151,6 +151,28 @@ class GateSetTomographyProgram:
                  sequence += seq
             command_code[idx] = command_code[idx] + sequence
             sequencer_code[idx] =  seq_code[idx] + command_code[idx] + "}"
+
+
+        self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
+        self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+
+        daq = self._awg._daq
+        dev = self._awg._connection_settings["hdawg_id"]
+
+
+        for idx in qubits:
+             i_idx = self._channel_idxs[str(idx)][0]
+             q_idx = self._channel_idxs[str(idx)][1]
+             osc_idx = self._channel_osc_idxs[str(idx)]
+             self._awg.set_osc_freq(osc_idx, self._qubit_parameters[idx]["mod_freq"])
+             self._awg.set_sine(i_idx+1, osc_idx)
+             self._awg.set_sine(q_idx+1, osc_idx)
+             self._awg.set_out_amp(i_idx+1, 1, self._qubit_parameters[idx]["i_amp_pi"])
+             self._awg.set_out_amp(q_idx+1, 2, self._qubit_parameters[idx]["q_amp_pi"])
+             self._awg._hdawg.sigouts[i_idx].on(1)
+             self._awg._hdawg.sigouts[q_idx].on(1)
+             daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables))
+
         self._sequencer_code = sequencer_code
         self._waveforms_awg = waveforms_awg
         for idx in qubits:
@@ -158,12 +180,12 @@ class GateSetTomographyProgram:
              time.sleep(0.4)
              self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[idx])
 
-        self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
-        self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
+        # self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
+        # self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
 
-        daq = self._awg._daq
-        dev = self._awg._connection_settings["hdawg_id"]
-        #
+        # daq = self._awg._daq
+        # dev = self._awg._connection_settings["hdawg_id"]
+
         # for idx in qubits:
         #      i_idx = self._channel_idxs[str(idx)][0]
         #      q_idx = self._channel_idxs[str(idx)][1]
