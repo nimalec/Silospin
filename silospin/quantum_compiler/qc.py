@@ -154,6 +154,7 @@ class GateSetTomographyProgram:
         self._sequencer_code = sequencer_code
 
         for idx in qubits:
+             print(idx)
              self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
              self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx])
              time.sleep(0.4)
