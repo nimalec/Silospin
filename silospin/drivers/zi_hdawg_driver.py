@@ -163,6 +163,9 @@ class HdawgDriver:
 
       return self._connection_settings[param]
 
+    def get_waveforms(self):
+        return {"awg1": self._hdawg.awgs[0].waveform(), "awg2": self._hdawg.awgs[1].waveform(), "awg3": self._hdawg.awgs[2].waveform(), "awg4": self._hdawg.awgs[3].waveform()}
+
     def get_osc_freq(self, osc_num):
       """
         Getter function for oscillator frequency.
