@@ -173,12 +173,12 @@ class GateSetTomographyProgram:
              self._awg._hdawg.sigouts[q_idx].on(1)
              daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables))
 
-        self._sequencer_code = sequencer_code
-        self._waveforms_awg = waveforms_awg
         for idx in qubits:
              self._awg.load_sequence(sequencer_code[idx], awg_idx=idx)
-             time.sleep(0.4)
+            # time.sleep(0.4)
              self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[idx])
+        self._sequencer_code = sequencer_code
+        self._waveforms_awg = waveforms_awg
 
         # self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
         # self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
