@@ -6,4 +6,4 @@ class TestWaveformUpload:
         waveforms = Waveforms()
         waveforms.assign_waveform(slot=0, wave1=np.ones(256))
         for idx in range(0,4):
-            awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms)
+            hdawg._hdawg.awgs[idx].write_to_waveform_memory(waveforms)
