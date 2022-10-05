@@ -165,10 +165,10 @@ class GateSetTomographyProgram:
         self._awg.load_sequence(sequencer_code[2], awg_idx=2)
         self._awg.load_sequence(sequencer_code[3], awg_idx=3)
 
-        self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[0])
-        self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[1])
-        self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[2])
-        self._awg._hdawg.awgs[idx].write_to_waveform_memory(waveforms_awg[3])
+        self._awg._hdawg.awgs[0].write_to_waveform_memory(waveforms_awg[0])
+        self._awg._hdawg.awgs[1].write_to_waveform_memory(waveforms_awg[1])
+        self._awg._hdawg.awgs[2].write_to_waveform_memory(waveforms_awg[2])
+        self._awg._hdawg.awgs[3].write_to_waveform_memory(waveforms_awg[3])
 
         self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
         self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
