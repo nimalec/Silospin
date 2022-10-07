@@ -528,3 +528,161 @@ def make_ramsey_sequencer(n_start, n_stop, dn, n_rect, n_av):
 def make_rabi_sequencer(n_start, n_stop, dn, n_wait, n_av):
     sequence = "cvar i;\nconst n_start="+str(n_start)+";\nconst n_stop="+str(n_stop)+ ";\nconst dn="+str(dn)+";\nconst n_wait="+str(n_wait)+";\n  \nfor (i = n_start; i < n_stop; i = i + dn){\n   repeat("+str(n_av)+"){\n     setTrigger(1);setTrigger(0);\n     playWave(rect(i,1));\n     waitWave();\n     playZero(n_wait);\n     waitWave();\n   }\n}"
     return sequence
+def make_command_table_idxs_rf_p_v0(gt_seq, taus_std, taus_p, n_arbZ):
+    ##RF gates
+    #0-3: pi (pi_fr) [xx, yy, mxxm, myym]
+    #4-7: pi/2 (pi/2_fr) [x, y, xxx, yyy]
+    #8-11: pi/2 (pi_fr) f[x, y, xxx, yyy]
+    #12-18: pi (pi_fr) [0, 90, 180, 270, -90, -180, -270]
+    #19-25: pi/2 (pi/2_fr) [0, 90, 180, 270, -90, -180, -270]
+    #26-27: pi/2 (pi/2_fr) [0, 90, 180, 270, -90, -180, -270]
+
+    #Args:
+    ## gt_seq ==> gate sequence obtained after parsing
+    ## taus_std ==> standard pulse durations (pi/2, pi)
+    ## taus_p ==> list of tuples [(idx, tau_p) ] with idx as command table index and tau_p as corresponding duration
+    ##n_arbZ ==> list of arb Z indices
+    #Ouptuts:
+    # ct_idxs
+    # nArbz
+
+    arbZ = [] #output: list of arbZ tuples
+    ct_idxs = {} #command table indices
+
+    #mapping of initial gate type to CT index
+    initial_gates = {'xx_pi_fr': 0, 'yy_pi_fr': 1, 'mxxm_pi_fr': 2, 'myym_pi_fr': 3, 'x_pi2_fr': 4, 'y_pi2_fr': 5, 'xxx_pi2_fr': 6, 'yyy_pi2_fr': 7, 'x_pi_fr': 8, 'y_pi_fr':  9, 'xxx_pi_fr':  10, 'yyy_pi_fr': 11}
+
+
+    N_p = len(taus_p) #number of plunger gates
+
+    #Arb Z counter
+    arbZ_counter = 35 + N_p + n_arbZ
+
+    #phase of last gate
+    phi_ls_gt = {'x':  0, 'y': -90, 'xx':  0, 'yy': -90 , 'xxx':  -180, 'yyy': 90, 'mxxm': -180, 'myym': 90}
+    pi_gt_set = {'xx', 'yy', 'mxxm', 'myym'}
+    pi_2_gt_set = {'x', 'y', 'xxx', 'yyy'}
+
+    ##populate dict with t_waits
+    #2 types of pulse delays: rf and plunger.
+    ## rf delays: tau_pi and tau_pi_2
+    ## plunger delays: populate from taus_p
+    ## Extract mapping from taus_p to ct_idx
+
+    ##Populates dictionnary of taus (33 - 33 + N_p)
+    taus_ct_idxs = {'rf': {'pi2': {{'tau_pi2': taus_std[0], 'ct_idx': 33 },  {'tau_pi': taus_std[1], 'ct_idx':  34} }, 'p': {}}}
+    idx = 0
+    for item in taus_p:
+        taus_ct_idxs['p'][str(idx)] = {'tau_p': item[1] , 'ct_idx': item[0]}
+        idx += 1
+
+    ##Modify ==> break into "rf" and "p" gate sequences
+    rf_gate_sequence = gt_seq['rf']
+    p_gate_sequence = gt_seq['plunger']
+
+    #Now loop over the number of gates in each sequence
+     #For a single gate ==> compare with all other gates
+    ##RF gates
+    rf_ct_idx_list = []
+    rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]).difference(rf_idx))
+
+    ##Outer loop over number of qubits
+    for i in rf_gate_sequence:
+        n_gates = len(rf_gate_sequence[i])
+        ##Inner loop over cnumber of gates per qubit
+        for idx in range(n_gates):
+            gt = gate_sequence[idx]
+            rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+            pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+            pi_intersect = rf_gates_other.intersection(pi_gt_set)
+
+            #Case A: Initial gates
+            if idx == 0:
+                #1. Case 1: xx, yy, mxxm, myym [pi (pi_fr)]
+                if gt in pi_gt_set:
+                    gt_str = gt+'_pi_fr'
+                    rf_ct_idx_list.append(initial_gates[gt_str])
+                #2. Case 2: pi/2 gates
+                elif gt in pi_2_gt_set:
+                    if len(pi_intersect)>0:
+                        ##work in pi frame
+                        gt_str = gt+'_pi_fr'
+                        rf_ct_idx_list.append(initial_gates[gt_str])
+                    else:
+                        ##work in pi/2 frame
+                        gt_str = gt+'_pi2_fr'
+                        rf_ct_idx_list.append(initial_gates[gt_str])
+
+                #3. Case 3: wait is present
+                elif gt[0] == 't':
+                    gt_t_str = int(gt[1:len(gt)])
+                    if gt_t_str == taus_std[0]:
+                        rf_ct_idx_list.append(33)
+                    elif gt_t_str == taus_std[1]:
+                        rf_ct_idx_list.append(34)
+                    else:
+                        for item in taus_p:
+                            if gt_t_str == item[1]:
+                                rf_ct_idx_li st.append(item[0])
+                            else:
+                                continue
+
+                    # #4. Case 4: z is present
+                    #Note: add edge case if Z = 0 ==> do not add to gate Z0 gateset
+                    elif gt[0] == 'z':
+                        z_angle = float(gt[1:len(gt)])
+                        if z_angle == 0:
+                            z0_idx = 34 + N_p
+                            rf_ct_idx_list.append(z0_idx)
+                        else:
+                            rf_ct_idx_list.append(arbZ_counter)
+                            arbZ.append((arbZ_counter, -float(gt[1:len(gt)])))
+                        else:
+                            pass
+
+           #Case B: following gates
+            else:
+            #1. Case 1: xx, yy, mxxm, myym [pi (pi_fr)]
+                if gt in pi_gt_set:
+                    gt_str = gt+'_pi_fr'
+                    rf_ct_idx_list.append(initial_gates[gt_str])
+                    ##Add phase changes here
+
+            #2. Case 2: pi/2 gates
+                elif gt in pi_2_gt_set:
+                    if len(pi_intersect)>0:
+                        ##work in pi frame
+                        gt_str = gt+'_pi_fr'
+                        rf_ct_idx_list.append(initial_gates[gt_str])
+                    else:
+                        ##work in pi/2 frame
+                        gt_str = gt+'_pi2_fr'
+                        rf_ct_idx_list.append(initial_gates[gt_str])
+                        ##Add phase changes here
+
+            #3. Case 3: wait is present
+                elif gt[0] == 't':
+                    gt_t_str = int(gt[1:len(gt)])
+                    if gt_t_str == taus_std[0]:
+                        rf_ct_idx_list.append(33)
+                    elif gt_t_str == taus_std[1]:
+                        rf_ct_idx_list.append(34)
+                    else:
+                        for item in taus_p:
+                            if gt_t_str == item[1]:
+                                rf_ct_idx_list.append(item[0])
+                            else:
+                                continue
+
+            #4. Case 4: z is present
+            #Note: add edge case if Z = 0 ==> do not add to gate Z0 gateset
+                elif gt[0] == 'z':
+                    z_angle = float(gt[1:len(gt)])
+                    if z_angle == 0:
+                        z0_idx = 34 + N_p
+                        rf_ct_idx_list.append(z0_idx)
+                    else:
+                        rf_ct_idx_list.append(arbZ_counter)
+                        arbZ.append((arbZ_counter, -float(gt[1:len(gt)])))
+                else:
+                    pass
