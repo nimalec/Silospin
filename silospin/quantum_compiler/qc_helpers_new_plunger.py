@@ -193,11 +193,87 @@ def make_command_table_idxs_rf_p_v0(gt_seqs, taus_std, taus_p, n_arbZ):
         rf_ct_idxs[rf_idx] = rf_ct_idx_list
 
     ct_idxs['rf'] = rf_ct_idxs
-
     ##START HERE!!!!
     ##Start populating plunger ct indices
-    plunger_ct_idxs = {}
 
+    ##Case II: plunger command table indices
+    plunger_ct_idxs = {}
+    ##Loops over plunger gate channels in plunger gate seqeunce
+    for p_idx in plunger_gate_sequence:
+        ##Deine a list to append to ==> plunger gate CT indices
+        plunger_ct_idxs[p_idx] = []
+        p_ct_idx_list = []
+        ##Other plunger channels present
+        p_diff_idxs = list(set([i for i in plunger_gate_sequence.keys()]).difference(p_idx))
+
+        rf_diff_idxs = list([i for i in rf_gate_sequence.keys()])
+
+        gate_sequence = plunger_gate_sequence[p_idx]
+        n_gates = len(gate_sequence)
+
+        for idx in range(n_gates):
+            gt = gate_sequence[idx]
+            p_gates_other = set([plunger_gate_sequence[j][idx] for j in p_diff_idxs])
+            rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+
+            pi_intersect = rf_gates_other.intersection(pi_gt_set)
+            pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+
+            #Case A: Z gate is present
+            if gt[0] == 'z':
+                p_ct_idx_list.append(12)
+
+           ## p gate is present
+            elif gt == 'p':
+                ##p is present, no other DC gates
+                if list(p_gates_other)[0][0] == 't':
+                    ##p is present, no other DC gates, no other rf gates
+                    if len(pi_intersect) == 0 and len(pi_2_intersect) == 0:
+                        if p_idx == '6':
+                            p_ct_idx_list.append(0)
+                        else:
+                            p_ct_idx_list.append(1)
+                else:
+                    pass
+
+                if len(pi_intersect) != 0:
+                    ##other pi gates are present
+                    if p_idx == '7':
+                        p_ct_idx_list.append(6)
+                    else:
+                        p_ct_idx_list.append(7)
+
+                elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
+                    ##other pi/2 gates are present
+                    if p_idx == '7':
+                       p_ct_idx_list.append(4)
+                    else:
+                       p_ct_idx_list.append(5)
+
+                if list(p_gates_other)[0] == 'p':
+                    if p_idx == '7':
+                       p_ct_idx_list.append(2)
+                    else:
+                       p_ct_idx_list.append(3)
+
+            ##If a delay is present
+            elif gt[0] == 't':
+                gt_t_str = int(gt[1:len(gt)])
+                #Checks if duration corresponds to pi/2 pulse duration
+                if gt_t_str == taus_std[0]:
+                    p_ct_idx_list.append(8)
+                elif gt_t_str == taus_std[1]:
+                    p_ct_idx_list.append(9)
+                else:
+                    if p_idx == '7':
+                        p_ct_idx_list.append(11)
+                    else:
+                        p_ct_idx_list.append(10)
+            else:
+                pass
+            plunger_ct_idxs[p_idx] = p_ct_idx_list
+    ct_idxs['plunger'] = plunger_ct_idxs
+    return ct_idxs, arbZ
 
 
 def generate_reduced_command_table_rf_core_v0(n_pi_2, n_pi, n_p=[], arbZ=[]):
@@ -280,7 +356,7 @@ def generate_reduced_command_table_rf_core_v0(n_pi_2, n_pi, n_p=[], arbZ=[]):
    #ct_idx = 37+n_p+n_z at this point
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
-    
+
 def generate_reduced_command_table_p_core_v0(n_p, n_pi_2, n_pi):
     ##n_p is a list of tuples of availbile plunger gate lengths [(idx,n_p)] with idx as the GST index and n_p as the corresponding gate length
     ##Command table index mappings
@@ -288,7 +364,7 @@ def generate_reduced_command_table_p_core_v0(n_p, n_pi_2, n_pi):
     #2-3:  p_i (p_j_fr) [chanels 1 and 2 of AWG core, defined wrt to standard p pulse] (used for parallel p pulses)
     #4-5: p_i (p_i in rf pi/2 frame)  [chanels 1 and 2 of AWG core, defined wrt to standard pi/2 pulse] (used for p pulses in parallel with pi/2 pulses [no pi])
     #6-7: p_i (p_i in rf pi frame)  [chanels 1 and 2 of AWG core, defined wrt to standard pi pulse] (used for p pulses in parallel with pi pulses)
-    #8: 0 degree phase shift
+    #8: 0 degree phase shift2
     #9: standard pi delay
     #10: standard pi/2 delay
     #11-11+n_p: plunger delays
@@ -329,5 +405,70 @@ def generate_reduced_command_table_p_core_v0(n_p, n_pi_2, n_pi):
     for item in n_p:
         ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": item[1]}, "phase0": {"value": 0,  "increment": True}, "phase1": {"value": 0,  "increment": True}})
         ct_idx += 1
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
+    return command_table
+
+def generate_reduced_command_table_p_core_v1(n_p, n_rf):
+    ##n_p: list of tuples of idx, plunger durations
+    ## n_rf: tuple of standard rf pulse duraiotns
+    ## Note: 2 plungers per core
+    ## CT indices:
+    ## 0 = p_1 (p_1_fr)
+    ## 1 = p_2 (p_2_fr)
+    ## 2 = p_1 (p_2_fr)
+    ## 3 = p_2 (p_1_fr)
+    ## 4 = p_1 (pi/2 fr)
+    ## 5 = p_2 (pi/2 fr)
+    ## 6 = p_1 (pi fr)
+    ## 7 = p_2 (pi fr)
+    ## 8 = pi/2 wait
+    ## 9 = pi wait
+    ## 10 = p1 wait
+    ## 11 = p2 wait
+    ## 12 = 0 degree phase shift
+    n_pi_2 = n_rf[0]
+    n_pi = n_rf[1]
+    ct = []
+    waves = [{"index": 0, "awgChannel0": ["sigout0"]}, {"index": 1, "awgChannel1": ["sigout1"]},  {"index": 2, "awgChannel0": ["sigout0"]}, {"index": 3, "awgChannel1": ["sigout1"]} ,  {"index": 4, "awgChannel0": ["sigout0"]}, {"index": 5, "awgChannel1": ["sigout1"]},  {"index": 6, "awgChannel0": ["sigout0"]}, {"index": 7, "awgChannel1": ["sigout1"]}]
+    ct_idx = 0
+    #p_1 (p_1_fr)
+    ct.append({"index": ct_idx, "waveform": waves[0]})
+    ct_idx += 1
+    #p_2 (p_2_fr)
+    ct.append({"index": ct_idx, "waveform": waves[1]})
+    ct_idx += 1
+    #p_1 (p_2_fr)
+    ct.append({"index": ct_idx, "waveform": waves[2]})
+    ct_idx += 1
+    #p_2 (p_1_fr)
+    ct.append({"index": ct_idx, "waveform": waves[3]})
+    ct_idx += 1
+    #p_1 (pi/2_fr)
+    ct.append({"index": ct_idx, "waveform": waves[4]})
+    ct_idx += 1
+    #p_2 (pi/2_fr)
+    ct.append({"index": ct_idx, "waveform": waves[5]})
+    ct_idx += 1
+    #p_1 (pi_fr)
+    ct.append({"index": ct_idx, "waveform": waves[6]})
+    ct_idx += 1
+    #p_2 (pi_fr)
+    ct.append({"index": ct_idx, "waveform": waves[7]})
+    ct_idx += 1
+    #pi/2 wait
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2}})
+    ct_idx += 1
+    #pi wait
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi}})
+    ct_idx += 1
+    #p_1 wait
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_p[0][1]}})
+    ct_idx += 1
+    #p_2 wait
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_p[1][1]}})
+    ct_idx += 1
+    #Z0 phase increment
+    ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ct_idx += 1
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
