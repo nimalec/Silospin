@@ -1,3 +1,6 @@
+import pandas as pd
+import re
+import copy 
 def quantum_protocol_parser_v5(file_path, qubit_lengths, channel_mapping):
 
     ##1. generate rf and plugner lines
