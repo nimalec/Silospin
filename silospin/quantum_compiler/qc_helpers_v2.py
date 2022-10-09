@@ -1,3 +1,6 @@
+from math import ceil
+from silospin.math.math_helpers import compute_accumulated_phase, rectangular
+
 def make_command_table_idxs_rf_p_v0(gt_seqs, taus_std, taus_p, n_arbZ):
     ##Use this one!!
     ##RF gates
@@ -565,7 +568,7 @@ def generate_reduced_command_table_rf_core_v0(n_pi_2, n_pi, n_p=[], arbZ=[]):
    #ct_idx = 37+n_p+n_z at this point
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
     return command_table
-    
+
 def make_gate_lengths(gate_parameters):
     gate_lengths = {"rf": {}, "plunger": {}}
     for idx in gate_parameters["rf"]:
