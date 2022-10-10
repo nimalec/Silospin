@@ -176,6 +176,7 @@ class GateSetTomographyProgramPlunger:
 
         waveforms_awg = {}
         sequencer_code = {}
+        seq_code = {}
         command_code = {}
         n_array_rf = [npoints_pi_2_standard, npoints_pi_standard, npoints_pi_standard]
          ##add plunger lenghts
