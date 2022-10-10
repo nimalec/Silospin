@@ -134,7 +134,7 @@ class GateSetTomographyProgramPlunger:
         ##Need to modify this
         self._waveforms = generate_waveforms_v4(self._gate_npoints, channel_mapping)
         for i in self._waveforms:
-            print(len(i))
+            print(i)
 
 
         ##6. Modify to account for new gate seq format
