@@ -51,7 +51,7 @@ class GateSetTomographyProgramPlunger:
     run_program(awg_idxs):
         Compiles and runs programs over specified awg_idxs.
     """
-    def __init__(self, gst_file_path, channel_mapping, gate_parameters, n_inner=1, n_outer=1, external_trigger=True, trigger_channel=0, sample_rate=2.4e9):
+    def __init__(self, gst_file_path, awg, gate_parameters, n_inner=1, n_outer=1, external_trigger=True, trigger_channel=0, sample_rate=2.4e9):
         '''
         Constructor method for CompileGateSetTomographyProgram.
         Parameters:
@@ -76,9 +76,9 @@ class GateSetTomographyProgramPlunger:
        '''
 
         self._gst_path = gst_file_path
-        #self._awg = awg
+        self._awg = awg
         self._sample_rate = sample_rate
-       # channel_mapping = self._awg._channel_mapping
+        channel_mapping = self._awg._channel_mapping
         self._gate_parameters = gate_parameters
 
         ##1. Append plunger gate lengths to tau_pi_2_set. Standard pi length will be defined from pi_2 length.
@@ -170,7 +170,7 @@ class GateSetTomographyProgramPlunger:
         command_table_plunger = generate_reduced_command_table_p_core_v1(n_p=plunger_set_npoints_tups, n_rf=(npoints_pi_2_standard, npoints_pi_standard))
         self._ct_idxs = ct_idxs_all
         self._command_tables = {'rf': command_tables_rf, 'plunger': command_table_plunger}
-        print(self._ct_idxs)
+
 
 
 
