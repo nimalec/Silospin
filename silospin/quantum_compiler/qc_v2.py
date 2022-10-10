@@ -224,7 +224,7 @@ class GateSetTomographyProgramPlunger:
             command_code[idx] = ""
             sequence = "repeat("+str(n_outer)+"){\n "
             for ii in range(len(ct_idxs_all)):
-                n_seq = ct_idxs_all['plunger'][ii][str(6)]
+                n_seq = ct_idxs_all[ii]['plunger'][str(6)]
                 if external_trigger == False:
                     pass
                 else:
