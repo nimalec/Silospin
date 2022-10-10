@@ -174,37 +174,37 @@ class GateSetTomographyProgramPlunger:
 
 
 
-         waveforms_awg = {}
-         sequencer_code = {}
-         command_code = {}
-         n_array_rf = [npoints_pi_2_standard, npoints_pi_standard, npoints_pi_standard]
+        waveforms_awg = {}
+        sequencer_code = {}
+        command_code = {}
+        n_array_rf = [npoints_pi_2_standard, npoints_pi_standard, npoints_pi_standard]
          ##add plunger lenghts
-         n_array_p = [len(self._waveforms[4]["p1_p1fr"]), len(self._waveforms[4]["p2_p2fr"]),  len(self._waveforms[4]["p1_p2fr"]), len(self._waveforms[4]["p2_p1fr"]), len(self._waveforms[4]["p1_pi_2fr"]), len(self._waveforms[4]["p2_pi_2fr"]),len(self._waveforms[4]["p1_pifr"]), len(self._waveforms[4]["p2_pifr"])]
+        n_array_p = [len(self._waveforms[4]["p1_p1fr"]), len(self._waveforms[4]["p2_p2fr"]),  len(self._waveforms[4]["p1_p2fr"]), len(self._waveforms[4]["p2_p1fr"]), len(self._waveforms[4]["p1_pi_2fr"]), len(self._waveforms[4]["p2_pi_2fr"]),len(self._waveforms[4]["p1_pifr"]), len(self._waveforms[4]["p2_pifr"])]
 
-         rf_cores = [1,2,3]
-         p_cores = [4]
+        rf_cores = [1,2,3]
+        p_cores = [4]
          ##Generate sequences for RF core
-         for idx in rf_cores:
-             waveforms = Waveforms()
-             waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_pifr"])
-             waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi_2_pi_2fr"])
-             waveforms.assign_waveform(slot = 2, wave1 = self._waveforms[idx]["pi_2_pifr"])
-             waveforms_awg[idx] = waveforms
-             seq_code[idx] =  make_waveform_placeholders(n_array_rf)
-             command_code[idx] = ""
-             sequence = "repeat("+str(n_outer)+"){\n "
-             for ii in range(len(ct_idxs_all)):
-                 n_seq = ct_idxs_all['rf'][ii][str(idx)]
-                 if external_trigger == False:
-                     pass
-                 else:
-                   if idx == trigger_channel:
-                       seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
-                   else:
-                       seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
-                 sequence += seq
-                 command_code[idx] = command_code[idx] + sequence
-                 sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
+        for idx in rf_cores:
+            waveforms = Waveforms()
+            waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_pifr"])
+            waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi_2_pi_2fr"])
+            waveforms.assign_waveform(slot = 2, wave1 = self._waveforms[idx]["pi_2_pifr"])
+            waveforms_awg[idx] = waveforms
+            seq_code[idx] =  make_waveform_placeholders(n_array_rf)
+            command_code[idx] = ""
+            sequence = "repeat("+str(n_outer)+"){\n "
+            for ii in range(len(ct_idxs_all)):
+                n_seq = ct_idxs_all['rf'][ii][str(idx)]
+                if external_trigger == False:
+                    pass
+                else:
+                  if idx == trigger_channel:
+                      seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
+                  else:
+                      seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
+                sequence += seq
+                command_code[idx] = command_code[idx] + sequence
+                sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
 
 
 
