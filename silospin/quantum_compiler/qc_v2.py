@@ -182,8 +182,8 @@ class GateSetTomographyProgramPlunger:
         n_array_rf = [len(self._waveforms[1]["pi_pifr"]), len(self._waveforms[1]["pi_2_pi_2fr"]), len(self._waveforms[1]["pi_2_pifr"])]
          ##add plunger lenghts
         n_array_p = [len(self._waveforms[4]["p1_p1fr"]), len(self._waveforms[4]["p2_p2fr"]),  len(self._waveforms[4]["p1_p2fr"]), len(self._waveforms[4]["p2_p1fr"]), len(self._waveforms[4]["p1_pi_2fr"]), len(self._waveforms[4]["p2_pi_2fr"]),len(self._waveforms[4]["p1_pifr"]), len(self._waveforms[4]["p2_pifr"])]
-        print(n_array_rf)
-        print(n_array_p)
+        print(self._gate_npoints)
+
         rf_cores = [1,2,3]
         p_cores = [4]
          ##Generate sequences for RF core
@@ -221,8 +221,7 @@ class GateSetTomographyProgramPlunger:
             waveforms.assign_waveform(slot = 6, wave1 = self._waveforms[idx]["p1_pifr"])
             waveforms.assign_waveform(slot = 7, wave1 = self._waveforms[idx]["p2_pifr"])
             waveforms_awg[idx] = waveforms
-             ##Modify function for plunger specifically
-            seq_code[idx] =  make_waveform_placeholders(n_array_p)
+            seq_code[idx] = make_waveform_placeholders(n_array_p)
             command_code[idx] = ""
             sequence = "repeat("+str(n_outer)+"){\n "
             for ii in range(len(ct_idxs_all)):
