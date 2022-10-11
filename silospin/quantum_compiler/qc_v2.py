@@ -263,11 +263,11 @@ class GateSetTomographyProgramPlunger:
         #self._awg.set_osc_freq(osc_idx, self._gate_parameters['p'][7]["mod_freq"])
         self._awg.set_sine(i_idx+1, osc_idx)
         self._awg.set_sine(q_idx+1, osc_idx)
-        self._awg.set_out_amp(i_idx+1, 1, self._gate_parameters['p'][p_idx]["p_amp"])
-        self._awg.set_out_amp(q_idx+1, 2, self._gate_parameters['p'][p_idx]["p_amp"])
-        self._awg._hdawg.sigouts[i_idx].on(1)
-        self._awg._hdawg.sigouts[q_idx].on(1)
-        daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables['plunger']))
+        self._awg.set_out_amp(i_idx+1, 1, self._gate_parameters['p'][7]["p_amp"])
+        self._awg.set_out_amp(q_idx+1, 2, self._gate_parameters['p'][8]["p_amp"])
+        self._awg._hdawg.sigouts[7].on(1)
+        self._awg._hdawg.sigouts[8].on(1)
+        daq.setVector(f"/{dev}/awgs/{p_idx}/commandtable/data", json.dumps(self._command_tables['plunger']))
 
     # def run_program(self, awg_idxs=None):
     #     if awg_idxs:
