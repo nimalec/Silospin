@@ -174,11 +174,9 @@ class GateSetTomographyProgramPlunger:
         sequencer_code = {}
         seq_code = {}
         command_code = {}
-        #n_array_rf = [npoints_pi_2_standard, npoints_pi_standard, npoints_pi_standard]
-        n_array_rf = [len(self._waveforms[1]["pi_pifr"]), len(self._waveforms[1]["pi_2_pi_2fr"]), len(self._waveforms[1]["pi_2_pifr"])]
-         ##add plunger lenghts
-        n_array_p = [len(self._waveforms[4]["p1_p1fr"]), len(self._waveforms[4]["p2_p2fr"]),  len(self._waveforms[4]["p1_p2fr"]), len(self._waveforms[4]["p2_p1fr"]), len(self._waveforms[4]["p1_pi_2fr"]), len(self._waveforms[4]["p2_pi_2fr"]),len(self._waveforms[4]["p1_pifr"]), len(self._waveforms[4]["p2_pifr"])]
-        print(self._gate_npoints)
+        #n_array_rf = [len(self._waveforms[1]["pi_pifr"]), len(self._waveforms[1]["pi_2_pi_2fr"]), len(self._waveforms[1]["pi_2_pifr"])]
+        #n_array_p = [len(self._waveforms[4]["p1_p1fr"]), len(self._waveforms[4]["p2_p2fr"]),  len(self._waveforms[4]["p1_p2fr"]), len(self._waveforms[4]["p2_p1fr"]), len(self._waveforms[4]["p1_pi_2fr"]), len(self._waveforms[4]["p2_pi_2fr"]),len(self._waveforms[4]["p1_pifr"]), len(self._waveforms[4]["p2_pifr"])]
+
 
         rf_cores = [1,2,3]
         p_cores = [4]
@@ -219,7 +217,7 @@ class GateSetTomographyProgramPlunger:
             waveforms_awg[idx] = waveforms
             seq_code[idx] = make_waveform_placeholders(n_array_p)
             command_code[idx] = ""
-            sequence = "repeat("+str(n_outer)+"){\n "
+              sequence = "repeat("+str(n_outer)+"){\n "
             for ii in range(len(ct_idxs_all)):
                 n_seq = ct_idxs_all[ii]['plunger'][str(6)]
                 if external_trigger == False:
@@ -233,10 +231,9 @@ class GateSetTomographyProgramPlunger:
                 command_code[idx] = command_code[idx] + sequence
                 sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
         self._sequencer_code = sequencer_code
-        self._awg.load_sequence(self._sequencer_code[1], awg_idx=0)
         #for idx in range(0,3):
         #    self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
-            #self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx+1])
+            #self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
 
     #     self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
     #     self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
