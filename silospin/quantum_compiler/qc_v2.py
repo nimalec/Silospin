@@ -259,8 +259,8 @@ class GateSetTomographyProgramPlunger:
         p_idx = 3
         i_idx = 6
         q_idx = 7
-        osc_idx = 13 
-        self._awg.set_osc_freq(osc_idx, self._gate_parameters['p'][p_idx]["mod_freq"])
+        osc_idx = 13
+        self._awg.set_osc_freq(osc_idx, self._gate_parameters['p'][i_idx]["mod_freq"])
         self._awg.set_sine(i_idx+1, osc_idx)
         self._awg.set_sine(q_idx+1, osc_idx)
         self._awg.set_out_amp(i_idx+1, 1, self._gate_parameters['p'][p_idx]["p_amp"])
