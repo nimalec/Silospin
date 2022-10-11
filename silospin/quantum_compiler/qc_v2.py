@@ -269,11 +269,11 @@ class GateSetTomographyProgramPlunger:
         self._awg._hdawg.sigouts[7].on(1)
         daq.setVector(f"/{dev}/awgs/{p_idx}/commandtable/data", json.dumps(self._command_tables['plunger']))
 
-    # def run_program(self, awg_idxs=None):
-    #     if awg_idxs:
-    #         awg_idxs = awg_idxs
-    #     else:
-    #         awg_idxs = self._awg_idxs
-    #     for idx in awg_idxs:
-    #         self._awg._awgs["awg"+str(idx+1)].single(True)
-    #         self._awg._awgs["awg"+str(idx+1)].enable(True)
+    def run_program(self, awg_idxs=None):
+        if awg_idxs:
+            awg_idxs = awg_idxs
+        else:
+            awg_idxs = [0,1,2,3]
+        for idx in awg_idxs:
+            self._awg._awgs["awg"+str(idx+1)].single(True)
+            self._awg._awgs["awg"+str(idx+1)].enable(True)
