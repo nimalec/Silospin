@@ -257,14 +257,14 @@ class GateSetTomographyProgramPlunger:
               daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables['rf']))
 
         p_idx = 3
-        i_idx = self._channel_idxs[str(p_idx)][0]
-        q_idx = self._channel_idxs[str(p_idx)][1]
-        osc_idx = self._channel_osc_idxs[str(p_idx)]
-        self._awg.set_osc_freq(osc_idx, self._gate_parameters[p_idx]["mod_freq"])
+        i_idx = self._channel_idxs[str(6)][0]
+        q_idx = self._channel_idxs[str(7)][1]
+        osc_idx = self._channel_osc_idxs[str(13)]
+        self._awg.set_osc_freq(osc_idx, self._gate_parameters['p'][p_idx]["mod_freq"])
         self._awg.set_sine(i_idx+1, osc_idx)
         self._awg.set_sine(q_idx+1, osc_idx)
-        self._awg.set_out_amp(i_idx+1, 1, self._gate_parameters[p_idx]["p_amp"])
-        self._awg.set_out_amp(q_idx+1, 2, self._gate_parameters[p_idx]["p_amp"])
+        self._awg.set_out_amp(i_idx+1, 1, self._gate_parameters['p'][p_idx]["p_amp"])
+        self._awg.set_out_amp(q_idx+1, 2, self._gate_parameters['p'][p_idx]["p_amp"])
         self._awg._hdawg.sigouts[i_idx].on(1)
         self._awg._hdawg.sigouts[q_idx].on(1)
         daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables['plunger']))
