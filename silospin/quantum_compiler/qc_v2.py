@@ -231,8 +231,8 @@ class GateSetTomographyProgramPlunger:
                 command_code[idx] = command_code[idx] + sequence
                 sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
         self._sequencer_code = sequencer_code
-        # for idx in range(0,3):
-        #    self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
+        for idx in range(0,3):
+           self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
         #    self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
 
     #     self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
