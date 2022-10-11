@@ -136,104 +136,104 @@ class GateSetTomographyProgramPlunger:
 
         ##6. Modify to account for new gate seq format
         #1. Modify this function to take in "qubit_lenghts of differnet form "
-        self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, self._gate_lengths, channel_mapping)
-
-        ##7. Modify ct_idxs to account for plunger gates
-        ##ct_idxs_all ==> ct_idxs_all[line_number]['rf'][core_number]
-        ct_idxs_all = {}
-
-        arbZs = []
-        n_arbZ = 0 #counter for the number of arbZ  rotatiosn in the file
-        # #Loops over every line in gate sequence
-        #taus_std = (tau_, ceil(tau_pi_2_standard*1e-9))
-        taus_std = (ceil(tau_pi_2_standard), ceil(tau_pi_standard))
-        taus_std_v2 = (self._gate_lengths['rf'][standard_rf_idx]['pi_2'],  self._gate_lengths['rf'][standard_rf_idx]['pi'])
-
-        for idx in self._gate_sequences:
-            gate_sequence = self._gate_sequences[idx]
-            ##each element ct_idxs_all[idx] has 'rf' and 'plungers'
-            ct_idxs_all[idx], arbZ = make_command_table_idxs_rf_p_v0(gate_sequence, taus_std_v2, plunger_set, n_arbZ)
-            n_arbZ += len(arbZ)
-            arbZs.append(arbZ)
-
-        arbZ_s = []
-        for lst in arbZs:
-            for i in lst:
-                arbZ_s.append(i)
-
-
-        command_tables_rf = generate_reduced_command_table_rf_core_v0(npoints_pi_2_standard, npoints_pi_standard, n_p=plunger_set_npoints, arbZ=arbZ_s)
-        command_table_plunger = generate_reduced_command_table_p_core_v1(n_p=plunger_set_npoints_tups, n_rf=(npoints_pi_2_standard, npoints_pi_standard))
-        self._ct_idxs = ct_idxs_all
-        self._command_tables = {'rf': command_tables_rf, 'plunger': command_table_plunger}
-
-
-
-
-        waveforms_awg = {}
-        sequencer_code = {}
-        seq_code = {}
-        command_code = {}
-        n_array_rf = [len(self._waveforms[1]["pi_pifr"]), len(self._waveforms[1]["pi_2_pi_2fr"]), len(self._waveforms[1]["pi_2_pifr"])]
-        n_array_p = [len(self._waveforms[4]["p1_p1fr"]), len(self._waveforms[4]["p2_p2fr"]),  len(self._waveforms[4]["p1_p2fr"]), len(self._waveforms[4]["p2_p1fr"]), len(self._waveforms[4]["p1_pi_2fr"]), len(self._waveforms[4]["p2_pi_2fr"]),len(self._waveforms[4]["p1_pifr"]), len(self._waveforms[4]["p2_pifr"])]
-
-
-        rf_cores = [1,2,3]
-        p_cores = [4]
-         ##Generate sequences for RF core
-        for idx in rf_cores:
-            waveforms = Waveforms()
-            waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_pifr"])
-            waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi_2_pi_2fr"])
-            waveforms.assign_waveform(slot = 2, wave1 = self._waveforms[idx]["pi_2_pifr"])
-            waveforms_awg[idx] = waveforms
-            seq_code[idx] =  make_waveform_placeholders(n_array_rf)
-            command_code[idx] = ""
-            sequence = "repeat("+str(n_outer)+"){\n "
-            for ii in range(len(ct_idxs_all)):
-                n_seq = ct_idxs_all[ii]['rf'][str(idx-1)]
-                if external_trigger == False:
-                    pass
-                else:
-                  if idx == trigger_channel:
-                      seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
-                  else:
-                      seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
-                sequence += seq
-                command_code[idx] = command_code[idx] + sequence
-                sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
-
-        ##Generate sequences for DC core
-        for idx in p_cores:
-            waveforms = Waveforms()
-            waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["p1_p1fr"])
-            waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["p2_p2fr"])
-            waveforms.assign_waveform(slot = 2, wave1 = self._waveforms[idx]["p1_p2fr"])
-            waveforms.assign_waveform(slot = 3, wave1 = self._waveforms[idx]["p2_p1fr"])
-            waveforms.assign_waveform(slot = 4, wave1 = self._waveforms[idx]["p1_pi_2fr"])
-            waveforms.assign_waveform(slot = 5, wave1 = self._waveforms[idx]["p2_pi_2fr"])
-            waveforms.assign_waveform(slot = 6, wave1 = self._waveforms[idx]["p1_pifr"])
-            waveforms.assign_waveform(slot = 7, wave1 = self._waveforms[idx]["p2_pifr"])
-            waveforms_awg[idx] = waveforms
-            seq_code[idx] = make_waveform_placeholders(n_array_p)
-            command_code[idx] = ""
-            sequence = "repeat("+str(n_outer)+"){\n "
-            for ii in range(len(ct_idxs_all)):
-                n_seq = ct_idxs_all[ii]['plunger'][str(6)]
-                if external_trigger == False:
-                    pass
-                else:
-                  if idx == trigger_channel:
-                      seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
-                  else:
-                      seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
-                sequence += seq
-                command_code[idx] = command_code[idx] + sequence
-                sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
-        self._sequencer_code = sequencer_code
-        for idx in range(0,3):
-           self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
-           self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
+        # self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, self._gate_lengths, channel_mapping)
+        #
+        # ##7. Modify ct_idxs to account for plunger gates
+        # ##ct_idxs_all ==> ct_idxs_all[line_number]['rf'][core_number]
+        # ct_idxs_all = {}
+        #
+        # arbZs = []
+        # n_arbZ = 0 #counter for the number of arbZ  rotatiosn in the file
+        # # #Loops over every line in gate sequence
+        # #taus_std = (tau_, ceil(tau_pi_2_standard*1e-9))
+        # taus_std = (ceil(tau_pi_2_standard), ceil(tau_pi_standard))
+        # taus_std_v2 = (self._gate_lengths['rf'][standard_rf_idx]['pi_2'],  self._gate_lengths['rf'][standard_rf_idx]['pi'])
+        #
+        # for idx in self._gate_sequences:
+        #     gate_sequence = self._gate_sequences[idx]
+        #     ##each element ct_idxs_all[idx] has 'rf' and 'plungers'
+        #     ct_idxs_all[idx], arbZ = make_command_table_idxs_rf_p_v0(gate_sequence, taus_std_v2, plunger_set, n_arbZ)
+        #     n_arbZ += len(arbZ)
+        #     arbZs.append(arbZ)
+        #
+        # arbZ_s = []
+        # for lst in arbZs:
+        #     for i in lst:
+        #         arbZ_s.append(i)
+        #
+        #
+        # command_tables_rf = generate_reduced_command_table_rf_core_v0(npoints_pi_2_standard, npoints_pi_standard, n_p=plunger_set_npoints, arbZ=arbZ_s)
+        # command_table_plunger = generate_reduced_command_table_p_core_v1(n_p=plunger_set_npoints_tups, n_rf=(npoints_pi_2_standard, npoints_pi_standard))
+        # self._ct_idxs = ct_idxs_all
+        # self._command_tables = {'rf': command_tables_rf, 'plunger': command_table_plunger}
+        #
+        #
+        #
+        #
+        # waveforms_awg = {}
+        # sequencer_code = {}
+        # seq_code = {}
+        # command_code = {}
+        # n_array_rf = [len(self._waveforms[1]["pi_pifr"]), len(self._waveforms[1]["pi_2_pi_2fr"]), len(self._waveforms[1]["pi_2_pifr"])]
+        # n_array_p = [len(self._waveforms[4]["p1_p1fr"]), len(self._waveforms[4]["p2_p2fr"]),  len(self._waveforms[4]["p1_p2fr"]), len(self._waveforms[4]["p2_p1fr"]), len(self._waveforms[4]["p1_pi_2fr"]), len(self._waveforms[4]["p2_pi_2fr"]),len(self._waveforms[4]["p1_pifr"]), len(self._waveforms[4]["p2_pifr"])]
+        #
+        #
+        # rf_cores = [1,2,3]
+        # p_cores = [4]
+        #  ##Generate sequences for RF core
+        # for idx in rf_cores:
+        #     waveforms = Waveforms()
+        #     waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_pifr"])
+        #     waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi_2_pi_2fr"])
+        #     waveforms.assign_waveform(slot = 2, wave1 = self._waveforms[idx]["pi_2_pifr"])
+        #     waveforms_awg[idx] = waveforms
+        #     seq_code[idx] =  make_waveform_placeholders(n_array_rf)
+        #     command_code[idx] = ""
+        #     sequence = "repeat("+str(n_outer)+"){\n "
+        #     for ii in range(len(ct_idxs_all)):
+        #         n_seq = ct_idxs_all[ii]['rf'][str(idx-1)]
+        #         if external_trigger == False:
+        #             pass
+        #         else:
+        #           if idx == trigger_channel:
+        #               seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
+        #           else:
+        #               seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
+        #         sequence += seq
+        #         command_code[idx] = command_code[idx] + sequence
+        #         sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
+        #
+        # ##Generate sequences for DC core
+        # for idx in p_cores:
+        #     waveforms = Waveforms()
+        #     waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["p1_p1fr"])
+        #     waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["p2_p2fr"])
+        #     waveforms.assign_waveform(slot = 2, wave1 = self._waveforms[idx]["p1_p2fr"])
+        #     waveforms.assign_waveform(slot = 3, wave1 = self._waveforms[idx]["p2_p1fr"])
+        #     waveforms.assign_waveform(slot = 4, wave1 = self._waveforms[idx]["p1_pi_2fr"])
+        #     waveforms.assign_waveform(slot = 5, wave1 = self._waveforms[idx]["p2_pi_2fr"])
+        #     waveforms.assign_waveform(slot = 6, wave1 = self._waveforms[idx]["p1_pifr"])
+        #     waveforms.assign_waveform(slot = 7, wave1 = self._waveforms[idx]["p2_pifr"])
+        #     waveforms_awg[idx] = waveforms
+        #     seq_code[idx] = make_waveform_placeholders(n_array_p)
+        #     command_code[idx] = ""
+        #     sequence = "repeat("+str(n_outer)+"){\n "
+        #     for ii in range(len(ct_idxs_all)):
+        #         n_seq = ct_idxs_all[ii]['plunger'][str(6)]
+        #         if external_trigger == False:
+        #             pass
+        #         else:
+        #           if idx == trigger_channel:
+        #               seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
+        #           else:
+        #               seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
+        #         sequence += seq
+        #         command_code[idx] = command_code[idx] + sequence
+        #         sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
+        # self._sequencer_code = sequencer_code
+        # for idx in range(0,3):
+        #    self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
+        #    self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
 
     #     self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
     #     self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
