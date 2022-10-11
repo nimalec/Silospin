@@ -1014,7 +1014,7 @@ def generate_waveforms_v4(gate_npoints, channel_map):
         waveforms[idx_p]["p2_p1fr"] = rectangular(gate_npoints["plunger"][8]["p"], amp, min_points = gate_npoints["plunger"][7]["p"])
     else:
         waveforms[idx_p]["p1_p2fr"] = rectangular(gate_npoints["plunger"][7]["p"], amp, min_points = gate_npoints["plunger"][7]["p"])
-        waveforms[idx_p]["p1_p2fr"] = rectangular(gate_npoints["plunger"][8]["p"], amp, min_points = gate_npoints["plunger"][8]["p"])
+        waveforms[idx_p]["p2_p1fr"] = rectangular(gate_npoints["plunger"][8]["p"], amp, min_points = gate_npoints["plunger"][8]["p"])
 
 
     waveforms[idx_p]["p1_p1fr"] = rectangular(gate_npoints["plunger"][7]["p"], amp, min_points = gate_npoints["plunger"][7]["p"])
