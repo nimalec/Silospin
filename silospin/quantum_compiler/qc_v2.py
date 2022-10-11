@@ -217,7 +217,7 @@ class GateSetTomographyProgramPlunger:
             waveforms_awg[idx] = waveforms
             seq_code[idx] = make_waveform_placeholders(n_array_p)
             command_code[idx] = ""
-              sequence = "repeat("+str(n_outer)+"){\n "
+            sequence = "repeat("+str(n_outer)+"){\n "
             for ii in range(len(ct_idxs_all)):
                 n_seq = ct_idxs_all[ii]['plunger'][str(6)]
                 if external_trigger == False:
