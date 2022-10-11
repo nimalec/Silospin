@@ -133,16 +133,10 @@ class GateSetTomographyProgramPlunger:
         #self._waveforms = generate_waveforms_v3(self._gate_npoints, channel_mapping)
         ##Need to modify this
         self._waveforms = generate_waveforms_v4(self._gate_npoints, channel_mapping)
-        for i in self._waveforms:
-            print(i)
-
 
         ##6. Modify to account for new gate seq format
         #1. Modify this function to take in "qubit_lenghts of differnet form "
         self._gate_sequences = quantum_protocol_parser_v4(self._gst_path, self._gate_lengths, channel_mapping)
-
-
-
 
         ##7. Modify ct_idxs to account for plunger gates
         ##ct_idxs_all ==> ct_idxs_all[line_number]['rf'][core_number]
@@ -242,7 +236,7 @@ class GateSetTomographyProgramPlunger:
 
         for idx in range(0,3):
             self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
-            self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx+1])
+            #self._awg._awgs["awg"+str(idx+1)].write_to_waveform_memory(waveforms_awg[idx+1])
 
     #     self._channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
     #     self._channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
