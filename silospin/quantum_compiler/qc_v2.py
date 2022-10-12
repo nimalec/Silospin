@@ -168,8 +168,6 @@ class GateSetTomographyProgramPlunger:
         self._command_tables = {'rf': command_tables_rf, 'plunger': command_table_plunger}
 
 
-
-
         waveforms_awg = {}
         sequencer_code = {}
         seq_code = {}
