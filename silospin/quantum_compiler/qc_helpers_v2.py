@@ -1098,5 +1098,5 @@ def generate_reduced_command_table_p_core_v1(n_p, n_rf):
     #Z0 phase increment
     ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
     ct_idx += 1
-    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
