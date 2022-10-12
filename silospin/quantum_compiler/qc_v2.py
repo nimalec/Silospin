@@ -193,7 +193,7 @@ class GateSetTomographyProgramPlunger:
                 if external_trigger == False:
                     pass
                 else:
-                  if idx == trigger_channel:
+                  if idx-1 == trigger_channel:
                       seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
                   else:
                       seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
