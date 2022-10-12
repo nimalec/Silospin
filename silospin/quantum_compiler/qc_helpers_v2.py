@@ -291,7 +291,7 @@ def generate_reduced_command_table_v2(n_pi_2, n_pi, arbZ=[]):
         for item in arbZ:
             ct.append({"index": item[0], "phase0": {"value": item[1], "increment": True}, "phase1": {"value": item[1],  "increment": True}})
 
-    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '0.2'}, 'table': ct}
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
 def generate_reduced_command_table_v3(pulse_lengths, arbZ=[], plungers=[]):
