@@ -198,9 +198,15 @@ def generate_reduced_command_table_rf_core_v0(n_pi_2, n_pi, n_p=[], arbZ=[]):
     if len(arbZ) == 0:
         pass
     else:
+        ii = 0
         for item in arbZ:
-            ct.append({"index": item[0], "phase0": {"value": item[1], "increment": True}, "phase1": {"value": item[1],  "increment": True}})
-            ct_idx += 1 
+            if ii == 0:
+                ct.append({"index": item[0], "phase0": {"value": item[1], "increment": True}, "phase1": {"value": item[1],  "increment": True}})
+                ii = item[0]
+            else:
+                ct.append({"index": item[0], "phase0": {"value": item[1], "increment": True}, "phase1": {"value": item[1],  "increment": True}})
+                ii += 1  
+
    #ct_idx = 37+n_p+n_z at this point
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
