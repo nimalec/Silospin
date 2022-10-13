@@ -203,6 +203,7 @@ def generate_reduced_command_table_rf_core_v0(n_pi_2, n_pi, n_p=[], arbZ=[]):
             if ii == 0:
                 ct.append({"index": item[0], "phase0": {"value": item[1], "increment": True}, "phase1": {"value": item[1],  "increment": True}})
                 ii = item[0]
+                ii+= 1
             else:
                 ct.append({"index": ii, "phase0": {"value": item[1], "increment": True}, "phase1": {"value": item[1],  "increment": True}})
                 ii += 1
