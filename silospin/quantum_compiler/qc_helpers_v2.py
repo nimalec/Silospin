@@ -1065,7 +1065,8 @@ def generate_reduced_command_table_p_core_v1(n_p, n_rf):
     n_pi_2 = n_rf[0]
     n_pi = n_rf[1]
     ct = []
-    waves = [{"index": 0, "awgChannel0": ["sigout0"]}, {"index": 1, "awgChannel1": ["sigout1"]},  {"index": 2, "awgChannel0": ["sigout0"]}, {"index": 3, "awgChannel1": ["sigout1"]} ,  {"index": 4, "awgChannel0": ["sigout0"]}, {"index": 5, "awgChannel1": ["sigout1"]},  {"index": 6, "awgChannel0": ["sigout0"]}, {"index": 7, "awgChannel1": ["sigout1"]}]
+    #waves = [{"index": 0, "awgChannel0": ["sigout0"]}, {"index": 1, "awgChannel1": ["sigout1"]},  {"index": 2, "awgChannel0": ["sigout0"]}, {"index": 3, "awgChannel1": ["sigout1"]} ,  {"index": 4, "awgChannel0": ["sigout0"]}, {"index": 5, "awgChannel1": ["sigout1"]},  {"index": 6, "awgChannel0": ["sigout0"]}, {"index": 7, "awgChannel1": ["sigout1"]}]
+    waves = [{"index": 0, "awgChannel0": ["sigout0", "sigout1"]}, {"index": 1, "awgChannel0": ["sigout0", "sigout1"]},  {"index": 2, "awgChannel0": ["sigout0", "sigout1"]}, {"index": 3, "awgChannel0": ["sigout0", "sigout1"]} ,  {"index": 4, "awgChannel0": ["sigout0", "sigout1"]}, {"index": 5, "awgChannel0": ["sigout0", "sigout1"]},  {"index": 6, "awgChannel0": ["sigout0", "sigout1"]}, {"index": 7, "awgChannel0": ["sigout0", "sigout1"]}]
     ct_idx = 0
     #p_1 (p_1_fr)
     ct.append({"index": ct_idx, "waveform": waves[0]})
