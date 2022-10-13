@@ -154,7 +154,6 @@ class GateSetTomographyProgramPlunger:
             ##each element ct_idxs_all[idx] has 'rf' and 'plungers'
             ct_idxs_all[idx], arbZ = make_command_table_idxs_rf_p_v0(gate_sequence, taus_std_v2, plunger_set, n_arbZ)
             n_arbZ += len(arbZ)
-            print(n_arbZ)
             arbZs.append(arbZ)
 
         arbZ_s = []
