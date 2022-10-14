@@ -96,8 +96,8 @@ class GateSetTomographyProgramPlunger:
             plunger_set_npoints_tups.append((idx, ceil(self._gate_parameters["p"][idx]["tau"]*2.4/32)*32))
 
         ##Define standard pi/2 length and corresponding gate index
-        tau_pi_2_standard = max(tau_pi_2_set,key=itemgetter(1))[1]
-        tau_pi_standard = 2*tau_pi_2_standard
+        tau_pi_2_standard_1 = max(tau_pi_2_set,key=itemgetter(1))[1]
+        tau_pi_standard_1 = 2*tau_pi_2_standard
         standard_rf_idx = max(tau_pi_2_set,key=itemgetter(1))[0]
 
         ##Define standard plunger and corresponding gate length
@@ -105,8 +105,8 @@ class GateSetTomographyProgramPlunger:
         standard_p_idx = max(plunger_set,key=itemgetter(1))[0]
 
         ##2. Defines standard npoints for each gate
-        npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard*1e-9/32)*32
-        npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard*1e-9/32)*32
+        npoints_pi_2_standard = ceil(self._sample_rate*tau_pi_2_standard_1*1e-9/32)*32
+        npoints_pi_standard = ceil(self._sample_rate*tau_pi_standard_1*1e-9/32)*32
         npoints_p_standard = ceil(self._sample_rate*tau_p_standard*1e-9/32)*32
 
         ##3. Define standard plunger gate lengths here
@@ -124,7 +124,9 @@ class GateSetTomographyProgramPlunger:
 
 
         self._gate_npoints = make_gate_npoints(self._gate_parameters, self._sample_rate)
-        self._gate_lengths = make_gate_lengths(self._gate_parameters)
+        #self._gate_lengths = make_gate_lengths(self._gate_parameters)
+        self._gate_lengths = make_gate_lengths_v2(self._gate_parameters, tau_pi_2_standard_1, tau_pi_standard_1)
+
 
 
 

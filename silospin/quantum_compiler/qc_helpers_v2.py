@@ -1109,3 +1109,14 @@ def generate_reduced_command_table_p_core_v1(n_p, n_rf):
     ct_idx += 1
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
+    
+def make_gate_lengths_v2(gate_parameters, t_pi_2_max, t_pi_max):
+    gate_lengths = {"rf": {}, "plunger": {}}
+    for idx in gate_parameters["rf"]:
+       t_pi = ceil(t_pi_max)
+       t_pi_2 = ceil(t_pi_2_max)
+       gate_lengths["rf"][idx] = {"pi": t_pi, "pi_2": t_pi_2}
+    for idx in gate_parameters["p"]:
+        t_p = ceil(gate_parameters["p"][idx]["tau"])
+        gate_lengths["plunger"][idx] = {"p": t_p}
+    return gate_lengths
