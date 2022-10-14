@@ -604,6 +604,7 @@ def make_command_table_idxs_rf_p_v0(gt_seqs, taus_std, taus_p, n_arbZ):
                             ##if corresponds to any plunger gate duration ==> assgn correspondig ct index (35 <= ct_idx <= 35 + N_p)
                             if gt_t_str == taus_ct_idxs['plunger'][item]['tau_p']:
                                 rf_ct_idx_list.append(taus_ct_idxs['plunger'][item]['ct_idx'])
+                                break 
                             else:
                                 continue
 
@@ -659,6 +660,7 @@ def make_command_table_idxs_rf_p_v0(gt_seqs, taus_std, taus_p, n_arbZ):
                             ##if corresponds to any plunger gate duration ==> assgn correspondig ct index (35 <= ct_idx <= 35 + N_p)
                             if gt_t_str == taus_ct_idxs['plunger'][item]['tau_p']:
                                 rf_ct_idx_list.append(taus_ct_idxs['plunger'][item]['ct_idx'])
+                                break
                             else:
                                 continue
                 #4  Case 4: Z gate is present
@@ -1109,7 +1111,7 @@ def generate_reduced_command_table_p_core_v1(n_p, n_rf):
     ct_idx += 1
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
-    
+
 def make_gate_lengths_v2(gate_parameters, t_pi_2_max, t_pi_max):
     gate_lengths = {"rf": {}, "plunger": {}}
     for idx in gate_parameters["rf"]:
