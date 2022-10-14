@@ -97,7 +97,7 @@ class GateSetTomographyProgramPlunger:
 
         ##Define standard pi/2 length and corresponding gate index
         tau_pi_2_standard_1 = max(tau_pi_2_set,key=itemgetter(1))[1]
-        tau_pi_standard_1 = 2*tau_pi_2_standard
+        tau_pi_standard_1 = 2*tau_pi_2_standard_1
         standard_rf_idx = max(tau_pi_2_set,key=itemgetter(1))[0]
 
         ##Define standard plunger and corresponding gate length
