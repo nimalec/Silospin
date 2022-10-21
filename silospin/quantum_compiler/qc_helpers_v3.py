@@ -699,17 +699,17 @@ def make_command_table_idxs_rf_p_v1(gt_seqs, taus_std, taus_p, n_arbZ):
                 pass
             plunger_ct_idxs[p_idx] = p_ct_idx_list
 
-    new_p_gate_lst = []
-    for i in range(len(plunger_ct_idxs['6'])):
-        if plunger_ct_idxs['6'][i] == plunger_ct_idxs['7'][i]:
-            new_p_gate_lst.append(plunger_ct_idxs['6'][i])
-        elif plunger_ct_idxs['6'][i] in {10,11,12,13,14} and plunger_ct_idxs['7'][i] not in {10,11,12,13,14}:
-            new_p_gate_lst.append(plunger_ct_idxs['6'][i])
-        elif plunger_ct_idxs['7'][i] in {10,11,12,13,14} and plunger_ct_idxs['6'][i] not in {10,11,12,13,14}:
-            new_p_gate_lst.append(plunger_ct_idxs['6'][i])
-
-    plunger_ct_idxs['6'] = new_p_gate_lst
-    plunger_ct_idxs['7'] = new_p_gate_lst
+    # new_p_gate_lst = []
+    # for i in range(len(plunger_ct_idxs['6'])):
+    #     if plunger_ct_idxs['6'][i] == plunger_ct_idxs['7'][i]:
+    #         new_p_gate_lst.append(plunger_ct_idxs['6'][i])
+    #     elif plunger_ct_idxs['6'][i] in {10,11,12,13,14} and plunger_ct_idxs['7'][i] not in {10,11,12,13,14}:
+    #         new_p_gate_lst.append(plunger_ct_idxs['6'][i])
+    #     elif plunger_ct_idxs['7'][i] in {10,11,12,13,14} and plunger_ct_idxs['6'][i] not in {10,11,12,13,14}:
+    #         new_p_gate_lst.append(plunger_ct_idxs['6'][i])
+    #
+    # plunger_ct_idxs['6'] = new_p_gate_lst
+    # plunger_ct_idxs['7'] = new_p_gate_lst
     ct_idxs['plunger'] = plunger_ct_idxs
     return ct_idxs, arbZ
 
