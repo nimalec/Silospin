@@ -628,10 +628,8 @@ def make_command_table_idxs_rf_p_v1(gt_seqs, taus_std, taus_p, n_arbZ):
     plunger_ct_idxs = {}
     ##Loops over plunger gate channels in plunger gate seqeunce
     for p_idx in plunger_gate_sequence:
-        ##Deine a list to append to ==> plunger gate CT indices
         plunger_ct_idxs[p_idx] = []
         p_ct_idx_list = []
-        ##Other plunger channels present
         p_diff_idxs = list(set([i for i in plunger_gate_sequence.keys()]).difference(p_idx))
         rf_diff_idxs = list([i for i in rf_gate_sequence.keys()])
         gate_sequence = plunger_gate_sequence[p_idx]
@@ -700,6 +698,18 @@ def make_command_table_idxs_rf_p_v1(gt_seqs, taus_std, taus_p, n_arbZ):
             else:
                 pass
             plunger_ct_idxs[p_idx] = p_ct_idx_list
+
+    new_p_gate_lst = []
+    for i in range(len(plunger_ct_idxs['6'])):
+        if plunger_ct_idxs['6'][i] == plunger_ct_idxs['7'][i]:
+            new_p_gate_lst.append(plunger_ct_idxs['6'][i])
+        elif plunger_ct_idxs['6'][i] in {10,11,12,13,14} and plunger_ct_idxs['7'][i] not in {10,11,12,13,14}:
+            new_p_gate_lst.append(plunger_ct_idxs['6'][i])
+        elif plunger_ct_idxs['7'][i] in {10,11,12,13,14} and plunger_ct_idxs['6'][i] not in {10,11,12,13,14}:
+            new_p_gate_lst.append(plunger_ct_idxs['6'][i])
+
+    plunger_ct_idxs['6'] = new_p_gate_lst
+    plunger_ct_idxs['7'] = new_p_gate_lst
     ct_idxs['plunger'] = plunger_ct_idxs
     return ct_idxs, arbZ
 
@@ -941,6 +951,21 @@ def make_waveform_placeholders(n_array):
         idx+=1
     return sequence_code
 
+def make_waveform_placeholders_plungers(n_array):
+    idx = 0
+    line_1 = "assignWaveIndex(placeholder("+str(n_array[0])+"),"+"0"+");\n"
+    line_2 = "assignWaveIndex(placeholder("+str(n_array[1])+"),"+"1"+");\n"
+    line_3 = "assignWaveIndex(placeholder("+str(n_array[2])+"),"+ "placeholder("+str(n_array[3])+"),"+"2"+");\n"
+    line_4 = "assignWaveIndex(placeholder("+str(n_array[2])+"),"+ "placeholder("+str(n_array[3])+"),"+"3"+");\n"
+    line_5 = "assignWaveIndex(placeholder("+str(n_array[4])+"),"+"4"+");\n"
+    line_6 = "assignWaveIndex(placeholder("+str(n_array[5])+"),"+"5"+");\n"
+    line_7 = "assignWaveIndex(placeholder("+str(n_array[6])+"),"+"6"+");\n"
+    line_8 = "assignWaveIndex(placeholder("+str(n_array[7])+"),"+"7"+");\n"
+    line_9 = "assignWaveIndex(placeholder("+str(n_array[4])+"),"+ "placeholder("+str(n_array[5])+"),"+"8"+");\n"
+    line_10 = "assignWaveIndex(placeholder("+str(n_array[6])+"),"+ "placeholder("+str(n_array[7])+"),"+"9"+");\n"
+    sequence_code = line_1+line_2+line_3+line_4+line_5+line_6+line_7+line_8+line_9+line_10
+    return sequence_code
+
 def make_gateset_sequencer_ext_trigger(n_seq, n_av, trig_channel=True):
     command_code = ""
     for n in n_seq:
@@ -1082,6 +1107,102 @@ def generate_waveforms_v5(gate_npoints, channel_map, min_padding_cores={1: 0, 2:
     else:
         pass
 
+    waveforms[idx_p]["p1_p1fr"] = rectangular(gate_npoints["plunger"][7]["p"], amp, min_points = npoints_p_1)
+    waveforms[idx_p]["p2_p2fr"] = rectangular(gate_npoints["plunger"][8]["p"], amp, min_points = npoints_p_2)
+    waveforms[idx_p]["p1_pi_2fr"] = rectangular(gate_npoints["plunger"][7]["p"], amp, min_points = npoints_pi_2_std)
+    waveforms[idx_p]["p2_pi_2fr"] = rectangular(gate_npoints["plunger"][8]["p"], amp, min_points = npoints_pi_2_std)
+    waveforms[idx_p]["p1_pifr"] = rectangular(gate_npoints["plunger"][7]["p"], amp, min_points = npoints_pi_std)
+    waveforms[idx_p]["p2_pifr"] = rectangular(gate_npoints["plunger"][8]["p"], amp, min_points = npoints_pi_std)
+    return waveforms
+
+def generate_waveforms_v6(gate_npoints, channel_map, min_padding_cores={1: 0, 2: 0, 3: 0, 4: 0}):
+    ##min_padding_cores --> min padding to be added (in number of points for each core. This is the total amount for each core)
+    amp = 1
+    waveforms = {}
+    for idx in channel_map:
+        if channel_map[idx]["rf"] == 1:
+            #3 waveforms for rf cores
+            waveforms[idx] = {"pi_pifr": None, "pi_2_pi_2fr": None, "pi_2_pifr": None}
+        elif channel_map[idx]["rf"] == 0:
+            #8 waveforms for plugner cores
+            waveforms[idx] = {"p1_p1fr": None, "p2_p2fr": None, "p1_p2fr": None, "p2_p1fr": None, "p1_pi_2fr": None , "p2_pi_2fr": None, "p1_pifr": None , "p2_pifr": None}
+        else:
+            pass
+
+    rf_pi_npoints = {}
+    for i in gate_npoints["rf"]:
+        rf_pi_npoints[i] = gate_npoints["rf"][i]["pi"]
+
+    plunger_npoints = {}
+    for i in gate_npoints["plunger"]:
+        plunger_npoints[i] = gate_npoints["plunger"][i]["p"]
+
+
+    ch_map_rf = {}
+    ch_map_p = {}
+    for i in channel_map:
+        if channel_map[i]["rf"] == 1:
+            rf_ch = channel_map[i]["ch"]["gateindex"][0]
+            rf_core = i
+            ch_map_rf[rf_ch] = rf_core
+        else:
+            p_ch_1 = channel_map[i]["ch"]["gateindex"][0]
+            p_ch_2 = channel_map[i]["ch"]["gateindex"][1]
+            p_core = i
+            ch_map_p[p_ch_1] = p_core
+            ch_map_p[p_ch_2] = p_core
+
+    ## Number of points for standard pulses
+    ##1. RF pules: pi and pi_2 lengths
+    max_rf_key = max(rf_pi_npoints, key=lambda k: rf_pi_npoints[k])
+    npoints_pi_std = gate_npoints["rf"][max_rf_key]["pi"]
+    npoints_pi_2_std = gate_npoints["rf"][max_rf_key]["pi_2"]
+
+    ##2. Plunger pulses: pi frame, pi_2 frame, p_other frame, p_same
+    max_p_key = max(plunger_npoints, key=lambda k: plunger_npoints[k])
+    npoints_p_std = gate_npoints["plunger"][max_p_key]["p"]
+
+  #  waveforms[idx] = {"pi_pifr": None, "pi_2_pi_2fr": None, "pi_2_pifr": None}
+   #waveforms[idx] = {"p1_p1fr": None, "p2_p2fr": None, "p1_p2fr": None, "p2_p1fr": None, "p1_pi_2_fr": None , "p2_pi_2fr": None, "p1_pifr": None , "p2_pifr": None}
+    ##Replace loop with core mapping...
+    if npoints_pi_std < 48:
+         npoints_pi_std_1 = 48
+    elif npoints_pi_std >= 48:
+         npoints_pi_std_1 = npoints_pi_std
+    else:
+        pass
+    if npoints_pi_2_std < 48:
+         npoints_pi_2_std_1 = 48
+    elif npoints_pi_2_std >= 48:
+        npoints_pi_2_std_1 = npoints_pi_2_std
+    else:
+       pass
+
+    for i in gate_npoints["rf"]:
+        ##Map idx to core number here...
+        idx = ch_map_rf[i]
+        waveforms[idx]["pi_pifr"] = rectangular(gate_npoints["rf"][i]["pi"], amp, min_points = npoints_pi_std_1)
+        waveforms[idx]["pi_2_pi_2fr"] = rectangular(gate_npoints["rf"][i]["pi_2"], amp, min_points = npoints_pi_2_std_1)
+        waveforms[idx]["pi_2_pifr"] = rectangular(gate_npoints["rf"][i]["pi_2"], amp, min_points = npoints_pi_std_1)
+
+
+    ##Set to 7 here for the specific case when core 4 is the dedicated plunger core
+    idx_p = ch_map_p[7]
+    if gate_npoints["plunger"][7]["p"] < 48:
+        npoints_p_1 = 48
+    elif gate_npoints["plunger"][7]["p"] >= 48:
+        npoints_p_1 = gate_npoints["plunger"][7]["p"]
+    else:
+        pass
+    if gate_npoints["plunger"][8]["p"] < 48:
+        npoints_p_2 = 48
+    elif gate_npoints["plunger"][8]["p"] >= 48:
+        npoints_p_2 = gate_npoints["plunger"][8]["p"]
+    else:
+        pass
+    npoints_p1p2_fr = max([npoints_p_1,npoints_p_2])
+    waveforms[idx_p]["p1_p2fr"] = rectangular(gate_npoints["plunger"][7]["p"], amp, min_points = npoints_p1p2_fr)
+    waveforms[idx_p]["p2_p1fr"] = rectangular(gate_npoints["plunger"][8]["p"], amp, min_points = npoints_p1p2_fr)
     waveforms[idx_p]["p1_p1fr"] = rectangular(gate_npoints["plunger"][7]["p"], amp, min_points = npoints_p_1)
     waveforms[idx_p]["p2_p2fr"] = rectangular(gate_npoints["plunger"][8]["p"], amp, min_points = npoints_p_2)
     waveforms[idx_p]["p1_pi_2fr"] = rectangular(gate_npoints["plunger"][7]["p"], amp, min_points = npoints_pi_2_std)
