@@ -126,7 +126,7 @@ class GateSetTomographyProgramPlunger_V3:
 
         ##5. Modify to generte plunger waveforms
         ## Modify padding scheme here.... min_padding_cores={1: 0, 2: 0, 3: 0, 4: 0}
-        self._waveforms = generate_waveforms_v5(self._gate_npoints, channel_mapping)
+        self._waveforms = generate_waveforms_v6(self._gate_npoints, channel_mapping)
 
         #6. Modify to account for new gate seq format
         #1. Modify this function to take in "qubit_lenghts of differnet form "
