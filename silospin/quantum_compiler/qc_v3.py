@@ -189,25 +189,25 @@ class GateSetTomographyProgramPlunger_V3:
                 command_code[idx] = command_code[idx] + sequence
                 sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
 
-    #     ##Generate sequences for DC core
-    #     idx = 4
-    #     waveforms = Waveforms()
-    #     waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["p1_p1fr"])
-    #     waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["p2_p2fr"])
-    #     waveforms.assign_waveform(slot = 2, wave1 = self._waveforms[idx]["p1_p2fr"], wave2 = self._waveforms[idx]["p2_p1fr"])
-    #     waveforms.assign_waveform(slot = 3, wave1 = self._waveforms[idx]["p1_p2fr"], wave2 = self._waveforms[idx]["p2_p1fr"])
-    #     waveforms.assign_waveform(slot = 4, wave1 = self._waveforms[idx]["p1_pi_2fr"])
-    #     waveforms.assign_waveform(slot = 5, wave1 = self._waveforms[idx]["p2_pi_2fr"])
-    #     waveforms.assign_waveform(slot = 6, wave1 = self._waveforms[idx]["p1_pifr"])
-    #     waveforms.assign_waveform(slot = 7, wave1 = self._waveforms[idx]["p2_pifr"])
-    #     waveforms.assign_waveform(slot = 8, wave1 = self._waveforms[idx]["p1_pi_2fr"],  wave2 = self._waveforms[idx]["p2_pi_2fr"])
-    #     waveforms.assign_waveform(slot = 9, wave1 = self._waveforms[idx]["p1_pifr"],  wave2 = self._waveforms[idx]["p2_pifr"])
-    #
-    #     waveforms_awg[idx] = waveforms
-    #
-    #     seq_code[idx] = make_waveform_placeholders_plungers(n_array_p)
-    #     command_code[idx] = ""
-    #
+        ##Generate sequences for DC core
+        idx = 4
+        waveforms = Waveforms()
+        waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["p1_p1fr"])
+        waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["p2_p2fr"])
+        waveforms.assign_waveform(slot = 2, wave1 = self._waveforms[idx]["p1_p2fr"], wave2 = self._waveforms[idx]["p2_p1fr"])
+        waveforms.assign_waveform(slot = 3, wave1 = self._waveforms[idx]["p1_p2fr"], wave2 = self._waveforms[idx]["p2_p1fr"])
+        waveforms.assign_waveform(slot = 4, wave1 = self._waveforms[idx]["p1_pi_2fr"])
+        waveforms.assign_waveform(slot = 5, wave1 = self._waveforms[idx]["p2_pi_2fr"])
+        waveforms.assign_waveform(slot = 6, wave1 = self._waveforms[idx]["p1_pifr"])
+        waveforms.assign_waveform(slot = 7, wave1 = self._waveforms[idx]["p2_pifr"])
+        waveforms.assign_waveform(slot = 8, wave1 = self._waveforms[idx]["p1_pi_2fr"],  wave2 = self._waveforms[idx]["p2_pi_2fr"])
+        waveforms.assign_waveform(slot = 9, wave1 = self._waveforms[idx]["p1_pifr"],  wave2 = self._waveforms[idx]["p2_pifr"])
+
+        waveforms_awg[idx] = waveforms
+
+        seq_code[idx] = make_waveform_placeholders_plungers(n_array_p)
+        command_code[idx] = ""
+
     #     sequence = "repeat("+str(n_outer)+"){\n "
     #     for ii in range(len(ct_idxs_all)):
     #         n_seq = ct_idxs_all[ii]['plunger'][str(6)]
