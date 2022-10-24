@@ -47,8 +47,7 @@ class MfliDriver:
         self._daq_module = self._daq.dataAcquisitionModule()
         self._scope_module = self._daq.scopeModule()
         self._demods_settings = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable"), "adcselect": self._daq.getInt(f"/{self._device}/demods/0/adcselect") ,
-        "bypass": self._daq.getInt(f"/{self._device}/demods/0/bypass"), "freq": self._daq.getDouble(f"/{self._device}/demods/0/freq"), "harmonic":
-        self._daq.getInt(f"/{self._device}/demods/0/bypass"), "order": self._daq.getInt(f"/{self._device}/demods/0/order"),
+         "freq": self._daq.getDouble(f"/{self._device}/demods/0/freq"), "order": self._daq.getInt(f"/{self._device}/demods/0/order"),
         "oscselect": self._daq.getInt(f"/{self._device}/demods/0/oscselect"),   "phaseshift": self._daq.getDouble(f"/{self._device}/demods/0/phaseshift"),
         "phaseadjust":  self._daq.getInt(f"/{self._device}/demods/0/phaseadjust"), "rate" : self._daq.getDouble(f"/{self._device}/demods/0/rate"),
         "sinc": self._daq.getInt(f"/{self._device}/demods/0/sinc"), "timeconstant": self._daq.getDouble(f"/{self._device}/demods/0/timeconstant")
