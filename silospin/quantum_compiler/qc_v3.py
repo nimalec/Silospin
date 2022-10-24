@@ -247,7 +247,7 @@ class GateSetTomographyProgramPlunger_V3:
               self._awg._hdawg.sigouts[i_idx].on(1)
               self._awg._hdawg.sigouts[q_idx].on(1)
               daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables['rf']))
-              
+
         p_idx = 3
         i_idx = 6
         q_idx = 7
