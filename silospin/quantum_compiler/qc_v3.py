@@ -170,6 +170,7 @@ class GateSetTomographyProgramPlunger_V3:
             waveforms = Waveforms()
             waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_pifr"])
             waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["pi_2_pi_2fr"])
+            print(len(self._waveforms[idx]["pi_2_pi_2fr"]))
             waveforms.assign_waveform(slot = 2, wave1 = self._waveforms[idx]["pi_2_pifr"])
             waveforms_awg[idx] = waveforms
             seq_code[idx] =  make_waveform_placeholders(n_array_rf)
