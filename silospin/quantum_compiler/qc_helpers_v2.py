@@ -746,6 +746,7 @@ def make_command_table_idxs_rf_p_v0(gt_seqs, taus_std, taus_p, n_arbZ):
             else:
                 if gt[0] in {"x", "y", "m"}:
                     phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
+                    phi_a = -phi_a
                 else:
                     pass
 
