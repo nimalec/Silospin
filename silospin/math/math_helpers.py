@@ -4,7 +4,7 @@ def gauss(x, amp, mu, sig):
     return amp*np.exp(-(x-mu)**2/(2*sig**2))
 
 def rectangular(npoints, amp, min_points = 48):
-    min_npoints = ceil(min_points/16)*16
+    #min_npoints = ceil(min_points/16)*16
     array = amp*np.ones(npoints)
     if npoints < min_points:
         npoints_pad = min_points - npoints
