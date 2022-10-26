@@ -895,10 +895,10 @@ def generate_reduced_command_table_p_core_v2(n_p, n_rf):
     ct = []
     ct_idx = 0
     #p_1 (p_1_fr)
-    ct.append({"index": ct_idx, "waveform": waves[0], "amplitude0": {"value": 1}, "amplitude1": {"value": 0}})
+    ct.append({"index": ct_idx, "waveform": waves[0]})
     ct_idx += 1
     #p_2 (p_2_fr)
-    ct.append({"index": ct_idx, "waveform": waves[1], "amplitude0": {"value": 0}, "amplitude1": {"value": 1}})
+    ct.append({"index": ct_idx, "waveform": waves[1]})
     ct_idx += 1
     #p_1 (p_2_fr)
     ct.append({"index": ct_idx, "waveform": waves[2]})
