@@ -128,8 +128,6 @@ class GateSetTomographyProgramPlunger:
         self._gate_lengths = make_gate_lengths_v2(self._gate_parameters, tau_pi_2_standard_1, tau_pi_standard_1)
 
 
-
-
         ##5. Modify to generte plunger waveforms
         ## Waveform output should be separated into rf and plunger waveforms
         #self._waveforms = generate_waveforms_v3(self._gate_npoints, channel_mapping)

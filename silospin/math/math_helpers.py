@@ -22,16 +22,33 @@ def rectangular(npoints, amp, min_points = 48):
         array = amp*np.ones(npoints)
     return array
 
-def rectangular_add_padding(npoints, amp, min_points = 48):
+def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_rate=2.4e9):
     #min_npoints = ceil(min_points/16)*16
     #net_pad = min_points - npoints  (if npoints < min_points)
     #net_pad  = 0 (if n_points = min_points)
-    #add assert for npoints > min_points ==> cannot have st npoitns > min_poitns
     #additional_pad = (2*side_pad*sample_rate/16)*16
     #if net_pad = 0 , min_points ->  min_points + additional_pad
     #else (net_pad !=0), pad_prime = ceil(net_pad/16)*16 - additional_pad
     #min_points -> min_points + pad_prime
+    try:
+        if npoints >= min_points:
+            raise TypeError("Minimum number of points should be greater than or equal to the minimum number specified!")
+    except TypeError:
+        raise
 
+    min_npoints = ceil(min_points/16)*16
+    net_pad_0 = min_points - npoints
+
+    if side_pad == 0:
+        pass
+    else:
+        added_pad_0 = (2*side_pad*sample_rate/16)*16
+        if net_pad_0 == 0:
+            min_points = min_points + added_pad_0
+        else:
+            added_pad_1= ceil(net_pad_0/16)*16 - added_pad_0
+            min_points = int(min_points + added_pad_0)
+    min_points = ceil(min_points/16)*16
     array = amp*np.ones(npoints)
     if npoints < min_points:
         npoints_pad = min_points - npoints
@@ -48,7 +65,6 @@ def rectangular_add_padding(npoints, amp, min_points = 48):
     else:
         array = amp*np.ones(npoints)
     return array
-
 
 def compute_accumulated_phase(gt, phi_l):
     phi_d_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90}
