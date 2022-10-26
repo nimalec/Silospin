@@ -958,13 +958,14 @@ def make_waveform_placeholders_plungers(n_array):
     line_1 = "assignWaveIndex(placeholder("+str(n_array[0])+"),"+"0"+");\n"
 #    line_2 = "assignWaveIndex(placeholder("+str(n_array[1])+"),"+"1"+");\n"
     line_2 = "assignWaveIndex(placeholder("+str(n_array[1])+"),"+ "placeholder("+str(n_array[1])+"),"+"1"+");\n"
-
     line_3 = "assignWaveIndex(placeholder("+str(n_array[2])+"),"+ "placeholder("+str(n_array[3])+"),"+"2"+");\n"
     line_4 = "assignWaveIndex(placeholder("+str(n_array[2])+"),"+ "placeholder("+str(n_array[3])+"),"+"3"+");\n"
     line_5 = "assignWaveIndex(placeholder("+str(n_array[4])+"),"+"4"+");\n"
-    line_6 = "assignWaveIndex(placeholder("+str(n_array[5])+"),"+"5"+");\n"
+    #line_6 = "assignWaveIndex(placeholder("+str(n_array[5])+"),"+"5"+");\n"
+    line_6 = "assignWaveIndex(placeholder("+str(n_array[5])+"),"+ "placeholder("+str(n_array[5])+"),"+"1"+");\n"
     line_7 = "assignWaveIndex(placeholder("+str(n_array[6])+"),"+"6"+");\n"
-    line_8 = "assignWaveIndex(placeholder("+str(n_array[7])+"),"+"7"+");\n"
+    #line_8 = "assignWaveIndex(placeholder("+str(n_array[7])+"),"+"7"+");\n"
+    line_8 = "assignWaveIndex(placeholder("+str(n_array[7])+"),"+ "placeholder("+str(n_array[7])+"),"+"1"+");\n"
     line_9 = "assignWaveIndex(placeholder("+str(n_array[4])+"),"+ "placeholder("+str(n_array[5])+"),"+"8"+");\n"
     line_10 = "assignWaveIndex(placeholder("+str(n_array[6])+"),"+ "placeholder("+str(n_array[7])+"),"+"9"+");\n"
     sequence_code = line_1+line_2+line_3+line_4+line_5+line_6+line_7+line_8+line_9+line_10
