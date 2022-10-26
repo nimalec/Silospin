@@ -189,10 +189,12 @@ class GateSetTomographyProgramPlunger_V3:
                 sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
 
         #Generate sequences for DC core
+        ##Note: needed to chage sign for case with 2 waveform slots ...
         idx = 4
         waveforms = Waveforms()
         waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["p1_p1fr"])
-        waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["p2_p2fr"])
+        #waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["p2_p2fr"])
+        waveforms.assign_waveform(slot = 1, wave2 = self._waveforms[idx]["p2_p2fr"])
         waveforms.assign_waveform(slot = 2, wave1 = -self._waveforms[idx]["p1_p2fr"], wave2 = -self._waveforms[idx]["p2_p1fr"])
         waveforms.assign_waveform(slot = 3, wave1 = -self._waveforms[idx]["p1_p2fr"], wave2 = -self._waveforms[idx]["p2_p1fr"])
         waveforms.assign_waveform(slot = 4, wave1 = self._waveforms[idx]["p1_pi_2fr"])
