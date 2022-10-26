@@ -195,8 +195,8 @@ class GateSetTomographyProgramPlunger_V3:
         waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["p1_p1fr"], wave2 = np.zeros(len(self._waveforms[idx]["p2_p2fr"])))
         #waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["p2_p2fr"])
         waveforms.assign_waveform(slot = 1, wave1 = np.zeros(len(self._waveforms[idx]["p2_p2fr"])), wave2 = self._waveforms[idx]["p2_p2fr"])
-        waveforms.assign_waveform(slot = 2, wave1 = -self._waveforms[idx]["p1_p2fr"], wave2 = -self._waveforms[idx]["p2_p1fr"])
-        waveforms.assign_waveform(slot = 3, wave1 = -self._waveforms[idx]["p1_p2fr"], wave2 = -self._waveforms[idx]["p2_p1fr"])
+        waveforms.assign_waveform(slot = 2, wave1 = self._waveforms[idx]["p1_p2fr"], wave2 = self._waveforms[idx]["p2_p1fr"])
+        waveforms.assign_waveform(slot = 3, wave1 = self._waveforms[idx]["p1_p2fr"], wave2 = self._waveforms[idx]["p2_p1fr"])
         waveforms.assign_waveform(slot = 4, wave1 = self._waveforms[idx]["p1_pi_2fr"], wave2=np.zeros(len(self._waveforms[idx]["p1_pi_2fr"])))
         #waveforms.assign_waveform(slot = 5, wave1 = self._waveforms[idx]["p2_pi_2fr"])
         waveforms.assign_waveform(slot = 5, wave1 = np.zeros(len(self._waveforms[idx]["p2_pi_2fr"])), wave2 = self._waveforms[idx]["p2_pi_2fr"])
@@ -204,8 +204,8 @@ class GateSetTomographyProgramPlunger_V3:
         #waveforms.assign_waveform(slot = 6, wave1 = self._waveforms[idx]["p1_pifr"])
         #waveforms.assign_waveform(slot = 7, wave1 = self._waveforms[idx]["p2_pifr"])
         waveforms.assign_waveform(slot = 7, wave1 = np.zeros(len(self._waveforms[idx]["p2_pifr"])), wave2 = self._waveforms[idx]["p2_pifr"])
-        waveforms.assign_waveform(slot = 8, wave1 = -self._waveforms[idx]["p1_pi_2fr"], wave2 = -self._waveforms[idx]["p2_pi_2fr"])
-        waveforms.assign_waveform(slot = 9, wave1 = -self._waveforms[idx]["p1_pifr"],  wave2 = -self._waveforms[idx]["p2_pifr"])
+        waveforms.assign_waveform(slot = 8, wave1 = self._waveforms[idx]["p1_pi_2fr"], wave2 = self._waveforms[idx]["p2_pi_2fr"])
+        waveforms.assign_waveform(slot = 9, wave1 = self._waveforms[idx]["p1_pifr"],  wave2 = self._waveforms[idx]["p2_pifr"])
 
         waveforms_awg[idx] = waveforms
 
