@@ -901,10 +901,10 @@ def generate_reduced_command_table_p_core_v2(n_p, n_rf):
     ct.append({"index": ct_idx, "waveform": waves[1], "amplitude0": {"value": 0}, "amplitude1": {"value": 1}})
     ct_idx += 1
     #p_1 (p_2_fr)
-    ct.append({"index": ct_idx, "waveform": waves[2]})
+    ct.append({"index": ct_idx, "waveform": waves[2], "amplitude0": {"value": -1}, "amplitude1": {"value": -1}})
     ct_idx += 1
     #p_2 (p_1_fr)
-    ct.append({"index": ct_idx, "waveform": waves[3]})
+    ct.append({"index": ct_idx, "waveform": waves[3], "amplitude0": {"value": -1}, "amplitude1": {"value": -1}})
     ct_idx += 1
     ## 4 = p_1 (pi/2 fr) ==> amp = 0 on 2 (only p1)
     ct.append({"index": ct_idx, "waveform": waves[4], "amplitude0": {"value": 1}, "amplitude1": {"value": 0}})
@@ -918,10 +918,10 @@ def generate_reduced_command_table_p_core_v2(n_p, n_rf):
     ## 5 = p_2 (pi fr) ==> amp = 0 on 1 (only p2)
     ct.append({"index": ct_idx, "waveform": waves[7], "amplitude0": {"value": 0}, "amplitude1": {"value": 1}})
     ct_idx += 1
-    ct.append({"index": ct_idx, "waveform": waves[8]})
+    ct.append({"index": ct_idx, "waveform": waves[8], "amplitude0": {"value": -1}, "amplitude1": {"value": -1}})
     ct_idx += 1
     #p_2 (p_1_fr)
-    ct.append({"index": ct_idx, "waveform": waves[9]})
+    ct.append({"index": ct_idx, "waveform": waves[9], "amplitude0": {"value": -1}, "amplitude1": {"value": -1}})
     ct_idx += 1
     #pi/2 wait
     ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2}})
