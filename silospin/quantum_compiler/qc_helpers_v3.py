@@ -985,10 +985,8 @@ def make_gate_npoints_v2(gate_parameters, sample_rate):
     ##Look into this issue....
     gate_npoints = {"rf": {}, "plunger": {}}
     for idx in gate_parameters["rf"]:
-        #n_pi = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi"]*1e-9/48)*48
-        #n_pi_2 = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi_2"]*1e-9/48)*48
-        n_pi = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi"]*1e-9)
-        n_pi_2 = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi_2"]*1e-9)
+        n_pi = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi"]*1e-9/48)*48
+        n_pi_2 = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi_2"]*1e-9/48)*48
         gate_npoints["rf"][idx] = {"pi": n_pi, "pi_2": n_pi_2}
     for idx in gate_parameters["p"]:
         n_p = ceil(sample_rate*gate_parameters["p"][idx]["tau"]*1e-9)
