@@ -234,20 +234,20 @@ class GateSetTomographyProgramPlunger_V3:
         daq = self._awg._daq
         dev = self._awg._connection_settings["hdawg_id"]
 
-        # ##9. Modify to only set sine waves for modulation cores
-        rf_cores_2 = [0,1,2]
-        for idx in rf_cores_2:
-              i_idx = self._channel_idxs[str(idx)][0]
-              q_idx = self._channel_idxs[str(idx)][1]
-              osc_idx = self._channel_osc_idxs[str(idx)]
-              self._awg.set_osc_freq(osc_idx, self._gate_parameters['rf'][idx+1]["mod_freq"])
-              self._awg.set_sine(i_idx+1, osc_idx)
-              self._awg.set_sine(q_idx+1, osc_idx)
-              self._awg.set_out_amp(i_idx+1, 1, self._gate_parameters['rf'][idx+1]["i_amp"])
-              self._awg.set_out_amp(q_idx+1, 2, self._gate_parameters['rf'][idx+1]["q_amp"])
-              self._awg._hdawg.sigouts[i_idx].on(1)
-              self._awg._hdawg.sigouts[q_idx].on(1)
-              daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables['rf']))
+        # # ##9. Modify to only set sine waves for modulation cores
+        # rf_cores_2 = [0,1,2]
+        # for idx in rf_cores_2:
+        #       i_idx = self._channel_idxs[str(idx)][0]
+        #       q_idx = self._channel_idxs[str(idx)][1]
+        #       osc_idx = self._channel_osc_idxs[str(idx)]
+        #       self._awg.set_osc_freq(osc_idx, self._gate_parameters['rf'][idx+1]["mod_freq"])
+        #       self._awg.set_sine(i_idx+1, osc_idx)
+        #       self._awg.set_sine(q_idx+1, osc_idx)
+        #       self._awg.set_out_amp(i_idx+1, 1, self._gate_parameters['rf'][idx+1]["i_amp"])
+        #       self._awg.set_out_amp(q_idx+1, 2, self._gate_parameters['rf'][idx+1]["q_amp"])
+        #       self._awg._hdawg.sigouts[i_idx].on(1)
+        #       self._awg._hdawg.sigouts[q_idx].on(1)
+        #       daq.setVector(f"/{dev}/awgs/{idx}/commandtable/data", json.dumps(self._command_tables['rf']))
 
         # p_idx = 3
         # i_idx = 6
