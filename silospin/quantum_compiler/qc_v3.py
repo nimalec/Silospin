@@ -192,18 +192,18 @@ class GateSetTomographyProgramPlunger_V3:
         ##Note: needed to chage sign for case with 2 waveform slots ...
         idx = 4
         waveforms = Waveforms()
-        waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["p1_p1fr"], wave2 = np.zeros(len(self._waveforms[idx]["p2_p2fr"]))
+        waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["p1_p1fr"], wave2 = np.zeros(len(self._waveforms[idx]["p2_p2fr"])))
         #waveforms.assign_waveform(slot = 1, wave1 = self._waveforms[idx]["p2_p2fr"])
         waveforms.assign_waveform(slot = 1, wave1 = np.zeros(len(self._waveforms[idx]["p2_p2fr"])), wave2 = self._waveforms[idx]["p2_p2fr"])
         waveforms.assign_waveform(slot = 2, wave1 = -self._waveforms[idx]["p1_p2fr"], wave2 = -self._waveforms[idx]["p2_p1fr"])
         waveforms.assign_waveform(slot = 3, wave1 = -self._waveforms[idx]["p1_p2fr"], wave2 = -self._waveforms[idx]["p2_p1fr"])
         waveforms.assign_waveform(slot = 4, wave1 = self._waveforms[idx]["p1_pi_2fr"], wave2=np.zeros(len(self._waveforms[idx]["p1_pi_2fr"])))
         #waveforms.assign_waveform(slot = 5, wave1 = self._waveforms[idx]["p2_pi_2fr"])
-        waveforms.assign_waveform(slot = 5, wave1 = np.zeros(len(self._waveforms[idx]["p2_pi_2fr"])), wave2 = self._waveforms[idx]["p2_pi_2fr"])
+        waveforms.assign_waveform(slot = 5, wave1 = np.zeros(len(self._waveforms[idx]["p2_pi_2fr"])), wave2 = self._waveforms[idx]["p2_pi_2fr"]))
         waveforms.assign_waveform(slot = 6, wave1 = self._waveforms[idx]["p1_pifr"], wave2=np.zeros(len(self._waveforms[idx]["p1_pifr"])))
         #waveforms.assign_waveform(slot = 6, wave1 = self._waveforms[idx]["p1_pifr"])
         #waveforms.assign_waveform(slot = 7, wave1 = self._waveforms[idx]["p2_pifr"])
-        waveforms.assign_waveform(slot = 7, wave1 = np.zeros(len(self._waveforms[idx]["p2_pifr"])), wave2 = self._waveforms[idx]["p2_pifr"])
+        waveforms.assign_waveform(slot = 7, wave1 = np.zeros(len(self._waveforms[idx]["p2_pifr"])), wave2 = self._waveforms[idx]["p2_pifr"]))
         waveforms.assign_waveform(slot = 8, wave1 = -self._waveforms[idx]["p1_pi_2fr"], wave2 = -self._waveforms[idx]["p2_pi_2fr"])
         waveforms.assign_waveform(slot = 9, wave1 = -self._waveforms[idx]["p1_pifr"],  wave2 = -self._waveforms[idx]["p2_pifr"])
 
@@ -227,7 +227,7 @@ class GateSetTomographyProgramPlunger_V3:
                 sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
 
         self._sequencer_code = sequencer_code
-        for idx in range(0,4): 
+        for idx in range(0,4):
             self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
             self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
 
