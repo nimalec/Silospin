@@ -985,8 +985,10 @@ def make_gate_npoints_v2(gate_parameters, sample_rate):
     ##Look into this issue....
     gate_npoints = {"rf": {}, "plunger": {}}
     for idx in gate_parameters["rf"]:
-        n_pi = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi"]*1e-9/48)*48
-        n_pi_2 = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi_2"]*1e-9/48)*48
+        #n_pi = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi"]*1e-9/48)*48
+        #n_pi_2 = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi_2"]*1e-9/48)*48
+        n_pi = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi"]*1e-9)
+        n_pi_2 = ceil(sample_rate*gate_parameters["rf"][idx]["tau_pi_2"]*1e-9)
         gate_npoints["rf"][idx] = {"pi": n_pi, "pi_2": n_pi_2}
     for idx in gate_parameters["p"]:
         n_p = ceil(sample_rate*gate_parameters["p"][idx]["tau"]*1e-9)
@@ -1057,7 +1059,6 @@ def generate_waveforms_v5(gate_npoints, channel_map, min_padding_cores={1: 0, 2:
        pass
 
     for i in gate_npoints["rf"]:
-        ##Map idx to core number here...
         idx = ch_map_rf[i]
         waveforms[idx]["pi_pifr"] = rectangular(gate_npoints["rf"][i]["pi"], amp, min_points = npoints_pi_std_1)
         waveforms[idx]["pi_2_pi_2fr"] = rectangular(gate_npoints["rf"][i]["pi_2"], amp, min_points = npoints_pi_2_std_1)
@@ -1067,7 +1068,6 @@ def generate_waveforms_v5(gate_npoints, channel_map, min_padding_cores={1: 0, 2:
     ##Set to 7 here for the specific case when core 4 is the dedicated plunger core
     idx_p = ch_map_p[7]
     if gate_npoints["plunger"][7]["p"] < gate_npoints["plunger"][8]["p"]:
-        ##add additional check if the nubmer of samples are less than 48
         if gate_npoints["plunger"][8]["p"] < 48:
             waveforms[idx_p]["p1_p2fr"] = rectangular(gate_npoints["plunger"][7]["p"], amp, min_points = 48)
             waveforms[idx_p]["p2_p1fr"] = rectangular(gate_npoints["plunger"][8]["p"], amp, min_points = 48)
