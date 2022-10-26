@@ -73,7 +73,7 @@ class GateSetTomographyProgramPlunger_V3:
             sample_rate : float
                 Sample rate of AWG in Sa/s.
        '''
-
+        ##Can add assertion here....
         self._gst_path = gst_file_path
         self._awg = awg
         self._sample_rate = sample_rate
@@ -265,7 +265,6 @@ class GateSetTomographyProgramPlunger_V3:
             awg_idxs = awg_idxs
         else:
             awg_idxs = [0,1,2,3]
-            #awg_idxs = [0,1,2]
         for idx in awg_idxs:
             self._awg._awgs["awg"+str(idx+1)].single(True)
             self._awg._awgs["awg"+str(idx+1)].enable(True)
