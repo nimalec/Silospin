@@ -956,7 +956,9 @@ def make_waveform_placeholders(n_array):
 def make_waveform_placeholders_plungers(n_array):
     idx = 0
     line_1 = "assignWaveIndex(placeholder("+str(n_array[0])+"),"+"0"+");\n"
-    line_2 = "assignWaveIndex(placeholder("+str(n_array[1])+"),"+"1"+");\n"
+#    line_2 = "assignWaveIndex(placeholder("+str(n_array[1])+"),"+"1"+");\n"
+    line_2 = "assignWaveIndex(placeholder("+str(n_array[1])+"),"+ "placeholder("+str(n_array[1])+"),"+"1"+");\n"
+
     line_3 = "assignWaveIndex(placeholder("+str(n_array[2])+"),"+ "placeholder("+str(n_array[3])+"),"+"2"+");\n"
     line_4 = "assignWaveIndex(placeholder("+str(n_array[2])+"),"+ "placeholder("+str(n_array[3])+"),"+"3"+");\n"
     line_5 = "assignWaveIndex(placeholder("+str(n_array[4])+"),"+"4"+");\n"
