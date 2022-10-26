@@ -1,4 +1,5 @@
 import numpy as np
+from math import ceil
 def gauss(x, amp, mu, sig):
     return amp*np.exp(-(x-mu)**2/(2*sig**2))
 
