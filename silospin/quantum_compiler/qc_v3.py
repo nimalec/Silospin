@@ -392,8 +392,8 @@ class GateSetTomographyProgramPlunger_V4:
         plunger_set_npoints = []
         plunger_set_npoints_tups = []
         for idx in self._gate_parameters["p"]:
-            plunger_set.append((idx, dc_lengths[idx]))
-            plunger_set_npoints.append(dc_npoints[idx])
+            plunger_set.append((idx, dc_lengths[idx-1]))
+            plunger_set_npoints.append(dc_npoints[idx-1])
             plunger_set_npoints_tups.append((idx, dc_npoints[idx]))
 
         ##7. Modify ct_idxs to account for plunger gates
