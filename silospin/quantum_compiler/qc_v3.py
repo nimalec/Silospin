@@ -394,7 +394,7 @@ class GateSetTomographyProgramPlunger_V4:
         for idx in self._gate_parameters["p"]:
             plunger_set.append((idx, dc_lengths[idx-1]))
             plunger_set_npoints.append(dc_npoints[idx-1])
-            plunger_set_npoints_tups.append((idx, dc_npoints[idx]))
+            plunger_set_npoints_tups.append((idx, dc_npoints[idx-1]))
 
         ##7. Modify ct_idxs to account for plunger gates
         ##ct_idxs_all ==> ct_idxs_all[line_number]['rf'][core_number]
