@@ -92,8 +92,8 @@ def make_gate_lengths_v4(dc_times, gate_parameters, t_pi_2_max, t_pi_max):
        t_pi_2 = ceil(t_pi_2_max)
        gate_lengths["rf"][idx] = {"pi": t_pi, "pi_2": t_pi_2}
     for idx in gate_parameters["p"]:
-        t_p = ceil(dc_times[idx])
-        gate_lengths["plunger"][idx] = {"p": t_p}
+       t_p = ceil(dc_times[idx-1])
+       gate_lengths["plunger"][idx] = {"p": t_p}
     return gate_lengths
 
 def generate_waveforms_v4(gate_npoints, channel_map):
