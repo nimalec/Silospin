@@ -381,8 +381,8 @@ class GateSetTomographyProgramPlunger_V4:
 
         n_waveform_pi_2_std  = len(self._waveforms[1]["pi_2_pi_2fr"])
         n_waveform_pi_std  = len(self._waveforms[1]["pi_pifr"])
-        tau_waveform_pi_2_std = ceil(1e9*len(self._waveforms[1]["pi_pi_2fr"])/self._sample_rate)
-        tau_waveform_pi_std = ceil(1e9*len(self._waveforms[1]["pi_pi_2fr"])/self._sample_rate)
+        tau_waveform_pi_2_std = ceil(1e9*n_waveform_pi_2_std/self._sample_rate)
+        tau_waveform_pi_std = ceil(1e9*n_waveform_pi_std /self._sample_rate)
         dc_lengths = {6: ceil(1e9*len(self._waveforms[4]["p1_p1fr"])/self._sample_rate), 7: ceil(1e9*len(self._waveforms[4]["p2_p2fr"])/self._sample_rate)}
         dc_npoints = {6: len(self._waveforms[4]["p1_p1fr"]), 7: len(self._waveforms[4]["p2_p2fr"])}
         self._gate_lengths = make_gate_lengths_v4(dc_lengths, self._gate_parameters, tau_waveform_pi_2_std, tau_waveform_pi_std)
