@@ -336,12 +336,10 @@ class GateSetTomographyProgramPlunger_V4:
         channel_mapping = self._awg._channel_mapping
         self._gate_parameters = gate_parameters
 
-        ##1. Append plunger gate lengths to tau_pi_2_set. Standard pi length will be defined from pi_2 length.
         tau_pi_2_set = []
         for idx in self._gate_parameters["rf"]:
             tau_pi_2_set.append((idx, self._gate_parameters["rf"][idx]["tau_pi_2"]))
 
-       ##assumes that plungers will alwyas be shorter than rf pulses
         plunger_set = []
         plunger_set_npoints = []
         plunger_set_npoints_tups = []
@@ -375,7 +373,6 @@ class GateSetTomographyProgramPlunger_V4:
 
         gate_standard_lengths = {"pi_2": ceil(tau_pi_2_standard*1e-9), "pi": ceil(tau_pi_standard*1e-9), "p": p_dict}
 
-        ##Need to modify padding scheme somewhere here.... (arbitrary padding )
         self._gate_npoints = make_gate_npoints_v2(self._gate_parameters, self._sample_rate)
         self._waveforms = generate_waveforms_v7(self._gate_npoints, channel_mapping, added_padding)
 
@@ -396,11 +393,9 @@ class GateSetTomographyProgramPlunger_V4:
             plunger_set_npoints.append(dc_npoints[idx-1])
             plunger_set_npoints_tups.append((idx, dc_npoints[idx-1]))
 
-        ##7. Modify ct_idxs to account for plunger gates
-        ##ct_idxs_all ==> ct_idxs_all[line_number]['rf'][core_number]
         ct_idxs_all = {}
         arbZs = []
-        n_arbZ = 0 #counter for the number of arbZ  rotatiosn in the file
+        n_arbZ = 0
         taus_std = (ceil(tau_pi_2_standard), ceil(tau_pi_standard))
         taus_std_v2 = (tau_waveform_pi_2_std,  tau_waveform_pi_std)
 
@@ -451,8 +446,6 @@ class GateSetTomographyProgramPlunger_V4:
                 command_code[idx] = command_code[idx] + sequence
                 sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
 
-        #Generate sequences for DC core
-        ##Note: needed to chage sign for case with 2 waveform slots ...
         idx = 4
         waveforms = Waveforms()
         waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["p1_p1fr"], wave2 = np.zeros(len(self._waveforms[idx]["p2_p2fr"])))
@@ -495,7 +488,6 @@ class GateSetTomographyProgramPlunger_V4:
         daq = self._awg._daq
         dev = self._awg._connection_settings["hdawg_id"]
 
-        # ##9. Modify to only set sine waves for modulation cores
         rf_cores_2 = [0,1,2]
         for idx in rf_cores_2:
               i_idx = self._channel_idxs[str(idx)][0]
