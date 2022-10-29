@@ -470,9 +470,11 @@ class GateSetTomographyProgramPlunger_V4:
                 pass
             else:
                 if idx == trigger_channel:
-                    seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
+                    #seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=True)
+                    seq = make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=True)
                 else:
-                    seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
+                    #seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
+                    seq = make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=True)
                 sequence += seq
                 command_code[idx] = command_code[idx] + sequence
                 sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"

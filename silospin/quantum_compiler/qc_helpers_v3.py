@@ -1000,7 +1000,23 @@ def make_gateset_sequencer_ext_trigger(n_seq, n_av, trig_channel=True):
         trig_program = "repeat("+str(n_av)+"){"+"waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\n"+"\nwaitDIOTrigger();\nresetOscPhase();"
     else:
         trig_program = "repeat("+str(n_av)+"){"+"\nwaitDIOTrigger();\nresetOscPhase();\n"
-    program = trig_program + command_code +"}\n}"
+    program = trig_program + command_code
+    return program
+
+def make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=True):
+    command_code = ""
+    for n in n_seq:
+        idx_str = str(n)
+        line = "executeTableEntry("+idx_str+");\n"
+        command_code = command_code + line
+
+    if trig_channel == True:
+        trig_program = "repeat("+str(n_av)+"){"+"waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\n"+"\nwaitDIOTrigger();\nresetOscPhase();"
+        #trig_program = "waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\nwaitDIOTrigger();\n"
+    else:
+        trig_program = "repeat("+str(n_av)+"){"+"\nwaitDIOTrigger();\nresetOscPhase();\n"
+        #trig_program = "waitDIOTrigger();\n"
+    program = trig_program + command_code +"}\n"
     return program
 
 def make_gate_npoints_v2(gate_parameters, sample_rate):
