@@ -372,7 +372,7 @@ class ChargeStabilitySweepsSerialMultiInstrument:
     def __init__(self, dac_id="COM3", mfli_ids={"dev5759"}, excluded_zurich_devices= ["dev8446", "dev5761"], filter_tc=10e-3):
         ##Note: This version uses pySerial, a faster drivier implementation
          ## Last 2 things to change: 1. change looping stucture for 2D sweeps, 2. option for no plotting, 3. add comments and other documentation to code
-        ## Dict. of all lockins in setup 
+        ## Dict. of all lockins in setup
         self._mfli = {}
         all_excluded = {}
         for i in excluded_zurich_devices:
