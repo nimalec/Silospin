@@ -476,10 +476,10 @@ class GateSetTomographyProgramPlunger_V4:
                     #seq = make_gateset_sequencer_ext_trigger(n_seq, n_inner, trig_channel=False)
                     seq = make_gateset_sequencer_hard_trigger_v2(n_seq, n_inner, trig_channel=True)
                 sequence += seq
-                command_code[idx] = command_code[idx] + sequence
-                sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
+        command_code[idx] = command_code[idx] + sequence
+        sequencer_code[idx] = seq_code[idx] + command_code[idx]
 
-        self._sequencer_code = sequencer_code+"}"
+        self._sequencer_code = sequencer_code
     #     for idx in range(0,4):
     #         self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
     #         self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
