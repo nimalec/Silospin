@@ -597,16 +597,19 @@ def make_command_table_idxs_rf_p_v1(gt_seqs, taus_std, taus_p, n_arbZ):
 
              # 1. Case 1: xx, yy, mxxm, myym [pi (pi_fr)]
                 if gt in pi_gt_set:
-                    rf_ct_idx_list.append(ct_idx_incr_pi_pi_fr[phi_a])
+                    #rf_ct_idx_list.append(ct_idx_incr_pi_pi_fr[phi_a])
+                    rf_ct_idx_list.append(ct_idx_incr_pi_pi_fr[-phi_a])
 
                 #2. Case 2: pi/2 gates
                 elif gt in pi_2_gt_set:
                     if len(pi_intersect)>0:
                         ##work in pi frame
-                        rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_fr[phi_a])
+                        #rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_fr[phi_a])
+                        rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_fr[-phi_a])
                     else:
                         ##work in pi/2 frame
-                        rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_2_fr[phi_a])
+                        #rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_2_fr[phi_a])
+                        rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_2_fr[-phi_a])
 
                 #3. Case 3: wait is present
                 ##Need not change

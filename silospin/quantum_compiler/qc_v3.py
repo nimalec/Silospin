@@ -379,9 +379,6 @@ class GateSetTomographyProgramPlunger_V4:
         except TypeError:
             raise
 
-
-
-
         p_dict = {}
         for idx in plunger_set:
             p_dict[idx[0]] = ceil(idx[1]*1e-9)
