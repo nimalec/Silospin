@@ -367,6 +367,21 @@ class GateSetTomographyProgramPlunger_V4:
         tau_pi_standard = npoints_pi_standard/self._sample_rate
         tau_p_standard = npoints_p_standard/self._sample_rate
 
+        try:
+         if tau_p_standard > tau_pi_2_standard:
+            raise TypeError("DC pulse lengths should always be shorter than RF pulse lengths!!")
+        except TypeError:
+            raise
+
+        try:
+         if added_padding > 5e-9:
+            raise TypeError("Padding should not exceed 5 ns!!")
+        except TypeError:
+            raise
+
+
+
+
         p_dict = {}
         for idx in plunger_set:
             p_dict[idx[0]] = ceil(idx[1]*1e-9)
