@@ -15,7 +15,7 @@ class MfliDriverChargeStability:
         port=8004
         self._signal_path = sig_path
         self._daq_1 = zhinst.ziPython.ziDAQServer(host, port, api_level=6)
-        self._daq_1.connect(interface = '1GbE')
+        self._daq_1.connect()
         self._mfli = MfliDriver(dev_id)
         self._daq_mod_2 =  MfliDaqModule(self._mfli)
         self._daq_mod_2.set_continuous_numeric_parameters(timeconstant)
