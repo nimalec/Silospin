@@ -14,7 +14,7 @@ class MfliDriverChargeStability:
         host = 'localhost'
         port=8004
         self._signal_path = sig_path
-        self._daq_1 = zhinst.ziPython.ziDAQServer(host, port, api_level=6)
+        self._daq_1 = zhinst.ziPython.ziDAQServer(host, port, api_level=6, interface = '1GbE')
         self._daq_1.connect()
         self._mfli = MfliDriver(dev_id)
         self._daq_mod_2 =  MfliDaqModule(self._mfli)
@@ -39,7 +39,7 @@ class MfliDriver:
            None.
 
         """
-        (daq, device, _) = zhinst.utils.create_api_session(device_id, api_level, server_host=server_host, server_port=server_port)
+        (daq, device, _) = zhinst.utils.create_api_session(device_id, api_level, server_host=server_host, server_port=server_port, interface = '1GbE')
         self._connection_settings = {"mfli_id" : device, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "connection_status" : False}
         self._daq = daq
         self._device = device

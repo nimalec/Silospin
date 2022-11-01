@@ -578,7 +578,7 @@ def make_command_table_idxs_rf_p_v1(gt_seqs, taus_std, taus_p, n_arbZ):
                 elif gt[0] == 'z':
                     z_angle = float(gt[1:len((gt))-1])
                     if int(z_angle) == 0:
-                        z0_idx = 35+N_p
+                        z0_idx = 35 + N_p
                         rf_ct_idx_list.append(z0_idx)
                     else:
                         rf_ct_idx_list.append(arbZ_counter)
