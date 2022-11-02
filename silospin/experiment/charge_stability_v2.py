@@ -228,10 +228,10 @@ class ChargeStabilitySweepsSerial:
                 output_voltages_new = output_voltages.flatten()
                 for i in range(len(V_x_f)):
                     if i%npoints[0] == 0:
-                        self._dac.set_channel(channels[0])
-                        self._dac.set_voltage(V_x_f[i])
-                        self._dac.set_channel(channels[1])
-                        self._dac.set_voltage(V_y_f[i])
+                         self._dac.set_channel(channels[0])
+                         self._dac.set_voltage(V_x_f[i])
+                         self._dac.set_channel(channels[1])
+                         self._dac.set_voltage(V_y_f[i])
                          v_meas = self._mfli.get_sample_r()
                          output_voltages_new[i] = v_meas
                     else:
