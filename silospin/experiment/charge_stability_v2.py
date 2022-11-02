@@ -10,7 +10,7 @@ import time
 
 class ChargeStabilitySweepsSerial:
     def __init__(self, dac_id="COM3", mfli_id="dev5759", excluded_zurich_devices= ["dev8446", "dev5761"], filter_tc=10e-3):
-        self.zi_mfli_driver = MfliDriverChargeStability(excluded_devices = excluded_zurich_devices, timeconstant=filter_tc)
+        self._mfli = MfliDriverChargeStability(excluded_devices = excluded_zurich_devices, timeconstant=filter_tc)
         #self._dac = DacDriverSerial(dac_id)
 
     # def sweep1D(self, channel, start_v, end_v, npoints, n_r = 10, n_fr = 1, plot = True):
