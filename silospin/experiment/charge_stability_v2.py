@@ -154,90 +154,90 @@ class ChargeStabilitySweepsSerial:
 #     V_out = np.mean(np.array(V_outs), axis=0)
 #     return (V_x, V_y, V_out)
 
-def sweep2D(self, channels, v_range, npoints, n_r = 10, n_fr = 1, plot = True):
-    ##Need to add frame averaging here....
-    ##channels ==> tuple of ints for channel idxs
-    ##v_range ==> 2x2 list of voltage ranges
-    ##npoints ==> tuple of number of points for each dimension
-    ##n_r frequency of repeats
-    ##n_fr number of frames to loop over
+    def sweep2D(self, channels, v_range, npoints, n_r = 10, n_fr = 1, plot = True):
+        ##Need to add frame averaging here....
+        ##channels ==> tuple of ints for channel idxs
+        ##v_range ==> 2x2 list of voltage ranges
+        ##npoints ==> tuple of number of points for each dimension
+        ##n_r frequency of repeats
+        ##n_fr number of frames to loop over
 
-    ##V_out ==> list of output arrays to be averaged over eventually
+        ##V_out ==> list of output arrays to be averaged over eventually
 
-    #Input voltage mesh
-    V_outs = []
-    v_x = np.linspace(v_range[0][0], v_range[0][1], npoints[0])
-    v_y = np.linspace(v_range[1][0], v_range[1][1], npoints[1])
-    V_x, V_y = np.meshgrid(v_x, v_y)
-    V_x_f = V_x.flatten()
-    V_y_f = V_y.flatten()
+        #Input voltage mesh
+        V_outs = []
+        v_x = np.linspace(v_range[0][0], v_range[0][1], npoints[0])
+        v_y = np.linspace(v_range[1][0], v_range[1][1], npoints[1])
+        V_x, V_y = np.meshgrid(v_x, v_y)
+        V_x_f = V_x.flatten()
+        V_y_f = V_y.flatten()
 
-    if plot == True:
-        fig = plt.figure()
-        ax = fig.add_subplot(111)
-        for j in range(n_fr):
-            output_voltages = np.ones((npoints[0], npoints[1]))
-            output_voltages_f = output_voltages.flatten()
-            for i in range(len(V_x_f)):
-                if i == 0:
-                    ##Apply new settings, plot
-                    #self._dac.set_channel(channels[0])
-                    #self._dac.set_voltage(V_x_f[i])
-                    #self._dac.set_channel(channels[1])
-                    #self._dac.set_voltage(V_y_f[i])
-                    v_meas = self._mfli.get_sample_r()
-                    output_voltages_new = v_meas*output_voltages_f
-                    V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
-                    img = ax.imshow(V_out, interpolation="None", cmap="RdBu")
-                    fig.canvas.draw()
-                    ax.set_xlim(v_range[0][0]-0.5, v_range[0][1]+0.5)
-                    ax.set_ylim(v_range[1][0]-0.5, v_range[1][1]+0.5)
-                    ax.set_xlabel("Left barrier voltage [V]")
-                    ax.set_ylabel("Right barrier voltage [V]")
-                    plt.show(block=False)
-                else:
-                    if i%npoints[0] == 0:
+        if plot == True:
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            for j in range(n_fr):
+                output_voltages = np.ones((npoints[0], npoints[1]))
+                output_voltages_f = output_voltages.flatten()
+                for i in range(len(V_x_f)):
+                    if i == 0:
+                        ##Apply new settings, plot
                         #self._dac.set_channel(channels[0])
                         #self._dac.set_voltage(V_x_f[i])
                         #self._dac.set_channel(channels[1])
                         #self._dac.set_voltage(V_y_f[i])
                         v_meas = self._mfli.get_sample_r()
-                        output_voltages_new[i] = v_meas
-                    else:
-                        #self._dac.set_voltage(V_y_f[i])
-                        v_meas = self._mfli.get_sample_r()
-                        output_voltages_new[i] = v_meas
-                    V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
-
-                    if i%n_r == 0:
-                        img.set_data(V_out)
-                        img.set_clim(np.amin(V_out), np.amax(V_out))
+                        output_voltages_new = v_meas*output_voltages_f
+                        V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
+                        img = ax.imshow(V_out, interpolation="None", cmap="RdBu")
+                        fig.canvas.draw()
                         ax.set_xlim(v_range[0][0]-0.5, v_range[0][1]+0.5)
                         ax.set_ylim(v_range[1][0]-0.5, v_range[1][1]+0.5)
                         ax.set_xlabel("Left barrier voltage [V]")
                         ax.set_ylabel("Right barrier voltage [V]")
-                        fig.canvas.draw()
-                        fig.canvas.flush_events()
+                        plt.show(block=False)
                     else:
-                        pass
-            V_outs.append(V_out)
-    else:
-        for j in range(n_fr):
-            output_voltages = np.ones((npoints[0], npoints[1]))
-            output_voltages_new = output_voltages.flatten()
-            for i in range(len(V_x_f)):
-                if i%npoints[0] == 0:
-                    # self._dac.set_channel(channels[0])
-                    # self._dac.set_voltage(V_x_f[i])
-                    # self._dac.set_channel(channels[1])
-                    # self._dac.set_voltage(V_y_f[i])
-                     v_meas = self._mfli.get_sample_r()
-                     output_voltages_new[i] = v_meas
-                else:
-                    # self._dac.set_voltage(V_y_f[i])
-                     v_meas = self._mfli.get_sample_r()
-                     output_voltages_new[i] = v_meas
-                V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
-            V_outs.append(V_out)
-    V_out = np.mean(np.array(V_outs), axis=0)
-    return (V_x, V_y, V_out)
+                        if i%npoints[0] == 0:
+                            #self._dac.set_channel(channels[0])
+                            #self._dac.set_voltage(V_x_f[i])
+                            #self._dac.set_channel(channels[1])
+                            #self._dac.set_voltage(V_y_f[i])
+                            v_meas = self._mfli.get_sample_r()
+                            output_voltages_new[i] = v_meas
+                        else:
+                            #self._dac.set_voltage(V_y_f[i])
+                            v_meas = self._mfli.get_sample_r()
+                            output_voltages_new[i] = v_meas
+                        V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
+
+                        if i%n_r == 0:
+                            img.set_data(V_out)
+                            img.set_clim(np.amin(V_out), np.amax(V_out))
+                            ax.set_xlim(v_range[0][0]-0.5, v_range[0][1]+0.5)
+                            ax.set_ylim(v_range[1][0]-0.5, v_range[1][1]+0.5)
+                            ax.set_xlabel("Left barrier voltage [V]")
+                            ax.set_ylabel("Right barrier voltage [V]")
+                            fig.canvas.draw()
+                            fig.canvas.flush_events()
+                        else:
+                            pass
+                V_outs.append(V_out)
+        else:
+            for j in range(n_fr):
+                output_voltages = np.ones((npoints[0], npoints[1]))
+                output_voltages_new = output_voltages.flatten()
+                for i in range(len(V_x_f)):
+                    if i%npoints[0] == 0:
+                        # self._dac.set_channel(channels[0])
+                        # self._dac.set_voltage(V_x_f[i])
+                        # self._dac.set_channel(channels[1])
+                        # self._dac.set_voltage(V_y_f[i])
+                         v_meas = self._mfli.get_sample_r()
+                         output_voltages_new[i] = v_meas
+                    else:
+                        # self._dac.set_voltage(V_y_f[i])
+                         v_meas = self._mfli.get_sample_r()
+                         output_voltages_new[i] = v_meas
+                    V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
+                V_outs.append(V_out)
+        V_out = np.mean(np.array(V_outs), axis=0)
+        return (V_x, V_y, V_out)
