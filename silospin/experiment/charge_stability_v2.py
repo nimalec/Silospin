@@ -74,15 +74,15 @@ class ChargeStabilitySweepsSerial:
 #     ##V_out ==> list of output arrays to be averaged over eventually
 #
 #     #Input voltage mesh
-      V_outs = []
-      v_array = np.linspace(start_v,end_v,npoints)
-      v_outer = []
-      v_inner = []
-      v_mean = []
-
-      ##Output voltage array
-      output_voltages = np.ones((npoints[0], npoints[1]))
-      output_voltages_f = output_voltages.flatten()
+      # V_outs = []
+      # v_array = np.linspace(start_v,end_v,npoints)
+      # v_outer = []
+      # v_inner = []
+      # v_mean = []
+      #
+      # ##Output voltage array
+      # output_voltages = np.ones((npoints[0], npoints[1]))
+      # output_voltages_f = output_voltages.flatten()
 
 #     if plot == True:
 #         fig = plt.figure()
