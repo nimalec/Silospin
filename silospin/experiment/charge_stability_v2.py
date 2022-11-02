@@ -211,6 +211,7 @@ class ChargeStabilitySweepsSerial:
 
                         if i%n_r == 0:
                             img.set_data(V_out)
+                            print(np.shape(V_out))
                             img.set_clim(np.amin(V_out), np.amax(V_out))
                             ax.set_xlim(v_range[0][0]-0.5, v_range[0][1]+0.5)
                             ax.set_ylim(v_range[1][0]-0.5, v_range[1][1]+0.5)
