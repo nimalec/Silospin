@@ -74,17 +74,16 @@ class ChargeStabilitySweepsSerial:
 #     ##V_out ==> list of output arrays to be averaged over eventually
 #
 #     #Input voltage mesh
-#     V_outs = []
-#     v_x = np.linspace(v_range[0][0], v_range[0][1], npoints[0])
-#     v_y = np.linspace(v_range[1][0], v_range[1][1], npoints[1])
-#     V_x, V_y = np.meshgrid(v_x, v_y)
-#     V_x_f = V_x.flatten()
-#     V_y_f = V_y.flatten()
-#
-#     #Output voltage array
-#     output_voltages = np.ones((npoints[0], npoints[1]))
-#     output_voltages_f = output_voltages.flatten()
-#
+      V_outs = []
+      v_array = np.linspace(start_v,end_v,npoints)
+      v_outer = []
+      v_inner = []
+      v_mean = []
+
+      ##Output voltage array
+      output_voltages = np.ones((npoints[0], npoints[1]))
+      output_voltages_f = output_voltages.flatten()
+
 #     if plot == True:
 #         fig = plt.figure()
 #         ax = fig.add_subplot(111)
@@ -172,10 +171,6 @@ def sweep2D(self, channels, v_range, npoints, n_r = 10, n_fr = 1, plot = True):
     V_x, V_y = np.meshgrid(v_x, v_y)
     V_x_f = V_x.flatten()
     V_y_f = V_y.flatten()
-
-    #Output voltage array
-    output_voltages = np.ones((npoints[0], npoints[1]))
-    output_voltages_f = output_voltages.flatten()
 
     if plot == True:
         fig = plt.figure()
