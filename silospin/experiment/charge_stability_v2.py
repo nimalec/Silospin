@@ -188,7 +188,8 @@ class ChargeStabilitySweepsSerial:
                         v_meas = self._mfli.get_sample_r()
                         output_voltages_new = v_meas*output_voltages_f
                         V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
-                        img = ax.imshow(V_out, interpolation="None", cmap="RdBu")
+                        #img = ax.imshow(V_out, interpolation="None", cmap="RdBu")
+                        img = ax.imshow(V_out)
                         fig.canvas.draw()
                         ax.set_xlim(v_range[0][0], v_range[0][1])
                         ax.set_ylim(v_range[1][0], v_range[1][1])
