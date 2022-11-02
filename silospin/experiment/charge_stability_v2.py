@@ -10,8 +10,8 @@ import time
 
 class ChargeStabilitySweepsSerial:
     def __init__(self, dac_id="COM3", mfli_id="dev5759", excluded_zurich_devices= ["dev8446", "dev5761"], filter_tc=10e-3):
-        self._mfli = MfliDriverChargeStability(excluded_devices = excluded_zurich_devices, timeconstant=filter_tc)
-        self._dac = DacDriverSerial(dac_id)
+        self.zi_mfli_driver = MfliDriverChargeStability(excluded_devices = excluded_zurich_devices, timeconstant=filter_tc)
+        #self._dac = DacDriverSerial(dac_id)
 
     # def sweep1D(self, channel, start_v, end_v, npoints, n_r = 10, n_fr = 1, plot = True):
     #     self._dac.set_channel(channel)
@@ -181,10 +181,10 @@ class ChargeStabilitySweepsSerial:
                 for i in range(len(V_x_f)):
                     if i == 0:
                         #Apply new settings, plot
-                        self._dac.set_channel(channels[0])
-                        self._dac.set_voltage(V_x_f[i])
-                        self._dac.set_channel(channels[1])
-                        self._dac.set_voltage(V_y_f[i])
+                        # self._dac.set_channel(channels[0])
+                        # self._dac.set_voltage(V_x_f[i])
+                        # self._dac.set_channel(channels[1])
+                        # self._dac.set_voltage(V_y_f[i])
                         v_meas = self._mfli.get_sample_r()
                         output_voltages_new = v_meas*output_voltages_f
                         V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
@@ -198,10 +198,10 @@ class ChargeStabilitySweepsSerial:
                         plt.show(block=False)
                     else:
                         if i%npoints[0] == 0:
-                            self._dac.set_channel(channels[0])
-                            self._dac.set_voltage(V_x_f[i])
-                            self._dac.set_channel(channels[1])
-                            self._dac.set_voltage(V_y_f[i])
+                            # self._dac.set_channel(channels[0])
+                            # self._dac.set_voltage(V_x_f[i])
+                            # self._dac.set_channel(channels[1])
+                            # self._dac.set_voltage(V_y_f[i])
                             v_meas = self._mfli.get_sample_r()
                             output_voltages_new[i] = v_meas
                         else:
@@ -212,7 +212,6 @@ class ChargeStabilitySweepsSerial:
 
                         if i%n_r == 0:
                             img.set_data(V_out)
-                            print(np.shape(V_out))
                             img.set_clim(np.amin(V_out), np.amax(V_out))
                             ax.set_xlim(v_range[0][0], v_range[0][1])
                             ax.set_ylim(v_range[1][0], v_range[1][1])
@@ -229,14 +228,14 @@ class ChargeStabilitySweepsSerial:
                 output_voltages_new = output_voltages.flatten()
                 for i in range(len(V_x_f)):
                     if i%npoints[0] == 0:
-                         self._dac.set_channel(channels[0])
-                         self._dac.set_voltage(V_x_f[i])
-                         self._dac.set_channel(channels[1])
-                         self._dac.set_voltage(V_y_f[i])
+                         # self._dac.set_channel(channels[0])
+                         # self._dac.set_voltage(V_x_f[i])
+                         # self._dac.set_channel(channels[1])
+                         # self._dac.set_voltage(V_y_f[i])
                          v_meas = self._mfli.get_sample_r()
                          output_voltages_new[i] = v_meas
                     else:
-                         self._dac.set_voltage(V_y_f[i])
+                         #self._dac.set_voltage(V_y_f[i])
                          v_meas = self._mfli.get_sample_r()
                          output_voltages_new[i] = v_meas
                     V_out = output_voltages_new.reshape([npoints[0], npoints[1]])
