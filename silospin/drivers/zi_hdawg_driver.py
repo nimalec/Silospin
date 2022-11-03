@@ -121,8 +121,7 @@ class HdawgDriver:
                 self._run_status["awg"+str(idx+1)] = True
 
         return {"connection": self._connection_settings, "oscillators": self._oscillator_freq,
-        "sines": self._sines, "command_tables": self._command_tables , "sequences": self._sequences,
-        "waveforms": self._waveforms , "run_status": self._run_status}
+        "sines": self._sines, "command_tables": self._command_tables , "sequences": self._sequences, "run_status": self._run_status}
 
     def get_connection_settings(self, param):
       """
