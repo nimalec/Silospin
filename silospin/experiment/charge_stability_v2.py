@@ -191,10 +191,10 @@ class ChargeStabilitySweepsSerial:
                         #img = ax.imshow(V_out, interpolation="None", cmap="RdBu")
                         img = ax.imshow(V_out)
                         fig.canvas.draw()
-                        ax.set_xlim(v_range[0][0], v_range[0][1])
-                        ax.set_ylim(v_range[1][0], v_range[1][1])
-                        ax.set_xlabel("Left barrier voltage [V]")
-                        ax.set_ylabel("Right barrier voltage [V]")
+                        # ax.set_xlim(v_range[0][0], v_range[0][1])
+                        # ax.set_ylim(v_range[1][0], v_range[1][1])
+                        # ax.set_xlabel("Left barrier voltage [V]")
+                        # ax.set_ylabel("Right barrier voltage [V]")
                         plt.show(block=False)
                     else:
                         if i%npoints[0] == 0:
