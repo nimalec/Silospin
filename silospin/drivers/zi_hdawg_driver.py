@@ -3,7 +3,7 @@ import zhinst
 import zhinst.utils
 import json
 from zhinst.toolkit import Session
-from silospin.quantum_compiler.qc_helpers import channel_mapper
+from silospin.quantum_compiler.quantum_comiler_helpers import channel_mapper
 import numpy as np
 
 class HdawgDriver:
