@@ -10,7 +10,7 @@ from zhinst.toolkit import Waveforms
 import zhinst.utils
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
-from silospin.quantum_compiler.quantum_comiler_helpers import *
+from silospin.quantum_compiler.quantum_compiler_helpers import *
 from silospin.quantum_compiler.quantum_compiler_io import *
 
 
