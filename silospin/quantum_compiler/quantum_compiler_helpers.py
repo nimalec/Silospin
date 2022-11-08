@@ -343,7 +343,7 @@ def make_plunger_command_table(n_p, n_rf):
     return command_table
 
 def make_waveform_placeholders(n_array):
-    ii = 0 
+    ii = 0
     idx = 0
     sequence_code = ""
     command_code = ""
