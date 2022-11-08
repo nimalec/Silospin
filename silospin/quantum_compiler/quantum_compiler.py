@@ -228,6 +228,7 @@ class GateSetTomographyQuantumCompiler:
 
         daq = self._awg._daq
         dev = self._awg._connection_settings["hdawg_id"]
+        daq.setInt(f"/{dev}/system/awg/oscillatorcontrol", 1)
 
         rf_cores_2 = [0,1,2]
         for idx in rf_cores_2:
@@ -254,6 +255,7 @@ class GateSetTomographyQuantumCompiler:
         self._awg._hdawg.sigouts[6].on(1)
         self._awg._hdawg.sigouts[7].on(1)
         daq.setVector(f"/{dev}/awgs/{p_idx}/commandtable/data", json.dumps(self._command_tables['plunger']))
+
 
     def run_program(self, awg_idxs=None):
         if awg_idxs:
