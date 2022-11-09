@@ -174,7 +174,7 @@ class GateSetTomographyQuantumCompiler:
         n_array_rf = [len(self._waveforms[1]["pi_pifr"]), len(self._waveforms[1]["pi_2_pi_2fr"]), len(self._waveforms[1]["pi_2_pifr"])]
         n_array_p = [len(self._waveforms[4]["p1_p1fr"]), len(self._waveforms[4]["p2_p2fr"]),  len(self._waveforms[4]["p1_p2fr"]), len(self._waveforms[4]["p2_p1fr"]), len(self._waveforms[4]["p1_pi_2fr"]), len(self._waveforms[4]["p2_pi_2fr"]),len(self._waveforms[4]["p1_pifr"]), len(self._waveforms[4]["p2_pifr"])]
         rf_cores = [1,2,3]
-        p_cores = [4]
+
         for idx in rf_cores:
             waveforms = Waveforms()
             waveforms.assign_waveform(slot = 0, wave1 = self._waveforms[idx]["pi_pifr"])
@@ -230,7 +230,7 @@ class GateSetTomographyQuantumCompiler:
         daq = self._awg._daq
         dev = self._awg._connection_settings["hdawg_id"]
 
-        for idx in rf_cores_2:
+        for idx in rf_cores:
               daq.setVector(f"/{dev}/awgs/{idx-1}/commandtable/data", json.dumps(self._command_tables['rf']))
         p_idx = 3
         daq.setVector(f"/{dev}/awgs/{p_idx}/commandtable/data", json.dumps(self._command_tables['plunger']))
