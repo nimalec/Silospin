@@ -11,7 +11,6 @@ def initialize_drivers(awgs={0: 'dev8446'}, lockins={0: 'dev5759', 1: 'dev5761'}
     ##Designed for setup with 2 AWGs, 2 lockin amplifiers,
     ##Initialize AWGs
     global awg_driver_1
-    #global awg_driver_2
     global mfli_driver_1
     global mfli_driver_2
     global dac_box_1
