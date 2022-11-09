@@ -22,7 +22,7 @@ class GSTExperiment:
         plunger_lengths = {7: 5, 8: 5}
         plunger_amp =  {7:  1, 8: 1}
         self._gate_parameters = make_gate_parameters(tau_pi, tau_pi_2, i_amp, q_amp, mod_freq, plunger_lengths, plunger_amp)
-        self._gst_program = GateSetTomographyQuantumCompiler(self._gst_file, self._gate_parameters, self._instrument_drivers['awgs'][0], n_inner, n_outer)
+        self._gst_program = GateSetTomographyQuantumCompiler(self._gst_file, self._instrument_drivers['awgs'][0], self._gate_parameters, n_inner, n_outer, added_padding=added_padding)
 
     def run_program(self):
         self._gst_program.run_program()
