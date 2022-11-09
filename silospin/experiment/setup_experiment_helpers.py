@@ -20,7 +20,7 @@ def initialize_drivers(awgs={0: 'dev8446'}, lockins={0: 'dev5759', 1: 'dev5761'}
     mfli_driver_2 = MfliDriver(lockins[1])
     dac_box_1 = DacDriverSerial(dev_id=dacboxes[0])
 
-def update_parameters_file(parameters_file_path, new_parameter_set):
+#def update_parameters_file(parameters_file_path, new_parameter_set):
     ##Structure of parameter dictionneirs
     ## 'descriptors': {'experiment_setup', 'time_stamp', 'date' , 'experiment_counter', 'initials' 'descriptors'}
     ## 'instruments': {'descriptors': {'last_update'}, 'awgs': {'awg1', 'awg2'}, 'mflis': {'mfli1', 'mfli2'},
