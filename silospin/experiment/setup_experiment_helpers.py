@@ -3,30 +3,22 @@ from silospin.drivers.zi_mfli_driver import MfliDriver
 from silospin.drivers.homedac_box import DacDriverSerial
 import pickle
 
-def initialize_drivers(awgs={0: 'dev8446'}, lockins={0: 'dev5759', 1: 'dev5761'}, dacboxes={0: 'COM3'}):
-    ##awgs ==> dictionary of AWG device IDs
-    ##lockins ==> dictionary of LockIn device IDs
-    ##microwaves ==> dictionary of microwave communication ports
-    ## dacboxes ==> dictionary of microwave communication ports
-    ##Designed for setup with 2 AWGs, 2 lockin amplifiers,
-    ##Initialize AWGs
+def initialize_drivers(awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0: 'dev5759', 1: 'dev5761', 2: 'dev6573'}):
     global awg_driver_1
     global mfli_driver_1
     global mfli_driver_2
-    global dac_box_1
+    global mfli_driver_3
     awg_driver_1 = HdawgDriver(awgs[0])
-    #awg_driver_2 = HdawgDriver(awgs[1])
+    awg_driver_2 = HdawgDriver(awgs[1])
     mfli_driver_1 = MfliDriver(lockins[0])
     mfli_driver_2 = MfliDriver(lockins[1])
-    dac_box_1 = DacDriverSerial(dev_id=dacboxes[0])
+    mfli_driver_3 = MfliDriver(lockins[2])
 
-#def update_parameters_file(parameters_file_path, new_parameter_set):
-    ##Structure of parameter dictionneirs
-    ## 'descriptors': {'experiment_setup', 'time_stamp', 'date' , 'experiment_counter', 'initials' 'descriptors'}
-    ## 'instruments': {'descriptors': {'last_update'}, 'awgs': {'awg1', 'awg2'}, 'mflis': {'mfli1', 'mfli2'},
-    #'dacs': {'dac0'}}
-    ## 'qubits' : {'descriptors': {}, 'parameters': parameter file here}
-    #with open(‘filename.pickle’, ‘wb’) as handle:
-#        pickle.dump(your_data, handle, protocol=pickle.HIGHEST_PROTOCOL)
+def pickle_qubit_parameters(parameters_dict, parameters_file_path):
+    with open(parameters_file_path, 'wb') as handle:
+        pickle.dump(parameters_dict, handle, protocol = pickle.HIGHEST_PROTOCOL)
 
-#def get_parameters_file(parameters_file_path)
+def unpickle_qubit_parameters(parameters_file_path):
+    with open(parameters_file_path, 'rb') as handle:
+        qubit_parameters = pickle.load(handle)
+    return qubit_parameters
