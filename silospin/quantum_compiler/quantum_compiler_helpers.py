@@ -2,7 +2,6 @@ from math import ceil
 from silospin.math.math_helpers import *
 
 def channel_mapper(rf_cores=[1,2,3], plunger_channels = {"p12": 7, "p21": 8}):
-    ## Currently set up for only 1 HDAWG with 4 cores ==> adjust for 2-3 HDAWGs
     rf_cores = set(rf_cores) # awg cores used for rf bursts
     channel_mapping = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 8: 4} #channel maping (channel -> core)
     core_mapping = {1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]}#channel maping (core -> channel)
