@@ -71,9 +71,9 @@ class MfliDriver:
 
     def get_all_mfli_settings(self):
         self._demods_settings = {"enable": self._daq.getInt(f"/{self._device}/demods/0/enable"), "adcselect": self._daq.getInt(f"/{self._device}/demods/0/adcselect") ,
-        "bypass": self._daq.getInt(f"/{self._device}/demods/0/bypass"), "freq": self._daq.getDouble(f"/{self._device}/demods/0/freq"), "harmonic":
+        "freq": self._daq.getDouble(f"/{self._device}/demods/0/freq"), "harmonic":
         self._daq.getInt(f"/{self._device}/demods/0/bypass"), "order": self._daq.getInt(f"/{self._device}/demods/0/order"),
-        "oscselect": self._daq.getInt(f"/{self._device}/demods/0/oscselect"),   "phaseshift": self._daq.getDouble(f"/{self._device}/demods/0/phaseshift"),
+        "oscselect": self._daq.getInt(f"/{self._device}/demods/0/oscselect"), "phaseshift": self._daq.getDouble(f"/{self._device}/demods/0/phaseshift"),
         "phaseadjust":  self._daq.getInt(f"/{self._device}/demods/0/phaseadjust"), "rate" : self._daq.getDouble(f"/{self._device}/demods/0/rate"),
         "sinc": self._daq.getInt(f"/{self._device}/demods/0/sinc"), "timeconstant": self._daq.getDouble(f"/{self._device}/demods/0/timeconstant")
         , "trigger": self._daq.getInt(f"/{self._device}/demods/0/trigger")}
