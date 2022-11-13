@@ -26,5 +26,5 @@ def unpickle_qubit_parameters(parameters_file_path):
 
 def pickle_waveforms(waveforms_dict, waveforms_file_path):
     waveforms_parameters = {"timestamp": str(datetime.datetime.now()), "waveforms": waveforms_dict}
-    with open(parameters_file_path, 'wb') as handle:
+    with open(waveforms_file_path, 'wb') as handle:
         pickle.dump(waveforms_parameters, handle, protocol = pickle.HIGHEST_PROTOCOL)

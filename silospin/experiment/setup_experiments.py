@@ -1,5 +1,5 @@
 from silospin.quantum_compiler.quantum_compiler import GateSetTomographyQuantumCompiler
-from silospin.experiment.setup_experiment_helpers import initialize_drivers, pickle_qubit_parameters, unpickle_qubit_parameters, pickle_waveforms 
+from silospin.experiment.setup_experiment_helpers import initialize_drivers, pickle_qubit_parameters, unpickle_qubit_parameters, pickle_waveforms
 from silospin.experiment import setup_experiment_helpers
 from silospin.quantum_compiler.quantum_compiler_helpers import make_gate_parameters
 import pickle
@@ -11,7 +11,7 @@ class GSTExperiment:
         self._gst_file = gst_file
         self._gate_parameters = unpickle_qubit_parameters(parameter_file_path)["parameters"]
         self._gst_program = GateSetTomographyQuantumCompiler(self._gst_file, self._instrument_drivers['awgs'][0], self._gate_parameters, n_inner, n_outer, added_padding=added_padding)
-        pickle_waveforms(self._gst_program._waveforms, waveforms_file_path)
+        pickle_waveforms(self._gst_program._waveforms,waveforms_file_path)
 
     def run_program(self):
         self._gst_program.run_program()
