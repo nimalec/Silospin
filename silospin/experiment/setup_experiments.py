@@ -1,5 +1,5 @@
 from silospin.quantum_compiler.quantum_compiler import GateSetTomographyQuantumCompiler
-from silospin.experiment.setup_experiment_helpers import initialize_drivers, pickle_qubit_parameters, unpickle_qubit_parameters
+from silospin.experiment.setup_experiment_helpers import initialize_drivers, pickle_qubit_parameters, unpickle_qubit_parameters, pickle_waveform 
 from silospin.experiment import setup_experiment_helpers
 from silospin.quantum_compiler.quantum_compiler_helpers import make_gate_parameters
 import pickle
