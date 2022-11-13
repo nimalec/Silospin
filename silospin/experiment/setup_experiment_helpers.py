@@ -30,8 +30,7 @@ def pickle_waveforms(waveforms_dict, waveforms_file_path):
     with open(waveforms_file_path, 'wb') as handle:
         pickle.dump(waveforms_parameters, handle, protocol = pickle.HIGHEST_PROTOCOL)
 
-def pickle_instrument_parameters(self, awg1_params, awg2_params, instruments_file_path):
-    instrument_parameters = {"timestamp": str(datetime.datetime.now()), "awg1": awg1_params, "awg2": awg2_params}
+def pickle_instrument_parameters(self, awg1_params, awg2_params, mfli1_params, mfli2_params, instruments_file_path):
+    instrument_parameters = {"timestamp": str(datetime.datetime.now()), "awg1": awg1_params, "awg2": awg2_params, "mfli1": mfli1_params, "mfli2": mfli2_params}
     with open(instruments_file_path, 'wb') as handle:
         pickle.dump(instrument_parameters, handle, protocol = pickle.HIGHEST_PROTOCOL)
-    
