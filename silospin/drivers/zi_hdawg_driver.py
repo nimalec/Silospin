@@ -120,8 +120,7 @@ class HdawgDriver:
             else:
                 self._run_status["awg"+str(idx+1)] = True
 
-        return {"connection": self._connection_settings, "oscillators": self._oscillator_freq,
-        "sines": self._sines, "command_tables": self._command_tables , "sequences": self._sequences, "run_status": self._run_status}
+        return {"connection": self._connection_settings, "oscillators": self._oscillator_freq, "sines": self._sines, "command_tables": self._command_tables , "sequences": self._sequences, "run_status": self._run_status, "channel_map": self._channel_mapping}
 
     def get_connection_settings(self, param):
       """
