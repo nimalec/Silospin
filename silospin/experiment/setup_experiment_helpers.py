@@ -6,6 +6,7 @@ import datetime
 
 def initialize_drivers(awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0: 'dev5759', 1: 'dev5761'}):
     global awg_driver_1
+    global awg_driver_2
     global mfli_driver_1
     global mfli_driver_2
     global mfli_driver_3
@@ -28,3 +29,6 @@ def pickle_waveforms(waveforms_dict, waveforms_file_path):
     waveforms_parameters = {"timestamp": str(datetime.datetime.now()), "waveforms": waveforms_dict}
     with open(waveforms_file_path, 'wb') as handle:
         pickle.dump(waveforms_parameters, handle, protocol = pickle.HIGHEST_PROTOCOL)
+
+def pickle_instrument_parameters(self, awg1_params, awg2_params):
+    instrument_parameters = {"timestamp": str(datetime.datetime.now()), "awg1": awg1_params, "awg2": awg2_params}
