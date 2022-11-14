@@ -19,4 +19,5 @@ def set_val(device_id, intrument_type, parameter, value, value_type, device_conn
         pass
             device.write(write_command.encode('utf-8'))
 
-def set_val_v2(parameter, value):
+# def set_val_v2(parameter, value):
+#     if
