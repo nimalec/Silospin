@@ -91,7 +91,7 @@ class ChargeStabilitySweepsSerial:
                         V_meas_1 = self._mflis[0].get_sample_r()
                         V_out_1.append(V_meas_1)
                 V_out_all_1.append(V_out_1)
-                return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0)))
+            return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0)))
 
         elif {2} == lockins:
             V_out_all_1 = []
@@ -121,7 +121,7 @@ class ChargeStabilitySweepsSerial:
                         V_meas_1 = self._mflis[1].get_sample_r()
                         V_out_1.append(V_meas_1)
                 V_out_all_1.append(V_out_1)
-                return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0)))
+            return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0)))
         else:
             pass
 
