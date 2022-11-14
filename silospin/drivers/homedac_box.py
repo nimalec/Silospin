@@ -85,47 +85,18 @@ class DacDriverSerial:
 
 
 class DacDriverSerialServer:
-    def __init__(self, dev_id = 'COM3', verbose=0, init=True, baud_rate=250000):
-        self._dev_id = dev_id
-        self._baud_rate = baud_rate
-        self._dac = serial.Serial(self._dev_id, baudrate=baud_rate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,timeout=1)
-        time.sleep(1)
-        cmd_1 = '*IDN?\n'
-        self._dac.write(cmd_1.encode('utf-8'))
-        time.sleep(1)
-        outputstring_1 = ''
-        outputstring_1 = self._dac.readline().decode('utf-8').strip()
-        print(outputstring_1)
-        cmd_2 = 'VERBOSE '+str(int(verbose))+'\n'
-        self._dac.write(cmd_2.encode('utf-8'))
-        time.sleep(1)
-        cmd_3 = 'INIT\n'
+    def __init__(self, client="tcp://0.0.0.0:4243"):
+        self._client = zerorpc.Client()
+        self._client.connect(client)
 
-        if init == True:
-            self._dac.write(cmd_3.encode('utf-8'))
-            time.sleep(1)
-        else:
-            pass
+    def close(self):
+        self._client.close()
 
-    def reconnect_device(self):
-        self._dac.close()
-        self._dac = serial.Serial(self._dev_id, baudrate=self._baud_rate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,timeout=1)
+    def open_connection(self):
+        self._client.open_connection()
 
     def set_voltage(self, voltage):
-        cmd = 'VOLT '+ str('{:.6f}'.format(voltage))+'\n'
-        self._dac.write(cmd.encode('utf-8'))
+        self._client.set_voltage(voltage)
 
     def set_channel(self, channel):
-        cmd = 'CH '+str(int(channel))+'\n'
-        self._dac.write(cmd.encode('utf-8'))
-
-    def set_init(self):
-        self._dac.write('INIT\n'.encode('utf-8'))
-
-    def set_idn(self):
-        cmd = '*IDN?\n'
-        self._dac.write(cmd.encode('utf-8'))
-
-    def set_verbose(self, verbose):
-        cmd = 'VEROBSE '+str(int(verbose))+'\n'
-        self._dac.write(cmd.encode('utf-8'))
+        self._client.set_channel(channel)
