@@ -29,7 +29,7 @@ class ChargeStabilitySweepsSerial:
                 ax_2 = fig_2.add_subplot(111)
                 for j in range(n_fr):
                     V_out_1 = []
-                    V_out_1 = []
+                    V_out_2 = []
                     for i in range(len(v_in_array)):
                         self._dac.set_voltage(v_in_array[i])
                         V_meas_1 = self._mflis[0].get_sample_r()
