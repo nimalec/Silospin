@@ -11,15 +11,21 @@ class DacServer(object):
     def open_connection(self):
         self.dac_driver._dac.open()
 
-    def channel_set(self, channel):
+    def set_channel(self, channel):
         self.dac_driver.set_channel(channel)
 
-    def voltage_set(self, voltage):
+    def set_voltage(self, voltage):
         self.dac_driver.set_voltage(voltage)
 
-    def channel_voltage_set(self, channel, value):
+    def set_channel_voltage(self, channel, value):
         self.dac_driver.set_channel(channel)
         self.dac_driver.set_voltage(value)
+
+    def set_init(self):
+        self.dac_driver.set_init()
+
+    def set_verbose(self):
+        self.dac_driver.set_init()
 
 ​server = zerorpc.Server(DacServer())
 s.bind("tcp://0.0.0.0:4243")
