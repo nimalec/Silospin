@@ -62,7 +62,7 @@ class ChargeStabilitySweepsSerial:
                         V_out_2.append(V_meas_2)
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
-                return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0)), np.mean(np.array(V_out_all_2)),axis=0))
+            return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0)), np.mean(np.array(V_out_all_2)),axis=0))
 
         elif {1} == lockins:
             V_out_all_1 = []
