@@ -9,7 +9,7 @@ import numpy as np
 import time
 
 class ChargeStabilitySweepsSerial:
-    def __init__(self, dac_id="COM3", mfli_id="dev5759", excluded_zurich_devices= ["dev8446", "dev5761"], filter_tc=10e-3):
+    def __init__(self, dac_id="COM3", mfli_id= "dev5759", excluded_zurich_devices= ["dev8446", "dev5761"], filter_tc=10e-3):
 
         ##Modify here to account for multiple instruments
         self._mfli = MfliDriverChargeStability(excluded_devices = excluded_zurich_devices, timeconstant=filter_tc)
@@ -44,4 +44,4 @@ class ChargeStabilitySweepsSerial:
                     V_meas_1 = self._mfli.get_sample_r()
                     V_out_1.append(V_meas_1)
             V_out_all_1.append(V_out_1)
-        return np.mean(np.array(V_out_all_1),axis=0)
+        return (v_in_array, np.mean(np.array(V_out_all_1),axis=0))
