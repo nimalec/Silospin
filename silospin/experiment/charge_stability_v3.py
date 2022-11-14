@@ -10,10 +10,10 @@ import time
 
 class ChargeStabilitySweepsSerial:
     def __init__(self, dac_id="COM3", filter_tc=10e-3):
-        self._mflis = {0: MfliDriverChargeStability(excluded_devices=["dev5761", "dev8446", "dev8485", "dev6573"], timeconstant=filter_tc), 1: MfliDriverChargeStability(excluded_devices=["dev5759", "dev8446", "dev8485", "dev6573"], timeconstant=filter_tc)}
+        self._mflis = {0: MfliDriverChargeStability(excluded_devices=["dev5761", "dev8446", "dev8485", "dev6573"], timeconstant=filter_tc), 1: MfliDriverChargeStability(excluded_devices=["dev5759", "dev8446", "dev8485", "dev6573"], 2: , timeconstant=filter_tc)}
         self._dac = DacDriverSerial(dac_id)
 
-    def sweep1D(self, channel, start_v, end_v, npoints, lockins = {1, 2}, n_r = 10, n_fr = 1, plot = True):
+    def sweep1D(self, channel, start_v, end_v, npoints, lockins = {1, 2, 3}, n_r = 10, n_fr = 1, plot = True):
         ##Lockin 1 ==> "dev5759"
         ##Lockin 2 ==> "dev5761"
         v_in_array = np.linspace(start_v,end_v,npoints)
@@ -132,8 +132,6 @@ class ChargeStabilitySweepsSerial:
         v_x = np.linspace(v_range[0][0], v_range[0][1], npoints[0])
         v_y = np.linspace(v_range[1][0], v_range[1][1], npoints[1])
         V_x, V_y = np.meshgrid(v_x, v_y)
-
-
 
         self._dac.set_channel(channel)
 
