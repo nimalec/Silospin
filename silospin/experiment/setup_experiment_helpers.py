@@ -35,7 +35,7 @@ def pickle_instrument_parameters(awg1_params, awg2_params, mfli1_params, mfli2_p
     with open(instruments_file_path, 'wb') as handle:
         pickle.dump(instrument_parameters, handle, protocol = pickle.HIGHEST_PROTOCOL)
 
-def pickle_dac_parameter(channel_mapping, instruments_file_path, dev_id = "COM3"):
+def pickle_dac_parameters(channel_mapping, instruments_file_path, dev_id = "COM3"):
     instrument_parameters = {"timestamp": str(datetime.datetime.now()), "id": dev_id, "channel_mapping": channel_mapping}
     with open(instruments_file_path, 'wb') as handle:
         pickle.dump(instrument_parameters, handle, protocol = pickle.HIGHEST_PROTOCOL)
