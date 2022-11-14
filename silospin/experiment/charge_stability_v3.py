@@ -44,4 +44,5 @@ class ChargeStabilitySweepsSerial:
                     V_meas_1 = self._mfli.get_sample_r()
                     V_out_1.append(V_meas_1)
             V_out_all_1.append(V_out_1)
+            print(len(V_out_all_1))
         return (v_in_array, np.mean(np.array(V_out_all_1),axis=0))
