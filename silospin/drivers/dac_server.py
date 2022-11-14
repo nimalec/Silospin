@@ -1,6 +1,5 @@
 import zerorpc
 from silospin.drivers.homedac_box import DacDriverSerial
-
 class DacServer(object):
     device_id='COM3'
     dac_driver = DacDriverSerial(dev_id = device_id, verbose=0, init=False,  baud_rate=250000)
@@ -28,5 +27,5 @@ class DacServer(object):
         self.dac_driver.set_init()
 
 ​server = zerorpc.Server(DacServer())
-s.bind("tcp://0.0.0.0:4243")
-s.run()
+server.bind("tcp://0.0.0.0:4243")
+server.run()
