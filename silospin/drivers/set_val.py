@@ -1,23 +1,75 @@
 import serial
+from zerorpc import Client
 
-def set_val(device_id, intrument_type, parameter, value, value_type, device_connected=None):
-    ##Value type ==> float, int, or str
-    ## Intrument ==> connection ID  (should aso include baud_rate , termination_char, verbose)
-    baud_rates =  {'dac': 250000, 'mw': 250000}
-    if device_connected:
-        device = device_connected
-    else:
-        device = serial.Serial(device_id, baudrate=baud_rates[device_id], parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,timeout=1)
+def set_val(parameter, value, channel_mapping):
+    ##For now, channel_mapping = input. Once channel mapping is known, we can use a pickle file for this.
+    ## Channel map ==> uses a dictionary
 
-    if value_type == 'float':
-        write_command = parameter+' '+str('{:.6f}'.format(value))+'\n'
-    elif value_type == 'int':
-        write_command = parameter+' '+str(int(value))+'\n'
-    elif value_type == 'str':
-        write_command = parameter+' '+str(value)+'\n'
+    all_gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "M1", "R1", "L2", "M2", "R2", "TS", "BS1", "BS2", "MS"}
+    ohmic_gates = {"Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
+    hemts = {"HEMT1", "HEMT2"}
+    sensors02 = {"L2", "M2", "R2"}
+    sensors1 = {"L2", "M2", "R2"}
+    topgates = {"B1", "P1", "P2", "B3", "P3", "B4", "P4", "B5"}
+
+    if parameter in all_gates:
+        client = Client()
+        client.connect("tcp://0.0.0.0:4243")
+        client.set_channel(channel_mapping["gates"][parameter])
+        client.set_voltage(value)
+
+    elif parameter == "allgates":
+        client = Client()
+        client.connect("tcp://0.0.0.0:4243")
+        for gt in all_gates:
+            client.set_channel(channel_mapping["gates"][gt])
+            client.set_voltage(value)
+
+    elif parameter in ohmic_gates:
+        client = Client()
+        client.connect("tcp://0.0.0.0:4243")
+        client.set_channel(channel_mapping["ohmics"][parameter])
+        client.set_voltage(value)
+
+    elif parameter == "ohmics":
+        client = Client()
+        client.connect("tcp://0.0.0.0:4243")
+        for gt in ohmic_gates:
+            client.set_channel(channel_mapping["ohmics"][gt])
+            client.set_voltage(value)
+
+    elif parameter in hemts:
+        client = Client()
+        client.connect("tcp://0.0.0.0:4243")
+        client.set_channel(channel_mapping["hemts"][gt])
+        client.set_voltage(value)
+
+    elif parameter == "hemts":
+        client = Client()
+        client.connect("tcp://0.0.0.0:4243")
+        for gt in hemts:
+            client.set_channel(channel_mapping["hemts"][gt])
+            client.set_voltage(value)
+
+    elif parameter == "topgates":
+        client = Client()
+        client.connect("tcp://0.0.0.0:4243")
+        for gt in topgates:
+            client.set_channel(channel_mapping["gates"][gt])
+            client.set_voltage(value)
+
+    elif parameter == "sensor02":
+        client = Client()
+        client.connect("tcp://0.0.0.0:4243")
+        for gt in sensors02:
+            client.set_channel(channel_mapping["gates"][gt])
+            client.set_voltage(value)
+
+    elif parameter == "sensors1":
+        client = Client()
+        client.connect("tcp://0.0.0.0:4243")
+        for gt in sensors1:
+            client.set_channel(channel_mapping["gates"][gt])
+            client.set_voltage(value)
     else:
         pass
-            device.write(write_command.encode('utf-8'))
-
-# def set_val_v2(parameter, value):
-#     if
