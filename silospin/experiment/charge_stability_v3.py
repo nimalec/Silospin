@@ -44,7 +44,7 @@ class ChargeStabilitySweepsSerial:
 
                             ax_2.plot(v_in_array[0:len(V_out_2)], V_out_2)
                             ax_2.set_xlabel('Applied barrier voltage [V]')
-                            ax_2.set_ylabel('Measured output on lock-in 2 [V]')
+                            ax_2.set_ylabel('Measured output voltage on lock-in 2 [V]')
                             fig_2.canvas.draw()
 
                             plt.show(block=False)
@@ -62,7 +62,7 @@ class ChargeStabilitySweepsSerial:
                         V_out_2.append(V_meas_2)
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
-            return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0)), np.mean(np.array(V_out_all_2)),axis=0))
+            return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0))
 
         elif {1} == lockins:
             V_out_all_1 = []
@@ -78,7 +78,7 @@ class ChargeStabilitySweepsSerial:
                         if i%n_r == 0:
                             ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
                             ax_1.set_xlabel('Applied barrier voltage [V]')
-                            ax_1.set_ylabel('Measured output [V]')
+                            ax_1.set_ylabel('Measured output voltage on lock-in 1 [V]')
                             fig_1.canvas.draw()
                             plt.show(block=False)
                     V_out_all_1.append(V_out_1)
@@ -91,7 +91,7 @@ class ChargeStabilitySweepsSerial:
                         V_meas_1 = self._mflis[0].get_sample_r()
                         V_out_1.append(V_meas_1)
                 V_out_all_1.append(V_out_1)
-            return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0)))
+            return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0))
 
         elif {2} == lockins:
             V_out_all_1 = []
@@ -108,7 +108,7 @@ class ChargeStabilitySweepsSerial:
                         if i%n_r == 0:
                             ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
                             ax_1.set_xlabel('Applied barrier voltage [V]')
-                            ax_1.set_ylabel('Measured output [V]')
+                            ax_1.set_ylabel('Measured output voltage on lock-in 2[V]')
                             fig_1.canvas.draw()
                             plt.show(block=False)
                     V_out_all_1.append(V_out_1)
@@ -121,7 +121,7 @@ class ChargeStabilitySweepsSerial:
                         V_meas_1 = self._mflis[1].get_sample_r()
                         V_out_1.append(V_meas_1)
                 V_out_all_1.append(V_out_1)
-            return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0)))
+            return_value = (v_in_array,np.mean(np.array(V_out_all_1),axis=0))
         else:
             pass
 
