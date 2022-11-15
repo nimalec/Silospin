@@ -33,7 +33,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
             fig_3 = plt.figure()
             ax_3 = fig_2.add_subplot(111)
 
-            for i in n_fr:
+            for i in range(n_fr):
                 V_out_1 = []
                 V_out_2 = []
                 V_out_3 = []
@@ -69,7 +69,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                 V_out_all_3.append(V_out_3)
 
         else:
-            for i in n_fr:
+            for i in range(n_fr):
                 V_out_1 = []
                 V_out_2 = []
                 V_out_3 = []
@@ -98,7 +98,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
             ax_1 = fig_1.add_subplot(111)
             fig_2 = plt.figure()
             ax_2 = fig_2.add_subplot(111)
-            for i in n_fr:
+            for i in range(n_fr):
                 V_out_1 = []
                 V_out_2 = []
                 for j in range(npoints):
@@ -126,7 +126,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                 V_out_all_2.append(V_out_2)
 
         else:
-            for i in n_fr:
+            for i in range(n_fr):
                 V_out_1 = []
                 V_out_2 = []
                 for j in range(npoints):
@@ -148,7 +148,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         if plot == True:
             fig_1 = plt.figure()
             ax_1 = fig_1.add_subplot(111)
-            for i in n_fr:
+            for i in range(n_fr):
                 V_out_1 = []
                 for j in range(npoints):
                     if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
@@ -167,7 +167,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                             plt.show(block=False)
                 V_out_all_1.append(V_out_1)
         else:
-            for i in n_fr:
+            for i in range(n_fr):
                 V_out_1 = []
                 for j in range(npoints):
                     if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
