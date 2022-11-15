@@ -182,5 +182,5 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     else:
         pass
     return return_value
-    
+
 #def do2DSweep(parameter, start_value, end_value, lockins = {1,2,3}, client_address = ):
