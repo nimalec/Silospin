@@ -41,10 +41,9 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
 
                 for j in range(npoints):
                     if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
-                        for k in range(len(v_in_arrays)):
-                            ## For case where a set of voltage ranges per channel is provided
-
-
+                        pass
+                        # for k in range(len(v_in_arrays)):
+                        #     ## For case where a set of voltage ranges per channel is provided
                     else:
                         set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(self._mflis[0].get_sample_r())
@@ -66,8 +65,30 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                             ax_3.set_xlabel('Applied barrier voltage [V]')
                             ax_3.set_ylabel('Measured output on lock-in 3 [V]')
                             fig_3.canvas.draw()
-
                             plt.show(block=False)
+                V_out_all_1.append(V_out_1)
+                V_out_all_2.append(V_out_2)
+                V_out_all_3.append(V_out_3)
+
+        else:
+            for i in n_fr:
+                V_out_1 = []
+                V_out_2 = []
+                V_out_3 = []
+                for j in range(npoints):
+                    if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
+                        pass
+                        # for k in range(len(v_in_arrays)):
+                        #     ## For case where a set of voltage ranges per channel is provided
+                    else:
+                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+                        V_out_1.append(self._mflis[0].get_sample_r())
+                        V_out_2.append(self._mflis[1].get_sample_r())
+                        V_out_3.append(self._mflis[2].get_sample_r())
+                V_out_all_1.append(V_out_1)
+                V_out_all_2.append(V_out_2)
+                V_out_all_3.append(V_out_3)
+
 
     elif lockins in {lockin_configs[2], lockin_configs[3]}:
         V_out_all_1 = []
