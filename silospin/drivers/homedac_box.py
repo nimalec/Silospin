@@ -86,8 +86,9 @@ class DacDriverSerial:
 
 class DacDriverSerialServer:
     def __init__(self, client="tcp://127.0.0.1:4243"):
+        self._client_address = client
         self._client = zerorpc.Client()
-        self._client.connect(client)
+        self._client.connect(self._client_address)
 
     def close(self):
         self._client.close()
@@ -96,7 +97,9 @@ class DacDriverSerialServer:
         self._client.open_connection()
 
     def set_voltage(self, voltage):
+        self._client.connect(self._client_address)
         self._client.set_voltage(voltage)
 
     def set_channel(self, channel):
+        self._client.connect(self._client_address)
         self._client.set_channel(channel)
