@@ -73,7 +73,7 @@ def set_val(parameter, value, channel_mapping, dac_client):
             dac_client.set_channel(channel_mapping["ohmics"][gt])
             dac_client.set_voltage(value)
 
-    elif paramter == "topgates":
+    elif parameter == "topgates":
         for gt in topgates:
             dac_client.set_channel(channel_mapping["gates"][gt])
             dac_client.set_voltage(value)
