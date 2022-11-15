@@ -78,17 +78,17 @@ def set_val(parameter, value, channel_mapping, dac_client):
             dac_client.set_channel(channel_mapping["gates"][gt])
             dac_client.set_voltage(value)
 
-    elif paramter == "sensors02":
+    elif parameter == "sensors02":
         for gt in sensors02:
             dac_client.set_channel(channel_mapping["gates"][gt])
             dac_client.set_voltage(value)
 
-    elif paramter == "sensors1":
+    elif parameter == "sensors1":
         for gt in sensors1:
             dac_client.set_channel(channel_mapping["gates"][gt])
             dac_client.set_voltage(value)
 
-    elif paramter == "sensors2":
+    elif parameter == "sensors2":
         for gt in sensors2:
             dac_client.set_channel(channel_mapping["gates"][gt])
             dac_client.set_voltage(value)
