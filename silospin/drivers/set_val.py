@@ -47,11 +47,11 @@ def set_val(parameter, value, channel_mapping, dac_client):
         for i in range(len(value)):
             if value[i][0] in all_gates:
                 dac_client.set_channel(channel_mapping["gates"][value[i][0]])
-                dac_client.set_voltage(channel_mapping["gates"][value[i][1]])
+                dac_client.set_voltage(value[i][1])
 
             elif value[i][0] in ohmic_gates:
                 dac_client.set_channel(channel_mapping["gates"][value[i][0]])
-                dac_client.set_voltage(channel_mapping["gates"][value[i][1]])
+                dac_client.set_voltage(value[i][1])
             else:
                 pass
 
