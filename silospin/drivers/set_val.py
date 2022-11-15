@@ -34,7 +34,6 @@ def set_val(parameter, value, channel_mapping, dac_client):
 
     elif parameter == "channel_voltage":
         ##Takes in a tuple of chanel with voltage
-        print(value)
         dac_client.set_channel(value[0])
         dac_client.set_voltage(value[1])
 
