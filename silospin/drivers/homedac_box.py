@@ -85,7 +85,7 @@ class DacDriverSerial:
 
 
 class DacDriverSerialServer:
-    def __init__(self, client="tcp://0.0.0.0:4243"):
+    def __init__(self, client="tcp://127.0.0.1:4243"):
         self._client = zerorpc.Client()
         self._client.connect(client)
 

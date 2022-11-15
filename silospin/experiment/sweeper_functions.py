@@ -67,7 +67,6 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
                 V_out_all_3.append(V_out_3)
-
         else:
             for i in range(n_fr):
                 V_out_1 = []
@@ -115,12 +114,10 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                             ax_1.set_xlabel('Applied barrier voltage [V]')
                             ax_1.set_ylabel('Measured output on lock-in 1 [V]')
                             fig_1.canvas.draw()
-
                             ax_2.plot(v_in_array[0:len(V_out_2)], V_out_2)
                             ax_2.set_xlabel('Applied barrier voltage [V]')
                             ax_2.set_ylabel('Measured output on lock-in 2 [V]')
                             fig_2.canvas.draw()
-
                             plt.show(block=False)
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
@@ -183,4 +180,4 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         pass
     return return_value
 
-#def do2DSweep(parameter, start_value, end_value, lockins = {1,2,3}, client_address = ):
+#def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_value2, end_value2, npoints2):
