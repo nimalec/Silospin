@@ -1,7 +1,7 @@
 from silospin.drivers.set_val import *
 from silospin.drivers.homedac_box import DacDriverSerialServer
 from silospin.drivers.zi_mfli_driver import MfliDriverChargeStability
-from silospin.drivers.experiment.setup_experiment_helpers import unpickle_qubit_parameters
+from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
 
 import numpy as np
 
