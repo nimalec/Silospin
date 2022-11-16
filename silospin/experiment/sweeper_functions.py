@@ -182,8 +182,16 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         V_out_all_1 = []
         idx_1 = list(lockins)[0]
         if plot == True:
-            fig_1 = plt.figure()
-            ax_1 = fig_1.add_subplot(111)
+            fig1 = plt.figure()
+            ax1 = fig1.add_subplot(111)
+
+            line1, = ax1.plot(v_in_array, np.zeros(len(v_in_array)))
+            ax1.set_xlabel('Applied voltage [V]')
+            ax1.set_ylabel('Measured output on lock-in '+str(idx_1)+' [V]')
+            fig1.canvas.draw()
+            ax1background = fig1.canvas.copy_from_bbox(ax1.bbox)
+            plt.show(block=False)
+
             for i in range(n_fr):
                 V_out_1 = []
                 for j in range(npoints):
@@ -196,12 +204,12 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         V_out_1.append(mflis[idx_1-1].get_sample_r())
 
                         if j%n_r == 0:
-                            ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
-                            ax_1.set_xlabel('Applied voltage [V]')
-                            ax_1.set_ylabel('Measured output on lock-in 1 [V]')
-                            fig_1.canvas.draw()
-                            plt.show(block=False)
+                            line1.set_data(v_in_array[0:len(V_out_1)], V_out_1)
+                            fig1.canvas.draw()
+                            fig1.canvas.flush_events()
+                            ax1.set_ylim(np.amin(V_out_1), np.amax(V_out_1))
                 V_out_all_1.append(V_out_1)
+                
         else:
             for i in range(n_fr):
                 V_out_1 = []
