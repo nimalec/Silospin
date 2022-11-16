@@ -73,21 +73,6 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         V_out_3.append(mflis[2].get_sample_r())
 
                         if j%n_r == 0:
-                            # line1, = ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
-                            # ax_1.set_xlabel('Applied voltage [V]')
-                            # ax_1.set_ylabel('Measured output on lock-in 1 [V]')
-                            # fig_1.canvas.draw()
-                            #
-                            # line2, = ax_2.plot(v_in_array[0:len(V_out_2)], V_out_2)
-                            # ax_2.set_xlabel('Applied voltage [V]')
-                            # ax_2.set_ylabel('Measured output on lock-in 2 [V]')
-                            # fig_2.canvas.draw()
-                            #
-                            # line3, = ax_3.plot(v_in_array[0:len(V_out_3)], V_out_3)
-                            # ax_3.set_xlabel('Applied voltage [V]')
-                            # ax_3.set_ylabel('Measured output on lock-in 3 [V]')
-                            # fig_3.canvas.draw()
-                            # plt.show(block=False)
                             line1.set_data(v_in_array[0:len(V_out_1)], V_out_1)
                             fig1.canvas.draw()
                             fig1.canvas.flush_events()
@@ -136,6 +121,21 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
             ax_1 = fig_1.add_subplot(111)
             fig_2 = plt.figure()
             ax_2 = fig_2.add_subplot(111)
+
+            line1, = ax1.plot(v_in_array, np.zeros(len(v_in_array)))
+            ax1.set_xlabel('Applied voltage [V]')
+            ax1.set_ylabel('Measured output on lock-in 1 [V]')
+            fig1.canvas.draw()
+            ax1background = fig1.canvas.copy_from_bbox(ax1.bbox)
+            plt.show(block=False)
+
+            line2, = ax2.plot(v_in_array, np.zeros(len(v_in_array)))
+            ax2.set_xlabel('Applied voltage [V]')
+            ax2.set_ylabel('Measured output on lock-in 1 [V]')
+            fig2.canvas.draw()
+            ax2background = fig2.canvas.copy_from_bbox(ax1.bbox)
+            plt.show(block=False)
+
             for i in range(n_fr):
                 V_out_1 = []
                 V_out_2 = []
@@ -149,15 +149,15 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         V_out_1.append(mflis[idx_1-1].get_sample_r())
                         V_out_2.append(mflis[idx_2-1].get_sample_r())
                         if j%n_r == 0:
-                            ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
-                            ax_1.set_xlabel('Applied voltage [V]')
-                            ax_1.set_ylabel('Measured output on lock-in 1 [V]')
-                            fig_1.canvas.draw()
-                            ax_2.plot(v_in_array[0:len(V_out_2)], V_out_2)
-                            ax_2.set_xlabel('Applied voltage [V]')
-                            ax_2.set_ylabel('Measured output on lock-in 2 [V]')
-                            fig_2.canvas.draw()
-                            plt.show(block=False)
+                            line1.set_data(v_in_array[0:len(V_out_1)], V_out_1)
+                            fig1.canvas.draw()
+                            fig1.canvas.flush_events()
+                            ax1.set_ylim(np.amin(V_out_1), np.amax(V_out_1))
+
+                            line2.set_data(v_in_array[0:len(V_out_2)], V_out_2)
+                            fig2.canvas.draw()
+                            fig2.canvas.flush_events()
+                            ax2.set_ylim(np.amin(V_out_2), np.amax(V_out_2))
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
 
