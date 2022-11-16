@@ -117,10 +117,10 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         idx_1 = list(lockins)[0]
         idx_2 = list(lockins)[1]
         if plot == True:
-            fig_1 = plt.figure()
-            ax_1 = fig_1.add_subplot(111)
-            fig_2 = plt.figure()
-            ax_2 = fig_2.add_subplot(111)
+            fig1 = plt.figure()
+            ax1 = fig1.add_subplot(111)
+            fig2 = plt.figure()
+            ax2 = fig2.add_subplot(111)
 
             line1, = ax1.plot(v_in_array, np.zeros(len(v_in_array)))
             ax1.set_xlabel('Applied voltage [V]')
