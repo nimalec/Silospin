@@ -95,6 +95,12 @@ class MfliDriver:
         self._oscs_settings = {"freq": self._daq.getDouble(f"/{self._device}/oscs/0/freq")}
         return {"connection": self._connection_settings, "demods": self._demods_settings, "sigins": self._sigins_settings, "sigouts": self._sigouts_settings, "currins": self._currins_settings , "oscs": self._oscs_settings}
 
+    def get_osc_freq(self):
+        return self._daq.getDouble(f"/{self._device}/oscs/0/freq")
+
+    def set_osc_freq(self, value):
+        self._daq.set(f"/{self._device}/oscs/0/freq", value)
+
     def get_demods_settings(self, key):
         settings_1 = {"enable", "adcselect","bypass", "harmonic", "order", "oscselect", "phaseadjust",  "sinc", "trigger"}
         settings_2 = {"freq", "phaseshift", "rate", "timeconstant", "rate"}
