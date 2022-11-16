@@ -47,9 +47,9 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         #     ## For case where a set of voltage ranges per channel is provided
                     else:
                         set_val(parameter, v_in_array[j], channel_mapping, dac_server)
-                        V_out_1.append(self._mflis[0].get_sample_r())
-                        V_out_2.append(self._mflis[1].get_sample_r())
-                        V_out_3.append(self._mflis[2].get_sample_r())
+                        V_out_1.append(mflis[0].get_sample_r())
+                        V_out_2.append(mflis[1].get_sample_r())
+                        V_out_3.append(mflis[2].get_sample_r())
 
                         if j%n_r == 0:
                             ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
@@ -82,9 +82,9 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         #     ## For case where a set of voltage ranges per channel is provided
                     else:
                         set_val(parameter, v_in_array[j], channel_mapping, dac_server)
-                        V_out_1.append(self._mflis[0].get_sample_r())
-                        V_out_2.append(self._mflis[1].get_sample_r())
-                        V_out_3.append(self._mflis[2].get_sample_r())
+                        V_out_1.append(mflis[0].get_sample_r())
+                        V_out_2.append(mflis[1].get_sample_r())
+                        V_out_3.append(mflis[2].get_sample_r())
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
                 V_out_all_3.append(V_out_3)
