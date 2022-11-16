@@ -124,14 +124,14 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
 
             line1, = ax1.plot(v_in_array, np.zeros(len(v_in_array)))
             ax1.set_xlabel('Applied voltage [V]')
-            ax1.set_ylabel('Measured output on lock-in 1 [V]')
+            ax1.set_ylabel('Measured output on lock-in '+str(idx_1)+' [V]')
             fig1.canvas.draw()
             ax1background = fig1.canvas.copy_from_bbox(ax1.bbox)
             plt.show(block=False)
 
             line2, = ax2.plot(v_in_array, np.zeros(len(v_in_array)))
             ax2.set_xlabel('Applied voltage [V]')
-            ax2.set_ylabel('Measured output on lock-in 1 [V]')
+            ax2.set_ylabel('Measured output on lock-in '+str(idx_2)+' [V]')
             fig2.canvas.draw()
             ax2background = fig2.canvas.copy_from_bbox(ax1.bbox)
             plt.show(block=False)
