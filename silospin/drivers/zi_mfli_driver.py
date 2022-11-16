@@ -10,13 +10,14 @@ import time
 from silospin.drivers.driver_helpers import read_data_update_plot, read_data
 
 class MfliDriverChargeStability:
-    def __init__(self, dev_id = "dev5759", excluded_devices = ["dev8446", "dev5761"], sig_path="/dev5759/demods/0/sample", timeconstant = 10e-3):
+    def __init__(self, dev_id = "dev5759", excluded_devices = ["dev8446", "dev5761"], sig_path="/dev5759/demods/0/sample", timeconstant = 10e-3, demod_freq = 100e3):
         host = 'localhost'
-        port=8004
+        port = 8004
         self._signal_path = sig_path
         self._daq_1 = zhinst.ziPython.ziDAQServer(host, port, api_level=6)
         self._daq_1.connect()
         self._mfli = MfliDriver(dev_id)
+        self._mfli.set_demods_settings("freq", demod_freq)
         self._daq_mod_2 =  MfliDaqModule(self._mfli)
         self._daq_mod_2.set_continuous_numeric_parameters(timeconstant)
 
