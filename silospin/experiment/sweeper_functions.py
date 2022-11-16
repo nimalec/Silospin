@@ -109,7 +109,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
                 V_out_all_3.append(V_out_3)
-        return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0), np.mean(np.array(V_out_all_3),axis=0))
+        return_value = {"v_applied": v_in_array, "v_out1": np.mean(np.array(V_out_all_1),axis=0), "v_out2": np.mean(np.array(V_out_all_2),axis=0), "v_out3": np.mean(np.array(V_out_all_3),axis=0)}
 
     elif lockins == lockin_configs[2] or lockins == lockin_configs[3]:
         V_out_all_1 = []
@@ -176,7 +176,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         V_out_2.append(mflis[idx_2-1].get_sample_r())
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
-        return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0))
+        return_value = {"v_applied": v_in_array, "v_out1": np.mean(np.array(V_out_all_1),axis=0), "v_out2": np.mean(np.array(V_out_all_2),axis=0))}
 
     elif lockins == lockin_configs[4] or lockins == lockin_configs[5] or lockins == lockin_configs[6]:
         V_out_all_1 = []
@@ -209,7 +209,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                             fig1.canvas.flush_events()
                             ax1.set_ylim(np.amin(V_out_1), np.amax(V_out_1))
                 V_out_all_1.append(V_out_1)
-                
+
         else:
             for i in range(n_fr):
                 V_out_1 = []
@@ -222,7 +222,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(mflis[idx_1-1].get_sample_r())
                 V_out_all_1.append(V_out_1)
-        return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0))
+        return_value = {"v_applied": v_in_array, "v_out1": np.mean(np.array(V_out_all_1),axis=0))}
     else:
         pass
     return return_value
