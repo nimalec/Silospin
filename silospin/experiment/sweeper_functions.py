@@ -90,7 +90,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                 V_out_all_3.append(V_out_3)
         return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0), np.mean(np.array(V_out_all_3),axis=0))
 
-    elif lockins == lockin_configs[2] or lockins == lockin_configs[3]
+    elif lockins == lockin_configs[2] or lockins == lockin_configs[3]:
         V_out_all_1 = []
         V_out_all_2 = []
         idx_1 = list(lockins)[0]
