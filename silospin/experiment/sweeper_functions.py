@@ -18,7 +18,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         v_in_arrays = []
         for i in range(len(start_value)):
             v_in_arrays.append(np.linspace(start_value[i][1], end_value[i][1], npoints))
-    elif parameter in all_gates or parameter == "channel_voltage":
+    elif parameter in gates or parameter == "channel_voltage":
         v_in_array = np.linspace(start_value, end_value, npoints)
     else:
         pass
