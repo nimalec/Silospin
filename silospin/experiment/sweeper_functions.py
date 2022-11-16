@@ -178,7 +178,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(mflis[idx_1-1].get_sample_r())
                 V_out_all_1.append(V_out_1)
-        return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0))
+        return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0))
     else:
         pass
     return return_value
