@@ -4,7 +4,7 @@ from silospin.drivers.zi_mfli_driver import MfliDriverChargeStability
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
 
 import numpy as np
-
+import matplotlib.pyplot as plt
 
 def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, plot = True, lockins = {1,2,3}, filter_tc=10e-3, dac_mapping_file_path = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_dac.pickle'):
     dac_server = DacDriverSerialServer()
