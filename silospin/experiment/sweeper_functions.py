@@ -14,14 +14,15 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     dac_dict = unpickle_qubit_parameters(dac_mapping_file_path)
     channel_mapping = dac_dict["channel_mapping"]
 
-    if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
-        v_in_arrays = []
-        for i in range(len(start_value)):
-            v_in_arrays.append(np.linspace(start_value[i][1], end_value[i][1], npoints))
-    elif parameter in gates or parameter == "channel_voltage":
-        v_in_array = np.linspace(start_value, end_value, npoints)
-    else:
-        pass
+    # if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
+    #     v_in_arrays = []
+    #     for i in range(len(start_value)):
+    #         v_in_arrays.append(np.linspace(start_value[i][1], end_value[i][1], npoints))
+    # elif parameter in gates or parameter == "channel_voltage":
+    #     v_in_array = np.linspace(start_value, end_value, npoints)
+    # else:
+    #     pass
+    v_in_array = np.linspace(start_value, end_value, npoints)
 
     if lockins == lockin_configs[1]:
         V_out_all_1 = []
