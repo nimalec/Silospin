@@ -205,4 +205,6 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
 
     if save_path:
         pickle_charge_data(return_value, save_path)
+    else:
+        pass 
     return return_value
