@@ -34,7 +34,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
             fig_2 = plt.figure()
             ax_2 = fig_2.add_subplot(111)
             fig_3 = plt.figure()
-            ax_3 = fig_2.add_subplot(111)
+            ax_3 = fig_3.add_subplot(111)
 
             for i in range(n_fr):
                 V_out_1 = []
