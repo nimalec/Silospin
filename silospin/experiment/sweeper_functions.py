@@ -53,17 +53,17 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
 
                         if j%n_r == 0:
                             ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
-                            ax_1.set_xlabel('Applied barrier voltage [V]')
+                            ax_1.set_xlabel('Applied voltage [V]')
                             ax_1.set_ylabel('Measured output on lock-in 1 [V]')
                             fig_1.canvas.draw()
 
                             ax_2.plot(v_in_array[0:len(V_out_2)], V_out_2)
-                            ax_2.set_xlabel('Applied barrier voltage [V]')
+                            ax_2.set_xlabel('Applied voltage [V]')
                             ax_2.set_ylabel('Measured output on lock-in 2 [V]')
                             fig_2.canvas.draw()
 
                             ax_3.plot(v_in_array[0:len(V_out_3)], V_out_3)
-                            ax_3.set_xlabel('Applied barrier voltage [V]')
+                            ax_3.set_xlabel('Applied voltage [V]')
                             ax_3.set_ylabel('Measured output on lock-in 3 [V]')
                             fig_3.canvas.draw()
                             plt.show(block=False)
@@ -114,11 +114,11 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         V_out_2.append(mflis[idx_2-1].get_sample_r())
                         if j%n_r == 0:
                             ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
-                            ax_1.set_xlabel('Applied barrier voltage [V]')
+                            ax_1.set_xlabel('Applied voltage [V]')
                             ax_1.set_ylabel('Measured output on lock-in 1 [V]')
                             fig_1.canvas.draw()
                             ax_2.plot(v_in_array[0:len(V_out_2)], V_out_2)
-                            ax_2.set_xlabel('Applied barrier voltage [V]')
+                            ax_2.set_xlabel('Applied voltage [V]')
                             ax_2.set_ylabel('Measured output on lock-in 2 [V]')
                             fig_2.canvas.draw()
                             plt.show(block=False)
@@ -161,7 +161,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
 
                         if j%n_r == 0:
                             ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
-                            ax_1.set_xlabel('Applied barrier voltage [V]')
+                            ax_1.set_xlabel('Applied voltage [V]')
                             ax_1.set_ylabel('Measured output on lock-in 1 [V]')
                             fig_1.canvas.draw()
                             plt.show(block=False)
