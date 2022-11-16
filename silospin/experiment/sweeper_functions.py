@@ -89,97 +89,97 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                 V_out_all_3.append(V_out_3)
         return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0), np.mean(np.array(V_out_all_3),axis=0))
 
-    elif lockins in {lockin_configs[2], lockin_configs[3]}:
-        V_out_all_1 = []
-        V_out_all_2 = []
-        idx_1 = list(lockins)[0]
-        idx_2 = list(lockins)[1]
-        if plot == True:
-            fig_1 = plt.figure()
-            ax_1 = fig_1.add_subplot(111)
-            fig_2 = plt.figure()
-            ax_2 = fig_2.add_subplot(111)
-            for i in range(n_fr):
-                V_out_1 = []
-                V_out_2 = []
-                for j in range(npoints):
-                    if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
-                        pass
-                        # for k in range(len(v_in_arrays)):
-                        #     ## For case where a set of voltage ranges per channel is provided
-                    else:
-                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
-                        V_out_1.append(self._mflis[idx_1].get_sample_r())
-                        V_out_2.append(self._mflis[idx_2].get_sample_r())
-                        if j%n_r == 0:
-                            ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
-                            ax_1.set_xlabel('Applied barrier voltage [V]')
-                            ax_1.set_ylabel('Measured output on lock-in 1 [V]')
-                            fig_1.canvas.draw()
-                            ax_2.plot(v_in_array[0:len(V_out_2)], V_out_2)
-                            ax_2.set_xlabel('Applied barrier voltage [V]')
-                            ax_2.set_ylabel('Measured output on lock-in 2 [V]')
-                            fig_2.canvas.draw()
-                            plt.show(block=False)
-                V_out_all_1.append(V_out_1)
-                V_out_all_2.append(V_out_2)
+    # elif lockins in {lockin_configs[2], lockin_configs[3]}:
+    #     V_out_all_1 = []
+    #     V_out_all_2 = []
+    #     idx_1 = list(lockins)[0]
+    #     idx_2 = list(lockins)[1]
+    #     if plot == True:
+    #         fig_1 = plt.figure()
+    #         ax_1 = fig_1.add_subplot(111)
+    #         fig_2 = plt.figure()
+    #         ax_2 = fig_2.add_subplot(111)
+    #         for i in range(n_fr):
+    #             V_out_1 = []
+    #             V_out_2 = []
+    #             for j in range(npoints):
+    #                 if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
+    #                     pass
+    #                     # for k in range(len(v_in_arrays)):
+    #                     #     ## For case where a set of voltage ranges per channel is provided
+    #                 else:
+    #                     set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+    #                     V_out_1.append(self._mflis[idx_1].get_sample_r())
+    #                     V_out_2.append(self._mflis[idx_2].get_sample_r())
+    #                     if j%n_r == 0:
+    #                         ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
+    #                         ax_1.set_xlabel('Applied barrier voltage [V]')
+    #                         ax_1.set_ylabel('Measured output on lock-in 1 [V]')
+    #                         fig_1.canvas.draw()
+    #                         ax_2.plot(v_in_array[0:len(V_out_2)], V_out_2)
+    #                         ax_2.set_xlabel('Applied barrier voltage [V]')
+    #                         ax_2.set_ylabel('Measured output on lock-in 2 [V]')
+    #                         fig_2.canvas.draw()
+    #                         plt.show(block=False)
+    #             V_out_all_1.append(V_out_1)
+    #             V_out_all_2.append(V_out_2)
+    #
+    #     else:
+    #         for i in range(n_fr):
+    #             V_out_1 = []
+    #             V_out_2 = []
+    #             for j in range(npoints):
+    #                 if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
+    #                     pass
+    #                     # for k in range(len(v_in_arrays)):
+    #                     #     ## For case where a set of voltage ranges per channel is provided
+    #                 else:
+    #                     set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+    #                     V_out_1.append(self._mflis[idx_1].get_sample_r())
+    #                     V_out_2.append(self._mflis[idx_2].get_sample_r())
+    #             V_out_all_1.append(V_out_1)
+    #             V_out_all_2.append(V_out_2)
+    #     return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0))
 
-        else:
-            for i in range(n_fr):
-                V_out_1 = []
-                V_out_2 = []
-                for j in range(npoints):
-                    if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
-                        pass
-                        # for k in range(len(v_in_arrays)):
-                        #     ## For case where a set of voltage ranges per channel is provided
-                    else:
-                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
-                        V_out_1.append(self._mflis[idx_1].get_sample_r())
-                        V_out_2.append(self._mflis[idx_2].get_sample_r())
-                V_out_all_1.append(V_out_1)
-                V_out_all_2.append(V_out_2)
-        return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0))
-
-    elif lockins in {lockin_configs[4], lockin_configs[5], lockin_configs[6]}:
-        V_out_all_1 = []
-        idx_1 = list(lockins)[0]
-        if plot == True:
-            fig_1 = plt.figure()
-            ax_1 = fig_1.add_subplot(111)
-            for i in range(n_fr):
-                V_out_1 = []
-                for j in range(npoints):
-                    if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
-                        pass
-                        # for k in range(len(v_in_arrays)):
-                        #     ## For case where a set of voltage ranges per channel is provided
-                    else:
-                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
-                        V_out_1.append(self._mflis[idx_1].get_sample_r())
-
-                        if j%n_r == 0:
-                            ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
-                            ax_1.set_xlabel('Applied barrier voltage [V]')
-                            ax_1.set_ylabel('Measured output on lock-in 1 [V]')
-                            fig_1.canvas.draw()
-                            plt.show(block=False)
-                V_out_all_1.append(V_out_1)
-        else:
-            for i in range(n_fr):
-                V_out_1 = []
-                for j in range(npoints):
-                    if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
-                        pass
-                        # for k in range(len(v_in_arrays)):
-                        #     ## For case where a set of voltage ranges per channel is provided
-                    else:
-                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
-                        V_out_1.append(self._mflis[idx_1].get_sample_r())
-                V_out_all_1.append(V_out_1)
-        return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0))
-    else:
-        pass
-    return return_value
+    # elif lockins in {lockin_configs[4], lockin_configs[5], lockin_configs[6]}:
+    #     V_out_all_1 = []
+    #     idx_1 = list(lockins)[0]
+    #     if plot == True:
+    #         fig_1 = plt.figure()
+    #         ax_1 = fig_1.add_subplot(111)
+    #         for i in range(n_fr):
+    #             V_out_1 = []
+    #             for j in range(npoints):
+    #                 if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
+    #                     pass
+    #                     # for k in range(len(v_in_arrays)):
+    #                     #     ## For case where a set of voltage ranges per channel is provided
+    #                 else:
+    #                     set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+    #                     V_out_1.append(self._mflis[idx_1].get_sample_r())
+    #
+    #                     if j%n_r == 0:
+    #                         ax_1.plot(v_in_array[0:len(V_out_1)], V_out_1)
+    #                         ax_1.set_xlabel('Applied barrier voltage [V]')
+    #                         ax_1.set_ylabel('Measured output on lock-in 1 [V]')
+    #                         fig_1.canvas.draw()
+    #                         plt.show(block=False)
+    #             V_out_all_1.append(V_out_1)
+    #     else:
+    #         for i in range(n_fr):
+    #             V_out_1 = []
+    #             for j in range(npoints):
+    #                 if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
+    #                     pass
+    #                     # for k in range(len(v_in_arrays)):
+    #                     #     ## For case where a set of voltage ranges per channel is provided
+    #                 else:
+    #                     set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+    #                     V_out_1.append(self._mflis[idx_1].get_sample_r())
+    #             V_out_all_1.append(V_out_1)
+    #     return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0))
+    # else:
+    #     pass
+    # return return_value
 
 #def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_value2, end_value2, npoints2):
