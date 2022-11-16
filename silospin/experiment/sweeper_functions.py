@@ -136,8 +136,8 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         #     ## For case where a set of voltage ranges per channel is provided
                     else:
                         set_val(parameter, v_in_array[j], channel_mapping, dac_server)
-                        V_out_1.append(self._mflis[idx_1].get_sample_r())
-                        V_out_2.append(self._mflis[idx_2].get_sample_r())
+                        V_out_1.append(mflis[idx_1].get_sample_r())
+                        V_out_2.append(mflis[idx_2].get_sample_r())
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
         return_value = (v_in_array, np.mean(np.array(V_out_all_1),axis=0), np.mean(np.array(V_out_all_2),axis=0))
