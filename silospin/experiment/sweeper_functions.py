@@ -236,9 +236,9 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
             ax3 = fig3.add_subplot(111)
 
             for i in range(n_fr):
-                 v_out_1 = np.ones((npoints1,npoints2))
-                 v_out_2 = np.ones((npoints1,npoints2))
-                 v_out_3 = np.ones((npoints1,npoints2))
+                 v_out_1 = np.ones((npoints1,npoints2)).flatten()
+                 v_out_2 = np.ones((npoints1,npoints2)).flatten()
+                 v_out_3 = np.ones((npoints1,npoints2)).flatten() 
 
                  for j in range(len(V_x_f)):
                      if j == 0:
