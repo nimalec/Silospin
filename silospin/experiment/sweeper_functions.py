@@ -279,7 +279,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          v_out_3[j] = v_meas_3
 
                          if j%n_r == 0:
-                             pritn(v_out_1)
+                             print(v_out_1)
                              img1.set_data(v_out_1.reshape([npoints1, npoints2]))
                              img1.set_clim(np.amin(v_out_1), np.amax(v_out_1))
                              ax1.set_xlim(start_value1, end_value1)
