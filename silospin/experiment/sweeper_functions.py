@@ -279,7 +279,6 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          v_out_3[j] = v_meas_3
 
                          if j%n_r == 0:
-                             print(v_out_1)
                              img1.set_data(v_out_1.reshape([npoints1, npoints2]))
                              img1.set_clim(np.amin(v_out_1), np.amax(v_out_1))
                              ax1.set_xlim(start_value1, end_value1)
@@ -287,6 +286,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                             # ax.set_xlabel("Left barrier voltage [V]")
                             # ax.set_ylabel("Right barrier voltage [V]")
                              fig1.canvas.draw()
+                             plt.show(block=False)
                              fig1.canvas.flush_events()
 
                              img2.set_data(v_out_2.reshape([npoints1, npoints2]))
@@ -296,6 +296,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                             # ax.set_xlabel("Left barrier voltage [V]")
                             # ax.set_ylabel("Right barrier voltage [V]")
                              fig2.canvas.draw()
+                             plt.show(block=False)
                              fig2.canvas.flush_events()
 
                              img3.set_data(v_out_3.reshape([npoints1, npoints2]))
@@ -305,6 +306,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                             # ax.set_xlabel("Left barrier voltage [V]")
                             # ax.set_ylabel("Right barrier voltage [V]")
                              fig3.canvas.draw()
+                             plt.show(block=False)
                              fig3.canvas.flush_events()
                          else:
                             pass
