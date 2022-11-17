@@ -206,5 +206,104 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     if save_path:
         pickle_charge_data(return_value, save_path)
     else:
-        pass 
+        pass
     return return_value
+
+def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_value2, end_value2, npoints2, n_r = 10, n_fr = 1, plot = True, lockins = {1,2,3}, filter_tc=10e-3, demod_freq = 100e3, dac_mapping_file_path = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_dac.pickle', save_path=None):
+    dac_server = DacDriverSerialServer()
+    mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
+    gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS", "Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
+    lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1}, 5: {2}, 6: {3}}
+    dac_dict = unpickle_qubit_parameters(dac_mapping_file_path)
+    channel_mapping = dac_dict["channel_mapping"]
+
+    v_x = np.linspace(start_value1, end_value1, npoints1)
+    v_y = np.linspace(start_value2, end_value2, npoints2)
+    V_x, V_y = np.meshgrid(v_x, v_y)
+    V_x_f = V_x.flatten()
+    V_y_f = V_y.flatten()
+
+    if lockins == lockin_configs[1]:
+        V_out_all_1 = []
+        V_out_all_2 = []
+        V_out_all_3 = []
+        if plot == True:
+            fig1 = plt.figure()
+            ax1 = fig1.add_subplot(111)
+            fig2 = plt.figure()
+            ax2 = fig2.add_subplot(111)
+            fig3 = plt.figure()
+            ax3 = fig3.add_subplot(111)
+
+            for i in range(n_fr):
+                 v_out_1 = np.ones((npoints1,npoints2))
+                 v_out_2 = np.ones((npoints1,npoints2))
+                 v_out_3 = np.ones((npoints1,npoints2))
+
+                 for j in range(len(V_x_f)):
+                     if j == 0:
+                         set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                         set_val(parameter2, V_x_f[j], channel_mapping, dac_server)
+                         v_meas_1 = mflis[0].get_sample_r()
+                         v_meas_2 = mflis[1].get_sample_r()
+                         v_meas_3 = mflis[2].get_sample_r()
+                         v_out_1  = v_meas_1*v_out_1
+                         v_out_2  = v_meas_2*v_out_2
+                         v_out_3  = v_meas_3*v_out_3
+                         V_out1 =  v_out_1.reshape([npoints1, npoints2])
+                         V_out2 =  v_out_2.reshape([npoints1, npoints2])
+                         V_out3 =  v_out_2.reshape([npoints1, npoints2])
+
+                         img1 = ax1.imshow(V_out1)
+                         fig1.canvas.draw()
+                         plt.show(block=False)
+                         img2 = ax2.imshow(V_out2)
+                         fig2.canvas.draw()
+                         plt.show(block=False)
+                         img3 = ax3.imshow(V_out3)
+                         fig3.canvas.draw()
+                         plt.show(block=False)
+
+                     else:
+                         if j%npoints1 == 0:
+                             set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                             set_val(parameter2, V_x_f[j], channel_mapping, dac_server)
+                         else:
+                             set_val(parameter2, V_x_f[j], channel_mapping, dac_server)
+
+                         v_meas_1 = mflis[0].get_sample_r()
+                         v_meas_2 = mflis[1].get_sample_r()
+                         v_meas_3 = mflis[2].get_sample_r()
+                         v_out_1[j] = v_meas_1
+                         v_out_2[j] = v_meas_2
+                         v_out_3[j] = v_meas_3
+
+                         if j%n_r == 0:
+                             img1.set_data(v_out_1.reshape([npoints1, npoints2]))
+                             img1.set_clim(np.amin(v_out_1), np.amax(v_out_1))
+                             ax1.set_xlim(start_value1, end_value1)
+                             ax1.set_ylim(start_value2, end_value2)
+                            # ax.set_xlabel("Left barrier voltage [V]")
+                            # ax.set_ylabel("Right barrier voltage [V]")
+                             fig1.canvas.draw()
+                             fig1.canvas.flush_events()
+
+                             img2.set_data(v_out_2.reshape([npoints1, npoints2]))
+                             img2.set_clim(np.amin(v_out_2), np.amax(v_out_2))
+                             ax2.set_xlim(start_value1, end_value1)
+                             ax2.set_ylim(start_value2, end_value2)
+                            # ax.set_xlabel("Left barrier voltage [V]")
+                            # ax.set_ylabel("Right barrier voltage [V]")
+                             fig2.canvas.draw()
+                             fig2.canvas.flush_events()
+
+                             img3.set_data(v_out_3.reshape([npoints1, npoints2]))
+                             img3.set_clim(np.amin(v_out_3), np.amax(v_out_3))
+                             ax3.set_xlim(start_value1, end_value1)
+                             ax3.set_ylim(start_value2, end_value2)
+                            # ax.set_xlabel("Left barrier voltage [V]")
+                            # ax.set_ylabel("Right barrier voltage [V]")
+                             fig3.canvas.draw()
+                             fig3.canvas.flush_events()
+                         else:
+                            pass
