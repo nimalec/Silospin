@@ -257,12 +257,12 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          img1 = ax1.imshow(V_out1)
                          fig1.canvas.draw()
                          plt.show(block=False)
-                         img2 = ax2.imshow(V_out2)
-                         fig2.canvas.draw()
-                         plt.show(block=False)
-                         img3 = ax3.imshow(V_out3)
-                         fig3.canvas.draw()
-                         plt.show(block=False)
+                         # img2 = ax2.imshow(V_out2)
+                         # fig2.canvas.draw()
+                         # plt.show(block=False)
+                         # img3 = ax3.imshow(V_out3)
+                         # fig3.canvas.draw()
+                         # plt.show(block=False)
 
                      else:
                          if j%npoints1 == 0:
