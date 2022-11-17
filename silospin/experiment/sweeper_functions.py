@@ -260,7 +260,9 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          ax1.set_xlabel(parameter1+" gate voltage [V]")
                          ax1.set_ylabel(parameter2+" gate voltage [V]")
                          fig1.canvas.draw()
+                         cbar = fig1.colorbar(img1, ax=ax1, extend='both')
                          plt.show(block=False)
+
                          #plt.xlim([-start_value1, end_value1])
                          #plt.ylim([-start_value2, end_value2])
                          # img2 = ax2.imshow(V_out2)
