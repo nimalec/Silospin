@@ -260,9 +260,9 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          ax1.set_xlabel(parameter1+" gate voltage [V]")
                          ax1.set_ylabel(parameter2+" gate voltage [V]")
                          fig1.canvas.draw()
-                         cbar = fig1.colorbar(img1, ax=ax1, extend='both')
+                         cbar1 = fig1.colorbar(img1, ax=ax1, extend='both')
+                         cbar1.set_label('Demodulated voltage [V]', rotation=270)
                          plt.show(block=False)
-
                          #plt.xlim([-start_value1, end_value1])
                          #plt.ylim([-start_value2, end_value2])
                          # img2 = ax2.imshow(V_out2)
@@ -271,7 +271,6 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          # img3 = ax3.imshow(V_out3)
                          # fig3.canvas.draw()
                          # plt.show(block=False)
-
                      else:
                          if j%npoints1 == 0:
                              set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
