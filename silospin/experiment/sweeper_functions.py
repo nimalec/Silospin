@@ -230,6 +230,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
         if plot == True:
             fig1 = plt.figure()
             ax1 = fig1.add_subplot(111)
+            ax1.set_xlim(start_value1, end_value1)
+            ax1.set_ylim(start_value2, end_value2)
             # fig2 = plt.figure()
             # ax2 = fig2.add_subplot(111)
             # fig3 = plt.figure()
@@ -243,7 +245,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                  for j in range(len(V_x_f)):
                      if j == 0:
                          set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
-                         set_val(parameter2, V_x_f[j], channel_mapping, dac_server)
+                         set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                          v_meas_1 = mflis[0].get_sample_r()
                          v_meas_2 = mflis[1].get_sample_r()
                          v_meas_3 = mflis[2].get_sample_r()
@@ -267,9 +269,9 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                      else:
                          if j%npoints1 == 0:
                              set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
-                             set_val(parameter2, V_x_f[j], channel_mapping, dac_server)
+                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                          else:
-                             set_val(parameter2, V_x_f[j], channel_mapping, dac_server)
+                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
 
                          v_meas_1 = mflis[0].get_sample_r()
                          v_meas_2 = mflis[1].get_sample_r()
@@ -281,8 +283,6 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          if j%n_r == 0:
                              img1.set_data(v_out_1.reshape([npoints1, npoints2]))
                              img1.set_clim(np.amin(v_out_1), np.amax(v_out_1))
-                             print(np.amin(v_out_1))
-                             print(np.amax(v_out_1))
                              #ax1.set_xlim(start_value1, end_value1)
                              #ax1.set_ylim(start_value2, end_value2)
                             # ax.set_xlabel("Left barrier voltage [V]")
