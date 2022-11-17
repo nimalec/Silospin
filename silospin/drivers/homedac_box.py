@@ -97,9 +97,9 @@ class DacDriverSerialServer:
         self._client.open_connection()
 
     def set_voltage(self, voltage):
-        self._client.connect(self._client_address)
+        #self._client.connect(self._client_address)
         self._client.set_voltage(voltage)
 
     def set_channel(self, channel):
-        self._client.connect(self._client_address)
+        #self._client.connect(self._client_address)
         self._client.set_channel(channel)
