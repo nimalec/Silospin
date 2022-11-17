@@ -230,10 +230,10 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
         if plot == True:
             fig1 = plt.figure()
             ax1 = fig1.add_subplot(111)
-            fig2 = plt.figure()
-            ax2 = fig2.add_subplot(111)
-            fig3 = plt.figure()
-            ax3 = fig3.add_subplot(111)
+            # fig2 = plt.figure()
+            # ax2 = fig2.add_subplot(111)
+            # fig3 = plt.figure()
+            # ax3 = fig3.add_subplot(111)
 
             for i in range(n_fr):
                  v_out_1 = np.ones((npoints1,npoints2)).flatten()
