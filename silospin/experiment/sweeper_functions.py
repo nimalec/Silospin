@@ -230,8 +230,6 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
         if plot == True:
             fig1 = plt.figure()
             ax1 = fig1.add_subplot(111)
-            # ax1.set_xlabel(paramter1+" gate voltage [V]")
-            # ax1.set_xlabel(paramter2+" gate voltage [V]")
             #ax1.set_xlim(start_value1, end_value1)
             #ax1.set_ylim(start_value2, end_value2)
             # fig2 = plt.figure()
@@ -259,6 +257,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          V_out3 =  v_out_2.reshape([npoints1, npoints2])
 
                          img1 = ax1.imshow(V_out1)
+                         ax1.set_xlabel(paramter1+" gate voltage [V]")
+                         ax1.set_ylabel(paramter2+" gate voltage [V]")
                          fig1.canvas.draw()
                          plt.show(block=False)
                          # img2 = ax2.imshow(V_out2)
