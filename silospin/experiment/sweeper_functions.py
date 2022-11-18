@@ -271,8 +271,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 
                          if i>0:
                              cbar1.remove()
-                             #cbar1 = fig1.colorbar(img1, ax=ax1, extend='both')
-                             #cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
+                             cbar1 = fig1.colorbar(img1, ax=ax1, extend='both', pad = 10)
+                             cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
                              #plt.show(blocks=False)
                          else:
                              pass
