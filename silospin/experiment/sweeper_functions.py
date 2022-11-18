@@ -227,6 +227,9 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
         V_out_all_1 = []
         V_out_all_2 = []
         V_out_all_3 = []
+        v_out_1 = np.ones((npoints1,npoints2)).flatten()
+        v_out_2 = np.ones((npoints1,npoints2)).flatten()
+        v_out_3 = np.ones((npoints1,npoints2)).flatten()
         if plot == True:
             fig1 = plt.figure()
             ax1 = fig1.add_subplot(111)
@@ -266,13 +269,13 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
                          plt.show(block=False)
 
-                         if i>0:
-                             cbar1.remove()
-                             cbar1 = fig1.colorbar(img1, ax=ax1, extend='both')
-                             #cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
-                             #plt.show(blocks=False)
-                         else:
-                             pass
+                         # if i>0:
+                         #     cbar1.remove()
+                         #     cbar1 = fig1.colorbar(img1, ax=ax1, extend='both')
+                         #     cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
+                         #     #plt.show(blocks=False)
+                         # else:
+                         #     pass
                          # img2 = ax2.imshow(V_out2)
                          # fig2.canvas.draw()
                          # plt.show(block=False)
