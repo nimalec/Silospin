@@ -12,7 +12,7 @@ class GSTExperiment:
         self._gate_parameters = unpickle_qubit_parameters(parameter_file_path)["parameters"]
         self._gst_program = GateSetTomographyQuantumCompiler(self._gst_file, self._instrument_drivers['awgs'][0], self._gate_parameters, n_inner, n_outer, added_padding=added_padding)
         pickle_waveforms(self._gst_program._waveforms,waveforms_file_path)
-        pickle_instrument_parameters(self, setup_experiment_helpers.awg_driver_1.get_all_awg_parameters(), setup_experiment_helpers.awg_driver_2.get_all_awg_parameters(), setup_experiment_helpers.mfli_driver_1.get_all_mfli_settings(), setup_experiment_helpers.mfli_driver_2.get_all_mfli_settings(), instruments_file_path)
+        #pickle_instrument_parameters(self, setup_experiment_helpers.awg_driver_1.get_all_awg_parameters(), setup_experiment_helpers.awg_driver_2.get_all_awg_parameters(), setup_experiment_helpers.mfli_driver_1.get_all_mfli_settings(), setup_experiment_helpers.mfli_driver_2.get_all_mfli_settings(), instruments_file_path)
 
     def run_program(self):
         self._gst_program.run_program()
