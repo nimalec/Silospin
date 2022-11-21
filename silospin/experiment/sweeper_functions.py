@@ -233,12 +233,10 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
         if plot == True:
             fig1 = plt.figure()
             ax1 = fig1.add_subplot(111)
-            #ax1.set_xlim(start_value1, end_value1)
-            #ax1.set_ylim(start_value2, end_value2)
-            # fig2 = plt.figure()
-            # ax2 = fig2.add_subplot(111)
-            # fig3 = plt.figure()
-            # ax3 = fig3.add_subplot(111)
+            fig2 = plt.figure()
+            ax2 = fig2.add_subplot(111)
+            fig3 = plt.figure()
+            ax3 = fig3.add_subplot(111)
 
             for i in range(n_fr):
                  v_out_1 = np.ones((npoints1,npoints2)).flatten()
@@ -269,19 +267,31 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
                          plt.show(block=False)
 
+                         img2 = ax2.imshow(V_out2, extent=[start_value1,end_value1,start_value2,end_value2])
+                         ax2.set_xlabel(parameter1+" gate voltage [V]")
+                         ax2.set_ylabel(parameter2+" gate voltage [V]")
+                         fig2.canvas.draw()
+                         cbar2 = fig2.colorbar(img2, ax=ax2, extend='both')
+                         cbar2.set_label('Demodulated voltage from lock-in 2 [V]', rotation=270, labelpad=30)
+                         plt.show(block=False)
+
+                         img3 = ax3.imshow(V_out3, extent=[start_value1,end_value1,start_value2,end_value2])
+                         ax3.set_xlabel(parameter1+" gate voltage [V]")
+                         ax3.set_ylabel(parameter2+" gate voltage [V]")
+                         fig3.canvas.draw()
+                         cbar3 = fig3.colorbar(img3, ax=ax3, extend='both')
+                         cbar3.set_label('Demodulated voltage from lock-in 3 [V]', rotation=270, labelpad=30)
+                         plt.show(block=False)
+
                          if i>0:
                              cbar1.remove()
                              cbar1 = fig1.colorbar(img1, ax=ax1, extend='both')
-                             #cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
-                             #plt.show(blocks=False)
+                             cbar2.remove()
+                             cbar2 = fig2.colorbar(img2, ax=ax2, extend='both')
+                             cbar3.remove()
+                             cbar3 = fig1.colorbar(img3, ax=ax3, extend='both')
                          else:
                              pass
-                         # img2 = ax2.imshow(V_out2)
-                         # fig2.canvas.draw()
-                         # plt.show(block=False)
-                         # img3 = ax3.imshow(V_out3)
-                         # fig3.canvas.draw()
-                         # plt.show(block=False)
                      else:
                          if j%npoints1 == 0:
                              dac_server = DacDriverSerialServer()
@@ -304,13 +314,24 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          if j%n_r == 0:
                              img1.set_data(v_out_1.reshape([npoints1, npoints2]))
                              img1.set_clim(np.amin(v_out_1), np.amax(v_out_1))
-                             #ax1.set_xlim(start_value1, end_value1)
-                             #ax1.set_ylim(start_value2, end_value2)
-                            # ax.set_xlabel("Left barrier voltage [V]")
-                            # ax.set_ylabel("Right barrier voltage [V]")
+
+                             img2.set_data(v_out_2.reshape([npoints1, npoints2]))
+                             img2.set_clim(np.amin(v_out_2), np.amax(v_out_2))
+
+                             img3.set_data(v_out_3.reshape([npoints1, npoints2]))
+                             img3.set_clim(np.amin(v_out_3), np.amax(v_out_3))
+
                              fig1.canvas.draw()
                              plt.show(block=False)
                              fig1.canvas.flush_events()
+
+                             fig2.canvas.draw()
+                             plt.show(block=False)
+                             fig2.canvas.flush_events()
+
+                             fig3.canvas.draw()
+                             plt.show(block=False)
+                             fig3.canvas.flush_events()
 
                             #  img2.set_data(v_out_2.reshape([npoints1, npoints2]))
                             #  img2.set_clim(np.amin(v_out_2), np.amax(v_out_2))
