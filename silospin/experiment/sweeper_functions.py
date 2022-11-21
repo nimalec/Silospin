@@ -333,24 +333,5 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              plt.show(block=False)
                              fig3.canvas.flush_events()
 
-                            #  img2.set_data(v_out_2.reshape([npoints1, npoints2]))
-                            #  img2.set_clim(np.amin(v_out_2), np.amax(v_out_2))
-                            #  #ax2.set_xlim(start_value1, end_value1)
-                            #  #ax2.set_ylim(start_value2, end_value2)
-                            # # ax.set_xlabel("Left barrier voltage [V]")
-                            # # ax.set_ylabel("Right barrier voltage [V]")
-                            #  fig2.canvas.draw()
-                            #  plt.show(block=False)
-                            #  fig2.canvas.flush_events()
-                            #
-                            #  img3.set_data(v_out_3.reshape([npoints1, npoints2]))
-                            #  img3.set_clim(np.amin(v_out_3), np.amax(v_out_3))
-                            #  #ax3.set_xlim(start_value1, end_value1)
-                            #  #ax3.set_ylim(start_value2, end_value2)
-                            # # ax.set_xlabel("Left barrier voltage [V]")
-                            # # ax.set_ylabel("Right barrier voltage [V]")
-                            #  fig3.canvas.draw()
-                            #  plt.show(block=False)
-                            #  fig3.canvas.flush_events()
                          else:
                             pass
