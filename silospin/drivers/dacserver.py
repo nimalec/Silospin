@@ -1,3 +1,12 @@
+"""Homebuilt digital-to-analog converter (DAC) server.
+
+Run this on the command line as:
+
+>> python dacserver.py
+
+Version from November 2022.
+"""
+
 import zerorpc
 from silospin.drivers.homedac_box import DacDriverSerial
 
@@ -11,11 +20,11 @@ class DacServer(object):
     def open_connection(self):
         self.dac_driver._dac.open()
 
-    def set_voltage(self, voltage): 
+    def set_voltage(self, voltage):
         self.dac_driver.set_voltage(voltage)
 
     def set_channel(self, channel):
-        self.dac_driver.set_channel(channel)  
+        self.dac_driver.set_channel(channel)
 
 server = zerorpc.Server(DacServer())
 server.bind("tcp://0.0.0.0:4243")

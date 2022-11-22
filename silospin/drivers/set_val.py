@@ -1,3 +1,12 @@
+"""Homebuilt digital-to-analog converter (DAC) server.
+
+Run this on the command line as:
+
+>> python dacserver.py
+
+Version from November 2022.
+"""
+
 import serial
 from zerorpc import Client
 

@@ -1,4 +1,8 @@
-#!/usr/bin/env python
+"""Driver c
+Exact equivariance to :math:`E(3)`
+version of january 2021
+"""
+
 import zhinst
 import zhinst.utils
 from zhinst import ziPython
