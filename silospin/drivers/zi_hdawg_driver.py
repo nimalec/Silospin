@@ -110,7 +110,7 @@ class HdawgDriver:
         self._awgs = {"awg1" : self._hdawg.awgs[0], "awg2" : self._hdawg.awgs[1], "awg3" : self._hdawg.awgs[2], "awg4" : self._hdawg.awgs[3]}
         self._command_tables = {"awg1": self._hdawg.awgs[0].commandtable(), "awg2": self._hdawg.awgs[1].commandtable(), "awg3": self._hdawg.awgs[2].commandtable(), "awg4": self._hdawg.awgs[3].commandtable()}
         self._sequences =  {"awg1": self._hdawg.awgs[0].sequencer(), "awg2": self._hdawg.awgs[0].sequencer(), "awg3": self._hdawg.awgs[0].sequencer(), "awg4": self._hdawg.awgs[0].sequencer()}
-r
+
         self._run_status = {}
         for idx in range(4):
             status = self._daq.getInt(f"/{dev_id}/awgs/{idx}/sequencer/status")
