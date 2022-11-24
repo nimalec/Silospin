@@ -1,0 +1,18 @@
+site_name: Silospin
+site_url: https://silospin.com/
+markdown_extensions:
+      - mdx_math
+nav:
+   - Home: index.md
+   - Basics: about.md
+   - Quantum compiler: qc.md
+   - Silospin API: api.md
+
+theme: readthedocs
+extra_javascript:
+    - https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML
+
+plugins:
+  - search
+  - mkapi:
+      src_dirs: [silospin]

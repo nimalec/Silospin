@@ -55,71 +55,6 @@ class HdawgDriver:
 
     _channel_mapping : dict
         Channel mapping for AWG. Takes in RF core and DC channel groupings, returns mapping from AWG core indices to gate indices and channels.
-
-    Methods
-    - - - - - - -
-    get_all_awg_parameters : returns a dict
-        No input parameters. Returns dictionary current state of the instrument.
-
-    get_connection_settings(param) : returns a str or int
-        Takes in param (str) [must be in {"hdawg_name", "hdawg_id",  "server_host", "server_port",  "api_level", "interface",  "connection_status"}]. Returns its current value.
-
-    get_osc_freq(osc_num) : returns a float
-        Takes in osc_num (int) [must be between an oscillator index between 1-16].
-
-    set_osc_freq(osc_num, osc_freq) : no return value
-        Takes in in osc_num (int) [must be between an oscillator index between 1-16] and osc_freq (float) [frequency of oscillator in Hz]. Sets oscillator frequency.
-
-    get_phase(sin_num) : returns a float
-        Takes in sin_num (int from 1-8) and returns the phase in degrees.
-
-    set_phase(sin_num, phase) : no return value
-        Takes in sin_num (int from 1-8) and a phase in degree to set phase of sine generator.
-
-    get_modulation_mode(sin_num) : returns an int
-        Takes in sin_num (int from 1-8) and returns the corresponding modulation mode.
-
-    set_modulation_mode(sin_num, mode) : no return value
-        Sets modulation from sin_num (int, from 1-8) and mode (int, modulation mode).
-
-    get_sine(sin_num) : returns a dictionary
-        Returns dict describing sine generator properties from sin_num.
-
-    set_sine(sin_num, osc_num, phase=0.0, harmonic=1, amp1=1.0, amp2=1.0) :
-        Sets sine parameter for sin_num (int, from 1-8) taking properties osc_num (int, osciallor index from 1-16), phase (float, phase in degrees), harmonic (int, harmonic index), amp1 (float, amplitude on output 1), amp2 (float, amplitude on output 2).
-
-    assign_osc(sin_num, osc_num) : no return value
-        Assigns osc_num (int, osccillator index) to sin_num (int, sine generator index).
-
-    get_awg(awg_num) : returns awg core
-        Returns Zurich AWG core from awg_num (int, awg index from 1-4).
-
-    get_out_amp(sin_num, wave_num) : returns a float
-        Returns output amplitude in V of wave_num (int, wave output index) for sin_num (int, sine generator index).
-
-    set_out_amp(sin_num, wave_num, amp) : no return value
-      Sets amp (float, output amplitude in V) of wave_num (int, wave output index) for sin_num (int, sine generator index).
-
-    get_sequence(awg_idx) : returns a str
-       Returns sequence loaded on AWG core awg_idx (int).
-
-    get_updated_run_status(awg_num) : returns a bool
-        Returns current run status for awg core awg_num (int).
-
-    compile_core(awg_num) : no return value
-        Compiles core awg_num (int).
-
-    load_sequence(program, awg_idx = 0) : o return value
-       Loads sequencer program (str) onto AWG core awg_idx.
-
-    compile_run_core(awg_num) : no return value
-        Compiles and runs core awg_num (int).
-
-    stop_core(awg_num) : no return value
-        Stops core awg_num (int).
-
-    set_command_table(ct, awg_index) : no return value
-        Uploads command table  ct (dict) to awg core awg_index (int).
     """
 
     def __init__(self, dev_id, server_host = "localhost", server_port = 8004, api_level = 6, interface = "1GbE", rf_cores=[1,2,3], plunger_channels = {"p12": 7, "p21": 8}):
@@ -147,7 +82,8 @@ class HdawgDriver:
            -------
            None.
         """
-
+        ##Part 1: connect to instrument
+        # ##Should add exception handeling here
         self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "interface" : interface, "connection_status" : False}
         session = Session(server_host)
         self._session = session
@@ -161,6 +97,7 @@ class HdawgDriver:
 
         self._oscillator_freq = {"osc1" : self._hdawg.oscs[0].freq(), "osc2" :self._hdawg.oscs[1].freq(), "osc3" :self._hdawg.oscs[2].freq(), "osc4" :self._hdawg.oscs[3].freq(), "osc5" :self._hdawg.oscs[4].freq(), "osc6" :self._hdawg.oscs[5].freq(), "osc7" :self._hdawg.oscs[6].freq(), "osc8" :self._hdawg.oscs[7].freq(), "osc9" :self._hdawg.oscs[8].freq(), "osc10" :self._hdawg.oscs[9].freq(), "osc11" :self._hdawg.oscs[10].freq(), "osc12" :self._hdawg.oscs[11].freq(), "osc13" :self._hdawg.oscs[12].freq(), "osc13" :self._hdawg.oscs[12].freq(), "osc14" :self._hdawg.oscs[13].freq(), "osc15" :self._hdawg.oscs[14].freq(), "osc16" :self._hdawg.oscs[15].freq()}
 
+        ##Add modulation here ... (change modulation frequency )
         self._sines = {"sin1" : {"osc" : self._hdawg.sines[0].oscselect(), "phaseshift": self._hdawg.sines[0].phaseshift(), "harmonic" : self._hdawg.sines[0].harmonic(), "amp1" : self._hdawg.sines[0].amplitudes[0]() , "amp2" :self._hdawg.sines[0].amplitudes[1]()}
         , "sin2" : {"osc" : self._hdawg.sines[1].oscselect(), "phaseshift": self._hdawg.sines[1].phaseshift(), "harmonic" : self._hdawg.sines[1].harmonic(), "amp1" : self._hdawg.sines[1].amplitudes[0](), "amp2" :self._hdawg.sines[1].amplitudes[1]()},
         "sin3" : {"osc" : self._hdawg.sines[2].oscselect(), "phaseshift": self._hdawg.sines[2].phaseshift(), "harmonic" : self._hdawg.sines[2].harmonic(), "amp1" : self._hdawg.sines[2].amplitudes[0](), "amp2" :self._hdawg.sines[2].amplitudes[1]()},
@@ -169,9 +106,11 @@ class HdawgDriver:
          "sin6" : {"osc" : self._hdawg.sines[5].oscselect(), "phaseshift": self._hdawg.sines[5].phaseshift(), "harmonic" : self._hdawg.sines[5].harmonic(), "amp1" : self._hdawg.sines[5].amplitudes[0]() , "amp2" :self._hdawg.sines[5].amplitudes[1]()},
          "sin7" : {"osc" : self._hdawg.sines[6].oscselect(), "phaseshift": self._hdawg.sines[6].phaseshift(), "harmonic" : self._hdawg.sines[6].harmonic(), "amp1" : self._hdawg.sines[6].amplitudes[0]() , "amp2" :self._hdawg.sines[6].amplitudes[1]()},
           "sin8" : {"osc" : self._hdawg.sines[7].oscselect(), "phaseshift": self._hdawg.sines[7].phaseshift(), "harmonic" : self._hdawg.sines[0].harmonic(), "amp1" : self._hdawg.sines[7].amplitudes[0]() , "amp2" :self._hdawg.sines[7].amplitudes[1]()}}
+
         self._awgs = {"awg1" : self._hdawg.awgs[0], "awg2" : self._hdawg.awgs[1], "awg3" : self._hdawg.awgs[2], "awg4" : self._hdawg.awgs[3]}
         self._command_tables = {"awg1": self._hdawg.awgs[0].commandtable(), "awg2": self._hdawg.awgs[1].commandtable(), "awg3": self._hdawg.awgs[2].commandtable(), "awg4": self._hdawg.awgs[3].commandtable()}
         self._sequences =  {"awg1": self._hdawg.awgs[0].sequencer(), "awg2": self._hdawg.awgs[0].sequencer(), "awg3": self._hdawg.awgs[0].sequencer(), "awg4": self._hdawg.awgs[0].sequencer()}
+r
         self._run_status = {}
         for idx in range(4):
             status = self._daq.getInt(f"/{dev_id}/awgs/{idx}/sequencer/status")
@@ -205,10 +144,36 @@ class HdawgDriver:
                 self._run_status["awg"+str(idx+1)] = False
             else:
                 self._run_status["awg"+str(idx+1)] = True
+
         return {"connection": self._connection_settings, "oscillators": self._oscillator_freq, "sines": self._sines, "command_tables": self._command_tables , "sequences": self._sequences, "run_status": self._run_status, "channel_map": self._channel_mapping}
 
     def get_connection_settings(self, param):
+        """
+         Constructor for HDAWG Driver.
+
+           Parameters
+           ----------
+           dev_id : str
+              Device ID for AWG (e.g 'dev8446').
+           server_host : str
+              Server host name (default = "localhost").
+           server_port : int
+              Port number for the host server (default = 8004).
+           api_level : int
+              API level of instrument (default = 6, for HDAWG).
+           interface : str
+              Interface used to connect to server (default = "1GbE" for ethernet connection).
+           rf_cores : list
+               List of HDAWG cores dedicated for microwave or RF control, with core indices indexing from 1. Values must range between 1-4 (default set to [1,2,3]).
+           plunger_channels : dict
+               Dictionary specifying the mapping from plunger (DC) gates to their corresponding channels. Keys of dictionary represent gate type (e.g. "p12") and values are corresponding channels ranging from 1-8 (default set to {"p12": 7, "p21": 8}).
+
+           Returns
+           -------
+           None.
+        """
       params = {"hdawg_name", "hdawg_id",  "server_host", "server_port",  "api_level", "interface",  "connection_status"}
+
       # try:
       #    if type(param) is not str:
       #       raise TypeError("'param' should be a string.")
@@ -227,10 +192,12 @@ class HdawgDriver:
                self._connection_settings[param] = False
       else:
           pass
+
       return self._connection_settings[param]
 
     # def get_waveforms(self):
     #     return {"awg1": self._hdawg.awgs[0].waveform(), "awg2": self._hdawg.awgs[1].waveform(), "awg3": self._hdawg.awgs[2].waveform(), "awg4": self._hdawg.awgs[3].waveform()}
+
     def get_osc_freq(self, osc_num):
       # try:
       #    if type(osc_num) is not int:
@@ -314,6 +281,8 @@ class HdawgDriver:
       sine = {"osc" : self._hdawg.sines[sin_num-1].oscselect(), "phaseshift": self._hdawg.sines[sin_num-1].phaseshift(), "harmonic" : self._hdawg.sines[sin_num-1].harmonic(), "amp1" : self._hdawg.sines[sin_num-1].amplitudes[0]() , "amp2" :self._hdawg.sines[sin_num-1].amplitudes[1]()}
       return sine
 
+
+
     def assign_osc(self, sin_num, osc_num):
        # try:
        #    if type(sin_num) is not int:
@@ -342,6 +311,7 @@ class HdawgDriver:
        else:
           self._sines["sin"+str(sin_num)]["osc_num"] = osc_num
           self._hdawg.sines[sin_num-1].oscselect(osc_num-1)
+
 
     def set_sine(self, sin_num, osc_num, phase=0.0, harmonic=1, amp1=1.0, amp2=1.0):
        # try:
@@ -416,6 +386,7 @@ class HdawgDriver:
 
 
        self._sines["sin"+str(sin_num)]["amp"+str(wave_num-1)] = self._hdawg.sines[sin_num-1].amplitudes[wave_num-1]()
+
        return self._sines["sin"+str(sin_num)]["amp"+str(wave_num-1)]
 
     def set_out_amp(self, sin_num, wave_num, amp):
@@ -448,6 +419,7 @@ class HdawgDriver:
 
        self._hdawg.sines[sin_num-1].amplitudes[wave_num-1](amp)
        self._sines["sin"+str(sin_num)]["amp"+str(wave_num)] = amp
+
        cores = {1: 1, 2: 1, 3: 2, 4: 2, 5: 3, 6: 3, 7: 4, 7: 4, 8: 4, 8: 4}
        if self.get_updated_run_status(cores[sin_num]) == True:
           print("Core currently running, cannot change amplitude.")
@@ -535,6 +507,7 @@ class HdawgDriver:
         self._awgs["awg"+str(awg_idx+1)].load_sequencer_program(program)
         self._sequences["awg"+str(awg_idx+1)] = program
 
+
     def compile_run_core(self, awg_num):
        # try:
        #    if type(awg_num) is not int:
@@ -550,6 +523,7 @@ class HdawgDriver:
        self._hdawg.awgs[awg_num-1].single(True)
        self._hdawg.awgs[awg_num-1].enable(True)
        #self._run_status["awg"+str(awg_num)] = self._hdawg.awgs[awg_num-1].is_running
+
 
     def stop_core(self, awg_num):
        # try:
