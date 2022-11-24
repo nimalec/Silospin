@@ -148,30 +148,6 @@ class HdawgDriver:
         return {"connection": self._connection_settings, "oscillators": self._oscillator_freq, "sines": self._sines, "command_tables": self._command_tables , "sequences": self._sequences, "run_status": self._run_status, "channel_map": self._channel_mapping}
 
     def get_connection_settings(self, param):
-        """
-         Constructor for HDAWG Driver.
-
-           Parameters
-           ----------
-           dev_id : str
-              Device ID for AWG (e.g 'dev8446').
-           server_host : str
-              Server host name (default = "localhost").
-           server_port : int
-              Port number for the host server (default = 8004).
-           api_level : int
-              API level of instrument (default = 6, for HDAWG).
-           interface : str
-              Interface used to connect to server (default = "1GbE" for ethernet connection).
-           rf_cores : list
-               List of HDAWG cores dedicated for microwave or RF control, with core indices indexing from 1. Values must range between 1-4 (default set to [1,2,3]).
-           plunger_channels : dict
-               Dictionary specifying the mapping from plunger (DC) gates to their corresponding channels. Keys of dictionary represent gate type (e.g. "p12") and values are corresponding channels ranging from 1-8 (default set to {"p12": 7, "p21": 8}).
-
-           Returns
-           -------
-           None.
-        """
       params = {"hdawg_name", "hdawg_id",  "server_host", "server_port",  "api_level", "interface",  "connection_status"}
 
       # try:
