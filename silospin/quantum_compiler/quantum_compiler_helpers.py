@@ -418,35 +418,27 @@ def make_rf_command_table(n_pi_2, n_pi, n_p=[], arbZ=[]):
 
 def make_plunger_command_table(n_p, n_rf):
     '''
-    Generates command tables for dedicated RF cores. Each command table index corresponds to a phase increment and waveform play. Command table entries correspond to the following indices:\n
-    - 0, initial xx gate in pi frame \n
-    - 1, initial yy gate in pi frame\n
-    - 2, initial mxxm gate in pi frame\n
-    - 3, initial myym gate in pi frame\n
-    - 4, initial x gate in pi frame \n
-    - 5, initial y gate in pi frame\n
-    - 6, initial xxx gate in pi frame\n
-    - 7, initial yyy gate in pi frame\n
-    - 8, initial x gate in pi/2 frame \n
-    - 9, initial y gate in pi/2 frame\n
-    - 10, initial xxx gate in pi/2 frame\n
-    - 11, initial yyy gate in pi/2 frame\n
-    - 12, increment by 0 degrees in for pi gate in a pi frame \n
-    
-    - 33, wait for pi/2 duration \n
-    - 34, wait for pi duration \n
-    - 35 - 35+n_p, wait for DC pulse durations \n
-    - 36+n_p, increment phase by 0 degrees (z0z gate) \n
-    - 36+n_p-36+n_p+n_z, perform arbitrary rotation by phi degrees (z phi z)\n
+    Generates command table for a single DC AWG core. Each core has two channels.
+    - 0, plunger 1 pulse in plunger 1 frame \n
+    - 1, plunger 2 pulse in plunger 2 frame \n
+    - 2, plunger 1 pulse in plunger 2 frame \n
+    - 3, plunger 2 pulse in plunger 1 frame \n
+    - 4, plunger 1 pulse in pi/2 frame \n
+    - 5, plunger 2 pulse in pi/2 frame \n
+    - 6, plunger 1 pulse in pi frame \n
+    - 7, plunger 2 pulse in pi frame \n
+    - 8, wait for pi/2 pulse duration \n
+    - 9, wait for pi pulse duration \n
+    - 10, wait for plunger 1 pulse duration \n
+    - 11, wait for plunger 2 pulse duration \n
+    - 12, impose 0 degree phase shift \n
 
     Parameters:
-                    n_pi_2 (int): number of points for a stanard pi/2 pulse.
-                    n_pi (int): number of points for a stanard pi pulse.
-                    n_p (list): list of number of points for each plunger pulse length (default = []).
-                    arbZ (list): list of tuples of (arbitrary Z command table index, rotation angle) (default = []).
+                    n_p (list): list of 2 tuples of the form (ch_idx, n_p) with ch_idx as plunger channel index and n_p as the number of points for the plunger pulse.
+                    n_rf (tuple):  tuple of the form (n_pi_2, n_pi), as the number of points for a pi/2 and pi pulse.
 
     Returns:
-       command_table (dict): Dictionary of the RF command table to be directly uploaded onto AWG core.
+       command_table (dict): Dictionary of the plunger command table to be directly uploaded onto AWG core.
     '''
     waves = [{"index": 0}, {"index": 1}, {"index": 2}, {"index": 3}, {"index": 4}, {"index": 5}, {"index": 6}, {"index": 7}, {"index": 8}, {"index": 9}]
     n_pi_2 = n_rf[0]
@@ -488,27 +480,12 @@ def make_plunger_command_table(n_p, n_rf):
 
 def make_waveform_placeholders(n_array):
     '''
-    Outputs the mapping between AWG cores/channels and gate labels. \n
-    Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values. \n
-    - "ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict) \n
-    - "rf", 1 if core is for RF pulses and 0 if for DC pulses (int) \n
-    The dictionaries corresponding to the key "ch" have the following keys and values,
-    - "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]). \n
-    - "label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC). \n
-    - "gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)\n
-    Note: currently configured for 1 HDAWG unit with 4 AWG cores.   \n
+    Generates sequencer code for waveform placeholders on HDAWG FPGAs.
 
     Parameters:
-                    tau_pi (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    tau_pi_2 (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    i_amp (dict):
-                    q_amp (dict):
-                    mod_freq (dict):
-                    plunger_lengths (dict):
-                    plunger_amp (dict):
-
+                n_array (list): list of the number of points used for each waveform. Note, that each element of n_array must be at least 48 and an integer multiple of 16.
     Returns:
-       gate_parameters (dict):
+       sequence_code (str): sequencer code for waveform placeholders.
     '''
     ii = 0
     idx = 0
@@ -524,27 +501,12 @@ def make_waveform_placeholders(n_array):
 
 def make_waveform_placeholders_plungers(n_array):
     '''
-    Outputs the mapping between AWG cores/channels and gate labels. \n
-    Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values. \n
-    - "ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict) \n
-    - "rf", 1 if core is for RF pulses and 0 if for DC pulses (int) \n
-    The dictionaries corresponding to the key "ch" have the following keys and values,
-    - "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]). \n
-    - "label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC). \n
-    - "gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)\n
-    Note: currently configured for 1 HDAWG unit with 4 AWG cores.   \n
+    Generates sequencer code for plunger gate waveform placeholders on HDAWG FPGAs.
 
     Parameters:
-                    tau_pi (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    tau_pi_2 (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    i_amp (dict):
-                    q_amp (dict):
-                    mod_freq (dict):
-                    plunger_lengths (dict):
-                    plunger_amp (dict):
-
+                n_array (list): list of the number of points used for each waveform. Note, that each element of n_array must be at least 48 and an integer multiple of 16.
     Returns:
-       gate_parameters (dict):
+       sequence_code (str): sequencer code for waveform placeholders.
     '''
     idx = 0
     #line_1 = "assignWaveIndex(placeholder("+str(n_array[0])+"),"+"0"+");\n"
@@ -563,27 +525,14 @@ def make_waveform_placeholders_plungers(n_array):
 
 def make_gateset_sequencer_hard_trigger(n_seq, n_av, trig_channel=True):
     '''
-    Outputs the mapping between AWG cores/channels and gate labels. \n
-    Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values. \n
-    - "ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict) \n
-    - "rf", 1 if core is for RF pulses and 0 if for DC pulses (int) \n
-    The dictionaries corresponding to the key "ch" have the following keys and values,
-    - "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]). \n
-    - "label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC). \n
-    - "gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)\n
-    Note: currently configured for 1 HDAWG unit with 4 AWG cores.   \n
+    Generates sequencer code for waveform placeholders on HDAWG FPGAs.
 
     Parameters:
-                    tau_pi (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    tau_pi_2 (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    i_amp (dict):
-                    q_amp (dict):
-                    mod_freq (dict):
-                    plunger_lengths (dict):
-                    plunger_amp (dict):
-
+                n_array (list): list of the command table indices being executed on the AWG core.
+                n_av (int): number of inner loops to iterate over during a GST run.
+                trig_channel (bool): True if this core receives a physical trigger input, False otherwise.
     Returns:
-       gate_parameters (dict):
+       program (str): sequencer code for with command table executions for a given quantum algorithm. 
     '''
     command_code = ""
     for n in n_seq:
