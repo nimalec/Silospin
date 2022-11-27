@@ -737,27 +737,7 @@ Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm',
 </div>
 <div class="mkapi-docstring">
 <div class="mkapi-section">
-      <div class="mkapi-section-body"><p>Outputs the mapping between AWG cores/channels and gate labels.</p>
-<p>Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values.</p>
-<ul>
-<li>
-<p>"ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict)</p>
-</li>
-<li>
-<p>"rf", 1 if core is for RF pulses and 0 if for DC pulses (int)</p>
-</li>
-</ul>
-<p>The dictionaries corresponding to the key "ch" have the following keys and values,
-- "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]).</p>
-<ul>
-<li>
-<p>"label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC).</p>
-</li>
-<li>
-<p>"gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)</p>
-</li>
-</ul>
-<p>Note: currently configured for 1 HDAWG unit with 4 AWG cores.</p></div>
+      <div class="mkapi-section-body"><p>Generates a dictionary with the number of poitns for each pulse type used in a quantum algorithm.</p></div>
     </div>
   <div class="mkapi-section parameters">
       <div class="mkapi-section-name parameters">
@@ -765,22 +745,22 @@ Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm',
         </div>
       <div class="mkapi-section-body parameters"><ul class="mkapi-items">
 
+<li><code class="mkapi-item-name">sample_rate</code>
+<span class="mkapi-item-type">(float)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">sample rate of the HDAWG in samples per second.</span></li>
 
-<li><code class="mkapi-item-name">tau_pi</code>
-<span class="mkapi-item-type">(dict)</span>
-<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
-
-<li><code class="mkapi-item-name">tau_pi_2</code>
-<span class="mkapi-item-type">(dict)</span>
-<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
-
-
-
-
-
+<li><code class="mkapi-item-name">n_array</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of the command table indices being executed on the AWG core.</span></li>
 
 
 </ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(program (str))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>sequencer code for with command table executions for a given quantum algorithm.</p></div>
     </div>
   </div>
 
@@ -796,51 +776,64 @@ Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm',
 </div>
 <div class="mkapi-docstring">
 <div class="mkapi-section">
-      <div class="mkapi-section-body"><p>Outputs the mapping between AWG cores/channels and gate labels.</p>
-<p>Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values.</p>
+      <div class="mkapi-section-body"><p>Generates a dictionary with all waveforms to be uploaded on 4 AWG cores, provided the number of points for each gate, channel mapping, and additional uniform padding per gate. Waveforms generated in the form lists, accounting for all padding schemes. Additional padding adds delays uniformly to all gates in a sequenc. Padding on either side of gates not to exceed 5 ns.</p>
+<p>Outer elements keys of waveform dictionary correspond to AWG core index (from 1-4). Dedicated RF cores have keys corresponding to each waveform:
+- "pi_pifr", pi pulse in a pi frame
+- "pi_2_pi_2fr", pi/2 pulse in a pi/2 frame
+- "pi_2_pifr", pi/2 pulse in a pi frame</p>
+<p>Dedicated DC cores have keys corresponding to each waveform:</p>
 <ul>
 <li>
-<p>"ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict)</p>
+<p>"p1_p1fr", plunger 1 pulse in plunger 1 frame</p>
 </li>
 <li>
-<p>"rf", 1 if core is for RF pulses and 0 if for DC pulses (int)</p>
-</li>
-</ul>
-<p>The dictionaries corresponding to the key "ch" have the following keys and values,
-- "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]).</p>
-<ul>
-<li>
-<p>"label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC).</p>
+<p>"p2_p2fr", plunger 2 pulse in plunger 2 frame</p>
 </li>
 <li>
-<p>"gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)</p>
+<p>"p1_p2fr", plunger 1 pulse in plunger 2 frame</p>
 </li>
-</ul>
-<p>Note: currently configured for 1 HDAWG unit with 4 AWG cores.</p></div>
+<li>
+<p>"p2_p1fr", plunger 2 pulse in plunger 1 frame</p>
+</li>
+<li>
+<p>"p1_pi_2fr", plunger 1 pulse in pi/2 frame</p>
+</li>
+<li>
+<p>"p2_pi_2fr", plunger 2 pulse in pi/2 frame</p>
+</li>
+<li>
+<p>"p1_pifr", plunger 1 pulse in pi frame</p>
+</li>
+<li>
+<p>"p2_pifr", plunger 2 pulse in pi frame</p>
+</li>
+</ul></div>
     </div>
   <div class="mkapi-section parameters">
       <div class="mkapi-section-name parameters">
           <span class="mkapi-section-name-body parameters">Parameters</span> 
         </div>
       <div class="mkapi-section-body parameters"><ul class="mkapi-items">
-
-
-
-<li><code class="mkapi-item-name">tau_pi</code>
+<li><code class="mkapi-item-name">gate_npoints</code>
 <span class="mkapi-item-type">(dict)</span>
-<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary of number of points per gate</span></li>
 
-<li><code class="mkapi-item-name">tau_pi_2</code>
+<li><code class="mkapi-item-name">channel_map</code>
 <span class="mkapi-item-type">(dict)</span>
-<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">channel mapping dictionary.</span></li>
 
-
-
-
-
+<li><code class="mkapi-item-name">added_padding</code>
+<span class="mkapi-item-type">(float)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">added padding to either side of a gate pulse, in ns.</span></li>
 
 
 </ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(waveforms (dict))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>dictionary of waveforms to be uploaded on each core.</p></div>
     </div>
   </div>
 
@@ -856,50 +849,41 @@ Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm',
 </div>
 <div class="mkapi-docstring">
 <div class="mkapi-section">
-      <div class="mkapi-section-body"><p>Outputs the mapping between AWG cores/channels and gate labels.</p>
-<p>Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values.</p>
+      <div class="mkapi-section-body"><p>Configures HDAWG module to run a quantum algorithm. In particular, this function does the following:
+- enables oscillator control</p>
 <ul>
 <li>
-<p>"ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict)</p>
+<p>sets oscillator frequencies</p>
 </li>
 <li>
-<p>"rf", 1 if core is for RF pulses and 0 if for DC pulses (int)</p>
-</li>
-</ul>
-<p>The dictionaries corresponding to the key "ch" have the following keys and values,
-- "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]).</p>
-<ul>
-<li>
-<p>"label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC).</p>
+<p>sets output amplitudes for each channel</p>
 </li>
 <li>
-<p>"gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)</p>
+<p>turns on output channels</p>
 </li>
-</ul>
-<p>Note: currently configured for 1 HDAWG unit with 4 AWG cores.</p></div>
+</ul></div>
     </div>
   <div class="mkapi-section parameters">
       <div class="mkapi-section-name parameters">
           <span class="mkapi-section-name-body parameters">Parameters</span> 
         </div>
       <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">awg</code>
+<span class="mkapi-item-type">(silospin.drivers.zi_hdawg.HdawgDriver)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">instance of HDAWG.</span></li>
 
-
-<li><code class="mkapi-item-name">tau_pi</code>
+<li><code class="mkapi-item-name">gate_parameters</code>
 <span class="mkapi-item-type">(dict)</span>
-<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
-
-<li><code class="mkapi-item-name">tau_pi_2</code>
-<span class="mkapi-item-type">(dict)</span>
-<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
-
-
-
-
-
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary of gate paramters for each qubit.</span></li>
 
 
 </ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> 
+        </div>
+      <div class="mkapi-section-body returns"><p>None.</p></div>
     </div>
   </div>
 
