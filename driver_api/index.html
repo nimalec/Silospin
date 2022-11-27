@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://silospin.com/driver_api/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Driver API - Silospin</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="//use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet" />
+        <link href="//use.fontawesome.com/releases/v5.8.1/css/v4-shims.css" rel="stylesheet" />
+        <link href="../css/mkapi-common.css" rel="stylesheet" />
+        <link href="../css/mkapi-readthedocs.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Driver API";
+        var mkdocs_page_input_path = "driver_api.md";
+        var mkdocs_page_url = "/driver_api/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Silospin
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">Basics</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../qc/">Quantum compiler</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Driver API</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#arbitrary-waveform-generator-driver">Arbitrary waveform generator driver</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#lock-in-amplifier-driver">Lock-in amplifier driver</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#digital-to-analog-convertor-driver">Digital-to-analog convertor driver</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#trigger-box-driver">Trigger box driver</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#microwave-source-driver">Microwave-source driver</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../qc_api/">Quantum Compiler API</a>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Silospin</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>Driver API</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="drivers">Drivers</h1>
+<h2 id="arbitrary-waveform-generator-driver">Arbitrary waveform generator driver</h2>
+<div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <div class="mkapi-object-body class top"><code class="mkapi-object-prefix">silospin.drivers.zi_hdawg_driver.</code><code class="mkapi-object-name">HdawgDriver</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">dev_id</code>, <code class="mkapi-object-signature">server_host=&#39;localhost&#39;</code>, <code class="mkapi-object-signature">server_port=8004</code>, <code class="mkapi-object-signature">api_level=6</code>, <code class="mkapi-object-signature">interface=&#39;1GbE&#39;</code>, <code class="mkapi-object-signature">rf_cores=[1, 2, 3]</code>, <code class="mkapi-object-signature">plunger_channels={&#39;p12&#39;: 7, &#39;p21&#39;: 8}</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Driver class for Zurich HDAWG (Zurich arbitrary waveform generator) instrument. Configured for 4 AWG cores.</p></div>
+    </div>
+  <div class="mkapi-section attributes">
+      <div class="mkapi-section-name attributes">
+          <span class="mkapi-section-name-body attributes">Attributes</span> 
+        </div>
+      <div class="mkapi-section-body attributes"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">_awgs</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary for 4 AWG cores. Keys correspond to each AWG ("awg1"..."awg4"), values are Zurich AWG core objects.</span></li>
+
+<li><code class="mkapi-item-name">_channel_mapping</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Channel mapping for AWG. Takes in RF core and DC channel groupings, returns mapping from AWG core indices to gate indices and channels.</span></li>
+
+<li><code class="mkapi-item-name">_command_tables</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of command tables uploaded to each AWG core, pulled dicectly from the instrument.</span></li>
+
+<li><code class="mkapi-item-name">_connection_settings</code>
+<span class="mkapi-item-type">('dict')</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of connection settings. Keys/values: "hdawg_id" (str), "server_host" (str), "server_port" (int),  "api_level" (int), "interface" (str), "connection_status" (bool).</span></li>
+
+<li><code class="mkapi-item-name">_daq</code>
+<span class="mkapi-item-type">(zhinst.core.ziDAQServer)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Instance of Zurich driver DAQ module.</span></li>
+
+<li><code class="mkapi-item-name">_hdawg</code>
+<span class="mkapi-item-type">(zhinst.toolkit.driver.devices.hdawg.HDAWG)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Instance of Zurich HDAWG driver.</span></li>
+
+<li><code class="mkapi-item-name">_oscillator_freq</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of 16 HDAWG oscillator frequencies. Keys: "osc1"..."osc16" (str). Values: corresponding oscillator frequencies in Hz (float).</span></li>
+
+<li><code class="mkapi-item-name">_run_status</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of run status for each core ("awg1"..."awg4"), True if running and False if not.</span></li>
+
+<li><code class="mkapi-item-name">_sequences</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of sequencer code uploaded to each AWG core (keys correspond to each core "awg1"..."awg4").</span></li>
+
+<li><code class="mkapi-item-name">_session</code>
+<span class="mkapi-item-type">(zhinst.toolkit.session.Session)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Instance of Zurich session for established connection.</span></li>
+
+<li><code class="mkapi-item-name">_sines</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of 8 HDAWG sine generator properties. Outer keys correspond to the sine wave ("sine1"..."sine8"), with dictionary values as separate dictionaries.
+Inner dictionary for each sine generator describes propertie of sine generator. Keys/Values: "osc" (int) [oscillator index from 0-15], "phaseshift" (float) [phase shift for oscillator in degrees], "harmonic" (int) [harmonic of sine wave], "amp1" (float) [amplitude on output 1], "amp2" (float) [amplitude on output 2].</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.assign_osc">assign_osc</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">osc_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None.)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Assigns an oscillator index (osc_num from 1-16) to a sine generator (sin_num from 1-8).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.compile_core">compile_core</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None.)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Compiles specified core awg_num.</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.compile_run_core">compile_run_core</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None.)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Compiles and runs specified core, awg_num.</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.get_all_awg_parameters">get_all_awg_parameters</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(all_awg_parameters : 'dict')</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">No input parameters. Returns dictionary current state of the instrument.</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.get_awg">get_awg</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(awg_core :  'zhinst.toolkit.driver.nodes.awg.AWG')</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Gets AWG core object for awg core awg_num (ranges from 1-4).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.get_connection_settings">get_connection_settings</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">param</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(connection_setting : 'str' or  'int' or 'bool'.)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Returns connections setting corresponding to param of the instrument.
+Parameters include: "hdawg_id" ,  "server_host" , "server_port" , "api_level" , "interface" , "connection_status".</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.get_modulation_mode">get_modulation_mode</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(modulation_mode : 'int')</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Gets modulation mode for sine generator sin_num ranges from 1-8).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.get_osc_freq">get_osc_freq</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">osc_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(osc_freq : 'float')</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Returns frequency of oscillator osc_num in Hz. osc_num ranges from 1-16.</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.get_out_amp">get_out_amp</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">wave_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(amp :  'float')</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Gets output amplitude (in volts) for wave output wave_num (ranges from 1-2) of sine generator sin_num (ranges from 1-8).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.get_phase">get_phase</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(phaseshift : 'float')</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Gets the phase (in degrees) for sine generator sin_num (from 1-8).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.get_sequence">get_sequence</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_idx</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(sequence : 'str')</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Gets the code on the sequencer for a given AWG core index, awg_idx ranging from 0-3.</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.get_sine">get_sine</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(sine : 'dict')</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Returns a dictionary representing the state of sine generator sin_num (ranges from 1-8).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.get_updated_run_status">get_updated_run_status</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(run_status : 'bool')</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Gets the run status for specified AWG core.</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.set_command_table">set_command_table</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">ct</code>, <code class="mkapi-object-signature">awg_idx</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None.)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Uploads command table ct (in specified format) to AWG core, awg_idx (ranges from 0-3).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.set_modulation_mode">set_modulation_mode</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">mode</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Sets modulation mode for sine generator sin_num ranges from 1-8).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.set_osc_freq">set_osc_freq</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">osc_num</code>, <code class="mkapi-object-signature">freq</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None.)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Sets oscillator frequency freq in Hz for oscillator osc_num (from 1-16).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.set_out_amp">set_out_amp</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">wave_num</code>, <code class="mkapi-object-signature">amp</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None.)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Sets output amplitude (in volts) for wave output wave_num (ranges from 1-2) of sine generator sin_num (ranges from 1-8).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.set_phase">set_phase</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">phase</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None.)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Sets oscillator phase (in degrees) for sine generator sin_num (from 1-8).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.set_sine">set_sine</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">osc_num</code>, <code class="mkapi-object-signature">phase</code>, <code class="mkapi-object-signature">harmonic</code>, <code class="mkapi-object-signature">amp1</code>, <code class="mkapi-object-signature">amp2</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Returns a dictionary representing the state of sine generator sin_num (ranges from 1-8).</span></li>
+
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.drivers.zi_hdawg_driver.HdawgDriver.stop_core">stop_core</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_num</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None.)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Stops specified core.</span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.get_all_awg_parameters">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">get_all_awg_parameters</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>No input parameters. Returns dictionary current state of the instrument.</p>
+<p>Parameters dictionaries are described below:</p>
+<ul>
+<li>
+<p>"connection", dictionary of connection settings</p>
+</li>
+<li>
+<p>"oscillators", dictionary of oscillator frequencies</p>
+</li>
+<li>
+<p>"sines", dictionary of sine generator parameters</p>
+</li>
+<li>
+<p>"command_tables", dictionary of uploaded command tables</p>
+</li>
+<li>
+<p>"sequences", dictionary of uploaded sequencer code</p>
+</li>
+<li>
+<p>"run_status", dictionary of run statuses for each core</p>
+</li>
+<li>
+<p>"channel_map", channel mapping dictonary</p>
+</li>
+</ul></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.get_connection_settings">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">get_connection_settings</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">param</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Returns connections setting corresponding to param of the instrument.
+Parameters include: "hdawg_id" ,  "server_host" , "server_port" , "api_level" , "interface" , "connection_status".</p></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(connection_setting : 'str' or  'int' or 'bool'.)</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Specified connection setting for the HDAWG.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.get_osc_freq">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">get_osc_freq</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">osc_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Returns frequency of oscillator osc_num in Hz. osc_num ranges from 1-16.</p>
+<p>Keep the following oscillator grouping per AWG core in mind:
+-osc 1-4, AWG 1
+-osc 5-9, AWG 2
+-osc 10-13, AWG 3
+-osc 14-16, AWG 4</p></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(osc_freq : 'float')</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Oscillator frequency in Hz.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.set_osc_freq">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">set_osc_freq</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">osc_num</code>, <code class="mkapi-object-signature">freq</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Sets oscillator frequency freq in Hz for oscillator osc_num (from 1-16).</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.get_phase">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">get_phase</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Gets the phase (in degrees) for sine generator sin_num (from 1-8).</p></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(phaseshift : 'float')</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Phase shift for sine generator in degrees.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.set_phase">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">set_phase</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">phase</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Sets oscillator phase (in degrees) for sine generator sin_num (from 1-8).</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.get_modulation_mode">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">get_modulation_mode</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Gets modulation mode for sine generator sin_num ranges from 1-8).</p>
+<p>Note that modulation mode follows the convention:</p>
+<ul>
+<li>
+<p>0, Modulation Off: AWG Output goes directly to Signal Output.</p>
+</li>
+<li>
+<p>1, Sine 11: AWG Outputs 0 and 1 are both multiplied with Sine Generator signal 0.</p>
+</li>
+<li>
+<p>2, Sine 22: AWG Outputs 0 and 1 are both multiplied with Sine Generator signal 1.</p>
+</li>
+<li>
+<p>3, Sine 12: AWG Outputs 0 and 1 are multiplied with Sine Generator signal 0 and 1.</p>
+</li>
+<li>
+<p>4, Sine 21: AWG Outputs 0 and 1 are multiplied with Sine Generator signal 1 and 0.</p>
+</li>
+<li>
+<p>5, Advanced: Output modulates corresponding sines from modulation carriers.</p>
+</li>
+<li>
+<p>6, Mixer Calibration: The AWG outputs are multiplied with the sum or difference of Sine Generators multiplied by gains specified. The resulting output signal is AWG1<em>(Sine1</em>Gain1 - Sine2<em>Gain2) + AWG2</em>(Sine1<em>Gain2 + Sine2</em>Gain1).</p>
+</li>
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(modulation_mode : 'int')</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Modulation mode of sine generator ranges from 0-6.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.set_modulation_mode">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">set_modulation_mode</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">mode</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Sets modulation mode for sine generator sin_num ranges from 1-8).</p>
+<p>Note that modulation mode follows the convention:</p>
+<ul>
+<li>
+<p>0, Modulation Off: AWG Output goes directly to Signal Output.</p>
+</li>
+<li>
+<p>1, Sine 11: AWG Outputs 0 and 1 are both multiplied with Sine Generator signal 0.</p>
+</li>
+<li>
+<p>2, Sine 22: AWG Outputs 0 and 1 are both multiplied with Sine Generator signal 1.</p>
+</li>
+<li>
+<p>3, Sine 12: AWG Outputs 0 and 1 are multiplied with Sine Generator signal 0 and 1.</p>
+</li>
+<li>
+<p>4, Sine 21: AWG Outputs 0 and 1 are multiplied with Sine Generator signal 1 and 0.</p>
+</li>
+<li>
+<p>5, Advanced: Output modulates corresponding sines from modulation carriers.</p>
+</li>
+<li>
+<p>6, Mixer Calibration: The AWG outputs are multiplied with the sum or difference of Sine Generators multiplied by gains specified. The resulting output signal is AWG1x(Sine1xGain1 - Sine2*Gain2) + AWG2x(Sine1xGain2 + Sine2xGain1).</p>
+</li>
+</ul></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.get_sine">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">get_sine</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Returns a dictionary representing the state of sine generator sin_num (ranges from 1-8).</p>
+<p>The dictionary comprises the parameters listed below:</p>
+<ul>
+<li>
+<p>'osc', oscillator index (int)</p>
+</li>
+<li>
+<p>'phaseshift', phase offset (degrees) for current sine generator (float)</p>
+</li>
+<li>
+<p>'harmonic', harmonic of the oscillator's output (int)</p>
+</li>
+<li>
+<p>'amp1', amplitude (volts) of sine output 1 (float)</p>
+</li>
+<li>
+<p>'amp2', amplitude (volts) of sine output 2 (float)</p>
+</li>
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(sine : 'dict')</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Dictionary representing the sine generator's current state.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.assign_osc">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">assign_osc</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">osc_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Assigns an oscillator index (osc_num from 1-16) to a sine generator (sin_num from 1-8).</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.set_sine">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">set_sine</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">osc_num</code>, <code class="mkapi-object-signature">phase=0.0</code>, <code class="mkapi-object-signature">harmonic=1</code>, <code class="mkapi-object-signature">amp1=1.0</code>, <code class="mkapi-object-signature">amp2=1.0</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Returns a dictionary representing the state of sine generator sin_num (ranges from 1-8).</p>
+<p>The dictionary comprises the parameters listed below:</p>
+<ul>
+<li>
+<p>'osc', oscillator index (int)</p>
+</li>
+<li>
+<p>'phaseshift', phase offset (degrees) for current sine generator (float)</p>
+</li>
+<li>
+<p>'harmonic', harmonic of the oscillator's output (int)</p>
+</li>
+<li>
+<p>'amp1', amplitude (volts) of sine output 1 (float)</p>
+</li>
+<li>
+<p>'amp2', amplitude (volts) of sine output 2 (float)</p>
+</li>
+</ul></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.get_awg">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">get_awg</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Gets AWG core object for awg core awg_num (ranges from 1-4).</p></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(awg_core :  'zhinst.toolkit.driver.nodes.awg.AWG')</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Zurich AWG core object.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.get_out_amp">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">get_out_amp</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">wave_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Gets output amplitude (in volts) for wave output wave_num (ranges from 1-2) of sine generator sin_num (ranges from 1-8).</p></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(amp :  'float')</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Amplitude in volts of specified channel output.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.set_out_amp">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">set_out_amp</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">sin_num</code>, <code class="mkapi-object-signature">wave_num</code>, <code class="mkapi-object-signature">amp</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Sets output amplitude (in volts) for wave output wave_num (ranges from 1-2) of sine generator sin_num (ranges from 1-8).</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.get_sequence">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">get_sequence</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_idx</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Gets the code on the sequencer for a given AWG core index, awg_idx ranging from 0-3.</p></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(sequence : 'str')</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Sequencer code for specified AWG core.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.get_updated_run_status">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">get_updated_run_status</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Gets the run status for specified AWG core.</p></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(run_status : 'bool')</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>True if currently running, False if not running.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.compile_core">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">compile_core</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Compiles specified core awg_num.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.compile_run_core">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">compile_run_core</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Compiles and runs specified core, awg_num.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.stop_core">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">stop_core</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_num</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Stops specified core.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.drivers.zi_hdawg_driver.HdawgDriver.set_command_table">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">set_command_table</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">ct</code>, <code class="mkapi-object-signature">awg_idx</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Uploads command table ct (in specified format) to AWG core, awg_idx (ranges from 0-3).</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<h2 id="lock-in-amplifier-driver">Lock-in amplifier driver</h2>
+<p><img alt="mkapi" src="silospin.drivers.zi_hdawg_driver.HdawgDriver" />  </p>
+<h2 id="digital-to-analog-convertor-driver">Digital-to-analog convertor driver</h2>
+<p><img alt="mkapi" src="silospin.drivers.zi_hdawg_driver.HdawgDriver" />   </p>
+<h2 id="trigger-box-driver">Trigger box driver</h2>
+<p><img alt="mkapi" src="silospin.drivers.zi_hdawg_driver.HdawgDriver" />  </p>
+<h2 id="microwave-source-driver">Microwave-source driver</h2>
+<p><img alt="mkapi" src="silospin.drivers.zi_hdawg_driver.HdawgDriver" /></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../qc/" class="btn btn-neutral float-left" title="Quantum compiler"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../qc_api/" class="btn btn-neutral float-right" title="Quantum Compiler API">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../qc/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../qc_api/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../js/mkapi.js" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

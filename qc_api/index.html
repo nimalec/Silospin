@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://silospin.com/qc_api/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Quantum Compiler API - Silospin</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+        <link href="//use.fontawesome.com/releases/v5.8.1/css/all.css" rel="stylesheet" />
+        <link href="//use.fontawesome.com/releases/v5.8.1/css/v4-shims.css" rel="stylesheet" />
+        <link href="../css/mkapi-common.css" rel="stylesheet" />
+        <link href="../css/mkapi-readthedocs.css" rel="stylesheet" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Quantum Compiler API";
+        var mkdocs_page_input_path = "qc_api.md";
+        var mkdocs_page_url = "/qc_api/";
+      </script>
+    
+    <script src="../js/jquery-3.6.0.min.js" defer></script>
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+      <script>hljs.initHighlightingOnLoad();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Silospin
+        </a><div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../about/">Basics</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../qc/">Quantum compiler</a>
+                </li>
+              </ul>
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../driver_api/">Driver API</a>
+                </li>
+              </ul>
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="./">Quantum Compiler API</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#quantum-compiler">Quantum compiler</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#quantum-compiler-helper-functions">Quantum compiler helper functions</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Silospin</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" alt="Docs"></a> &raquo;</li>
+      <li>Quantum Compiler API</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="quantum-compiler-module">Quantum compiler module</h1>
+<h2 id="quantum-compiler">Quantum compiler</h2>
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler.GateSetTomographyQuantumCompiler">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object class code top">
+    <div class="mkapi-object-kind class top">class</div>
+    <div class="mkapi-object-body class top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler.</code><code class="mkapi-object-name">GateSetTomographyQuantumCompiler</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">gst_file_path</code>, <code class="mkapi-object-signature">awg</code>, <code class="mkapi-object-signature">gate_parameters</code>, <code class="mkapi-object-signature">n_inner=1</code>, <code class="mkapi-object-signature">n_outer=1</code>, <code class="mkapi-object-signature">trigger_channel=0</code>, <code class="mkapi-object-signature">added_padding=0</code>, <code class="mkapi-object-signature">config_awg=True</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Class representing an instance of compiler gate set tomography experiment (uses entirely rectangular waves).</p></div>
+    </div>
+  <div class="mkapi-section attributes">
+      <div class="mkapi-section-name attributes">
+          <span class="mkapi-section-name-body attributes">Attributes</span> 
+        </div>
+      <div class="mkapi-section-body attributes"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">_awg</code>
+<span class="mkapi-item-type">(HdawgDriver)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Instance of HdawgDriver object, native to silospin.</span></li>
+
+<li><code class="mkapi-item-name">_awg_cores</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">List of indcices corresponding to the qubits (AWG cores) used in the program.</span></li>
+
+<li><code class="mkapi-item-name">_channel_idxs</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Grouping of channel indices for  each core.</span></li>
+
+<li><code class="mkapi-item-name">_channel_osc_idxs</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Grouping of oscillator indices for  each core.</span></li>
+
+<li><code class="mkapi-item-name">_command_tables</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Command table uplaoded to HDAWG containing phase change instructions for each gate.</span></li>
+
+<li><code class="mkapi-item-name">_ct_idxs</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of command table entries executed in HDAWG FPGA sequencer. Outer dictonary keys correspond to GST line number. Inner keys correspond to qubit (AWG core) indices and values are lists of gate strings.</span></li>
+
+
+
+
+<li><code class="mkapi-item-name">_gate_sequences</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of quantum gate sequences for each AWG core read in from GST file. Outer dictonary keys correspond to GST line number. Inner keys correspond to qubit (AWG core) indices and values are lists of gate strings.</span></li>
+
+<li><code class="mkapi-item-name">_gst_path</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">File path for gate set tomography program being read and compiled.</span></li>
+
+<li><code class="mkapi-item-name">_qubit_parameters</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of standard parameters for each qubit. Dicionary keys correspond to qubit (AWG core) indices and value is dictonary of qubit parameters (["i_amp_pi", "q_amp_pi", "i_amp_pi_2", "q_amp_pi_2", "tau_pi",  "tau_pi_2", "delta_iq", "mod_freq"]).</span></li>
+
+<li><code class="mkapi-item-name">_sample_rate</code>
+<span class="mkapi-item-type">(float)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Sampling rate used by AWG. Set to 2.4 GSa/s</span></li>
+
+<li><code class="mkapi-item-name">_sequencer_code</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of sequencer code uploaded to each HDAWG coer.</span></li>
+
+<li><code class="mkapi-item-name">_waveforms</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Dictionary of rectangular 'pi' and 'pi/2' waveforms to be uploaded to each core of HDAWG. Dict keys correspond to qubit (AWG core) indices. Values are 2 element lists containing waveforms in the form of numpy arrays (['pi/2', 'pi']).</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section methods">
+      <div class="mkapi-section-name methods">
+          <span class="mkapi-section-name-body methods">Methods</span> 
+        </div>
+      <div class="mkapi-section-body methods"><ul class="mkapi-items">
+<li class="method"><code class="mkapi-item-name"><a href="#silospin.quantum_compiler.quantum_compiler.GateSetTomographyQuantumCompiler.run_program">run_program</a></code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_idxs</code><code class="mkapi-object-parenthesis">)</code>
+<span class="mkapi-item-type">(None.)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">Runs uploaded quantum algorithm on the specified AWG cores.</span></li>
+
+
+</ul></div>
+    </div>
+  </div>
+
+  <div class="mkapi-members">
+  
+    <div class="mkapi-member">
+      <div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler.GateSetTomographyQuantumCompiler.run_program">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object method code">
+    <div class="mkapi-object-kind method">method</div>
+    <div class="mkapi-object-body method"><code class="mkapi-object-name">run_program</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg_idxs=None</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Runs uploaded quantum algorithm on the specified AWG cores.</p>
+<p>Waits for external hardware trigger event to execute program.</p></div>
+    </div>
+  </div>
+
+</div>
+    </div>
+  
+  </div>
+
+</div>
+
+<h2 id="quantum-compiler-helper-functions">Quantum compiler helper functions</h2>
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.channel_mapper">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">channel_mapper</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">rf_cores=[1, 2, 3]</code>, <code class="mkapi-object-signature">plunger_channels={&#39;p12&#39;: 7, &#39;p21&#39;: 8}</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Outputs the mapping between AWG cores/channels and gate labels.</p>
+<p>Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values.</p>
+<ul>
+<li>
+<p>"ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict)</p>
+</li>
+<li>
+<p>"rf", 1 if core is for RF pulses and 0 if for DC pulses (int)</p>
+</li>
+</ul>
+<p>The dictionaries corresponding to the key "ch" have the following keys and values,
+- "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]).</p>
+<ul>
+<li>
+<p>"label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC).</p>
+</li>
+<li>
+<p>"gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)</p>
+</li>
+</ul>
+<p>Note: currently configured for 1 HDAWG unit with 4 AWG cores.</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">rf_cores</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+
+<li><code class="mkapi-item-name">plunger_channels</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary of RF core (default set to  {"p12": 7, "p21": 8})).</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(channel_mapper (dict))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Dictionary representing channel mapping.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.make_gate_parameters">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">make_gate_parameters</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">tau_pi</code>, <code class="mkapi-object-signature">tau_pi_2</code>, <code class="mkapi-object-signature">i_amp</code>, <code class="mkapi-object-signature">q_amp</code>, <code class="mkapi-object-signature">mod_freq</code>, <code class="mkapi-object-signature">plunger_length</code>, <code class="mkapi-object-signature">plunger_amp</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Outputs a dictionary representing the gate parameters of the set of qubits. Note that this dictionary should be stored as a
+pickle file and updated at each calibration step.</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">tau_pi</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary of pi-pulse durations for each qubit, in seconds.</span></li>
+
+<li><code class="mkapi-item-name">tau_pi_2</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary of pi/2-pulse durations for each qubit, in seconds.</span></li>
+
+<li><code class="mkapi-item-name">i_amp</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary of I-amplitudes for each qubit, in volts.</span></li>
+
+<li><code class="mkapi-item-name">q_amp</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary of Q-amplitudes for each qubit, in volts.</span></li>
+
+<li><code class="mkapi-item-name">mod_freq</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary of modulation frequencies for each qubit, in Hz.</span></li>
+
+
+<li><code class="mkapi-item-name">plunger_amp</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary of plunger gate amplitudes, in volts.</span></li>
+
+<li><code class="mkapi-item-name">plunger_lengths</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary of plunger gate lengths, in seconds.</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(gate_parameters (dict))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>gate parameters representing the currnet state of the set of qubits.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.make_command_table_indices">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">make_command_table_indices</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">gt_seqs</code>, <code class="mkapi-object-signature">taus_std</code>, <code class="mkapi-object-signature">taus_p</code>, <code class="mkapi-object-signature">n_arbZ</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Generates a dictionary with lists of command table executions for each core, provided the output of 'gst_file_parser'.
+This is the core of the quantum compiler, as it interprets longs RF and DC gate strings, converting them to FPGA instructions for amplitude and phase modulation.</p>
+<p>Outer-most keys "plunger" and "rf", containing instructions to be addressed separatley on the dedicated RF and DC cores.
+Outputs a dictionary with outer keys "rf" and "plunger", corresponding to executions for dedicated RF and DC AWG cores. The values for the "rf" keys are dictionaries with outer keys corresponding to each core and "plunger"
+has values of dictionaries with keys corresponding to each DC channel. Each of these core and channel keys have values of lists of command table (CT) indices (integers) to be addressed on the AWG cores.</p>
+<p>Each command table index maps to an entry of a CT, determining the waveform, amplitude, and phase to be played when the CT entry is executed. Phase changes for each gate are computed on-the-fly.
+Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm', 'y', 'yyy', 'y y', 'myym', 'arbZ', 'p', 't'. See 'Quantum Compiler' tab for a more elaborate description.</p>
+<p>Note: this function is currently configured for 1 HDAWG unit with 4 AWG cores.</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">gt_seqs</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary output of 'gst_file_parser', representing sequence of RF and DC gate strings on each core.</span></li>
+
+<li><code class="mkapi-item-name">taus_std</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of standard pi/2 and pi pulse lengths in ns ([tau_pi2, tau_pi]).</span></li>
+
+<li><code class="mkapi-item-name">taus_p</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of tuples, each with elements (ch_idx, tau_p) representing the channel index and corresponding plunger pulse length.</span></li>
+
+<li><code class="mkapi-item-name">n_arbZ</code>
+<span class="mkapi-item-type">(int)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">the accumulated number of previously seen arbitrary-Z rotations over all lines in GST file being read.</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(ct_idxs (dict), arbZ (list))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>dictonary of command table indices to execute, list of tuples of (arbitrary Z comman table index, rotation angle).</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.make_rf_command_table">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">make_rf_command_table</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">n_pi_2</code>, <code class="mkapi-object-signature">n_pi</code>, <code class="mkapi-object-signature">n_p=[]</code>, <code class="mkapi-object-signature">arbZ=[]</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Generates command tables for dedicated RF cores. Each command table index corresponds to a phase increment and waveform play. Command table entries correspond to the following indices:</p>
+<ul>
+<li>
+<p>0, initial xx gate in pi frame</p>
+</li>
+<li>
+<p>1, initial yy gate in pi frame</p>
+</li>
+<li>
+<p>2, initial mxxm gate in pi frame</p>
+</li>
+<li>
+<p>3, initial myym gate in pi frame</p>
+</li>
+<li>
+<p>4, initial x gate in pi frame</p>
+</li>
+<li>
+<p>5, initial y gate in pi frame</p>
+</li>
+<li>
+<p>6, initial xxx gate in pi frame</p>
+</li>
+<li>
+<p>7, initial yyy gate in pi frame</p>
+</li>
+<li>
+<p>8, initial x gate in pi/2 frame</p>
+</li>
+<li>
+<p>9, initial y gate in pi/2 frame</p>
+</li>
+<li>
+<p>10, initial xxx gate in pi/2 frame</p>
+</li>
+<li>
+<p>11, initial yyy gate in pi/2 frame</p>
+</li>
+<li>
+<p>12, increment by 0 degrees in for pi gate in a pi frame</p>
+</li>
+<li>
+<p>13, increment by -90 degrees in for pi gate in a pi frame</p>
+</li>
+<li>
+<p>14, increment by -180 degrees in for pi gate in a pi frame</p>
+</li>
+<li>
+<p>15, increment by -270 degrees in for pi gate in a pi frame</p>
+</li>
+<li>
+<p>16, increment by 90 degrees in for pi gate in a pi frame</p>
+</li>
+<li>
+<p>17, increment by 180 degrees in for pi gate in a pi frame</p>
+</li>
+<li>
+<p>18, increment by 270 degrees in for pi gate in a pi frame</p>
+</li>
+<li>
+<p>19, increment by 0 degrees in for pi/2 gate in a pi frame</p>
+</li>
+<li>
+<p>20, increment by -90 degrees in for pi/2 gate in a pi frame</p>
+</li>
+<li>
+<p>21, increment by -180 degrees in for pi/2 gate in a pi frame</p>
+</li>
+<li>
+<p>22, increment by -270 degrees in for pi/2 gate in a pi frame</p>
+</li>
+<li>
+<p>23, increment by 90 degrees in for pi/2 gate in a pi frame</p>
+</li>
+<li>
+<p>24, increment by 180 degrees in for pi/2 gate in a pi frame</p>
+</li>
+<li>
+<p>25, increment by 270 degrees in for pi/2 gate in a pi frame</p>
+</li>
+<li>
+<p>26, increment by 0 degrees in for pi/2 gate in a pi/2 frame</p>
+</li>
+<li>
+<p>27, increment by -90 degrees in for pi/2 gate in a pi/2 frame</p>
+</li>
+<li>
+<p>28, increment by -180 degrees in for pi/2 gate in a pi/2 frame</p>
+</li>
+<li>
+<p>29, increment by -270 degrees in for pi/2 gate in a pi/2 frame</p>
+</li>
+<li>
+<p>30, increment by 90 degrees in for pi/2 gate in a pi/2 frame</p>
+</li>
+<li>
+<p>31, increment by 180 degrees in for pi/2 gate in a pi/2 frame</p>
+</li>
+<li>
+<p>32, increment by 270 degrees in for pi/2 gate in a pi/2 frame</p>
+</li>
+<li>
+<p>33, wait for pi/2 duration</p>
+</li>
+<li>
+<p>34, wait for pi duration</p>
+</li>
+<li>
+<p>35 - 35+n_p, wait for DC pulse durations</p>
+</li>
+<li>
+<p>36+n_p, increment phase by 0 degrees (z0z gate)</p>
+</li>
+<li>
+<p>36+n_p-36+n_p+n_z, perform arbitrary rotation by phi degrees (z phi z)</p>
+</li>
+</ul></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">n_pi_2</code>
+<span class="mkapi-item-type">(int)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">number of points for a stanard pi/2 pulse.</span></li>
+
+<li><code class="mkapi-item-name">n_pi</code>
+<span class="mkapi-item-type">(int)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">number of points for a stanard pi pulse.</span></li>
+
+<li><code class="mkapi-item-name">n_p</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of number of points for each plunger pulse length (default = []).</span></li>
+
+<li><code class="mkapi-item-name">arbZ</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of tuples of (arbitrary Z command table index, rotation angle) (default = []).</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(command_table (dict))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Dictionary of the RF command table to be directly uploaded onto AWG core.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.make_plunger_command_table">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">make_plunger_command_table</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">n_p</code>, <code class="mkapi-object-signature">n_rf</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Generates command table for a single DC AWG core. Each core has two channels.
+- 0, plunger 1 pulse in plunger 1 frame</p>
+<ul>
+<li>
+<p>1, plunger 2 pulse in plunger 2 frame</p>
+</li>
+<li>
+<p>2, plunger 1 pulse in plunger 2 frame</p>
+</li>
+<li>
+<p>3, plunger 2 pulse in plunger 1 frame</p>
+</li>
+<li>
+<p>4, plunger 1 pulse in pi/2 frame</p>
+</li>
+<li>
+<p>5, plunger 2 pulse in pi/2 frame</p>
+</li>
+<li>
+<p>6, plunger 1 pulse in pi frame</p>
+</li>
+<li>
+<p>7, plunger 2 pulse in pi frame</p>
+</li>
+<li>
+<p>8, wait for pi/2 pulse duration</p>
+</li>
+<li>
+<p>9, wait for pi pulse duration</p>
+</li>
+<li>
+<p>10, wait for plunger 1 pulse duration</p>
+</li>
+<li>
+<p>11, wait for plunger 2 pulse duration</p>
+</li>
+<li>
+<p>12, impose 0 degree phase shift</p>
+</li>
+</ul></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">n_p</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of 2 tuples of the form (ch_idx, n_p) with ch_idx as plunger channel index and n_p as the number of points for the plunger pulse.</span></li>
+
+<li><code class="mkapi-item-name">n_rf</code>
+<span class="mkapi-item-type">(tuple)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">tuple of the form (n_pi_2, n_pi), as the number of points for a pi/2 and pi pulse.</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(command_table (dict))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>Dictionary of the plunger command table to be directly uploaded onto AWG core.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.make_waveform_placeholders">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">make_waveform_placeholders</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">n_array</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Generates sequencer code for waveform placeholders on HDAWG FPGAs.</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">n_array</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of the number of points used for each waveform. Note, that each element of n_array must be at least 48 and an integer multiple of 16.</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(sequence_code (str))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>sequencer code for waveform placeholders.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.make_waveform_placeholders_plungers">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">make_waveform_placeholders_plungers</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">n_array</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Generates sequencer code for plunger gate waveform placeholders on HDAWG FPGAs.</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">n_array</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of the number of points used for each waveform. Note, that each element of n_array must be at least 48 and an integer multiple of 16.</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(sequence_code (str))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>sequencer code for waveform placeholders.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.make_gateset_sequencer_hard_trigger">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">make_gateset_sequencer_hard_trigger</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">n_seq</code>, <code class="mkapi-object-signature">n_av</code>, <code class="mkapi-object-signature">trig_channel=True</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Generates sequencer code for waveform placeholders on HDAWG FPGAs.</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+
+
+
+<li><code class="mkapi-item-name">n_array</code>
+<span class="mkapi-item-type">(list)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of the command table indices being executed on the AWG core.</span></li>
+
+
+</ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(sequence_code (str))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>sequencer code for waveform placeholders.</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.make_gate_npoints">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">make_gate_npoints</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">gate_parameters</code>, <code class="mkapi-object-signature">sample_rate</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Outputs the mapping between AWG cores/channels and gate labels.</p>
+<p>Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values.</p>
+<ul>
+<li>
+<p>"ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict)</p>
+</li>
+<li>
+<p>"rf", 1 if core is for RF pulses and 0 if for DC pulses (int)</p>
+</li>
+</ul>
+<p>The dictionaries corresponding to the key "ch" have the following keys and values,
+- "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]).</p>
+<ul>
+<li>
+<p>"label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC).</p>
+</li>
+<li>
+<p>"gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)</p>
+</li>
+</ul>
+<p>Note: currently configured for 1 HDAWG unit with 4 AWG cores.</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+
+
+<li><code class="mkapi-item-name">tau_pi</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+
+<li><code class="mkapi-item-name">tau_pi_2</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+
+
+
+
+
+
+
+</ul></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.generate_waveforms">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">generate_waveforms</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">gate_npoints</code>, <code class="mkapi-object-signature">channel_map</code>, <code class="mkapi-object-signature">added_padding=0</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Outputs the mapping between AWG cores/channels and gate labels.</p>
+<p>Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values.</p>
+<ul>
+<li>
+<p>"ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict)</p>
+</li>
+<li>
+<p>"rf", 1 if core is for RF pulses and 0 if for DC pulses (int)</p>
+</li>
+</ul>
+<p>The dictionaries corresponding to the key "ch" have the following keys and values,
+- "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]).</p>
+<ul>
+<li>
+<p>"label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC).</p>
+</li>
+<li>
+<p>"gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)</p>
+</li>
+</ul>
+<p>Note: currently configured for 1 HDAWG unit with 4 AWG cores.</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+
+
+
+<li><code class="mkapi-item-name">tau_pi</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+
+<li><code class="mkapi-item-name">tau_pi_2</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+
+
+
+
+
+
+
+</ul></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_helpers.config_hdawg">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_helpers.</code><code class="mkapi-object-name">config_hdawg</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">awg</code>, <code class="mkapi-object-signature">gate_parameters</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Outputs the mapping between AWG cores/channels and gate labels.</p>
+<p>Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values.</p>
+<ul>
+<li>
+<p>"ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict)</p>
+</li>
+<li>
+<p>"rf", 1 if core is for RF pulses and 0 if for DC pulses (int)</p>
+</li>
+</ul>
+<p>The dictionaries corresponding to the key "ch" have the following keys and values,
+- "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]).</p>
+<ul>
+<li>
+<p>"label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC).</p>
+</li>
+<li>
+<p>"gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)</p>
+</li>
+</ul>
+<p>Note: currently configured for 1 HDAWG unit with 4 AWG cores.</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+
+
+<li><code class="mkapi-item-name">tau_pi</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+
+<li><code class="mkapi-item-name">tau_pi_2</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+
+
+
+
+
+
+
+</ul></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="mkapi-node" id="silospin.quantum_compiler.quantum_compiler_io.gst_file_parser">
+<div class='mkapi-object-container'>
+  <div class="mkapi-object function code top">
+    <div class="mkapi-object-kind function top">function</div>
+    <div class="mkapi-object-body function top"><code class="mkapi-object-prefix">silospin.quantum_compiler.quantum_compiler_io.</code><code class="mkapi-object-name">gst_file_parser</code><code class="mkapi-object-parenthesis">(</code><code class="mkapi-object-signature">file_path</code>, <code class="mkapi-object-signature">qubit_lengths</code>, <code class="mkapi-object-signature">channel_mapping</code><code class="mkapi-object-parenthesis">)</code></div>
+  </div>
+  
+</div>
+<div class="mkapi-docstring">
+<div class="mkapi-section">
+      <div class="mkapi-section-body"><p>Outputs the mapping between AWG cores/channels and gate labels.</p>
+<p>Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values.</p>
+<ul>
+<li>
+<p>"ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict)</p>
+</li>
+<li>
+<p>"rf", 1 if core is for RF pulses and 0 if for DC pulses (int)</p>
+</li>
+</ul>
+<p>The dictionaries corresponding to the key "ch" have the following keys and values,
+- "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]).</p>
+<ul>
+<li>
+<p>"label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC).</p>
+</li>
+<li>
+<p>"gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)</p>
+</li>
+</ul>
+<p>Note: currently configured for 1 HDAWG unit with 4 AWG cores.</p></div>
+    </div>
+  <div class="mkapi-section parameters">
+      <div class="mkapi-section-name parameters">
+          <span class="mkapi-section-name-body parameters">Parameters</span> 
+        </div>
+      <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+
+
+
+<li><code class="mkapi-item-name">tau_pi</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+
+<li><code class="mkapi-item-name">tau_pi_2</code>
+<span class="mkapi-item-type">(dict)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+
+
+
+
+
+
+
+</ul></div>
+    </div>
+  </div>
+
+</div>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../driver_api/" class="btn btn-neutral float-left" title="Driver API"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../driver_api/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../js/mkapi.js" defer></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-AMS_HTML" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
