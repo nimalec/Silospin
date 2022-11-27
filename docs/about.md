@@ -37,6 +37,8 @@ possit dolore ait natura crines nil namque exercetque Amoris.
 
 ## Quantum control hardware and measurement setup   
 
+![Image](img/highlevel_schematic.png)
+
 ### Control hardware schematic
 
 ### Zurich arbitrary waveform generators (HDAWGs)

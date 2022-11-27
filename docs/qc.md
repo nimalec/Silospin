@@ -12,3 +12,9 @@ The quantum compiler is responsible for converting a quantum algorithm represent
 ## Channel groupings
 
 ## Phase increments and command table formulation    
+
+
+#Worked example for a quantum circuit
+To convey a comprehensive understanding of the quantum compiler's inner-workings, let's attempt to generate the pulse sequences for the following quantum algorithm on a three-qubit array.
+
+![Image](img/quantumcircuit_example.png)

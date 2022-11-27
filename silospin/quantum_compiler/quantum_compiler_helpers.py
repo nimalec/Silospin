@@ -532,7 +532,7 @@ def make_gateset_sequencer_hard_trigger(n_seq, n_av, trig_channel=True):
                 n_av (int): number of inner loops to iterate over during a GST run.
                 trig_channel (bool): True if this core receives a physical trigger input, False otherwise.
     Returns:
-       program (str): sequencer code for with command table executions for a given quantum algorithm. 
+       program (str): sequencer code for with command table executions for a given quantum algorithm.
     '''
     command_code = ""
     for n in n_seq:
@@ -549,27 +549,13 @@ def make_gateset_sequencer_hard_trigger(n_seq, n_av, trig_channel=True):
 
 def make_gate_npoints(gate_parameters, sample_rate):
     '''
-    Outputs the mapping between AWG cores/channels and gate labels. \n
-    Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values. \n
-    - "ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict) \n
-    - "rf", 1 if core is for RF pulses and 0 if for DC pulses (int) \n
-    The dictionaries corresponding to the key "ch" have the following keys and values,
-    - "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]). \n
-    - "label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC). \n
-    - "gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)\n
-    Note: currently configured for 1 HDAWG unit with 4 AWG cores.   \n
+    Generates a dictionary with the number of poitns for each pulse type used in a quantum algorithm.
 
     Parameters:
-                    tau_pi (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    tau_pi_2 (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    i_amp (dict):
-                    q_amp (dict):
-                    mod_freq (dict):
-                    plunger_lengths (dict):
-                    plunger_amp (dict):
-
+                n_array (list): list of the command table indices being executed on the AWG core.
+                sample_rate (float): sample rate of the HDAWG in samples per second.
     Returns:
-       gate_parameters (dict):
+       program (str): sequencer code for with command table executions for a given quantum algorithm.
     '''
     gate_npoints = {"rf": {}, "plunger": {}}
     for idx in gate_parameters["rf"]:
@@ -583,27 +569,30 @@ def make_gate_npoints(gate_parameters, sample_rate):
 
 def generate_waveforms(gate_npoints, channel_map, added_padding=0):
     '''
-    Outputs the mapping between AWG cores/channels and gate labels. \n
-    Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values. \n
-    - "ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict) \n
-    - "rf", 1 if core is for RF pulses and 0 if for DC pulses (int) \n
-    The dictionaries corresponding to the key "ch" have the following keys and values,
-    - "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]). \n
-    - "label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC). \n
-    - "gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)\n
-    Note: currently configured for 1 HDAWG unit with 4 AWG cores.   \n
+    Generates a dictionary with all waveforms to be uploaded on 4 AWG cores, provided the number of points for each gate, channel mapping, and additional uniform padding per gate. Waveforms generated in the form lists, accounting for all padding schemes. Additional padding adds delays uniformly to all gates in a sequenc. Padding on either side of gates not to exceed 5 ns.
+
+    Outer elements keys of waveform dictionary correspond to AWG core index (from 1-4). Dedicated RF cores have keys corresponding to each waveform:
+    - "pi_pifr", pi pulse in a pi frame
+    - "pi_2_pi_2fr", pi/2 pulse in a pi/2 frame
+    - "pi_2_pifr", pi/2 pulse in a pi frame
+
+    Dedicated DC cores have keys corresponding to each waveform:\n
+    - "p1_p1fr", plunger 1 pulse in plunger 1 frame\n
+    - "p2_p2fr", plunger 2 pulse in plunger 2 frame\n
+    - "p1_p2fr", plunger 1 pulse in plunger 2 frame\n
+    - "p2_p1fr", plunger 2 pulse in plunger 1 frame\n
+    - "p1_pi_2fr", plunger 1 pulse in pi/2 frame\n
+    - "p2_pi_2fr", plunger 2 pulse in pi/2 frame\n
+    - "p1_pifr", plunger 1 pulse in pi frame\n
+    - "p2_pifr", plunger 2 pulse in pi frame\n
+
 
     Parameters:
-                    tau_pi (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    tau_pi_2 (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    i_amp (dict):
-                    q_amp (dict):
-                    mod_freq (dict):
-                    plunger_lengths (dict):
-                    plunger_amp (dict):
-
+                gate_npoints (dict): dictionary of number of points per gate
+                channel_map (dict): channel mapping dictionary.
+                added_padding (float): added padding to either side of a gate pulse, in ns.
     Returns:
-       gate_parameters (dict):
+       waveforms (dict): dictionary of waveforms to be uploaded on each core.
     '''
     amp = 1
     waveforms = {}
@@ -691,27 +680,18 @@ def generate_waveforms(gate_npoints, channel_map, added_padding=0):
 
 def config_hdawg(awg, gate_parameters):
     '''
-    Outputs the mapping between AWG cores/channels and gate labels. \n
-    Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values. \n
-    - "ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict) \n
-    - "rf", 1 if core is for RF pulses and 0 if for DC pulses (int) \n
-    The dictionaries corresponding to the key "ch" have the following keys and values,
-    - "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]). \n
-    - "label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC). \n
-    - "gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)\n
-    Note: currently configured for 1 HDAWG unit with 4 AWG cores.   \n
+    Configures HDAWG module to run a quantum algorithm. In particular, this function does the following:
+    - enables oscillator control \n
+    - sets oscillator frequencies \n
+    - sets output amplitudes for each channel \n
+    - turns on output channels \n
 
     Parameters:
-                    tau_pi (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    tau_pi_2 (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
-                    i_amp (dict):
-                    q_amp (dict):
-                    mod_freq (dict):
-                    plunger_lengths (dict):
-                    plunger_amp (dict):
+                    awg (silospin.drivers.zi_hdawg.HdawgDriver): instance of HDAWG.
+                    gate_parameters (dict): dictionary of gate paramters for each qubit.
 
     Returns:
-       gate_parameters (dict):
+       None.
     '''
     daq = awg._daq
     dev = awg._connection_settings["hdawg_id"]
