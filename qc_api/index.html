@@ -702,7 +702,13 @@ Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm',
         </div>
       <div class="mkapi-section-body parameters"><ul class="mkapi-items">
 
+<li><code class="mkapi-item-name">n_av</code>
+<span class="mkapi-item-type">(int)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">number of inner loops to iterate over during a GST run.</span></li>
 
+<li><code class="mkapi-item-name">trig_channel</code>
+<span class="mkapi-item-type">(bool)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">True if this core receives a physical trigger input, False otherwise.</span></li>
 
 <li><code class="mkapi-item-name">n_array</code>
 <span class="mkapi-item-type">(list)</span>
@@ -713,9 +719,9 @@ Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm',
     </div>
   <div class="mkapi-section returns">
       <div class="mkapi-section-name returns">
-          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(sequence_code (str))</span>
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(program (str))</span>
         </div>
-      <div class="mkapi-section-body returns"><p>sequencer code for waveform placeholders.</p></div>
+      <div class="mkapi-section-body returns"><p>sequencer code for with command table executions for a given quantum algorithm.</p></div>
     </div>
   </div>
 
