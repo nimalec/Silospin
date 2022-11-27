@@ -6,7 +6,8 @@ nav:
    - Home: index.md
    - Basics: about.md
    - Quantum compiler: qc.md
-   - Silospin API: api.md
+   - Driver API: driver_api.md
+   - Quantum Compiler API: qc_api.md
 
 theme: readthedocs
 extra_javascript:

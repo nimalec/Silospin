@@ -17,7 +17,7 @@ from silospin.quantum_compiler.quantum_compiler_io import *
 class GateSetTomographyQuantumCompiler:
     """
     Class representing an instance of compiler gate set tomography experiment (uses entirely rectangular waves).
-    ..
+
     Attributes
     ----------
     _gst_path : str
@@ -44,15 +44,9 @@ class GateSetTomographyQuantumCompiler:
         Grouping of channel indices for  each core.
     _channel_osc_idxs : dict
         Grouping of oscillator indices for  each core.
-    Methods
-    -------
-    __init__(gst_file_path, awg, n_inner=1, n_outer=1, qubits=[0,1,2,3], qubit_parameters=None, external_trigger=False, trigger_channel=0)
-        Constructor object for GST compilation object.
-    run_program(awg_idxs):
-        Compiles and runs programs over specified awg_idxs.
     """
     def __init__(self, gst_file_path, awg, gate_parameters, n_inner=1, n_outer=1, trigger_channel=0, added_padding=0, config_awg=True):
-        '''
+        """
         Constructor method for CompileGateSetTomographyProgram.
         Parameters:
             gst_file_path : str
@@ -73,7 +67,7 @@ class GateSetTomographyQuantumCompiler:
                 Trigger channel used if external_trigger = True.
             sample_rate : float
                 Sample rate of AWG in Sa/s.
-       '''
+        """
 
         sample_rate = 2.4e9
         self._gst_path = gst_file_path
@@ -236,6 +230,20 @@ class GateSetTomographyQuantumCompiler:
         daq.setVector(f"/{dev}/awgs/{p_idx}/commandtable/data", json.dumps(self._command_tables['plunger']))
 
     def run_program(self, awg_idxs=None):
+        """
+         Runs uploaded quantum algorithm on the specified AWG cores.
+
+         Waits for external hardware trigger event to execute program.
+
+         Parameters
+         ----------
+         awg_idxs : 'list'
+         List of awg_idxs (default set to [0,1,2,3]) to run.
+
+         Returns
+         -------
+         None.
+        """
         if awg_idxs:
             awg_idxs = awg_idxs
         else:

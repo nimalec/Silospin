@@ -3,6 +3,29 @@ import re
 import copy
 
 def gst_file_parser(file_path, qubit_lengths, channel_mapping):
+    '''
+    Outputs the mapping between AWG cores/channels and gate labels. \n
+    Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values. \n
+    - "ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict) \n
+    - "rf", 1 if core is for RF pulses and 0 if for DC pulses (int) \n
+    The dictionaries corresponding to the key "ch" have the following keys and values,
+    - "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]). \n
+    - "label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC). \n
+    - "gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)\n
+    Note: currently configured for 1 HDAWG unit with 4 AWG cores.   \n
+
+    Parameters:
+                    tau_pi (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
+                    tau_pi_2 (dict): list of core indices dedicated to RF control (default set to [1,2,3]).
+                    i_amp (dict):
+                    q_amp (dict):
+                    mod_freq (dict):
+                    plunger_lengths (dict):
+                    plunger_amp (dict):
+
+    Returns:
+       gate_parameters (dict):
+    '''
     sequence_table = {}
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1)
