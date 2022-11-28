@@ -14,7 +14,7 @@ The quantum compiler is responsible for converting a quantum algorithm represent
 ## Phase increments and command table formulation    
 
 
-#Worked example: controlled-Z gate calibration scheme 
+##Worked example: controlled-Z gate calibration scheme
 To convey a comprehensive understanding of the quantum compiler's inner-workings, let's attempt to generate the pulse sequences for the following quantum algorithm on a three-qubit array:
 
 
