@@ -7,6 +7,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, plot = True, lockins = {1,2,3}, filter_tc=10e-3, demod_freq = 100e3, dac_mapping_file_path = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_dac.pickle', save_path=None):
+    '''
+    Outputs the mapping between AWG cores/channels and gate labels. \n
+    Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values. \n
+    - "ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict) \n
+    - "rf", 1 if core is for RF pulses and 0 if for DC pulses (int) \n
+    The dictionaries corresponding to the key "ch" have the following keys and values,
+    - "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]). \n
+    - "label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC). \n
+    - "gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)\n
+    Note: currently configured for 1 HDAWG unit with 4 AWG cores.   \n
+    Parameters:
+                    rf_cores (list): list of core indices dedicated to RF control (default set to [1,2,3]).
+                    plunger_channels (dict): dictionary of RF core (default set to  {"p12": 7, "p21": 8})).
+    Returns:
+       channel_mapper (dict): Dictionary representing channel mapping.
+    '''
     dac_server = DacDriverSerialServer()
     mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
     gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS", "Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
@@ -210,6 +226,22 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     return return_value
 
 def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_value2, end_value2, npoints2, n_r = 10, n_fr = 1, plot = True, lockins = {1,2,3}, filter_tc=10e-3, demod_freq = 100e3, dac_mapping_file_path = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_dac.pickle', save_path=None):
+    '''
+    Outputs the mapping between AWG cores/channels and gate labels. \n
+    Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values. \n
+    - "ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict) \n
+    - "rf", 1 if core is for RF pulses and 0 if for DC pulses (int) \n
+    The dictionaries corresponding to the key "ch" have the following keys and values,
+    - "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]). \n
+    - "label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC). \n
+    - "gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)\n
+    Note: currently configured for 1 HDAWG unit with 4 AWG cores.   \n
+    Parameters:
+                    rf_cores (list): list of core indices dedicated to RF control (default set to [1,2,3]).
+                    plunger_channels (dict): dictionary of RF core (default set to  {"p12": 7, "p21": 8})).
+    Returns:
+       channel_mapper (dict): Dictionary representing channel mapping.
+    '''
 #    dac_server = DacDriverSerialServer()
     mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
     gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS", "Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
