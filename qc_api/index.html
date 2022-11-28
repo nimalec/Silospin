@@ -899,51 +899,34 @@ Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm',
 </div>
 <div class="mkapi-docstring">
 <div class="mkapi-section">
-      <div class="mkapi-section-body"><p>Outputs the mapping between AWG cores/channels and gate labels.</p>
-<p>Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values.</p>
-<ul>
-<li>
-<p>"ch", dictionary of the core's output channels, output gate labels, and gate indices in the GST convention (dict)</p>
-</li>
-<li>
-<p>"rf", 1 if core is for RF pulses and 0 if for DC pulses (int)</p>
-</li>
-</ul>
-<p>The dictionaries corresponding to the key "ch" have the following keys and values,
-- "index", list of 2 channels corresponding the specified core (grouping given by- 1: [1,2], 2: [3,4], 3: [5,6], 4: [7,8]).</p>
-<ul>
-<li>
-<p>"label", list of 2 labels corresponding to each channel (e.g. ["i1", "q1"] as IQ pair for RF or  ["p12", "p21"] as 2 plunger channels for DC).</p>
-</li>
-<li>
-<p>"gateindex", list of 2 gate indices corresponding to GST indices. (e.g. gate (1)x(1) maps to gateindex [1,1] for core 1 or (7)p(7)(8)p(8) maps to indices [7,8] of core 4.)</p>
-</li>
-</ul>
-<p>Note: currently configured for 1 HDAWG unit with 4 AWG cores.</p></div>
+      <div class="mkapi-section-body"><p>Outputs a dictionary representation of a quantum algorithm saved in a CSV file.
+Quantum algorithm should follow standard GST convention.</p></div>
     </div>
   <div class="mkapi-section parameters">
       <div class="mkapi-section-name parameters">
           <span class="mkapi-section-name-body parameters">Parameters</span> 
         </div>
       <div class="mkapi-section-body parameters"><ul class="mkapi-items">
+<li><code class="mkapi-item-name">file_path</code>
+<span class="mkapi-item-type">(str)</span>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">file path of the CSV quantum algorithm file.</span></li>
 
-
-
-<li><code class="mkapi-item-name">tau_pi</code>
+<li><code class="mkapi-item-name">qubit_lengths</code>
 <span class="mkapi-item-type">(dict)</span>
-<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">dictionary containing gate legnths for each qubit. output from 'make_gate_lengths' function.</span></li>
 
-<li><code class="mkapi-item-name">tau_pi_2</code>
+<li><code class="mkapi-item-name">channel_mapping</code>
 <span class="mkapi-item-type">(dict)</span>
-<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">list of core indices dedicated to RF control (default set to [1,2,3]).</span></li>
-
-
-
-
-
+<span class="mkapi-item-dash">&mdash;</span> <span class="mkapi-item-description">channel mapping dictionary. output from 'channel_mapper' function.</span></li>
 
 
 </ul></div>
+    </div>
+  <div class="mkapi-section returns">
+      <div class="mkapi-section-name returns">
+          <span class="mkapi-section-name-body returns">Returns</span> <span class="mkapi-item-type">(gate_parameters (dict))</span>
+        </div>
+      <div class="mkapi-section-body returns"><p>sequence_table representing the interpreted gate sequences for each AWG core and channel.</p></div>
     </div>
   </div>
 

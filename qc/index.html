@@ -63,6 +63,8 @@
     </li>
     <li class="toctree-l2"><a class="reference internal" href="#phase-increments-and-command-table-formulation">Phase increments and command table formulation</a>
     </li>
+    <li class="toctree-l2"><a class="reference internal" href="#worked-example-controlled-z-gate-calibration-scheme">Worked example: controlled-Z gate calibration scheme</a>
+    </li>
     </ul>
                 </li>
               </ul>
@@ -105,7 +107,7 @@
 <h2 id="calibration-parameters-and-protocols">Calibration parameters and protocols</h2>
 <h2 id="channel-groupings">Channel groupings</h2>
 <h2 id="phase-increments-and-command-table-formulation">Phase increments and command table formulation</h2>
-<h1 id="worked-example-controlled-z-gate-calibration-scheme">Worked example: controlled-Z gate calibration scheme</h1>
+<h2 id="worked-example-controlled-z-gate-calibration-scheme">Worked example: controlled-Z gate calibration scheme</h2>
 <p>To convey a comprehensive understanding of the quantum compiler's inner-workings, let's attempt to generate the pulse sequences for the following quantum algorithm on a three-qubit array:</p>
 <p><img alt="Image" src="../img/quantumcircuit_example.png" /></p>
 <p>This algorithm has three qubits denoted by <script type="math/tex">Q_1, Q_2, Q_3 </script>. The <script type="math/tex"> \textbf{X} </script> gates denote <script type="math/tex"> \pi </script> rotations about the <script type="math/tex">x</script>-axis, the <script type="math/tex"> \sqrt{\textbf{X}} </script> gates denote <script type="math/tex"> \frac{\pi}{2} </script> rotations about the <script type="math/tex">x</script>-axis, and the  <script type="math/tex"> \textbf{Z}(\theta) </script> gates are <script type="math/tex"> \theta</script> rotations about the <script type="math/tex">z</script>-axis (will take <script type="math/tex">\theta = \frac{\pi}{2}</script> here). Pairs of connected filled circles represent controlled-Z (CZ) gates, which are implemented between qubits  <script type="math/tex">Q_1-Q_2</script> and <script type="math/tex">Q_2-Q_3</script> via barrier gates <script type="math/tex">P_{12} (\tau)</script> and <script type="math/tex">P_{23} (\tau)</script>. This algorithm lays out a typical experiment for CZ-gate calibration, where parameters  <script type="math/tex">P_{12} (\tau)</script> and <script type="math/tex">P_{23} (\tau)</script> are swept over.   </p>
