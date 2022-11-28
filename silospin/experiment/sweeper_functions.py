@@ -10,7 +10,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     dac_server = DacDriverSerialServer()
     mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
     gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS", "Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
-    lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1}, 5: {2}, 6: {3}}
+    lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1,3}, 5: {1}, 6: {2}, 7: {3}}
     dac_dict = unpickle_qubit_parameters(dac_mapping_file_path)
     channel_mapping = dac_dict["channel_mapping"]
     v_in_array = np.linspace(start_value, end_value, npoints)
@@ -98,7 +98,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                 V_out_all_3.append(V_out_3)
         return_value = {"v_applied": v_in_array.tolist(), "v_out1": np.mean(np.array(V_out_all_1),axis=0).tolist(), "v_out2": np.mean(np.array(V_out_all_2),axis=0).tolist(), "v_out3": np.mean(np.array(V_out_all_3),axis=0).tolist()}
 
-    elif lockins == lockin_configs[2] or lockins == lockin_configs[3]:
+    elif lockins == lockin_configs[2] or lockins == lockin_configs[3] or lockins == lockin_configs[4]:
         V_out_all_1 = []
         V_out_all_2 = []
         idx_1 = list(lockins)[0]
@@ -161,7 +161,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                 V_out_all_2.append(V_out_2)
         return_value = {"v_applied": v_in_array.tolist(), "v_out1": np.mean(np.array(V_out_all_1),axis=0).tolist(), "v_out2": np.mean(np.array(V_out_all_2),axis=0).tolist()}
 
-    elif lockins == lockin_configs[4] or lockins == lockin_configs[5] or lockins == lockin_configs[6]:
+    elif lockins == lockin_configs[5] or lockins == lockin_configs[6] or lockins == lockin_configs[7]:
         V_out_all_1 = []
         idx_1 = list(lockins)[0]
         if plot == True:
@@ -213,7 +213,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 #    dac_server = DacDriverSerialServer()
     mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
     gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS", "Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
-    lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1}, 5: {2}, 6: {3}}
+    lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1,3}, 5: {1}, 6: {2}, 7: {3}}
     dac_dict = unpickle_qubit_parameters(dac_mapping_file_path)
     channel_mapping = dac_dict["channel_mapping"]
 
@@ -257,7 +257,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          v_out_3  = v_meas_3*v_out_3
                          V_out1 =  v_out_1.reshape([npoints1, npoints2])
                          V_out2 =  v_out_2.reshape([npoints1, npoints2])
-                         V_out3 =  v_out_2.reshape([npoints1, npoints2])
+                         V_out3 =  v_out_3.reshape([npoints1, npoints2])
 
                          img1 = ax1.imshow(V_out1, extent=[start_value1,end_value1,start_value2,end_value2])
                          ax1.set_xlabel(parameter1+" gate voltage [V]")
@@ -335,3 +335,153 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 
                          else:
                             pass
+
+    elif lockins == lockin_configs[2] or lockins == lockin_configs[3] or lockins == lockin_configs[4]:
+        idx_1 = list(lockins)[0]-1
+        idx_2 = list(lockins)[1]-1
+
+        V_out_all_1 = []
+        V_out_all_2 = []
+        v_out_1 = np.ones((npoints1,npoints2)).flatten()
+        v_out_2 = np.ones((npoints1,npoints2)).flatten()
+        if plot == True:
+            fig1 = plt.figure()
+            ax1 = fig1.add_subplot(111)
+            fig2 = plt.figure()
+            ax2 = fig2.add_subplot(111)
+
+            for i in range(n_fr):
+                 v_out_1 = np.ones((npoints1,npoints2)).flatten()
+                 v_out_2 = np.ones((npoints1,npoints2)).flatten()
+
+                 for j in range(len(V_x_f)):
+                     if j == 0:
+                         dac_server = DacDriverSerialServer()
+                         set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                         set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                         dac_server.close()
+                         v_meas_1 = mflis[idx_1].get_sample_r()
+                         v_meas_2 = mflis[idx_2].get_sample_r()
+
+                         v_out_1  = v_meas_1*v_out_1
+                         v_out_2  = v_meas_2*v_out_2
+
+                         V_out1 =  v_out_1.reshape([npoints1, npoints2])
+                         V_out2 =  v_out_2.reshape([npoints1, npoints2])
+
+                         img1 = ax1.imshow(V_out1, extent=[start_value1,end_value1,start_value2,end_value2])
+                         ax1.set_xlabel(parameter1+" gate voltage [V]")
+                         ax1.set_ylabel(parameter2+" gate voltage [V]")
+                         fig1.canvas.draw()
+                         cbar1 = fig1.colorbar(img1, ax=ax1, extend='both')
+                         cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
+                         plt.show(block=False)
+
+                         img2 = ax2.imshow(V_out2, extent=[start_value1,end_value1,start_value2,end_value2])
+                         ax2.set_xlabel(parameter1+" gate voltage [V]")
+                         ax2.set_ylabel(parameter2+" gate voltage [V]")
+                         fig2.canvas.draw()
+                         cbar2 = fig2.colorbar(img2, ax=ax2, extend='both')
+                         cbar2.set_label('Demodulated voltage from lock-in 2 [V]', rotation=270, labelpad=30)
+                         plt.show(block=False)
+
+                         if i>0:
+                             cbar1.remove()
+                             cbar1 = fig1.colorbar(img1, ax=ax1, extend='both')
+                             cbar2.remove()
+                             cbar2 = fig2.colorbar(img2, ax=ax2, extend='both')
+                         else:
+                             pass
+                     else:
+                         if j%npoints1 == 0:
+                             dac_server = DacDriverSerialServer()
+                             set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                             dac_server.close()
+
+                         else:
+                             dac_server = DacDriverSerialServer()
+                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                             dac_server.close()
+
+                         v_meas_1 = mflis[idx_1].get_sample_r()
+                         v_meas_2 = mflis[idx_2].get_sample_r()
+
+                         v_out_1[j] = v_meas_1
+                         v_out_2[j] = v_meas_2
+
+
+                         if j%n_r == 0:
+                             img1.set_data(v_out_1.reshape([npoints1, npoints2]))
+                             img1.set_clim(np.amin(v_out_1), np.amax(v_out_1))
+
+                             img2.set_data(v_out_2.reshape([npoints1, npoints2]))
+                             img2.set_clim(np.amin(v_out_2), np.amax(v_out_2))
+
+
+                             fig1.canvas.draw()
+                             plt.show(block=False)
+                             fig1.canvas.flush_events()
+
+                             fig2.canvas.draw()
+                             plt.show(block=False)
+                             fig2.canvas.flush_events()
+
+                         else:
+                            pass
+
+    elif lockins == lockin_configs[5] or lockins == lockin_configs[6] or lockins == lockin_configs[7]:
+        idx_1 = list(lockins)[0]-1
+        V_out_all_1 = []
+        v_out_1 = np.ones((npoints1,npoints2)).flatten()
+        if plot == True:
+            fig1 = plt.figure()
+            ax1 = fig1.add_subplot(111)
+            for i in range(n_fr):
+                 v_out_1 = np.ones((npoints1,npoints2)).flatten()
+                 for j in range(len(V_x_f)):
+                     if j == 0:
+                         dac_server = DacDriverSerialServer()
+                         set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                         set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                         dac_server.close()
+                         v_meas_1 = mflis[idx_1].get_sample_r()
+                         v_out_1  = v_meas_1*v_out_1
+                         V_out1 =  v_out_1.reshape([npoints1, npoints2])
+                         img1 = ax1.imshow(V_out1, extent=[start_value1,end_value1,start_value2,end_value2])
+                         ax1.set_xlabel(parameter1+" gate voltage [V]")
+                         ax1.set_ylabel(parameter2+" gate voltage [V]")
+                         fig1.canvas.draw()
+                         cbar1 = fig1.colorbar(img1, ax=ax1, extend='both')
+                         cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
+                         plt.show(block=False)
+
+                         if i>0:
+                             cbar1.remove()
+                             cbar1 = fig1.colorbar(img1, ax=ax1, extend='both')
+                         else:
+                             pass
+                     else:
+                         if j%npoints1 == 0:
+                             dac_server = DacDriverSerialServer()
+                             set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                             dac_server.close()
+
+                         else:
+                             dac_server = DacDriverSerialServer()
+                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                             dac_server.close()
+
+                         v_meas_1 = mflis[idx_1].get_sample_r()
+                         v_out_1[j] = v_meas_1
+                         if j%n_r == 0:
+                             img1.set_data(v_out_1.reshape([npoints1, npoints2]))
+                             img1.set_clim(np.amin(v_out_1), np.amax(v_out_1))
+                             fig1.canvas.draw()
+                             plt.show(block=False)
+                             fig1.canvas.flush_events()
+                         else:
+                            pass
+    else:
+        pass
