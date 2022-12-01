@@ -9,6 +9,8 @@ Version from November 2022.
 
 import serial
 from zerorpc import Client
+from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
+from silospin.analysis.virtualgates import virtual_to_physical
 
 def make_dac_channel_mapping(channel_map=None):
     if channel_map:
@@ -20,7 +22,7 @@ def make_dac_channel_mapping(channel_map=None):
     return dac_channel_mapping
 
 
-def set_val(parameter, value, channel_mapping, dac_client):
+def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_virtual_param.pickle'):
     ## parameter ==> string of parameter passed in
     ## value ==> corresponding voltage to set)
     ##channel_mapping ==> map from gate type to channel number
@@ -34,6 +36,7 @@ def set_val(parameter, value, channel_mapping, dac_client):
     rightddgates = {"B3", "P3", "P4", "B5"}
     sensors1 = {"L1", "M1", "R1"}
     sensors2 = {"L2", "M2", "R2"}
+    virtual_gates = {"VP1", "VP2", "VP3", "VP4"}
 
     if parameter == "channel":
         dac_client.set_channel(value)
@@ -106,5 +109,18 @@ def set_val(parameter, value, channel_mapping, dac_client):
         for gt in rightddgates:
             dac_client.set_channel(channel_mapping["gates"][gt])
             dac_client.set_voltage(value)
+
+    elif parameter in virtual_gates:
+         virtual_gate_param = unpickle_qubit_parameters(virtual_gate_param_file_path)
+         idx = int(parameter[2])-1
+         physical_gates = virtual_to_physical(idx, virtual_gate_param)
+         dac_client.set_channel(channel_mapping["gates"]["P1"])
+         dac_client.set_voltage(physical_gates[0])
+         dac_client.set_channel(channel_mapping["gates"]["P2"])
+         dac_client.set_voltage(physical_gates[1])
+         dac_client.set_channel(channel_mapping["gates"]["P3"])
+         dac_client.set_voltage(physical_gates[2])
+         dac_client.set_channel(channel_mapping["gates"]["P4"])
+         dac_client.set_voltage(physical_gates[3])
     else:
         pass
