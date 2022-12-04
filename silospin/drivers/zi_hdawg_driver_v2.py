@@ -84,7 +84,7 @@ class HdawgDriver:
            -------
            None.
         """
-        self._connection_settings = {"hdawg_id" : dev_id, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "interface" : interface, "connection_status" : False}
+        self._connection_settings = {"hdawg_id" : dev_id, "dev_name": dev_name, "server_host" : server_host , "server_port" : server_port, "api_level" : api_level, "interface" : interface, "connection_status" : False}
         session = Session(server_host)
         self._session = session
         self._hdawg = self._session.connect_device(dev_id)
@@ -120,7 +120,6 @@ class HdawgDriver:
 
         self._channel_mapping = channel_map
         self._hdawg_core_split = awg_core_split
-
 
         for idx in self._channel_mapping[dev_name]:
             ch_1 = self._channel_mapping[dev_name][idx]['channel_core_number'][0]
@@ -166,8 +165,7 @@ class HdawgDriver:
                 self._run_status["awg"+str(idx+1)] = False
             else:
                 self._run_status["awg"+str(idx+1)] = True
-
-        return {"connection": self._connection_settings, "oscillators": self._oscillator_freq, "sines": self._sines, "command_tables": self._command_tables , "sequences": self._sequences, "run_status": self._run_status, "channel_map": self._channel_mapping}
+        return {"connection": self._connection_settings, "oscillators": self._oscillator_freq, "sines": self._sines, "command_tables": self._command_tables , "sequences": self._sequences, "run_status": self._run_status, "channel_map": self._channel_mapping[self._connection_settings["dev_name"]]}
 
     def get_connection_settings(self, param):
       """

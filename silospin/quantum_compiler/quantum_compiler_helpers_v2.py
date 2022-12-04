@@ -1,7 +1,7 @@
 from math import ceil
 from silospin.math.math_helpers import *
 
-def channel_mapper(rf_dc_awg_grouping = {"hdawg1": {"rf":  [1,2,3,4], "dc": []}, "hdawg2":  {"rf": [1], "dc": [2,3,4]}}):
+def channel_mapper(rf_dc_awg_grouping = {"hdawg1": {"rf":  [1,2,3,4], "dc": []}, "hdawg2":  {"rf": [1], "dc": [2,3,4]}}, trig_channels = {"hdawg1": 1, "hdawg2": 1}):
     '''
     Outputs a dictionary representing the mapping between AWG cores and gate identifiers used by the quantum compiler. \n
 
@@ -30,14 +30,22 @@ def channel_mapper(rf_dc_awg_grouping = {"hdawg1": {"rf":  [1,2,3,4], "dc": []},
             ch_2_idx+=2
             ch_core_1_idx += 2
             ch_core_2_idx += 2
+
+            if trig_channels[awg_idx] == ch_core_1_idx:
+                trig_in = [1,0]
+            elif trig_channels[awg_idx] == ch_core_2_idx:
+                trig_in = [0,1]
+            else:
+                trig_in = [0,0]
+
             if core_idx in rf_cores:
                 rf_dc_awg_grouping[awg_idx]["rf"].append(core_count)
-                channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_core_number":[ch_core_1_idx, ch_core_2_idx], "channel_number":[ch_1_idx, ch_2_idx], "channel_labels":["i"+str(core_count), "q"+str(core_count)],"gate_idx":[core_count,core_count], "rf": 1}
+                channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_core_number":[ch_core_1_idx, ch_core_2_idx], "channel_number":[ch_1_idx, ch_2_idx], "trig_channel": trig_in, "channel_labels":["i"+str(core_count), "q"+str(core_count)],"gate_idx":[core_count,core_count], "rf": 1}
                 hdawg_mapping[core_count] = awg_idx
             elif core_idx in dc_cores:
                 rf_dc_awg_grouping[awg_idx]["dc"].append(ch_1_idx)
                 rf_dc_awg_grouping[awg_idx]["dc"].append(ch_2_idx)
-                channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_core_number":[ch_core_1_idx, ch_core_2_idx], "channel_number":[ch_1_idx, ch_2_idx], "channel_labels":["p"+str(ch_1_idx), "p"+str(ch_2_idx)],"gate_idx":[ch_1_idx,ch_2_idx], "rf": 0}
+                channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_core_number":[ch_core_1_idx, ch_core_2_idx], "channel_number":[ch_1_idx, ch_2_idx], "trig_channel": trig_in, "channel_labels":["p"+str(ch_1_idx), "p"+str(ch_2_idx)],"gate_idx":[ch_1_idx,ch_2_idx], "rf": 0}
                 hdawg_mapping[ch_1_idx] = awg_idx
                 hdawg_mapping[ch_2_idx] = awg_idx
             else:
