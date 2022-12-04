@@ -27,12 +27,12 @@ def channel_mapper(rf_dc_awg_grouping = {"hdawg1": {"rf":  [1,2,3,4], "dc": []},
             ch_1_idx+=2
             ch_2_idx+=2
             if core_idx in rf_cores:
-                gate_idx_groupings[awg_idx]["rf"].append(core_count)
+                rf_dc_awg_grouping[awg_idx]["rf"].append(core_count)
                 channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_number":[ch_1_idx, ch_2_idx], "channel_labels":["i"+str(core_count), "q"+str(core_count)],"gate_idx":[core_count,core_count], "rf": 1}
                 hdawg_mapping[core_count] = awg_idx
             elif core_idx in dc_cores:
-                gate_idx_groupings[awg_idx]["dc"].append(ch_1_idx)
-                gate_idx_groupings[awg_idx]["dc"].append(ch_2_idx)
+                rf_dc_awg_grouping[awg_idx]["dc"].append(ch_1_idx)
+                rf_dc_awg_grouping[awg_idx]["dc"].append(ch_2_idx)
                 channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_number":[ch_1_idx, ch_2_idx], "channel_labels":["p"+str(ch_1_idx), "p"+str(ch_2_idx)],"gate_idx":[ch_1_idx,ch_2_idx], "rf": 0}
                 hdawg_mapping[ch_1_idx] = awg_idx
                 hdawg_mapping[ch_2_idx] = awg_idx
