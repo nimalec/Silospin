@@ -673,7 +673,7 @@ def generate_waveforms(gate_npoints, channel_map, added_padding=0):
     waveforms[idx_p]["p2_pifr"] = rectangular_add_padding(gate_npoints["plunger"][8]["p"], amp, min_points = n_std_waveform_pi, side_pad =added_padding)
     return waveforms
 
-def config_hdawg(awg, gate_parameters, channel_to_core):
+def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
     ## Should have a generic channel mapping funciton from channels to cores
     '''
     Configures HDAWG module to run a quantum algorithm. In particular, this function does the following:
@@ -693,28 +693,37 @@ def config_hdawg(awg, gate_parameters, channel_to_core):
     daq = awg._daq
     dev = awg._connection_settings["hdawg_id"]
     daq.setInt(f"/{dev}/system/awg/oscillatorcontrol", 1)
-    rf_cores = [0,1,2]
-    channel_idxs = {"0": [0,1], "1": [2,3], "2": [4,5], "3": [6,7]}
-    channel_osc_idxs = {"0": 1, "1": 5, "2": 9, "3": 13}
-    for idx in rf_cores:
-        i_idx = channel_idxs[str(idx)][0]
-        q_idx = channel_idxs[str(idx)][1]
-        osc_idx = channel_osc_idxs[str(idx)]
-        awg.set_osc_freq(osc_idx, gate_parameters['rf'][idx+1]["mod_freq"])
-        awg.set_sine(i_idx+1, osc_idx)
-        awg.set_sine(q_idx+1, osc_idx)
-        awg.set_out_amp(i_idx+1, 1, gate_parameters['rf'][idx+1]["i_amp"])
-        awg.set_out_amp(q_idx+1, 2, gate_parameters['rf'][idx+1]["q_amp"])
-        awg._hdawg.sigouts[i_idx].on(1)
-        awg._hdawg.sigouts[q_idx].on(1)
+    rf_gate_param = gate_parameters["rf"]
+    p_gate_param = gate_parameters["p"]
+    channel_idxs = {"1": [1,2], "2": [3,4], "3": [5,6], "4": [7,8]}
+    channel_osc_idxs = {1: 1, 2: 5, 3: 9, 4: 13}
 
-    p_idx = 3
-    i_idx = 6
-    q_idx = 7
-    osc_idx = 13
-    awg.set_sine(i_idx+1, osc_idx)
-    awg.set_sine(q_idx+1, osc_idx)
-    awg.set_out_amp(i_idx+1, 1, gate_parameters['p'][7]["p_amp"])
-    awg.set_out_amp(q_idx+1, 2, gate_parameters['p'][8]["p_amp"])
-    awg._hdawg.sigouts[6].on(1)
-    awg._hdawg.sigouts[7].on(1)
+    for core in channel_mapping:
+        if channel_mapping[core]['rf'] == 1:
+            core_idx = channel_mapping[core]['core_idx']
+            osc_idx = channel_osc_idxs[core]
+            i_idx = channel_mapping[core]['channel_core_number'][0]
+            q_idx = channel_mapping[core]['channel_core_number'][1]
+            awg.set_osc_freq(osc_idx, rf_gate_param[core_idx]["mod_freq"])
+            awg.set_sine(i_idx, osc_idx)
+            awg.set_sine(q_idx, osc_idx)
+            awg.set_out_amp(i_idx, 1, rf_gate_param[core_idx]["i_amp"])
+            awg.set_out_amp(q_idx, 2, rf_gate_param[core_idx]["q_amp"])
+            if channels_on == True:
+                awg._hdawg.sigouts[i_idx].on(1)
+                awg._hdawg.sigouts[q_idx].on(1)
+            else:
+                pass
+        elif channel_mapping[core]['rf'] == 0:
+            core_idx = channel_mapping[core]['core_idx']
+            p1_idx = channel_mapping[core]['channel_core_number'][0]
+            p2_idx = channel_mapping[core]['channel_core_number'][0]
+            p1_core_idx = channel_mapping[core]['channel_core_number'][0]
+            p2_core_idx = channel_mapping[core]['channel_core_number'][1]
+            awg.set_out_amp(p1_core_idx, 1, p_gate_param[p1_idx]["i_amp"])
+            awg.set_out_amp(p2_core_idx, 2, p_gate_param[p2_idx]["q_amp"])
+            if channels_on == True:
+                awg._hdawg.sigouts[i_idx].on(1)
+                awg._hdawg.sigouts[q_idx].on(1)
+            else:
+                pass
