@@ -81,19 +81,18 @@ class GateSetTomographyQuantumCompiler:
         sample_rate = 2.4e9
         self._gst_path = gst_file_path
         self._awgs = awgs
+        channel_mapping = self._awgs["hdawg1"]._channel_mapping
+        awg_core_split = self._awg["hdawg1"]._hdawg_core_split
 
         rf_cores = []
         plunger_channels = []
-        for awg in mapper:
-            for idx in mapper[awg]:
-                if mapper[awg][idx]['rf'] == 1:
-                    rf_cores.append((awg, mapper[awg][idx]['core_idx']))
+        for awg in channel_mapping:
+            for idx in channel_mapping[awg]:
+                if channel_mapping[awg][idx]['rf'] == 1:
+                    rf_cores.append((awg, channel_mapping[awg][idx]['core_idx']))
                 else:
-                    plunger_channels.append((awg, mapper[awg][idx]['gate_idx'][0]))
-                    plunger_channels.append((awg, mapper[awg][idx]['gate_idx'][1]))
-
-        channel_mapping = self._awgs["hdawg1"]._channel_mapping
-        awg_core_split = self._awg["hdawg1"]._hdawg_core_split
+                    plunger_channels.append((awg, channel_mapping[awg][idx]['gate_idx'][0]))
+                    plunger_channels.append((awg, channel_mapping[awg][idx]['gate_idx'][1]))
 
         self._gate_parameters = {}
         gate_param_all_rf = gate_parameters["rf"]
