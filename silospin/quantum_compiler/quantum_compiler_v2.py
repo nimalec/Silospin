@@ -82,7 +82,7 @@ class GateSetTomographyQuantumCompiler:
         self._gst_path = gst_file_path
         self._awgs = awgs
         channel_mapping = self._awgs["hdawg1"]._channel_mapping
-        awg_core_split = self._awg["hdawg1"]._hdawg_core_split
+        awg_core_split = self._awgs["hdawg1"]._hdawg_core_split
 
         rf_cores = []
         plunger_channels = []
