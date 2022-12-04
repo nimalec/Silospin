@@ -53,7 +53,7 @@ class GateSetTomographyQuantumCompiler:
     _channel_osc_idxs : dict
         Grouping of oscillator indices for  each core.
     """
-    def __init__(self, gst_file_path, awgs, gate_parameters, n_inner=1, n_outer=1, trigger_channels={"hdawg1":0,"hdawg2":0}, added_padding=0, config_awg=True):
+    def __init__(self, gst_file_path, awgs, gate_parameters, n_inner=1, n_outer=1, added_padding=0, config_awg=True):
         """
         Constructor method for CompileGateSetTomographyProgram.
         Parameters:
@@ -82,8 +82,6 @@ class GateSetTomographyQuantumCompiler:
         self._gst_path = gst_file_path
         self._awgs = awgs
 
-        ##Modify chanel_mapping and gate_parameters for arbitrary cores
-        ##Need to loop over self._gate_parameters ==> determine which paramaters
         rf_cores = []
         plunger_channels = []
         for awg in mapper:
