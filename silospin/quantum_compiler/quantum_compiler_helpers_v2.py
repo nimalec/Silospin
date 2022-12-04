@@ -714,16 +714,16 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
                 awg._hdawg.sigouts[q_idx].on(1)
             else:
                 pass
-        # elif channel_mapping[core]['rf'] == 0:
-        #     core_idx = channel_mapping[core]['core_idx']
-        #     p1_idx = channel_mapping[core]['channel_core_number'][0]
-        #     p2_idx = channel_mapping[core]['channel_core_number'][0]
-        #     p1_core_idx = channel_mapping[core]['channel_core_number'][0]
-        #     p2_core_idx = channel_mapping[core]['channel_core_number'][1]
-        #     awg.set_out_amp(p1_core_idx, 1, p_gate_param[p1_idx]["i_amp"])
-        #     awg.set_out_amp(p2_core_idx, 2, p_gate_param[p2_idx]["q_amp"])
-        #     if channels_on == True:
-        #         awg._hdawg.sigouts[i_idx].on(1)
-        #         awg._hdawg.sigouts[q_idx].on(1)
+        elif channel_mapping[core]['rf'] == 0:
+            core_idx = channel_mapping[core]['core_idx']
+            p1_idx = channel_mapping[core]['channel_core_number'][0]
+            p2_idx = channel_mapping[core]['channel_core_number'][1]
+            p1_core_idx = channel_mapping[core]['channel_core_number'][0]
+            p2_core_idx = channel_mapping[core]['channel_core_number'][1]
+            awg.set_out_amp(p1_core_idx, 1, p_gate_param[p1_idx]["i_amp"])
+            awg.set_out_amp(p2_core_idx, 2, p_gate_param[p2_idx]["q_amp"])
+            if channels_on == True:
+                awg._hdawg.sigouts[i_idx].on(1)
+                awg._hdawg.sigouts[q_idx].on(1)
         else:
            pass
