@@ -118,12 +118,12 @@ class HdawgDriver:
             else:
                 self._run_status["awg"+str(idx+1)] = True
 
-        self._channel_mapping = channel_map
+        self._channel_mapping = channel_map[dev_name]
         self._hdawg_core_split = awg_core_split
 
         for idx in self._channel_mapping[dev_name]:
-            ch_1 = self._channel_mapping[dev_name][idx]['channel_number'][0]
-            ch_2 = self._channel_mapping[dev_name][idx]['channel_number'][1]
+            ch_1 = self._channel_mapping[dev_name][idx]['channel_core_number'][0]
+            ch_2 = self._channel_mapping[dev_name][idx]['channel_core_number'][1]
             if self._channel_mapping[dev_name][idx]['rf'] == 1:
                 self.set_modulation_mode(ch_1, 1)
                 self.set_modulation_mode(ch_2, 2)

@@ -19,6 +19,8 @@ def channel_mapper(rf_dc_awg_grouping = {"hdawg1": {"rf":  [1,2,3,4], "dc": []},
     ch_1_idx = -1
     ch_2_idx = 0
     for awg_idx in rf_dc_awg_grouping:
+        ch_core_1_idx = -1
+        ch_core_2_idx = 0
         channel_mapping[awg_idx] = {1: {}, 2: {}, 3: {}, 4:{}}
         rf_cores = set(rf_dc_awg_grouping[awg_idx]["rf"])
         dc_cores = set(rf_dc_awg_grouping[awg_idx]["dc"])
@@ -26,14 +28,16 @@ def channel_mapper(rf_dc_awg_grouping = {"hdawg1": {"rf":  [1,2,3,4], "dc": []},
             core_count+=1
             ch_1_idx+=2
             ch_2_idx+=2
+            ch_core_1_idx += 2
+            ch_core_2_idx += 2
             if core_idx in rf_cores:
                 rf_dc_awg_grouping[awg_idx]["rf"].append(core_count)
-                channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_number":[ch_1_idx, ch_2_idx], "channel_labels":["i"+str(core_count), "q"+str(core_count)],"gate_idx":[core_count,core_count], "rf": 1}
+                channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_core_number":[ch_core_1_idx, ch_core_2_idx], "channel_number":[ch_1_idx, ch_2_idx], "channel_labels":["i"+str(core_count), "q"+str(core_count)],"gate_idx":[core_count,core_count], "rf": 1}
                 hdawg_mapping[core_count] = awg_idx
             elif core_idx in dc_cores:
                 rf_dc_awg_grouping[awg_idx]["dc"].append(ch_1_idx)
                 rf_dc_awg_grouping[awg_idx]["dc"].append(ch_2_idx)
-                channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_number":[ch_1_idx, ch_2_idx], "channel_labels":["p"+str(ch_1_idx), "p"+str(ch_2_idx)],"gate_idx":[ch_1_idx,ch_2_idx], "rf": 0}
+                channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_core_number":[ch_core_1_idx, ch_core_2_idx], "channel_number":[ch_1_idx, ch_2_idx], "channel_labels":["p"+str(ch_1_idx), "p"+str(ch_2_idx)],"gate_idx":[ch_1_idx,ch_2_idx], "rf": 0}
                 hdawg_mapping[ch_1_idx] = awg_idx
                 hdawg_mapping[ch_2_idx] = awg_idx
             else:
