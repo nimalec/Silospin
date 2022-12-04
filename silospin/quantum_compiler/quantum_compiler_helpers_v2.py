@@ -725,5 +725,5 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
         #     if channels_on == True:
         #         awg._hdawg.sigouts[i_idx].on(1)
         #         awg._hdawg.sigouts[q_idx].on(1)
-            else:
-                pass
+        else:
+           pass
