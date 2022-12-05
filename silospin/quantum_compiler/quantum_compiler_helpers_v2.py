@@ -710,8 +710,8 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
             awg.set_out_amp(i_idx, 1, rf_gate_param[core_idx]["i_amp"])
             awg.set_out_amp(q_idx, 2, rf_gate_param[core_idx]["q_amp"])
             if channels_on == True:
-                awg._hdawg.sigouts[i_idx].on(1)
-                awg._hdawg.sigouts[q_idx].on(1)
+                awg._hdawg.sigouts[i_idx-1].on(1)
+                awg._hdawg.sigouts[q_idx-1].on(1)
             else:
                 pass
         elif channel_mapping[core]['rf'] == 0:
