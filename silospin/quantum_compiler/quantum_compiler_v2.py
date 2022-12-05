@@ -117,26 +117,24 @@ class GateSetTomographyQuantumCompiler:
         tau_pi_2_standard_1 = max(tau_pi_2_set,key=itemgetter(1))[1]
         tau_pi_standard_1 = 2*tau_pi_2_standard_1
         standard_rf_idx = max(tau_pi_2_set,key=itemgetter(1))[0]
-        print((tau_pi_2_standard_1,tau_pi_standard_1,standard_rf_idx))
         npoints_pi_2_standard = ceil(sample_rate*tau_pi_2_standard_1*1e-9/32)*32
         npoints_pi_standard = ceil(sample_rate*tau_pi_standard_1*1e-9/32)*32
         tau_pi_2_standard = npoints_pi_2_standard/sample_rate
         tau_pi_standard = npoints_pi_standard/sample_rate
-        print((npoints_pi_2_standard,npoints_pi_standard,standard_rf_idx))
-        print((tau_pi_2_standard,tau_pi_standard)) 
-    #
-    #     plunger_set = []
-    #     plunger_set_npoints = []
-    #     plunger_set_npoints_tups = []
-    #     for idx in gate_parameters["p"]:
-    #         plunger_set.append((idx, gate_parameters["p"][idx]["tau"]))
-    #         plunger_set_npoints.append(ceil(gate_parameters["p"][idx]["tau"]*2.4/32)*32)
-    #         plunger_set_npoints_tups.append((idx, ceil(gate_parameters["p"][idx]["tau"]*2.4/32)*32))
-    #     tau_p_standard = max(plunger_set,key=itemgetter(1))[1]
-    #     standard_p_idx = max(plunger_set,key=itemgetter(1))[0]
-    #     npoints_p_standard = ceil(sample_rate*tau_p_standard*1e-9/32)*32
-    #     tau_p_standard = npoints_p_standard/sample_rate
-    #
+
+        plunger_set = []
+        plunger_set_npoints = []
+        plunger_set_npoints_tups = []
+        for idx in gate_parameters["p"]:
+            plunger_set.append((idx, gate_parameters["p"][idx]["tau"]))
+            plunger_set_npoints.append(ceil(gate_parameters["p"][idx]["tau"]*2.4/32)*32)
+            plunger_set_npoints_tups.append((idx, ceil(gate_parameters["p"][idx]["tau"]*2.4/32)*32))
+        tau_p_standard = max(plunger_set,key=itemgetter(1))[1]
+        standard_p_idx = max(plunger_set,key=itemgetter(1))[0]
+        npoints_p_standard = ceil(sample_rate*tau_p_standard*1e-9/32)*32
+        tau_p_standard = npoints_p_standard/sample_rate
+        print((tau_p_standard,standard_p_idx,npoints_p_standard, tau_p_standard))
+
     #     try:
     #      if tau_p_standard > tau_pi_2_standard:
     #         raise TypeError("DC pulse lengths should always be shorter than RF pulse lengths!!")
