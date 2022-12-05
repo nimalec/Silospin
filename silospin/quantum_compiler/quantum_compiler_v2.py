@@ -134,8 +134,28 @@ class GateSetTomographyQuantumCompiler:
         npoints_p_standard = ceil(sample_rate*tau_p_standard*1e-9/32)*32
         tau_p_standard = npoints_p_standard/sample_rate
 
-        print((standard_rf_idx, npoints_pi_standard))
-        print((standard_p_idx, npoints_p_standard))
+        hdawg_std_rf = awg_core_split[standard_rf_idx]
+        hdawg_std_p = awg_core_split[standard_p_idx]
+
+        for core_idx in channel_mapping[hdawg_std_rf]:
+            if channel_mapping[hdawg_std_rf][core_idx]['core_idx'] == standard_rf_idx:
+                core_std_rf = core_idx
+            else:
+                pass
+        for core_idx in channel_mapping[hdawg_std_p]:
+            if channel_mapping[hdawg_std_p][core_idx]['gate_idx'][0] == standard_p_idx or channel_mapping[hdawg_std_p][core_idx]['gate_idx'][1] == standard_p_idx:
+                core_std_p = core_idx
+            else:
+                pass
+
+        if standard_p_idx%2 == 0 and standard_p_idx !=1:
+            ch_std_p = 2
+        else:
+            ch_std_p = 1
+        #standard_rf = (hdawg_std_rf, core_std_rf)
+        #standard_p = (hdawg_std_p, core_std_p, ch_std_p)
+        standard_rf = (hdawg_std_rf, standard_rf_idx)
+        standard_p = (hdawg_std_p, standard_p_idx)
 
         try:
          if tau_p_standard > tau_pi_2_standard:
@@ -148,12 +168,12 @@ class GateSetTomographyQuantumCompiler:
         except TypeError:
             raise
 
-    #     ##Need to modify this....
+        ##Need to modify this....
         self._gate_npoints = {}
         for awg in self._gate_parameters:
             self._gate_npoints[awg] = make_gate_npoints(self._gate_parameters[awg], sample_rate)
 
-    #    self._waveforms = generate_waveforms(self._gate_npoints, channel_mapping, added_padding, )
+        self._waveforms = generate_waveforms_v2(self._gate_npoints, channel_mapping, added_padding, standard_rf, standard_p)
 
     #     n_waveform_pi_2_std  = len(self._waveforms[1]["pi_2_pi_2fr"])
     #     n_waveform_pi_std  = len(self._waveforms[1]["pi_pifr"])

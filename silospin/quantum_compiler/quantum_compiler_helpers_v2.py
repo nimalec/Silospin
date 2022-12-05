@@ -673,7 +673,7 @@ def generate_waveforms(gate_npoints, channel_map, added_padding=0):
     waveforms[idx_p]["p2_pifr"] = rectangular_add_padding(gate_npoints["plunger"][8]["p"], amp, min_points = n_std_waveform_pi, side_pad =added_padding)
     return waveforms
 
-def generate_waveforms_v2(gate_npoints, channel_map, added_padding):
+def generate_waveforms_v2(gate_npoints, channel_map, added_padding, standard_rf, standard_p):
     ## gate_npoints  ==> dictionary over the hdawg units
     ## channel_map ==> another dictionary over the nubmer of HDAWG units
     ## added_padding = 0
@@ -715,79 +715,51 @@ def generate_waveforms_v2(gate_npoints, channel_map, added_padding):
                 pass
 
 
+    npoints_pi_std = gate_npoints[standard_rf[0]]['rf'][standard_rf[1]]["pi"]
+    npoints_pi_2_std = gate_npoints[standard_rf[0]]['rf'][standard_rf[1]]["pi_2"]
+    npoints_p_std = gate_npoints[standard_p[0]]['rf'][standard_rf[1]]["p"]
+    n_std_waveform_pi = len(rectangular_add_padding(npoints_pi_std, amp, min_points = npoints_pi_std, side_pad=added_padding))
+    n_std_waveform_pi_2 = len(rectangular_add_padding(npoints_pi_2_std, amp, min_points = npoints_pi_2_std, side_pad=added_padding))
+    n_std_waveform_p = len(rectangular_add_padding(npoints_p_std, amp, min_points = npoints_p_std, side_pad=added_padding))
 
-
-    rf_pi_npoints = {}
-    for i in gate_npoints["rf"]:
-        rf_pi_npoints[i] = gate_npoints["rf"][i]["pi"]
-    plunger_npoints = {}
-    for i in gate_npoints["plunger"]:
-        plunger_npoints[i] = gate_npoints["plunger"][i]["p"]
-    ch_map_rf = {}
-    ch_map_p = {}
-    for i in channel_map:
-        if channel_map[i]["rf"] == 1:
-            rf_ch = channel_map[i]["ch"]["gateindex"][0]
-            rf_core = i
-            ch_map_rf[rf_ch] = rf_core
-        else:
-            p_ch_1 = channel_map[i]["ch"]["gateindex"][0]
-            p_ch_2 = channel_map[i]["ch"]["gateindex"][1]
-            p_core = i
-            ch_map_p[p_ch_1] = p_core
-            ch_map_p[p_ch_2] = p_core
-
-    max_rf_key = max(rf_pi_npoints, key=lambda k: rf_pi_npoints[k])
-    npoints_pi_std = gate_npoints["rf"][max_rf_key]["pi"]
-    npoints_pi_2_std = gate_npoints["rf"][max_rf_key]["pi_2"]
-    max_p_key = max(plunger_npoints, key=lambda k: plunger_npoints[k])
-    npoints_p_std = gate_npoints["plunger"][max_p_key]["p"]
-
-    n_std_waveform_pi = len(rectangular_add_padding(gate_npoints["rf"][max_rf_key]["pi"], amp, min_points = npoints_pi_std, side_pad=added_padding))
-    n_std_waveform_pi_2 = len(rectangular_add_padding(gate_npoints["rf"][max_rf_key]["pi_2"], amp, min_points = npoints_pi_2_std, side_pad=added_padding))
-    n_std_waveform_p = len(rectangular_add_padding(gate_npoints["rf"][max_rf_key]["pi_2"], amp, min_points = npoints_pi_2_std, side_pad=added_padding))
-
-    if npoints_pi_std < 48:
-         npoints_pi_std_1 = 48
-    elif npoints_pi_std >= 48:
-         npoints_pi_std_1 = npoints_pi_std
+    if n_std_waveform_pi < 48:
+         n_std_waveform_pi = 48
+    elif n_std_waveform_pi_2 < 48:
+         n_std_waveform_pi_2 = 48
+    elif n_std_waveform_p < 48:
+         n_std_waveform_p = 48
     else:
         pass
-    if npoints_pi_2_std < 48:
-         npoints_pi_2_std_1 = 48
-    elif npoints_pi_2_std >= 48:
-        npoints_pi_2_std_1 = npoints_pi_2_std
-    else:
-       pass
 
-    for i in gate_npoints["rf"]:
-        idx = ch_map_rf[i]
-        waveforms[idx]["pi_pifr"] = rectangular_add_padding(gate_npoints["rf"][i]["pi"], amp, min_points = n_std_waveform_pi , side_pad=added_padding)
-        waveforms[idx]["pi_2_pi_2fr"] = rectangular_add_padding(gate_npoints["rf"][i]["pi_2"], amp, min_points = n_std_waveform_pi_2, side_pad=added_padding)
-        waveforms[idx]["pi_2_pifr"] = rectangular_add_padding(gate_npoints["rf"][i]["pi_2"], amp, min_points = n_std_waveform_pi , side_pad=added_padding)
-
-    idx_p = ch_map_p[7]
-    if gate_npoints["plunger"][7]["p"] < 48:
-        npoints_p_1 = 48
-    elif gate_npoints["plunger"][7]["p"] >= 48:
-        npoints_p_1 = gate_npoints["plunger"][7]["p"]
-    else:
-        pass
-    if gate_npoints["plunger"][8]["p"] < 48:
-        npoints_p_2 = 48
-    elif gate_npoints["plunger"][8]["p"] >= 48:
-        npoints_p_2 = gate_npoints["plunger"][8]["p"]
-    else:
-        pass
-    npoints_p1p2_fr = max([npoints_p_1,npoints_p_2])
-    waveforms[idx_p]["p1_p2fr"] = rectangular_add_padding(gate_npoints["plunger"][7]["p"], amp, min_points = npoints_p1p2_fr, side_pad =added_padding)
-    waveforms[idx_p]["p2_p1fr"] = rectangular_add_padding(gate_npoints["plunger"][8]["p"], amp, min_points = npoints_p1p2_fr, side_pad =added_padding)
-    waveforms[idx_p]["p1_p1fr"] = rectangular_add_padding(gate_npoints["plunger"][7]["p"], amp, min_points = npoints_p_1, side_pad=added_padding)
-    waveforms[idx_p]["p2_p2fr"] = rectangular_add_padding(gate_npoints["plunger"][8]["p"], amp, min_points = npoints_p_2, side_pad =added_padding)
-    waveforms[idx_p]["p1_pi_2fr"] = rectangular_add_padding(gate_npoints["plunger"][7]["p"], amp, min_points = n_std_waveform_pi_2, side_pad =added_padding)
-    waveforms[idx_p]["p2_pi_2fr"] = rectangular_add_padding(gate_npoints["plunger"][8]["p"], amp, min_points = n_std_waveform_pi_2, side_pad =added_padding)
-    waveforms[idx_p]["p1_pifr"] = rectangular_add_padding(gate_npoints["plunger"][7]["p"], amp, min_points = n_std_waveform_pi, side_pad =added_padding)
-    waveforms[idx_p]["p2_pifr"] = rectangular_add_padding(gate_npoints["plunger"][8]["p"], amp, min_points = n_std_waveform_pi, side_pad =added_padding)
+    for awg in channel_map:
+        waveforms[awg] = {}
+        for core_idx in channel_map[awg]:
+            if channel_map[awg][core_idx]['rf'] == 1:
+                gt_idx = channel_map[awg][core_idx]['gate_idx'][0]
+                waveforms[awg][core_idx]["pi_pifr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
+                waveforms[awg][core_idx]["pi_2_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi_2"], amp, min_points = n_std_waveform_pi_2, side_pad=added_padding)
+                waveforms[awg][core_idx]["pi_2_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi_2"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
+            elif channel_map[awg][core_idx]['rf'] == 0:
+                gt_idx_1 = channel_map[awg][core_idx]['gate_idx'][0]
+                gt_idx_2 = channel_map[awg][core_idx]['gate_idx'][1]
+                if gate_npoints[awg]["p"][gt_idx_1]["p"] < 48:
+                    min_points_1 = 48
+                else:
+                    min_points_1 = gate_npoints[awg]["p"][gt_idx_1]["p"]
+                if gate_npoints[awg]["p"][gt_idx_2]["p"] < 48:
+                    min_points_2 = 48
+                else:
+                    min_points_2 = gate_npoints[awg]["p"][gt_idx_2]["p"]
+                waveforms[awg][core_idx]["p1_p1fr"] = rectangular_add_padding(gate_npoints[awg]["p"][gt_idx_1]["p"], amp, min_points = min_points_1, side_pad=added_padding)
+                waveforms[awg][core_idx]["p2_p2fr"] = rectangular_add_padding(gate_npoints[awg]["p"][gt_idx_2]["p"], amp, min_points = min_points_2, side_pad=added_padding)
+                waveforms[awg][core_idx]["p1_pstdfr"] = rectangular_add_padding(gate_npoints[awg]["p"][gt_idx_1]["p"], amp, min_points = n_std_waveform_p, side_pad=added_padding)
+                waveforms[awg][core_idx]["p2_pstdfr"] = rectangular_add_padding(gate_npoints[awg]["p"][gt_idx_2]["p"], amp, min_points = n_std_waveform_p, side_pad=added_padding)
+                waveforms[awg][core_idx]["p1_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["p"][gt_idx_1]["p"], amp, min_points = n_std_waveform_pi_2, side_pad=added_padding)
+                waveforms[awg][core_idx]["p2_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["p"][gt_idx_2]["p"], amp, min_points = n_std_waveform_pi_2, side_pad=added_padding)
+                waveforms[awg][core_idx]["p1_pifr"] = rectangular_add_padding(gate_npoints[awg]["p"][gt_idx_1]["p"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
+                waveforms[awg][core_idx]["p2_pifr"] = rectangular_add_padding(gate_npoints[awg]["p"][gt_idx_2]["p"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
+            else:
+                pass
     return waveforms
 
 def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
