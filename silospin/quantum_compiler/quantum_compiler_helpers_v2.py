@@ -695,7 +695,6 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
     daq.setInt(f"/{dev}/system/awg/oscillatorcontrol", 1)
     rf_gate_param = gate_parameters["rf"]
     p_gate_param = gate_parameters["p"]
-    print(p_gate_param)
     channel_idxs = {"1": [1,2], "2": [3,4], "3": [5,6], "4": [7,8]}
     channel_osc_idxs = {1: 1, 2: 5, 3: 9, 4: 13}
 
@@ -720,12 +719,12 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
                 pass
             else:
                 core_idx = channel_mapping[core]['core_idx']
-                p1_idx = channel_mapping[core]['channel_core_number'][0]
-                p2_idx = channel_mapping[core]['channel_core_number'][1]
+                p1_idx = channel_mapping[core]['channel_number'][0]
+                p2_idx = channel_mapping[core]['channel_number'][1]
                 p1_core_idx = channel_mapping[core]['channel_core_number'][0]
                 p2_core_idx = channel_mapping[core]['channel_core_number'][1]
-                awg.set_out_amp(p1_core_idx, 1, p_gate_param[p1_idx]["i_amp"])
-                awg.set_out_amp(p2_core_idx, 2, p_gate_param[p2_idx]["q_amp"])
+                awg.set_out_amp(p1_core_idx, 1, p_gate_param[p1_idx]["p_amp"])
+                awg.set_out_amp(p2_core_idx, 2, p_gate_param[p2_idx]["p_amp"])
                 if channels_on == True:
                     awg._hdawg.sigouts[p1_core_idx].on(1)
                     awg._hdawg.sigouts[p1_core_idx].on(1)
