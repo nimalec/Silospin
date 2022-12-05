@@ -726,8 +726,8 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
                 awg.set_out_amp(p1_core_idx, 1, p_gate_param[p1_idx]["p_amp"])
                 awg.set_out_amp(p2_core_idx, 2, p_gate_param[p2_idx]["p_amp"])
                 if channels_on == True:
-                    awg._hdawg.sigouts[p1_core_idx].on(1)
-                    awg._hdawg.sigouts[p1_core_idx].on(1)
+                    awg._hdawg.sigouts[p1_core_idx-1].on(1)
+                    awg._hdawg.sigouts[p1_core_idx-1].on(1)
                 else:
                     pass
         else:
