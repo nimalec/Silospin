@@ -133,25 +133,24 @@ class GateSetTomographyQuantumCompiler:
         standard_p_idx = max(plunger_set,key=itemgetter(1))[0]
         npoints_p_standard = ceil(sample_rate*tau_p_standard*1e-9/32)*32
         tau_p_standard = npoints_p_standard/sample_rate
-        print((tau_p_standard,standard_p_idx,npoints_p_standard, tau_p_standard))
 
-    #     try:
-    #      if tau_p_standard > tau_pi_2_standard:
-    #         raise TypeError("DC pulse lengths should always be shorter than RF pulse lengths!!")
-    #     except TypeError:
-    #         raise
-    #     try:
-    #      if added_padding > 5e-9:
-    #         raise TypeError("Padding should not exceed 5 ns!!")
-    #     except TypeError:
-    #         raise
-    #     p_dict = {}
-    #     for idx in plunger_set:
-    #         p_dict[idx[0]] = ceil(idx[1]*1e-9)
-    #     gate_standard_lengths = {"pi_2": ceil(tau_pi_2_standard*1e-9), "pi": ceil(tau_pi_standard*1e-9), "p": p_dict}
-    #
-    #
-    #
+        try:
+         if tau_p_standard > tau_pi_2_standard:
+            raise TypeError("DC pulse lengths should always be shorter than RF pulse lengths!!")
+        except TypeError:
+            raise
+        try:
+         if added_padding > 5e-9:
+            raise TypeError("Padding should not exceed 5 ns!!")
+        except TypeError:
+            raise
+        p_dict = {}
+        for idx in plunger_set:
+            p_dict[idx[0]] = ceil(idx[1]*1e-9)
+        gate_standard_lengths = {"pi_2": ceil(tau_pi_2_standard*1e-9), "pi": ceil(tau_pi_standard*1e-9), "p": p_dict}
+
+
+
     #
     #
     #     ##Need to modify this....
