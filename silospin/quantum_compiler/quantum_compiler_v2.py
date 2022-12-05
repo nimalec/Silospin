@@ -110,18 +110,20 @@ class GateSetTomographyQuantumCompiler:
                 config_hdawg(self._awgs[awg], self._gate_parameters[awg], channel_mapping[awg])
         else:
             pass
-    #
-    #     ##Fine
-    #     tau_pi_2_set = []
-    #     for idx in gate_parameters["rf"]:
-    #         tau_pi_2_set.append((idx, gate_parameters["rf"][idx]["tau_pi_2"]))
-    #     tau_pi_2_standard_1 = max(tau_pi_2_set,key=itemgetter(1))[1]
-    #     tau_pi_standard_1 = 2*tau_pi_2_standard_1
-    #     standard_rf_idx = max(tau_pi_2_set,key=itemgetter(1))[0]
-    #     npoints_pi_2_standard = ceil(sample_rate*tau_pi_2_standard_1*1e-9/32)*32
-    #     npoints_pi_standard = ceil(sample_rate*tau_pi_standard_1*1e-9/32)*32
-    #     tau_pi_2_standard = npoints_pi_2_standard/sample_rate
-    #     tau_pi_standard = npoints_pi_standard/sample_rate
+
+        tau_pi_2_set = []
+        for idx in gate_parameters["rf"]:
+            tau_pi_2_set.append((idx, gate_parameters["rf"][idx]["tau_pi_2"]))
+        tau_pi_2_standard_1 = max(tau_pi_2_set,key=itemgetter(1))[1]
+        tau_pi_standard_1 = 2*tau_pi_2_standard_1
+        standard_rf_idx = max(tau_pi_2_set,key=itemgetter(1))[0]
+        print((tau_pi_2_standard_1,tau_pi_standard_1,standard_rf_idx))
+        npoints_pi_2_standard = ceil(sample_rate*tau_pi_2_standard_1*1e-9/32)*32
+        npoints_pi_standard = ceil(sample_rate*tau_pi_standard_1*1e-9/32)*32
+        tau_pi_2_standard = npoints_pi_2_standard/sample_rate
+        tau_pi_standard = npoints_pi_standard/sample_rate
+        print((npoints_pi_2_standard,npoints_pi_standard,standard_rf_idx))
+        print((tau_pi_2_standard,tau_pi_standard)) 
     #
     #     plunger_set = []
     #     plunger_set_npoints = []
