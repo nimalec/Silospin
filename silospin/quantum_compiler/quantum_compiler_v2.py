@@ -134,6 +134,9 @@ class GateSetTomographyQuantumCompiler:
         npoints_p_standard = ceil(sample_rate*tau_p_standard*1e-9/32)*32
         tau_p_standard = npoints_p_standard/sample_rate
 
+        print((standard_rf_idx, npoints_pi_standard))
+        print((standard_p_idx, npoints_p_standard))
+
         try:
          if tau_p_standard > tau_pi_2_standard:
             raise TypeError("DC pulse lengths should always be shorter than RF pulse lengths!!")
@@ -150,10 +153,8 @@ class GateSetTomographyQuantumCompiler:
         for awg in self._gate_parameters:
             self._gate_npoints[awg] = make_gate_npoints(self._gate_parameters[awg], sample_rate)
 
-        # self._gate_npoints = make_gate_npoints(self._gate_parameters, sample_rate)
+    #    self._waveforms = generate_waveforms(self._gate_npoints, channel_mapping, added_padding, )
 
-
-    #     self._waveforms = generate_waveforms(self._gate_npoints, channel_mapping, added_padding)
     #     n_waveform_pi_2_std  = len(self._waveforms[1]["pi_2_pi_2fr"])
     #     n_waveform_pi_std  = len(self._waveforms[1]["pi_pifr"])
     #     tau_waveform_pi_2_std = ceil(1e9*n_waveform_pi_2_std/sample_rate)
