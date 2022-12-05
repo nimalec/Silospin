@@ -695,6 +695,7 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
     daq.setInt(f"/{dev}/system/awg/oscillatorcontrol", 1)
     rf_gate_param = gate_parameters["rf"]
     p_gate_param = gate_parameters["p"]
+    print(p_gate_param)
     channel_idxs = {"1": [1,2], "2": [3,4], "3": [5,6], "4": [7,8]}
     channel_osc_idxs = {1: 1, 2: 5, 3: 9, 4: 13}
 
