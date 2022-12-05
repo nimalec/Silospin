@@ -717,7 +717,7 @@ def generate_waveforms_v2(gate_npoints, channel_map, added_padding, standard_rf,
 
     npoints_pi_std = gate_npoints[standard_rf[0]]['rf'][standard_rf[1]]["pi"]
     npoints_pi_2_std = gate_npoints[standard_rf[0]]['rf'][standard_rf[1]]["pi_2"]
-    npoints_p_std = gate_npoints[standard_p[0]]['rf'][standard_rf[1]]["p"]
+    npoints_p_std = gate_npoints[standard_p[0]]['plunger'][standard_rf[1]]["p"]
     n_std_waveform_pi = len(rectangular_add_padding(npoints_pi_std, amp, min_points = npoints_pi_std, side_pad=added_padding))
     n_std_waveform_pi_2 = len(rectangular_add_padding(npoints_pi_2_std, amp, min_points = npoints_pi_2_std, side_pad=added_padding))
     n_std_waveform_p = len(rectangular_add_padding(npoints_p_std, amp, min_points = npoints_p_std, side_pad=added_padding))
