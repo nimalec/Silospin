@@ -718,9 +718,8 @@ def generate_waveforms_v2(gate_npoints, channel_map, added_padding, standard_rf,
             if channel_map[awg][core_idx]['rf'] == 1:
                 waveforms[awg][core_idx] = {"pi_pifr": None, "pi_2_pi_2fr": None, "pi_2_pifr":  None}
             elif channel_map[awg][core_idx]['rf'] == 0:
-                print(core_idx)
-                ch_1_idx = waveforms[awg][core_idx]['gate_idx'][0]
-                ch_2_idx = waveforms[awg][core_idx]['gate_idx'][1]
+                ch_1_idx = channel_map[awg][core_idx]['gate_idx'][0]
+                ch_2_idx = channel_map[awg][core_idx]['gate_idx'][1]
                 waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_pifr"] = None
                 waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_pifr"] = None
                 waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_pi_2fr"] = None
