@@ -746,16 +746,16 @@ def generate_waveforms_v2(gate_npoints, channel_map, added_padding, standard_rf,
     for awg in channel_map:
         waveforms[awg] = {}
         for core_idx in channel_map[awg]:
+            waveforms[awg][core_idx] = {}
             if channel_map[awg][core_idx]['rf'] == 1:
-                waveforms[awg][core_idx] = {}  
                 gt_idx = channel_map[awg][core_idx]['gate_idx'][0]
                 waveforms[awg][core_idx]["pi_pifr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
                 waveforms[awg][core_idx]["pi_2_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi_2"], amp, min_points = n_std_waveform_pi_2, side_pad=added_padding)
                 waveforms[awg][core_idx]["pi_2_pifr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi_2"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
 
             elif channel_map[awg][core_idx]['rf'] == 0:
-                ch_1_idx = waveforms[awg][core_idx]['gate_idx'][0]
-                ch_2_idx = waveforms[awg][core_idx]['gate_idx'][1]
+                ch_1_idx = channel_map[awg][core_idx]['gate_idx'][0]
+                ch_2_idx = channel_map[awg][core_idx]['gate_idx'][1]
                 waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_pifr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_1_idx]["p"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
                 waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_pifr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_2_idx]["p"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
                 waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_1_idx]["p"], amp, min_points = n_std_waveform_pi_2, side_pad=added_padding)
