@@ -201,7 +201,6 @@ class GateSetTomographyQuantumCompiler:
         print(tau_waveform_pi_2_std)
         print(tau_waveform_pi_std)
         print(dc_lengths)
-
         #self._gate_lengths = make_gate_lengths(dc_lengths, self._gate_parameters, tau_waveform_pi_2_std, tau_waveform_pi_std)
 
     #    self._gate_lengths = make_gate_lengths(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std)
