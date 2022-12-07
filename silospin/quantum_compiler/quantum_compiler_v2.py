@@ -173,12 +173,32 @@ class GateSetTomographyQuantumCompiler:
         for awg in self._gate_parameters:
             self._gate_npoints[awg] = make_gate_npoints(self._gate_parameters[awg], sample_rate)
 
+         ##Come back to padding scheme  ==> check edge case when plunger length with padding is smaller than the RF pulse length ==> should always be the same as the DC pulse length in total
         self._waveforms = generate_waveforms_v2(self._gate_npoints, channel_mapping, added_padding, standard_rf, standard_p)
 
-    #     n_waveform_pi_2_std  = len(self._waveforms[1]["pi_2_pi_2fr"])
-    #     n_waveform_pi_std  = len(self._waveforms[1]["pi_pifr"])
-    #     tau_waveform_pi_2_std = ceil(1e9*n_waveform_pi_2_std/sample_rate)
-    #     tau_waveform_pi_std = ceil(1e9*n_waveform_pi_std /sample_rate)
+        n_waveform_pi_2_std  = len(self._waveforms[1]["pi_2_pi_2fr"])
+        n_waveform_pi_std  = len(self._waveforms[1]["pi_pifr"])
+        tau_waveform_pi_2_std = ceil(1e9*n_waveform_pi_2_std/sample_rate)
+        tau_waveform_pi_std = ceil(1e9*n_waveform_pi_std /sample_rate)
+
+        dc_lengths = {}
+        for awg in channel_mapping:
+            for core_idx in channel_mapping:
+                if channel_mapping[awg][core_idx]['rf'] == 1:
+                    pass
+                elif channel_mapping[awg][core_idx]['rf'] == 0:
+                    ch_idx_1 = channel_mapping[awg][core_idx]['gate_idx'][0]
+                    ch_idx_2 = channel_mapping[awg][core_idx]['gate_idx'][1]
+                    ch_idx_1_key = 'p'+str(ch_idx_1)+'_'+str(ch_idx_1)+'fr'
+                    ch_idx_2_key = 'p'+str(ch_idx_2)+'_'+str(ch_idx_2)+'fr'
+                    dc_lengths[ch_idx_1] =  len(self._waveforms[awg][core_idx][ch_idx_1_key])
+                    dc_lengths[ch_idx_2] = len(self._waveforms[awg][core_idx][ch_idx_2_key])
+                else:
+                    pass
+        print(dc_lengths)
+
+
+
     #     dc_lengths = {6: ceil(1e9*len(self._waveforms[4]["p1_p1fr"])/sample_rate), 7: ceil(1e9*len(self._waveforms[4]["p2_p2fr"])/sample_rate)}
     #     dc_npoints = {6: len(self._waveforms[4]["p1_p1fr"]), 7: len(self._waveforms[4]["p2_p2fr"])}
     #     self._gate_lengths = make_gate_lengths(dc_lengths, self._gate_parameters, tau_waveform_pi_2_std, tau_waveform_pi_std)
