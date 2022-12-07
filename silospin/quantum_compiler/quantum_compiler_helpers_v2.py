@@ -110,8 +110,8 @@ def make_gate_lengths_v2(dc_times, t_pi_2_max, t_pi_max, channel_map):
                 ch_rf_idx = channel_map[awg][core]['gate_idx'][0]
                 gate_lengths["rf"][ch_rf_idx] = {"pi": t_pi_max, "pi_2": t_pi_2_max}
             elif channel_map[awg][core]['rf'] == 0:
-                ch_idx_1 = channel_map[awg][core_idx]['gate_idx'][0]
-                ch_idx_2 = channel_map[awg][core_idx]['gate_idx'][1]
+                ch_idx_1 = channel_map[awg][core]['gate_idx'][0]
+                ch_idx_2 = channel_map[awg][core]['gate_idx'][1]
                 t_p_1 = ceil(dc_times[ch_idx_1])
                 t_p_2 = ceil(dc_times[ch_idx_2])
                 gate_lengths["plunger"][ch_idx_1] = {"p": t_p_1}
