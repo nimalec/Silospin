@@ -91,7 +91,7 @@ def make_gate_lengths(dc_times, gate_parameters, t_pi_2_max, t_pi_max):
        gate_lengths["plunger"][idx] = {"p": t_p}
     return gate_lengths
 
-def make_gate_lengths_v2(dc_times, t_pi_2_max, t_pi_max):
+def make_gate_lengths_v2(dc_times, t_pi_2_max, t_pi_max, channel_map):
     '''
     Outputs a dictionary with the standard pi, pi/2, and DC pulse lengths in seconds for each gate.
 
@@ -104,11 +104,20 @@ def make_gate_lengths_v2(dc_times, t_pi_2_max, t_pi_max):
        gate_lengths (dict): dictonary of DC an RF gate lengths in ns. Outer dictionary keys are 'rf' and 'plunger'.
     '''
     gate_lengths = {"rf": {}, "plunger": {}}
-    for idx in gate_parameters["rf"]:
-       gate_lengths["rf"][idx] = {"pi": t_pi_max, "pi_2": t_pi_2_max}
-    for idx in gate_parameters["p"]:
-       t_p = ceil(dc_times[idx])
-       gate_lengths["plunger"][idx] = {"p": t_p}
+    for awg in channel_map:
+        for core in channel_map[awg]:
+            if channel_map[awg][core]['rf'] == 1:
+                ch_rf_idx = channel_map[awg][core]['gate_idx'][0]
+                gate_lengths["rf"][ch_rf_idx] = {"pi": t_pi_max, "pi_2": t_pi_2_max}
+            elif channel_map[awg][core]['rf'] == 0:
+                ch_idx_1 = channel_mapping[awg][core_idx]['gate_idx'][0]
+                ch_idx_2 = channel_mapping[awg][core_idx]['gate_idx'][1]
+                t_p_1 = ceil(dc_times[ch_idx_1])
+                t_p_2 = ceil(dc_times[ch_idx_2])
+                gate_lengths["plunger"][ch_idx_1] = {"p": t_p_1}
+                gate_lengths["plunger"][ch_idx_2] = {"p": t_p_2}
+            else:
+                pass
     return gate_lengths
 
 

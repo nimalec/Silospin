@@ -195,7 +195,6 @@ class GateSetTomographyQuantumCompiler:
                     ch_idx_2_key = 'p'+str(ch_idx_2)+'_p'+str(ch_idx_2)+'fr'
                     dc_lengths[ch_idx_1] =  ceil(1e9*len(self._waveforms[awg][core_idx][ch_idx_1_key])/sample_rate)
                     dc_lengths[ch_idx_2] = ceil(1e9*len(self._waveforms[awg][core_idx][ch_idx_2_key])/sample_rate)
-
                 else:
                     pass
 
