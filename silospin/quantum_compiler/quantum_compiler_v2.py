@@ -197,11 +197,8 @@ class GateSetTomographyQuantumCompiler:
                     dc_lengths[ch_idx_2] = ceil(1e9*len(self._waveforms[awg][core_idx][ch_idx_2_key])/sample_rate)
 
                 else:
-                    pass
-        print(tau_waveform_pi_2_std)
-        print(tau_waveform_pi_std)
-        print(dc_lengths)
-        #self._gate_lengths = make_gate_lengths(dc_lengths, self._gate_parameters, tau_waveform_pi_2_std, tau_waveform_pi_std)
+
+        self._gate_lengths = make_gate_lengths(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std)
 
     #    self._gate_lengths = make_gate_lengths(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std)
     #     self._gate_sequences = gst_file_parser(self._gst_path, self._gate_lengths, channel_mapping)
