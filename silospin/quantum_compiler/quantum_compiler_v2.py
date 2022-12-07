@@ -183,8 +183,7 @@ class GateSetTomographyQuantumCompiler:
 
         dc_lengths = {}
         for awg in channel_mapping:
-            print(channel_mapping[awg])
-            for core_idx in channel_mapping:
+            for core_idx in channel_mapping[awg]:
                 if channel_mapping[awg][core_idx]['rf'] == 1:
                     pass
                 elif channel_mapping[awg][core_idx]['rf'] == 0:
