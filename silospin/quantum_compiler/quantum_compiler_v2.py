@@ -193,8 +193,8 @@ class GateSetTomographyQuantumCompiler:
                     ch_idx_2 = channel_mapping[awg][core_idx]['gate_idx'][1]
                     ch_idx_1_key = 'p'+str(ch_idx_1)+'_p'+str(ch_idx_1)+'fr'
                     ch_idx_2_key = 'p'+str(ch_idx_2)+'_p'+str(ch_idx_2)+'fr'
-                    dc_lengths[ch_idx_1] =  ceil(1e9*len(self._waveforms[awg][core_idx][ch_idx_1_key]))
-                    dc_lengths[ch_idx_2] = ceil(1e9*len(self._waveforms[awg][core_idx][ch_idx_2_key]))
+                    dc_lengths[ch_idx_1] =  ceil(1e9*len(self._waveforms[awg][core_idx][ch_idx_1_key])/sample_rate)
+                    dc_lengths[ch_idx_2] = ceil(1e9*len(self._waveforms[awg][core_idx][ch_idx_2_key])/sample_rate)
 
                 else:
                     pass
