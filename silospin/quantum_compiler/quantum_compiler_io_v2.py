@@ -76,11 +76,10 @@ def gst_file_parser_v2(file_path, qubit_lengths):
 
             for item in element2:
                 if item[2] == "p" or item[3] == "p":
-                    plungerline[int(item[0])].append(item[2:len(item)])
+                    plungerline[int(item[0:2])].append(item[2:len(item)])
                     idx_set.add(int(item[0]))
                     qubit_length = qubit_lengths["plunger"][int(item[0])]['p']
                     length_set.append(qubit_length)
-                    print(length_set)
                 else:
                     rfline[int(item[0])].append(item[2:len(item)])
                     if item[2] == "t":
