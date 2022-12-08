@@ -93,7 +93,8 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             else:
                 max_gt_len = max(length_set)
                 diff_set_rf = rf_idxs.difference(idx_set)
-                diff_set_plunger = plunger_set.difference(idx_set)
+                #diff_set_plunger = plunger_set.difference(idx_set)
+                diff_set_plunger = plunger_idxs.difference(idx_set)
                 for item in diff_set_rf:
                     #rfline[str(item)].append("t"+str(max_gt_len))
                     rfline[item].append("t"+str(max_gt_len))
