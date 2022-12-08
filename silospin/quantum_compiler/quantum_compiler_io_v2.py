@@ -60,7 +60,8 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                     z_set.append(gt)
                 else:
                     notz_set.append(gt)
-
+            print(z_set)
+            print(nonz_set)
             element1 = z_set
             element2 = notz_set
 
