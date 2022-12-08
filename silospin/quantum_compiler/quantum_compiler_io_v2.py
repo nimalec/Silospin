@@ -81,7 +81,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                         length_set.append(int(item[3:len(item)]))
                     else:
                         idx_set.add(int(item[0]))
-                        print(item[0])
+                        print(item)
                         qubit_length = qubit_lengths["rf"][int(item[0])][gates[item[2:len(item)]]]
                         length_set.append(qubit_length)
             if len(length_set) == 0:
