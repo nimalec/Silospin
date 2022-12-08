@@ -30,7 +30,6 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             rf_line[rf_idx] = []
             rf_idxs.add(rf_idx)
 
-
         for p_idx in qubit_lengths['plunger'].keys():
             plunger_line[p_idx] = []
             plunger_idxs.add(p_idx)
@@ -56,7 +55,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             z_set = []
             notz_set = []
             for gt in temp_set:
-                if gt[2] == "z":
+                if gt[len(gt)-1] == 'z':
                     z_set.append(gt)
                 else:
                     notz_set.append(gt)
@@ -82,17 +81,16 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                     qubit_length = qubit_lengths["plunger"][gt_idx]['p']
                     length_set.append(qubit_length)
 
-                elif len(item) > 3 and item[3] == "p":
+                elif len(item) > 3 and item[3] == 'p':
                     gt_idx = int(item[0:2])
                     plungerline[gt_idx].append('p')
                     idx_set.add(gt_idx)
-                    qubit_length = qubit_lengths["plunger"][gt_idx]['p']
+                    qubit_length = qubit_lengths['plunger'][gt_idx]['p']
                     length_set.append(qubit_length)
 
                 else:
                     ## RF case
                     rfline[int(item[0])].append(item[2:len(item)])
-                    print(rfline[int(item[0])])
                     if item[2] == "t":
                         length_set.append(int(item[3:len(item)]))
                     else:
