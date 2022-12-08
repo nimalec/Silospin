@@ -55,7 +55,6 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             z_set = []
             notz_set = []
             for gt in temp_set:
-                print(gt)
                 if gt[len(gt)-1] == 'z':
                     z_set.append(gt)
                 else:
@@ -96,7 +95,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                     length_set.append(qubit_length)
 
                 else:
-                    ## RF case
+                    print(item)
                     rfline[int(item[0])].append(item[2:len(item)])
                     if item[2] == "t":
                         length_set.append(int(item[3:len(item)]))
@@ -104,6 +103,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                         idx_set.add(int(item[0:2]))
                         qubit_length = qubit_lengths["rf"][int(item[0:2])][gates[item[2:len(item)]]]
                         length_set.append(qubit_length)
+
             if len(length_set) == 0:
                 pass
             else:
