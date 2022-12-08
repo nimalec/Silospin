@@ -46,7 +46,10 @@ def gst_file_parser_v2(file_path, qubit_lengths):
 
             for item in element:
                 if len(item)>2:
-                    temp_set.append(item)
+                    if item[len(item)-1] in {'x', 'y', 'm', 'p'}:
+                        temp_set.append(item)
+                    else:
+                        pass
                 else:
                     pass
             print(temp_set)
