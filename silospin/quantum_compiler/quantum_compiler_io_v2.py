@@ -44,11 +44,11 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             temp_set = []
 
             for item in element:
-                print(item)
                 if len(item)>2:
                     temp_set.append(item)
                 else:
                     pass
+            print(temp_set)
             z_set = []
             notz_set = []
             for gt in temp_set:
