@@ -35,9 +35,11 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             plunger_line[p_idx] = []
             plunger_idxs.add(p_idx)
 
-        print(line)
         rfline = rf_line
         plungerline = plunger_line
+        print(rfline)
+        print(plunger_line)
+
 
         for elem in line:
             element = re.split('\(| \)', elem)
