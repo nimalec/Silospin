@@ -35,8 +35,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             plunger_line[p_idx] = []
             plunger_idxs.add(p_idx)
 
-        print(plunger_idxs)
-        print(rf_idxs)
+        print(line)
         rfline = rf_line
         plungerline = plunger_line
 
