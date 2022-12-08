@@ -55,6 +55,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             z_set = []
             notz_set = []
             for gt in temp_set:
+                print(gt)
                 if gt[len(gt)-1] == 'z':
                     z_set.append(gt)
                 else:
