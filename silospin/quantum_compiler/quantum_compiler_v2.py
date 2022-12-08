@@ -176,11 +176,6 @@ class GateSetTomographyQuantumCompiler:
          ##Come back to padding scheme  ==> check edge case when plunger length with padding is smaller than the RF pulse length ==> should always be the same as the DC pulse length in total
         self._waveforms = generate_waveforms_v2(self._gate_npoints, channel_mapping, added_padding, standard_rf, standard_p)
 
-        #n_waveform_pi_2_std  = len(self._waveforms[awg][1]["pi_2_pi_2fr"])
-        # n_waveform_pi_std  = len(self._waveforms[1]["pi_pifr"])
-        # tau_waveform_pi_2_std = ceil(1e9*n_waveform_pi_2_std/sample_rate)
-        # tau_waveform_pi_std = ceil(1e9*n_waveform_pi_std /sample_rate)
-
         dc_lengths = {}
         for awg in channel_mapping:
             for core_idx in channel_mapping[awg]:
@@ -199,7 +194,8 @@ class GateSetTomographyQuantumCompiler:
                     pass
 
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
-    #    self._gate_sequences = gst_file_parser(self._gst_path, self._gate_lengths, channel_mapping)
+
+        self._gate_sequences = gst_file_parser(self._gst_path, self._gate_lengths, channel_mapping)
     #
     #     plunger_set = []
     #     plunger_set_npoints = []
