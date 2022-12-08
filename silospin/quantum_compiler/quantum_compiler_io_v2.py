@@ -80,7 +80,6 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                     qubit_length = qubit_lengths["plunger"][int(item[0])]['p']
                     length_set.append(qubit_length)
                 else:
-                    #rfline[str(int(item[0]))].append(item[2:len(item)])
                     rfline[int(item[0])].append(item[2:len(item)])
                     if item[2] == "t":
                         length_set.append(int(item[3:len(item)]))
@@ -101,5 +100,5 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                 for item in diff_set_plunger:
                     #plungerline[item[1:len(item)]].append("t"+str(max_gt_len))
                     plungerline[item].append("t"+str(max_gt_len))
-        sequence_table[idx] = {"rf": rfline, "plunger": plungerline}
+        sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
     return sequence_table
