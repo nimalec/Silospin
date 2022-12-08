@@ -73,15 +73,12 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                 else:
                     gt_idx = int(item[0:2])
                     rfline[gt_idx].append(item[2:len(item)])
-
                 z_idx.add(gt_idx)
                 diff_set_z = rf_idxs.difference(z_idx)
                 for itm in diff_set_z:
                     rfline[itm].append("z0z")
                 for itm in plungerline:
                     plungerline[itm].append("z0z")
-                print(rfline)
-                print(plungerline)
 
             for item in element2:
                 if item[2] == "p":
