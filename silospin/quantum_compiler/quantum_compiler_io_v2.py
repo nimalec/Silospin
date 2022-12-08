@@ -65,7 +65,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             element2 = notz_set
 
             ##loop over set of z gate
-            z_idx = {}
+            z_idx = set({})
             for item in element1:
                 if item[1] == ')':
                     gt_idx = int(item[0])
