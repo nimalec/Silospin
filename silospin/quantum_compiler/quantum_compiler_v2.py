@@ -12,6 +12,7 @@ from silospin.drivers.zi_hdawg_driver_v2 import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.quantum_compiler_helpers_v2 import *
 from silospin.quantum_compiler.quantum_compiler_io import *
+from silospin.quantum_compiler.quantum_compiler_io_v2 import *
 
 ##Modifications:
 ##1. Keep track of redundant Z gates
@@ -195,7 +196,7 @@ class GateSetTomographyQuantumCompiler:
 
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
 
-        self._gate_sequences = gst_file_parser(self._gst_path, self._gate_lengths, channel_mapping)
+        self._gate_sequences = gst_file_parser_v2(self._gst_path, self._gate_lengths, channel_mapping)
     #
     #     plunger_set = []
     #     plunger_set_npoints = []
