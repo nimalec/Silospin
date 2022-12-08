@@ -199,9 +199,7 @@ class GateSetTomographyQuantumCompiler:
                     pass
 
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
-
-    #    self._gate_lengths = make_gate_lengths(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std)
-    #     self._gate_sequences = gst_file_parser(self._gst_path, self._gate_lengths, channel_mapping)
+    #    self._gate_sequences = gst_file_parser(self._gst_path, self._gate_lengths, channel_mapping)
     #
     #     plunger_set = []
     #     plunger_set_npoints = []

@@ -28,6 +28,7 @@ def gst_file_parser(file_path, qubit_lengths, channel_mapping):
         plunger_set = set()
         rf_line = {}
         plunger_line = {}
+        ## Should loop over cores and channels instead
         for ii in channel_mapping:
             if channel_mapping[ii]['rf'] == 1:
                 rf_idx = str(channel_mapping[ii]['ch']['gateindex'][0]-1)
