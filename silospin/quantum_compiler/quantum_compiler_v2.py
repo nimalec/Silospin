@@ -196,21 +196,20 @@ class GateSetTomographyQuantumCompiler:
 
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
         self._gate_sequences = gst_file_parser_v2(self._gst_path, self._gate_lengths)
-        print(self._gate_sequences)
-    #
-    #     plunger_set = []
-    #     plunger_set_npoints = []
-    #     plunger_set_npoints_tups = []
-    #     for idx in self._gate_parameters["p"]:
-    #         plunger_set.append((idx, dc_lengths[idx-1]))
-    #         plunger_set_npoints.append(dc_npoints[idx-1])
-    #         plunger_set_npoints_tups.append((idx, dc_npoints[idx-1]))
-    #
-    #     ct_idxs_all = {}
-    #     arbZs = []
-    #     n_arbZ = 0
-    #     taus_std = (ceil(tau_pi_2_standard), ceil(tau_pi_standard))
-    #     taus_std_v2 = (tau_waveform_pi_2_std,  tau_waveform_pi_std)
+        print(dc_lengths)
+
+        plunger_set = []
+        plunger_set_npoints = []
+        plunger_set_npoints_tups = []
+        # for idx in self._gate_parameters["p"]:
+        #     plunger_set.append((idx, dc_lengths[idx-1]))
+        #     plunger_set_npoints.append(dc_npoints[idx-1])
+        #     plunger_set_npoints_tups.append((idx, dc_npoints[idx-1]))
+
+        ct_idxs_all = {}
+        arbZs = []
+        n_arbZ = 0
+        taus_std = (tau_waveform_pi_2_std,  tau_waveform_pi_std)
     #
     #     for idx in self._gate_sequences:
     #         gate_sequence = self._gate_sequences[idx]
