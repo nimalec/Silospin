@@ -67,15 +67,15 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             ##loop over set of z gate
             for item in element1:
                 rfline[int(item[0])].append(item[2:len(item)])
-                print(rfline)
                 z_idx = {int(item[0])}
                 diff_set_z = rf_idxs.difference(z_idx)
                 for itm in diff_set_z:
                     rfline[itm].append("z0z")
                 for itm in plungerline:
                     plungerline[itm].append("z0z")
+
             for item in element2:
-                if item[2] == "p":
+                if item[2] == "p" or item[3] == "p":
                     plungerline[int(item[0])].append(item[2:len(item)])
                     idx_set.add(int(item[0]))
                     qubit_length = qubit_lengths["plunger"][int(item[0])]['p']
