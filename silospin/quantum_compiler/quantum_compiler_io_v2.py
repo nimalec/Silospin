@@ -26,7 +26,6 @@ def gst_file_parser_v2(file_path, qubit_lengths):
         plunger_idxs = set()
         rf_line = {}
         plunger_line = {}
-        ## Should loop over cores and channels instead
         for rf_idx in qubit_lengths['rf'].keys():
             rf_line[rf_idx] = []
             rf_idxs.add(rf_idx)
@@ -45,6 +44,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             temp_set = []
 
             for item in element:
+                print(item)
                 if len(item)>2:
                     temp_set.append(item)
                 else:
