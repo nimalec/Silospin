@@ -81,6 +81,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                     idx_set.add(gt_idx)
                     qubit_length = qubit_lengths["plunger"][gt_idx]['p']
                     length_set.append(qubit_length)
+                    print(plungerline)
 
                 elif len(item) > 2 and item[3] == "p":
                     gt_idx = int(item[0:2])
