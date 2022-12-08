@@ -23,16 +23,13 @@ def gst_file_parser_v2(file_path, qubit_lengths):
     for idx in range(len(df)):
         line = df.values[idx][0].split(";")[0:len(df.values[idx][0].split(";"))-1]
         rf_idxs = set()
-        rf_set = set()
         plunger_idxs = set()
-        plunger_set = set()
         rf_line = {}
         plunger_line = {}
         ## Should loop over cores and channels instead
         for idx in qubit_lengths['rf'].keys():
             rf_line[idx] = []
             rf_idxs.add(idx)
-
 
         for idx in qubit_lengths['plunger'].keys():
             plunger_line[idx] = []
@@ -65,22 +62,22 @@ def gst_file_parser_v2(file_path, qubit_lengths):
 
             ##loop over set of z gate
             for item in element1:
-                rfline[str(int(item[0])-1)].append(item[2:len(item)])
-                z_idx = {str(int(item[0])-1)}
-                diff_set_z = rf_set.difference(z_idx)
+                rfline[str(int(item[0]))].append(item[2:len(item)])
+                z_idx = {str(int(item[0]))}
+                #diff_set_z = rf_set.difference(z_idx)
+                diff_set_z = rf_idxs.difference(z_idx)
                 for itm in diff_set_z:
                     rfline[itm].append("z0z")
                 for itm in plungerline:
                     plungerline[itm].append("z0z")
             for item in element2:
                 if item[2] == "p":
-                    plungerline[str(int(item[0])-1)].append(item[2:len(item)])
-                    idx_set.add("p"+str(int(item[0])-1))
+                    plungerline[str(int(item[0]))].append(item[2:len(item)])
+                    idx_set.add("p"+str(int(item[0])))
                     qubit_length = qubit_lengths["plunger"][int(item[0])]['p']
                     length_set.append(qubit_length)
-
                 else:
-                    rfline[str(int(item[0])-1)].append(item[2:len(item)])
+                    rfline[str(int(item[0]))].append(item[2:len(item)])
                     if item[2] == "t":
                         length_set.append(int(item[3:len(item)]))
                     else:
@@ -94,7 +91,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                 diff_set_rf = rf_idxs.difference(idx_set)
                 diff_set_plunger = plunger_set.difference(idx_set)
                 for item in diff_set_rf:
-                    rfline[str(item-1)].append("t"+str(max_gt_len))
+                    rfline[str(item)].append("t"+str(max_gt_len))
                 for item in diff_set_plunger:
                     plungerline[item[1:len(item)]].append("t"+str(max_gt_len))
         sequence_table[idx] = {"rf": rfline, "plunger": plungerline}
