@@ -30,10 +30,13 @@ def gst_file_parser_v2(file_path, qubit_lengths):
             rf_line[rf_idx] = []
             rf_idxs.add(rf_idx)
 
+
         for p_idx in qubit_lengths['plunger'].keys():
             plunger_line[p_idx] = []
             plunger_idxs.add(p_idx)
 
+        print(plunger_idxs)
+        print(rf_idxs)
         rfline = rf_line
         plungerline = plunger_line
 
@@ -48,8 +51,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                     temp_set.append(item)
                 else:
                     pass
-                    
-            print(temp_set)
+
             z_set = []
             notz_set = []
             for gt in temp_set:
