@@ -80,7 +80,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                     plungerline[itm].append("z0z")
 
             for item in element2:
-                if item[2] == "p":
+                if item[2] == 'p':
                     gt_idx = int(item[0])
                     plungerline[gt_idx].append('p')
                     idx_set.add(gt_idx)
@@ -95,14 +95,23 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                     length_set.append(qubit_length)
 
                 else:
-                    print(item)
-                    rfline[int(item[0])].append(item[2:len(item)])
-                    if item[2] == "t":
-                        length_set.append(int(item[3:len(item)]))
+                    if item[1] == ')':
+                        rfline[int(item[0])].append(item[2:len(item)])
+                        if item[2] == "t":
+                            length_set.append(int(item[3:len(item)]))
+                        else:
+                            idx_set.add(int(item[0]))
+                            qubit_length = qubit_lengths["rf"][int(item[0])][gates[item[2:len(item)]]]
+                            length_set.append(qubit_length)
                     else:
-                        idx_set.add(int(item[0:2]))
-                        qubit_length = qubit_lengths["rf"][int(item[0:2])][gates[item[2:len(item)]]]
-                        length_set.append(qubit_length)
+                        rfline[int(item[0:2])].append(item[3:len(item)])
+                        if item[3] == "t":
+                            length_set.append(int(item[3:len(item)]))
+                        else:
+                            idx_set.add(int(item[0:2]))
+                            qubit_length = qubit_lengths["rf"][int(item[0:2])][gates[item[2:len(item)]]]
+                            length_set.append(qubit_length)
+
 
             if len(length_set) == 0:
                 pass
