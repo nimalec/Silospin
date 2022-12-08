@@ -27,13 +27,13 @@ def gst_file_parser_v2(file_path, qubit_lengths):
         rf_line = {}
         plunger_line = {}
         ## Should loop over cores and channels instead
-        for idx in qubit_lengths['rf'].keys():
-            rf_line[idx] = []
-            rf_idxs.add(idx)
+        for rf_idx in qubit_lengths['rf'].keys():
+            rf_line[rf_idx] = []
+            rf_idxs.add(rf_idx)
 
-        for idx in qubit_lengths['plunger'].keys():
-            plunger_line[idx] = []
-            plunger_idxs.add(idx)
+        for p_idx in qubit_lengths['plunger'].keys():
+            plunger_line[p_idx] = []
+            plunger_idxs.add(p_idx)
 
         rfline = rf_line
         plungerline = plunger_line
