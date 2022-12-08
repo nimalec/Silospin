@@ -60,14 +60,14 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                     z_set.append(gt)
                 else:
                     notz_set.append(gt)
-            print(z_set)
-            print(notz_set)
+
             element1 = z_set
             element2 = notz_set
 
             ##loop over set of z gate
             for item in element1:
                 rfline[int(item[0])].append(item[2:len(item)])
+                print(rfline)
                 z_idx = {int(item[0])}
                 diff_set_z = rf_idxs.difference(z_idx)
                 for itm in diff_set_z:
