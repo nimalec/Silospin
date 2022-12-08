@@ -40,7 +40,6 @@ def gst_file_parser_v2(file_path, qubit_lengths):
 
         for elem in line:
             element = re.split('\(| \)', elem)
-            print(element)
             idx_set = set()
             length_set = []
             temp_set = []
@@ -50,6 +49,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
                     temp_set.append(item)
                 else:
                     pass
+            print(temp_set)
 
             z_set = []
             notz_set = []
