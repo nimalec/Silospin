@@ -1,5 +1,6 @@
 from math import ceil
 from silospin.math.math_helpers import *
+from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
 
 def channel_mapper(rf_dc_awg_grouping = {"hdawg1": {"rf":  [1,2,3,4], "dc": []}, "hdawg2":  {"rf": [1], "dc": [2,3,4]}}, trig_channels = {"hdawg1": 1, "hdawg2": 1}):
     '''
@@ -703,7 +704,7 @@ def generate_waveforms(gate_npoints, channel_map, added_padding=0):
     waveforms[idx_p]["p2_pifr"] = rectangular_add_padding(gate_npoints["plunger"][8]["p"], amp, min_points = n_std_waveform_pi, side_pad =added_padding)
     return waveforms
 
-def generate_waveforms_v2(gate_npoints, channel_map, added_padding, standard_rf, standard_p):
+def generate_waveforms_v2(gate_npoints, channel_map, added_padding, standard_rf):
     ## gate_npoints  ==> dictionary over the hdawg units
     ## channel_map ==> another dictionary over the nubmer of HDAWG units
     ## added_padding = 0
@@ -815,6 +816,12 @@ def generate_waveforms_v2(gate_npoints, channel_map, added_padding, standard_rf,
                 pass
     return waveforms
 
+## General notes on arbitrary waveforms, etc.
+## 1. Make a dictionary in a pickle file with: function description, lambda function string, parameters controlling number of points, parameters contorlling the function's shape, parameters controlling amplitude of the output.
+## 2. Make a function that genreates new lambda function ==> updates pickle file
+## 3. Every time a gate shows up with specified parameters, generate a pickle file.
+##
+
 def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
     ## Should have a generic channel mapping funciton from channels to cores
     '''
@@ -874,3 +881,54 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
                     pass
         else:
            pass
+
+def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, waveform_parameters, rf_output, pickle_file_location):
+    ##gate_symbol (str), symbol dedicated for this specific gate
+    ##gate_description (str), description of the gate's inputs/outputs and general funcionality
+    ## waveform_function (str), string of function being executed. Order of waveform parameters should agree with order in gate_symbol (waveform parameters always come last as a convention). Should also be configured to be able to run. Outputs a waveform. Should always have name 'make_arb_waveform'.
+    ## waveform_parameters (lst): list parameters of specific waveforms
+    ## amplitude parameter (str): amplitude parameter to be modulated by command table
+    ##rf_output (int): if 1, configured for dual I/Q channel. if 0, configured for a single channel.
+    ## pickle_file_location (int): location of pickle file in memory (assuming this file already exists)
+    ##gate symbol ==> gate(duration, amplitude, phase, waveform_parameters)
+    ##parameters for each gate symbol should be
+    ## {"gate_symbol" : {"parameters": { 0: {"symbol":  , "units": }, 1: , ..., N: }}, "rf": , "waveform_funct": }
+    ## if amplitude or phase == 1 ==> need to implement in command table execution [not part of waveform]
+    arb_gates_pickle_initial = unpickle_qubit_parameters(pickle_file_location)
+    try:
+        if gate_symbol in arb_gates_pickle_initial.keys()
+            raise TypeError("Waveform name already taken!!")
+    except TypeError:
+         raise
+
+    arb_gates_pickle_initial[gate_symbol] = {"parameters": {} , "rf": rf_output, "description":  gate_description, "waveform_function": waveform_function}
+    ##standard format for gate input [RF]: amp*gatesymbol(tau, phase, waveform_param[0], ..., waveform_param[N-1])
+    ##standard format for gate input [Dc]: amp*gatesymbol(tau, waveform_param[0], ..., waveform_param[N-1])
+    ## amp is in volts (set by the command table index)
+    ## tau in ns
+    ## phase in degrees.
+    ## amp, tau, and phase come by default depending on this being an RF or DC pulse
+    idx = 0
+    for param in waveform_parameters:
+        arb_gates_pickle_initial[gate_symbol]["parameters"][idx] = param
+        idx += 1
+
+def obtain_waveform_arbitrary_gate_waveform(arbitrary_gate_function, tau, parameter_values):
+    ##parameter_values ==> list of tuples of (parameter_name, parameter_value) ==> should be ordered in propoer order of parameters used earlier
+    ### All of these functions will have the form
+    ## def make_arb_waveform(tau,parameter1, ..., parameterN):
+    ##     waveform code....
+    ##     return waveform
+    local_var = {}
+    parameters = {}
+    sample_rate = 2.4 ##sample rate of hdawg in GSa/s
+    execute_program = arbitrary_gate_function + '\nwaveform = make_arb_waveform(' + str(tau)
+    for idx in range(len(parameter_values)):
+        parameters[parameter_values[idx][0]] = parameter_values[idx][1]
+        execute_program += ','+str(parameter_values[idx][1])
+    execute_program += ')'
+    parameters['sample_rate'] = sample_rate
+    exec(program, parameters, local_var)
+    return local_var['waveform']
+
+#def obtain_waveform_arbitrary_gate_waveform(arbitrary_gate_function, tau, parameter_values):

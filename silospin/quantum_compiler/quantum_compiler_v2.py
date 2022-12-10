@@ -78,7 +78,7 @@ class GateSetTomographyQuantumCompiler:
                 Sample rate of AWG in Sa/s.
         """
 
-        ##Fine
+        ## For arb gates : plunger channels can be either plunger or arb gate channels.
         sample_rate = 2.4e9
         self._gst_path = gst_file_path
         self._awgs = awgs
@@ -99,6 +99,7 @@ class GateSetTomographyQuantumCompiler:
         gate_param_all_rf = gate_parameters["rf"]
         gate_param_all_dc = gate_parameters["p"]
 
+
         for awg in channel_mapping:
             self._gate_parameters[awg] = {"rf": {} , "p": {}}
         for gt_idx in gate_param_all_rf:
@@ -118,8 +119,8 @@ class GateSetTomographyQuantumCompiler:
         tau_pi_2_standard_1 = max(tau_pi_2_set,key=itemgetter(1))[1]
         tau_pi_standard_1 = 2*tau_pi_2_standard_1
         standard_rf_idx = max(tau_pi_2_set,key=itemgetter(1))[0]
-        npoints_pi_2_standard = ceil(sample_rate*tau_pi_2_standard_1*1e-9/32)*32
-        npoints_pi_standard = ceil(sample_rate*tau_pi_standard_1*1e-9/32)*32
+        npoints_pi_2_standard = ceil(sample_rate*tau_pi_2_standard_1*1e-9/16)*16
+        npoints_pi_standard = ceil(sample_rate*tau_pi_standard_1*1e-9/16)*16
         tau_pi_2_standard = npoints_pi_2_standard/sample_rate
         tau_pi_standard = npoints_pi_standard/sample_rate
 
@@ -128,35 +129,17 @@ class GateSetTomographyQuantumCompiler:
         plunger_set_npoints_tups = []
         for idx in gate_parameters["p"]:
             plunger_set.append((idx, gate_parameters["p"][idx]["tau"]))
-            plunger_set_npoints.append(ceil(gate_parameters["p"][idx]["tau"]*2.4/32)*32)
-            plunger_set_npoints_tups.append((idx, ceil(gate_parameters["p"][idx]["tau"]*2.4/32)*32))
-        tau_p_standard = max(plunger_set,key=itemgetter(1))[1]
-        standard_p_idx = max(plunger_set,key=itemgetter(1))[0]
-        npoints_p_standard = ceil(sample_rate*tau_p_standard*1e-9/32)*32
-        tau_p_standard = npoints_p_standard/sample_rate
-
+            plunger_set_npoints.append(ceil(gate_parameters["p"][idx]["tau"]*2.4/16)*16)
+            plunger_set_npoints_tups.append((idx, ceil(gate_parameters["p"][idx]["tau"]*2.4/16)*16))
         hdawg_std_rf = awg_core_split[standard_rf_idx]
-        hdawg_std_p = awg_core_split[standard_p_idx]
 
         for core_idx in channel_mapping[hdawg_std_rf]:
             if channel_mapping[hdawg_std_rf][core_idx]['core_idx'] == standard_rf_idx:
                 core_std_rf = core_idx
             else:
                 pass
-        for core_idx in channel_mapping[hdawg_std_p]:
-            if channel_mapping[hdawg_std_p][core_idx]['gate_idx'][0] == standard_p_idx or channel_mapping[hdawg_std_p][core_idx]['gate_idx'][1] == standard_p_idx:
-                core_std_p = core_idx
-            else:
-                pass
 
-        if standard_p_idx%2 == 0 and standard_p_idx !=1:
-            ch_std_p = 2
-        else:
-            ch_std_p = 1
-        #standard_rf = (hdawg_std_rf, core_std_rf)
-        #standard_p = (hdawg_std_p, core_std_p, ch_std_p)
         standard_rf = (hdawg_std_rf, standard_rf_idx)
-        standard_p = (hdawg_std_p, standard_p_idx)
 
         try:
          if tau_p_standard > tau_pi_2_standard:
@@ -175,7 +158,7 @@ class GateSetTomographyQuantumCompiler:
             self._gate_npoints[awg] = make_gate_npoints(self._gate_parameters[awg], sample_rate)
 
          ##Come back to padding scheme  ==> check edge case when plunger length with padding is smaller than the RF pulse length ==> should always be the same as the DC pulse length in total
-        self._waveforms = generate_waveforms_v2(self._gate_npoints, channel_mapping, added_padding, standard_rf, standard_p)
+        self._waveforms = generate_waveforms_v2(self._gate_npoints, channel_mapping, added_padding, standard_rf)
 
         dc_lengths = {}
         for awg in channel_mapping:
@@ -194,22 +177,23 @@ class GateSetTomographyQuantumCompiler:
                 else:
                     pass
 
+        ## andle arbitrary waveforms in gst_file_parser_v2 ==> should be able to determine the length, given the called upon function
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
         self._gate_sequences = gst_file_parser_v2(self._gst_path, self._gate_lengths)
-        print(dc_lengths)
 
-        plunger_set = []
-        plunger_set_npoints = []
-        plunger_set_npoints_tups = []
+        # plunger_set = []
+        # plunger_set_npoints = []
+        # plunger_set_npoints_tups = []
         # for idx in self._gate_parameters["p"]:
         #     plunger_set.append((idx, dc_lengths[idx-1]))
         #     plunger_set_npoints.append(dc_npoints[idx-1])
         #     plunger_set_npoints_tups.append((idx, dc_npoints[idx-1]))
 
-        ct_idxs_all = {}
-        arbZs = []
-        n_arbZ = 0
-        taus_std = (tau_waveform_pi_2_std,  tau_waveform_pi_std)
+        # ct_idxs_all = {}
+        # arbZs = []
+        # n_arbZ = 0
+        # taus_std = (tau_waveform_pi_2_std,  tau_waveform_pi_std)
+        ## arbitrary waveforms ==>  f(A, B, C).
     #
     #     for idx in self._gate_sequences:
     #         gate_sequence = self._gate_sequences[idx]
