@@ -35,7 +35,8 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
             raise TypeError("Minimum number of points should be greater than or equal to the minimum number specified!")
     except TypeError:
         raise
-
+        
+    print(npoints)
     min_npoints = ceil(min_points/16)*16
     net_pad_0 = min_points - npoints
 
