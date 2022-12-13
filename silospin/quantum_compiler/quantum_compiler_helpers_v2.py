@@ -1,4 +1,6 @@
 from math import ceil
+import pickle
+
 from silospin.math.math_helpers import *
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
 
@@ -882,7 +884,7 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
         else:
            pass
 
-def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, waveform_parameters, rf_output, pickle_file_location):
+def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, waveform_parameters, rf_output, pickle_file_location='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
     ##gate_symbol (str), symbol dedicated for this specific gate
     ##gate_description (str), description of the gate's inputs/outputs and general funcionality
     ## waveform_function (str), string of function being executed. Order of waveform parameters should agree with order in gate_symbol (waveform parameters always come last as a convention). Should also be configured to be able to run. Outputs a waveform. Should always have name 'make_arb_waveform'.
@@ -894,6 +896,14 @@ def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, wavefor
     ##parameters for each gate symbol should be
     ## {"gate_symbol" : {"parameters": { 0: {"symbol":  , "units": }, 1: , ..., N: }}, "rf": , "waveform_funct": }
     ## if amplitude or phase == 1 ==> need to implement in command table execution [not part of waveform]
+
+    ## Special Gates :
+    ## 1 . amp*gt(tau, phase, padding), for gt in {'X', 'Y', 'XXX', 'YYY'} [RF]
+    ## 2. amp*s(tau, phase, f) [DC]
+    ## 3. amp*rect(tau) [DC]
+    ## 4. amp*gauss(tau , var, mean) [DC]
+    ## 5. t(N), adds arbitrary delay.
+
     arb_gates_pickle_initial = unpickle_qubit_parameters(pickle_file_location)
     try:
         if gate_symbol in arb_gates_pickle_initial.keys()
@@ -903,7 +913,7 @@ def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, wavefor
 
     arb_gates_pickle_initial[gate_symbol] = {"parameters": {} , "rf": rf_output, "description":  gate_description, "waveform_function": waveform_function}
     ##standard format for gate input [RF]: amp*gatesymbol(tau, phase, waveform_param[0], ..., waveform_param[N-1])
-    ##standard format for gate input [Dc]: amp*gatesymbol(tau, waveform_param[0], ..., waveform_param[N-1])
+    ##standard format for gate input [DC]: amp*gatesymbol(tau, waveform_param[0], ..., waveform_param[N-1])
     ## amp is in volts (set by the command table index)
     ## tau in ns
     ## phase in degrees.
@@ -912,6 +922,10 @@ def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, wavefor
     for param in waveform_parameters:
         arb_gates_pickle_initial[gate_symbol]["parameters"][idx] = param
         idx += 1
+
+    with open(pickle_file_location, 'wb') as handle:
+        pickle.dump(instrument_parameters, handle, protocol = pickle.HIGHEST_PROTOCOL)
+
 
 def obtain_waveform_arbitrary_gate_waveform(arbitrary_gate_function, tau, parameter_values):
     ##parameter_values ==> list of tuples of (parameter_name, parameter_value) ==> should be ordered in propoer order of parameters used earlier
@@ -930,5 +944,3 @@ def obtain_waveform_arbitrary_gate_waveform(arbitrary_gate_function, tau, parame
     parameters['sample_rate'] = sample_rate
     exec(program, parameters, local_var)
     return local_var['waveform']
-
-#def obtain_waveform_arbitrary_gate_waveform(arbitrary_gate_function, tau, parameter_values):
