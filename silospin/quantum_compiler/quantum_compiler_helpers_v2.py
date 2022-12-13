@@ -905,12 +905,11 @@ def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, wavefor
     ## 5. t(N), adds arbitrary delay.
 
     arb_gates_pickle_initial = unpickle_qubit_parameters(pickle_file_location)
-    try:
-        if gate_symbol in arb_gates_pickle_initial.keys()
-            raise TypeError("Waveform name already taken!!")
-    except TypeError:
-         raise
-
+    # try:
+    #     if gate_symbol in arb_gates_pickle_initial.keys()
+    #         raise TypeError("Waveform name already taken!!")
+    # except TypeError:
+    #      raise
     arb_gates_pickle_initial[gate_symbol] = {"parameters": {} , "rf": rf_output, "description":  gate_description, "waveform_function": waveform_function}
     ##standard format for gate input [RF]: amp*gatesymbol(tau, phase, waveform_param[0], ..., waveform_param[N-1])
     ##standard format for gate input [DC]: amp*gatesymbol(tau, waveform_param[0], ..., waveform_param[N-1])
