@@ -140,12 +140,12 @@ class GateSetTomographyQuantumCompiler:
                 pass
 
         standard_rf = (hdawg_std_rf, standard_rf_idx)
-
-        try:
-         if tau_p_standard > tau_pi_2_standard:
-            raise TypeError("DC pulse lengths should always be shorter than RF pulse lengths!!")
-        except TypeError:
-            raise
+        # 
+        # try:
+        #  if tau_p_standard > tau_pi_2_standard:
+        #     raise TypeError("DC pulse lengths should always be shorter than RF pulse lengths!!")
+        # except TypeError:
+        #     raise
         try:
          if added_padding > 5e-9:
             raise TypeError("Padding should not exceed 5 ns!!")
