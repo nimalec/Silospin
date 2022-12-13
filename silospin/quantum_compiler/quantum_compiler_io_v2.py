@@ -178,6 +178,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
             temp_set = []
 
             for item in element:
+                print(item)
                 if len(item)>2:
                     if item[len(item)-1] in {'x', 'y', 'm', 'p', 'z'}:
                         temp_set.append(item)
