@@ -941,5 +941,5 @@ def obtain_waveform_arbitrary_gate_waveform(arbitrary_gate_function, tau, parame
         execute_program += ','+str(parameter_values[idx][1])
     execute_program += ')'
     parameters['sample_rate'] = sample_rate
-    exec(program, parameters, local_var)
+    exec(execute_program, parameters, local_var)
     return local_var['waveform']
