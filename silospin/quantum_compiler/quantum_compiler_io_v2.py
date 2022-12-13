@@ -3,6 +3,7 @@ import re
 import copy
 
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
+from silospin.quantum_compiler.quantum_compiler_helpers_v2 import obtain_waveform_arbitrary_gate_waveform
 
 def gst_file_parser_v2(file_path, qubit_lengths):
     '''
@@ -127,7 +128,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
         sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
     return sequence_table
 
-def gst_file_parser_v3(file_path, qubit_lengths):
+def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
     '''
     Outputs a dictionary representation of a quantum algorithm saved in a CSV file.
     Quantum algorithm should follow standard GST convention.
@@ -144,8 +145,12 @@ def gst_file_parser_v3(file_path, qubit_lengths):
     sequence_table = {}
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1)
+    arb_gate_dict = unpickle_qubit_parameters(arbgate_picklefile_location)
 
-    
+    ##Protocol:
+    ## 1. Define set of existing gates
+    ## 2. Loop through each line ==> if arb gate is present, check if gate exists. Determine the length of this gate ==> add appropriate delays.
+    ## 3. Nothing changes about gate idxs
 
     for idx in range(len(df)):
         line = df.values[idx][0].split(";")[0:len(df.values[idx][0].split(";"))-1]
@@ -153,6 +158,8 @@ def gst_file_parser_v3(file_path, qubit_lengths):
         plunger_idxs = set()
         rf_line = {}
         plunger_line = {}
+        arb_gates_line = {}
+
         for rf_idx in qubit_lengths['rf'].keys():
             rf_line[rf_idx] = []
             rf_idxs.add(rf_idx)
@@ -174,11 +181,19 @@ def gst_file_parser_v3(file_path, qubit_lengths):
                 if len(item)>2:
                     if item[len(item)-1] in {'x', 'y', 'm', 'p', 'z'}:
                         temp_set.append(item)
+                    elif item.find('*') != -1:
+                        idx_gt = item.find('*') + 1
+                        if item[idx_gt] in arb_gate_dict.keys():
+                            temp_set.append(item)
+                        else:
+                            ##Should instead throw an error here
+                            pass
                     else:
                         pass
                 else:
                     pass
 
+        ##Makes a set of Z gates
             z_set = []
             notz_set = []
             for gt in temp_set:
@@ -206,6 +221,7 @@ def gst_file_parser_v3(file_path, qubit_lengths):
                 for itm in plungerline:
                     plungerline[itm].append("z0z")
 
+
             for item in element2:
                 if item[2] == 'p':
                     gt_idx = int(item[0])
@@ -220,6 +236,38 @@ def gst_file_parser_v3(file_path, qubit_lengths):
                     idx_set.add(gt_idx)
                     qubit_length = qubit_lengths['plunger'][gt_idx]['p']
                     length_set.append(qubit_length)
+
+                elif item.find('*') != -1:
+                    gt_label_idx = item.find('*') + 1
+                    gt_label = item[gt_label_idx]
+                    gt_parameters = arb_gate_dict['parameters']
+                    gt_idx = int(item[0:gt_label_idx-2])
+                    idx_set.add(gt_idx)
+                    comma_idxs = [i for i, letter in enumerate(item) if letter == ',']
+                    param_values = []
+                    if gt_idx in rf_idxs:
+                         tau_val = float(item[gt_label_idx+3:comma_idxs[0]])
+                         phase_val = float(item[comma_idxs[0]+1:comma_idxs[1]])
+                         itr = 0
+                         for idx in comma_idxs[2:len(comma_idxs)]:
+                             if itr < len(comma_idxs)-1:
+                                 param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
+                             else:
+                                 param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:item.find(']')])))
+                             itr += 1
+
+                    elif gt_idx in plunger_idxs:
+                         tau_val = float(item[gt_label_idx+3:comma_idxs[0]])
+                         itr = 0
+                         for idx in comma_idxs[2:len(comma_idxs)]:
+                             if itr < len(comma_idxs)-1:
+                                 param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
+                             else:
+                                 param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:item.find(']')])))
+                             itr += 1
+                    else:
+                        pass
+                    length_set.append(len(obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)))
 
                 else:
                     if item[1] == ')':
