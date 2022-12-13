@@ -146,6 +146,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1)
     arb_gate_dict = unpickle_qubit_parameters(arbgate_picklefile_location)
+    print(df)
 
     ##Protocol:
     ## 1. Define set of existing gates
