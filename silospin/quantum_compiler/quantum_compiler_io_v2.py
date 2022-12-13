@@ -171,6 +171,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
         rfline = rf_line
         plungerline = plunger_line
 
+        print(line)
         for elem in line:
             element = re.split('\(| \)', elem)
             idx_set = set()
@@ -178,7 +179,6 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
             temp_set = []
 
             for item in element:
-                print(item)
                 if len(item)>2:
                     if item[len(item)-1] in {'x', 'y', 'm', 'p', 'z'}:
                         temp_set.append(item)
