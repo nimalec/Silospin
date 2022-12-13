@@ -923,7 +923,7 @@ def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, wavefor
         idx += 1
 
     with open(pickle_file_location, 'wb') as handle:
-        pickle.dump(instrument_parameters, handle, protocol = pickle.HIGHEST_PROTOCOL)
+        pickle.dump(arb_gates_pickle_initial, handle, protocol = pickle.HIGHEST_PROTOCOL)
 
 
 def obtain_waveform_arbitrary_gate_waveform(arbitrary_gate_function, tau, parameter_values):
