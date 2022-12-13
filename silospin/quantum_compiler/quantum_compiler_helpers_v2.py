@@ -925,13 +925,16 @@ def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, wavefor
     with open(pickle_file_location, 'wb') as handle:
         pickle.dump(arb_gates_pickle_initial, handle, protocol = pickle.HIGHEST_PROTOCOL)
 
-
-def obtain_waveform_arbitrary_gate_waveform(arbitrary_gate_function, tau, parameter_values):
+def obtain_waveform_arbitrary_gate_waveform(gate_label, tau, parameter_values, pickle_file_location='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
     ##parameter_values ==> list of tuples of (parameter_name, parameter_value) ==> should be ordered in propoer order of parameters used earlier
     ### All of these functions will have the form
     ## def make_arb_waveform(tau,parameter1, ..., parameterN):
     ##     waveform code....
     ##     return waveform
+
+    arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
+    arbitrary_gate_function = arbgate_dict[gate_label]['waveform_function']
+
     local_var = {}
     parameters = {}
     sample_rate = 2.4 ##sample rate of hdawg in GSa/s
