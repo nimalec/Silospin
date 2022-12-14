@@ -146,7 +146,6 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1)
     arb_gate_dict = unpickle_qubit_parameters(arbgate_picklefile_location)
-    print(df)
 
     ##Protocol:
     ## 1. Define set of existing gates
@@ -154,6 +153,8 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
     ## 3. Nothing changes about gate idxs
 
     for idx in range(len(df)):
+        print(df.values[idx][0].split(";"))
+        ##Fix parsing issue here....
         line = df.values[idx][0].split(";")[0:len(df.values[idx][0].split(";"))-1]
         rf_idxs = set()
         plunger_idxs = set()
