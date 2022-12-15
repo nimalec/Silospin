@@ -246,7 +246,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     gt_parameters = arb_gate_dict[gt_label]['parameters']
 
                     #gt_idx = int(item[item.find(')')+1:gt_label_idx-2])
-                    gt_idx = pitem[item.find('(')+1:item.find(')')]
+                    gt_idx = item[item.find('(')+1:item.find(')')]
                     print(gt_idx)
 
                     idx_set.add(gt_idx)
