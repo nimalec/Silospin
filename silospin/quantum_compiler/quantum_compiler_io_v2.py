@@ -209,6 +209,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
                 z_idx.add(gt_idx)
                 diff_set_z = rf_idxs.difference(z_idx)
                 ##Fill other gt_idx with z0z  if other z is present
+            print(diff_set_z)
             for itm in diff_set_z:
                 rfline[itm].append("z0z")
             for itm in plungerline:
