@@ -259,9 +259,13 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     else:
                         pass
                     length_set.append(len(obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)))
-                    print(length_set)
 
-                else:
+                elif item[item.find(')')+1] in {'x', 'y', 'm'}:
+                    rf_idx = int(item[item.find('(')+1:item.find(')')])
+                    idx_set.add(rf_idx)
+                    rfline[rf_idx].append(item[item.find(')'):len(item)])
+                    print(rfline)
+
                     if item[1] == ')':
                         rfline[int(item[0])].append(item[2:len(item)])
                         if item[2] == "t":
