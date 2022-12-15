@@ -1,7 +1,7 @@
 import pandas as pd
 import re
 import copy
-from math import ceil 
+from math import ceil
 
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
 from silospin.quantum_compiler.quantum_compiler_helpers_v2 import obtain_waveform_arbitrary_gate_waveform
@@ -235,7 +235,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
                     param_values = []
                     ## Arb RF gate
                     if gt_idx in rf_idxs:
-                        rfline[gt_idx].append(item[item.find('*')+1:len(item)])
+                        rfline[gt_idx].append(item[item.find(')')+1:len(item)])
                         idx_set.add(gt_idx)
                         tau_val = float(item[gt_label_idx+2:comma_idxs[0]])
                         phase_val = float(item[comma_idxs[0]+1:comma_idxs[1]])
@@ -250,7 +250,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
 
                     ## Arb DC gate
                     elif gt_idx in plunger_idxs:
-                         plungerline[gt_idx].append(item[item.find('*')+1:len(item)])
+                         plungerline[gt_idx].append(item[item.find(')')+1:len(item)])
                          idx_set.add(gt_idx)
                          tau_val = float(item[gt_label_idx+2:comma_idxs[0]])
                          if len(gt_parameters) == 0:
