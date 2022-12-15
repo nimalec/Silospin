@@ -233,8 +233,6 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     gt_parameters = arb_gate_dict[gt_label]['parameters']
                     idx_set.add(gt_idx)
                     comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
-                    print(comma_idxs)
-                    print(item)
                     param_values = []
                     if gt_idx in rf_idxs:
                          tau_val = float(item[gt_label_idx+3:comma_idxs[0]])
@@ -248,16 +246,18 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                              itr += 1
 
                     elif gt_idx in plunger_idxs:
-                         print(item[gt_label_idx+2:comma_idxs[0]])
+                         tau_val = float(item[gt_label_idx+2:comma_idxs[0]])
+                         if len(comma_idxs) == 1:
+                              param_values.append((gt_parameters[0], float(item[comma_idxs[0]+1:item.find(']')]])))
+                         print(param_values)
 
-                         tau_val = float(item[gt_label_idx+3:comma_idxs[0]])
-                         itr = 0
-                         for idx in comma_idxs[2:len(comma_idxs)]:
-                             if itr < len(comma_idxs)-1:
-                                 param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
-                             else:
-                                 param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:item.find(']')])))
-                             itr += 1
+                        # itr = 0
+                         # for idx in comma_idxs[1:len(comma_idxs)]:
+                         #     if itr < len(comma_idxs)-1:
+                         #         param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
+                         #     else:
+                         #         param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:item.find(']')])))
+                         #     itr += 1
                     else:
                         pass
                     length_set.append(len(obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)))
