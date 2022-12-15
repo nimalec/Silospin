@@ -235,7 +235,6 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     idx_set.add(gt_idx)
                     comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
                     param_values = []
-                    print(gt_label)
                     if gt_idx in rf_idxs:
                          tau_val = float(item[gt_label_idx+3:comma_idxs[0]])
                          phase_val = float(item[comma_idxs[0]+1:comma_idxs[1]])
@@ -254,10 +253,10 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                          elif len(gt_parameters) == 1:
                              param_values.append((gt_parameters[0], float(item[comma_idxs[0]+1:item.find(']')])))
                          else:
-                             pass  
-                             # for idx in range(len(param_values)-1):
-                             #     param_values.append((gt_parameters[idx], float(item[comma_idxs[idx]+1:comma_idxs[idx+1])))
-                             # param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')))
+                             pass
+                             for idx in range(len(param_values)-1):
+                                 param_values.append((gt_parameters[idx], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
+                             param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')))
 
 
 
