@@ -228,10 +228,11 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     length_set.append(qubit_length)
 
                 elif item.find('*') != -1:
-                    print(item)
                     gt_label_idx = item.find('*') + 1
                     gt_label = item[gt_label_idx]
                     gt_parameters = arb_gate_dict[gt_label]['parameters']
+                    print(gt_label)
+                    print(gt_parameters)
                     idx_set.add(gt_idx)
                     comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
                     param_values = []
