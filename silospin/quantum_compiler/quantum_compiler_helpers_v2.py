@@ -347,7 +347,7 @@ def make_command_table_indices_v2(gt_seqs, taus_std, taus_p, n_arbZ):
     ## Should alo return a list of command table indices corresponding to each arbitrary gate.
     ## 1. Take in channel grouping ==> determine whcih are plunger and RF indices/cores ==> cores they belong to.
     ## 2. Loop over gt seqs line.
-    ## 3.  
+    ## 3.
     '''
     Generates a dictionary with lists of command table executions for each core, provided the output of 'gst_file_parser'.
     This is the core of the quantum compiler, as it interprets longs RF and DC gate strings, converting them to FPGA instructions for amplitude and phase modulation.\n
