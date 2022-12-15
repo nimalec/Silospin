@@ -262,9 +262,13 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
 
                 elif item[item.find(')')+1] in {'x', 'y', 'm'}:
                     rf_idx = int(item[item.find('(')+1:item.find(')')])
+                    rf_gt = item[item.find(')')+1:len(item)]
                     idx_set.add(rf_idx)
-                    rfline[rf_idx].append(item[item.find(')'):len(item)])
-                    print(rfline)
+                    rfline[rf_idx].append(rf_gt)
+                    qubit_length = qubit_lengths["rf"][rf_idx][gates[rf_gt]]
+                    length_set.append(qubit_length)
+                    print(length_set)
+
 
                     if item[1] == ')':
                         rfline[int(item[0])].append(item[2:len(item)])
