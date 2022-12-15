@@ -210,7 +210,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
             z_idx = set({})
             for item in z_set:
                 gt_idx = int(item[item.find('(')+1:item.find(')')])
-                rfline[gt_idx].append(item[item.find(')'):item.find('z(')])
+                rfline[gt_idx].append(item[item.find(')')+1:item.find('z(')+1])
                 print(rfline[gt_idx])
             #     if item[1] == ')':
             #         rfline[gt_idx].append(item[2:len(item)])
