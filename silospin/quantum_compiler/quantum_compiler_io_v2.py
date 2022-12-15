@@ -128,7 +128,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
         sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
     return sequence_table
 
-def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
+def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_picklefile_location = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
     '''
     Outputs a dictionary representation of a quantum algorithm saved in a CSV file.
     Quantum algorithm should follow standard GST convention.
@@ -262,7 +262,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                              param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')]))
                     else:
                         pass
-                    length_set.append(len(obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)))
+                    length_set.append(ceil(1e9*len(obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location))/sample_rate))
 
                 elif item[item.find(')')+1] in {'x', 'y', 'm'}:
                     rf_idx = int(item[item.find('(')+1:item.find(')')])
