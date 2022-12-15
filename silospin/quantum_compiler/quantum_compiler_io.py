@@ -108,4 +108,5 @@ def gst_file_parser(file_path, qubit_lengths, channel_mapping):
                 for item in diff_set_plunger:
                     plungerline[item[1:len(item)]].append("t"+str(max_gt_len))
         sequence_table[idx] = {"rf": rfline, "plunger": plungerline}
+    print(sequence_table)
     return sequence_table
