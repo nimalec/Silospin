@@ -247,6 +247,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
 
                     elif gt_idx in plunger_idxs:
                          tau_val = float(item[gt_label_idx+2:comma_idxs[0]])
+                         print(len(gt_parameters))
                          if len(gt_parameters) == 0:
                              pass
                          elif len(gt_parameters) == 1:
