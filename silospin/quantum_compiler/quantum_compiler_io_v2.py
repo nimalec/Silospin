@@ -153,9 +153,9 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
     ## 3. Nothing changes about gate idxs
 
     for idx in range(len(df)):
-        print(df.values[idx][0])
         ##Fix parsing issue here....
         line = df.values[idx][0].split(";")[0:len(df.values[idx][0].split(";"))-1]
+        print(line)
         rf_idxs = set()
         plunger_idxs = set()
         rf_line = {}
