@@ -254,9 +254,10 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                          elif len(gt_parameters) == 1:
                              param_values.append((gt_parameters[0], float(item[comma_idxs[0]+1:item.find(']')])))
                          else:
-                             for idx in range(len(param_values)-1):
-                                 param_values.append((gt_parameters[idx], float(item[comma_idxs[idx]+1:comma_idxs[idx+1])))
-                             param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')))
+                             pass  
+                             # for idx in range(len(param_values)-1):
+                             #     param_values.append((gt_parameters[idx], float(item[comma_idxs[idx]+1:comma_idxs[idx+1])))
+                             # param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')))
 
 
 
