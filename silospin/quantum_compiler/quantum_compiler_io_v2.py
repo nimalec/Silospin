@@ -227,7 +227,8 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
 
             for item in notz_set:
                 gt_idx = int(item[item.find('(')+1:item.find(')')])
-                if item[2] == 'p':
+                if item[item.find(')')+1]== 'p':
+                #if item[2] == 'p':
                 #    gt_idx = int(item[0])
                     plungerline[gt_idx].append('p')
                     idx_set.add(gt_idx)
