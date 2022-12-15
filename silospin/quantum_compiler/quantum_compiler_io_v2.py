@@ -234,6 +234,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     idx_set.add(gt_idx)
                     comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
                     print(comma_idxs)
+                    print(item)
                     param_values = []
                     if gt_idx in rf_idxs:
                          tau_val = float(item[gt_label_idx+3:comma_idxs[0]])
