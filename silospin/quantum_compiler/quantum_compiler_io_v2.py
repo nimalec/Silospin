@@ -211,11 +211,12 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
             ##loop over set of z gate
             z_idx = set({})
             for item in element1:
+                gt_idx = item[item.find('(')+1:item.find(')')]
                 if item[1] == ')':
-                    gt_idx = int(item[0])
+                #    gt_idx = int(item[0])
                     rfline[gt_idx].append(item[2:len(item)])
                 else:
-                    gt_idx = int(item[0:2])
+            #        gt_idx = int(item[0:2])
                     rfline[gt_idx].append(item[2:len(item)])
                 z_idx.add(gt_idx)
                 diff_set_z = rf_idxs.difference(z_idx)
@@ -226,15 +227,16 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
 
 
             for item in element2:
+                gt_idx = item[item.find('(')+1:item.find(')')]
                 if item[2] == 'p':
-                    gt_idx = int(item[0])
+                #    gt_idx = int(item[0])
                     plungerline[gt_idx].append('p')
                     idx_set.add(gt_idx)
                     qubit_length = qubit_lengths["plunger"][gt_idx]['p']
                     length_set.append(qubit_length)
 
                 elif len(item) > 3 and item[3] == 'p':
-                    gt_idx = int(item[0:2])
+                #    gt_idx = int(item[0:2])
                     plungerline[gt_idx].append('p')
                     idx_set.add(gt_idx)
                     qubit_length = qubit_lengths['plunger'][gt_idx]['p']
@@ -244,10 +246,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     gt_label_idx = item.find('*') + 1
                     gt_label = item[gt_label_idx]
                     gt_parameters = arb_gate_dict[gt_label]['parameters']
-
-                    #gt_idx = int(item[item.find(')')+1:gt_label_idx-2])
-                    gt_idx = item[item.find('(')+1:item.find(')')]
-                    print(gt_idx)
+                #    gt_idx = item[item.find('(')+1:item.find(')')]
 
                     idx_set.add(gt_idx)
                     comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
