@@ -211,7 +211,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
             ##loop over set of z gate
             z_idx = set({})
             for item in element1:
-                gt_idx = item[item.find('(')+1:item.find(')')]
+                gt_idx = int(item[item.find('(')+1:item.find(')')])
                 if item[1] == ')':
                 #    gt_idx = int(item[0])
                     rfline[gt_idx].append(item[2:len(item)])
@@ -227,7 +227,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
 
 
             for item in element2:
-                gt_idx = item[item.find('(')+1:item.find(')')]
+                gt_idx = int(item[item.find('(')+1:item.find(')')])
                 if item[2] == 'p':
                 #    gt_idx = int(item[0])
                     plungerline[gt_idx].append('p')
