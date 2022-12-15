@@ -228,6 +228,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     length_set.append(qubit_length)
 
                 elif item.find('*') != -1:
+                    print(item)
                     gt_label_idx = item.find('*') + 1
                     gt_label = item[gt_label_idx]
                     gt_parameters = arb_gate_dict[gt_label]['parameters']
@@ -235,7 +236,6 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
                     param_values = []
                     if gt_idx in rf_idxs:
-                         print(item)
                          tau_val = float(item[gt_label_idx+3:comma_idxs[0]])
                          phase_val = float(item[comma_idxs[0]+1:comma_idxs[1]])
                          itr = 0
