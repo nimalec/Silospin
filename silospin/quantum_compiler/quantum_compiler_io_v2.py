@@ -256,7 +256,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                              pass
                              for idx in range(len(param_values)-1):
                                  param_values.append((gt_parameters[idx], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
-                             param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')))
+                             param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')]))
 
 
 
