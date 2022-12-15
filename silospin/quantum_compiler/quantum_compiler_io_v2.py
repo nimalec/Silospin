@@ -246,7 +246,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     gt_parameters = arb_gate_dict['parameters']
                     gt_idx = int(item[0:gt_label_idx-2])
                     idx_set.add(gt_idx)
-                    comma_idxs = [i for i, letter in enumerate(item) if letter == ',']
+                    comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
                     param_values = []
                     if gt_idx in rf_idxs:
                          tau_val = float(item[gt_label_idx+3:comma_idxs[0]])
