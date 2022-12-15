@@ -235,6 +235,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     ## Arb RF gate
                     if gt_idx in rf_idxs:
                         rfline[gt_idx].append(item)
+                        idx_set.add(gt_idx)
                         tau_val = float(item[gt_label_idx+2:comma_idxs[0]])
                         phase_val = float(item[comma_idxs[0]+1:comma_idxs[1]])
                         if len(gt_parameters) == 0:
@@ -248,7 +249,8 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
 
                     ## Arb DC gate
                     elif gt_idx in plunger_idxs:
-                         plungerline[gt_idx].append(item)  
+                         plungerline[gt_idx].append(item)
+                         idx_set.add(gt_idx)  
                          tau_val = float(item[gt_label_idx+2:comma_idxs[0]])
                          if len(gt_parameters) == 0:
                              pass
