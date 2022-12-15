@@ -228,6 +228,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
 
             for item in element2:
                 gt_idx = int(item[item.find('(')+1:item.find(')')])
+                print(gt_idx)
                 if item[2] == 'p':
                 #    gt_idx = int(item[0])
                     plungerline[gt_idx].append('p')
