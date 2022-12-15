@@ -228,7 +228,6 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     length_set.append(qubit_length)
 
                 elif item.find('*') != -1:
-                    print(item)
                     gt_label_idx = item.find('*') + 1
                     gt_label = item[gt_label_idx]
                     gt_parameters = arb_gate_dict[gt_label]['parameters']
@@ -236,15 +235,16 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
                     param_values = []
                     if gt_idx in rf_idxs:
-                         tau_val = float(item[gt_label_idx+3:comma_idxs[0]])
-                         phase_val = float(item[comma_idxs[0]+1:comma_idxs[1]])
-                         itr = 0
-                         for idx in comma_idxs[2:len(comma_idxs)]:
-                             if itr < len(comma_idxs)-1:
-                                 param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
-                             else:
-                                 param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:item.find(']')])))
-                             itr += 1
+                        tau_val = float(item[gt_label_idx+2:comma_idxs[0]])
+                        phase_val = float(item[comma_idxs[0]+1:comma_idxs[1]])
+                        if len(gt_parameters) == 0:
+                            pass
+                        elif len(gt_parameters) == 1:
+                            param_values.append((gt_parameters[0], float(item[comma_idxs[1]+1:item.find(']')])))
+                        else:
+                            for idx in range(len(param_values)-1):
+                                param_values.append((gt_parameters[idx], float(item[comma_idxs[idx+1]+1:comma_idxs[idx+2]])))
+                            param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx+1]+1:item.find(']')]))
 
                     elif gt_idx in plunger_idxs:
                          tau_val = float(item[gt_label_idx+2:comma_idxs[0]])
@@ -253,15 +253,11 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                          elif len(gt_parameters) == 1:
                              param_values.append((gt_parameters[0], float(item[comma_idxs[0]+1:item.find(']')])))
                          else:
-                             pass
                              for idx in range(len(param_values)-1):
                                  param_values.append((gt_parameters[idx], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
                              param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')]))
 
-
-
                          #if len(comma_idxs) == 1:
-
 
                          # if len(comma_idxs) == 1:
                          #      param_values.append((gt_parameters[0], float(item[comma_idxs[0]+1:item.find(']')]])))
