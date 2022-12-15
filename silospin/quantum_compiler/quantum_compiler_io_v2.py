@@ -294,4 +294,4 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
                 for item in diff_set_plunger:
                     plungerline[item].append("t"+str(max_gt_len))
         sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
-    return sequence_table, arbitrary_gates  
+    return sequence_table, arbitrary_gates
