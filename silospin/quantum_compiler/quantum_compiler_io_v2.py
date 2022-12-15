@@ -223,27 +223,19 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                 gt_idx = int(item[item.find('(')+1:item.find(')')])
                 if item[item.find(')')+1]== 'p':
                     plungerline[gt_idx].append('p')
-                    print(plungerline[gt_idx])
                     idx_set.add(gt_idx)
                     qubit_length = qubit_lengths["plunger"][gt_idx]['p']
                     length_set.append(qubit_length)
 
-                # elif len(item) > 3 and item[3] == 'p':
-                # #    gt_idx = int(item[0:2])
-                #     plungerline[gt_idx].append('p')
-                #     idx_set.add(gt_idx)
-                #     qubit_length = qubit_lengths['plunger'][gt_idx]['p']
-                #     length_set.append(qubit_length)
                 elif item.find('*') != -1:
                     gt_label_idx = item.find('*') + 1
                     gt_label = item[gt_label_idx]
                     gt_parameters = arb_gate_dict[gt_label]['parameters']
-                #    gt_idx = item[item.find('(')+1:item.find(')')]
-
                     idx_set.add(gt_idx)
                     comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
                     param_values = []
                     if gt_idx in rf_idxs:
+                         print(item)
                          tau_val = float(item[gt_label_idx+3:comma_idxs[0]])
                          phase_val = float(item[comma_idxs[0]+1:comma_idxs[1]])
                          itr = 0
