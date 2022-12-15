@@ -902,7 +902,7 @@ def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, wavefor
     ## 2. amp*s[tau, phase, f] [DC]
     ## 3. amp*r[tau] [DC]
     ## 4. amp*g[tau , var, mean] [DC]
-    ## 5. t[N], adds arbitrary delay ==> implement as a play zero. 
+    ## 5. t[N], adds arbitrary delay ==> implement as a play zero.
 
     arb_gates_pickle_initial = unpickle_qubit_parameters(pickle_file_location)
     # try:
