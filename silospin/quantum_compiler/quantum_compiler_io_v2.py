@@ -147,6 +147,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1) ## csv -> DF
     arb_gate_dict = unpickle_qubit_parameters(arbgate_picklefile_location) ## arb gate dict
+    arbitrary_gates = []
 
     for idx in range(len(df)): ## loop over all lines in file
         line = df.values[idx][0].split(";")[0:len(df.values[idx][0].split(";"))-1] #splits each line used semicolins
@@ -235,6 +236,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
                     param_values = []
                     ## Arb RF gate
                     if gt_idx in rf_idxs:
+                        arbitrary_gates.append((gt_idx, item[item.find(')')+1:len(item)]))
                         rfline[gt_idx].append(item[item.find(')')+1:len(item)])
                         idx_set.add(gt_idx)
                         tau_val = float(item[gt_label_idx+2:comma_idxs[0]])
@@ -250,6 +252,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
 
                     ## Arb DC gate
                     elif gt_idx in plunger_idxs:
+                         arbitrary_gates.append((gt_idx, item[item.find(')')+1:len(item)]))
                          plungerline[gt_idx].append(item[item.find(')')+1:len(item)])
                          idx_set.add(gt_idx)
                          tau_val = float(item[gt_label_idx+2:comma_idxs[0]])
@@ -291,5 +294,4 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
                 for item in diff_set_plunger:
                     plungerline[item].append("t"+str(max_gt_len))
         sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
-    print(sequence_table)
-    return sequence_table
+    return sequence_table, arbitrary_gates  

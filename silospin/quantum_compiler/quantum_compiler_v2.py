@@ -184,23 +184,22 @@ class GateSetTomographyQuantumCompiler:
         plunger_set = []
         plunger_set_npoints = []
         plunger_set_npoints_tups = []
-        for idx in self._gate_parameters["p"]:
-            plunger_set.append((idx, dc_lengths[idx-1]))
-            plunger_set_npoints.append(dc_npoints[idx-1])
-            plunger_set_npoints_tups.append((idx, dc_npoints[idx-1]))
-        print(plunger_set_npoints_tups)
-        # ct_idxs_all = {}
-        # arbZs = []
-        # n_arbZ = 0
-        # taus_std = (tau_waveform_pi_2_std,  tau_waveform_pi_std)
-        ## arbitrary waveforms ==>  f(A, B, C).
-    #
-    #     for idx in self._gate_sequences:
-    #         gate_sequence = self._gate_sequences[idx]
-    #         ct_idxs_all[idx], arbZ = make_command_table_indices(gate_sequence, taus_std_v2, plunger_set, n_arbZ)
-    #         n_arbZ += len(arbZ)
-    #         arbZs.append(arbZ)
-    #
+        # for idx in self._gate_parameters["p"]:
+        #     plunger_set.append((idx, dc_lengths[idx-1]))
+        #     plunger_set_npoints.append(dc_npoints[idx-1])
+        #     plunger_set_npoints_tups.append((idx, dc_npoints[idx-1]))
+        # print(plunger_set_npoints_tups)
+        ct_idxs_all = {}
+        arbZs = []
+        n_arbZ = 0
+        taus_std = (tau_waveform_pi_2_std,  tau_waveform_pi_std)
+
+        for idx in self._gate_sequences:
+            gate_sequence = self._gate_sequences[idx]
+            ct_idxs_all[idx], arbZ = make_command_table_indices(gate_sequence, taus_std, plunger_set, n_arbZ)
+            n_arbZ += len(arbZ)
+            arbZs.append(arbZ)
+
     #     arbZ_s = []
     #     for lst in arbZs:
     #         for i in lst:
