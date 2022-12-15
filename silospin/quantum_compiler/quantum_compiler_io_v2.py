@@ -256,23 +256,10 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                              for idx in range(len(param_values)-1):
                                  param_values.append((gt_parameters[idx], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
                              param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')]))
-
-                         #if len(comma_idxs) == 1:
-
-                         # if len(comma_idxs) == 1:
-                         #      param_values.append((gt_parameters[0], float(item[comma_idxs[0]+1:item.find(']')]])))
-                         # print(param_values)
-
-                        # itr = 0
-                         # for idx in comma_idxs[1:len(comma_idxs)]:
-                         #     if itr < len(comma_idxs)-1:
-                         #         param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
-                         #     else:
-                         #         param_values.append((gt_parameters[itr], float(item[comma_idxs[idx]+1:item.find(']')])))
-                         #     itr += 1
                     else:
                         pass
                     length_set.append(len(obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)))
+                    print(length_set)
 
                 else:
                     if item[1] == ')':
