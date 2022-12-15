@@ -201,14 +201,11 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
                     notz_set.append(gt)
 
             z_idx = set({})
-            ##Loop over all Z gates
             for item in z_set:
-                ##updates Z gates for RF (can only perform Z for an RF channel or core)
                 gt_idx = int(item[item.find('(')+1:item.find(')')])
                 rfline[gt_idx].append(item[item.find(')')+1:len(item)])
                 z_idx.add(gt_idx)
                 diff_set_z = rf_idxs.difference(z_idx)
-                ##Fill other gt_idx with z0z  if other z is present
             if len(z_set) == 0 :
                 pass
             else:

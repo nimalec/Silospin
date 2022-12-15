@@ -179,17 +179,16 @@ class GateSetTomographyQuantumCompiler:
 
         ## andle arbitrary waveforms in gst_file_parser_v2 ==> should be able to determine the length, given the called upon function
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
-        #self._gate_sequences = gst_file_parser_v2(self._gst_path, self._gate_lengths)
         self._gate_sequences = gst_file_parser_v3(self._gst_path, self._gate_lengths, sample_rate=sample_rate)
 
-        # plunger_set = []
-        # plunger_set_npoints = []
-        # plunger_set_npoints_tups = []
-        # for idx in self._gate_parameters["p"]:
-        #     plunger_set.append((idx, dc_lengths[idx-1]))
-        #     plunger_set_npoints.append(dc_npoints[idx-1])
-        #     plunger_set_npoints_tups.append((idx, dc_npoints[idx-1]))
-
+        plunger_set = []
+        plunger_set_npoints = []
+        plunger_set_npoints_tups = []
+        for idx in self._gate_parameters["p"]:
+            plunger_set.append((idx, dc_lengths[idx-1]))
+            plunger_set_npoints.append(dc_npoints[idx-1])
+            plunger_set_npoints_tups.append((idx, dc_npoints[idx-1]))
+        print(plunger_set_npoints_tups)
         # ct_idxs_all = {}
         # arbZs = []
         # n_arbZ = 0
