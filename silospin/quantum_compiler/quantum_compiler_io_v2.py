@@ -250,7 +250,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                          if len(gt_parameters) == 0:
                              pass
                          elif len(gt_parameters) == 1:
-                             print(item[commas_idxs[0]:item.find(']')])
+                             print(item[comma_idxs[0]:item.find(']')])
                              #param_values.append((gt_parameters[0], float(item[comma_idxs[0]+1:item.find(']')]])))
                          #if len(comma_idxs) == 1:
 
