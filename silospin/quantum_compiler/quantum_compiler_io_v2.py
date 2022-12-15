@@ -205,12 +205,12 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                 else:
                     notz_set.append(gt)
 
-            element1 = z_set
-            element2 = notz_set
+        #    element1 = z_set
+        #    element2 = notz_set
 
             ##loop over set of z gate
             z_idx = set({})
-            for item in element1:
+            for item in z_set:
                 gt_idx = int(item[item.find('(')+1:item.find(')')])
                 print(gt_idx)
                 if item[1] == ')':
@@ -227,9 +227,8 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                     plungerline[itm].append("z0z")
 
 
-            for item in element2:
+            for item in notz_set:
                 gt_idx = int(item[item.find('(')+1:item.find(')')])
-                print(gt_idx)
                 if item[2] == 'p':
                 #    gt_idx = int(item[0])
                     plungerline[gt_idx].append('p')
