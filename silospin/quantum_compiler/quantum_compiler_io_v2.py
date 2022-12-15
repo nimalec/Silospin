@@ -192,6 +192,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                             ##Should instead throw an error here
                             pass
                     else:
+                       ##Should instead throw an error here
                         pass
                 else:
                     pass
@@ -205,20 +206,17 @@ def gst_file_parser_v3(file_path, qubit_lengths, arbgate_picklefile_location = '
                 else:
                     notz_set.append(gt)
 
-        #    element1 = z_set
-        #    element2 = notz_set
-
-            ##loop over set of z gate
+             ##loop over set of z gate
             z_idx = set({})
             for item in z_set:
                 gt_idx = int(item[item.find('(')+1:item.find(')')])
-                print(gt_idx)
-                if item[1] == ')':
-                #    gt_idx = int(item[0])
-                    rfline[gt_idx].append(item[2:len(item)])
-                else:
-            #        gt_idx = int(item[0:2])
-                    rfline[gt_idx].append(item[2:len(item)])
+                rfline[gt_idx].append(item[item.find(')'):item.find('z(')])
+                print(rfline[gt_idx])
+            #     if item[1] == ')':
+            #         rfline[gt_idx].append(item[2:len(item)])
+            #     else:
+            # #        gt_idx = int(item[0:2])
+            #         rfline[gt_idx].append(item[2:len(item)])
                 z_idx.add(gt_idx)
                 diff_set_z = rf_idxs.difference(z_idx)
                 for itm in diff_set_z:
