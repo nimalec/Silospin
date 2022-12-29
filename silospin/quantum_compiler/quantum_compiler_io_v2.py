@@ -144,6 +144,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
        gate_parameters (dict): sequence_table representing the interpreted gate sequences for each AWG core and channel.
     '''
     sequence_table = {}
+    arbitrary_waveforms = {}
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1) ## csv -> DF
     arb_gate_dict = unpickle_qubit_parameters(arbgate_picklefile_location) ## arb gate dict
@@ -266,7 +267,9 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
                              param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')]))
                     else:
                         pass
-                    length_set.append(ceil(1e9*len(obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location))/sample_rate))
+
+                    waveform = obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)
+                    length_set.append(ceil(1e9*len(waveform)/sample_rate))
 
                 elif item[item.find(')')+1] in {'x', 'y', 'm'}:
                     rf_idx = int(item[item.find('(')+1:item.find(')')])
