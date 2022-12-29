@@ -180,7 +180,15 @@ class GateSetTomographyQuantumCompiler:
         ## andle arbitrary waveforms in gst_file_parser_v2 ==> should be able to determine the length, given the called upon function
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
         self._gate_sequences, arbitrary_gates = gst_file_parser_v3(self._gst_path, self._gate_lengths, sample_rate=sample_rate)
-        print(arbitrary_gates)
+
+        ##Command table idxs funciton:
+        ## 1. Outputs: command tables list, arb Z gates (with CT entry for each core based on channel grouping), arb gates list (w/ CT entry for each core)
+        ##
+        ##
+        ##
+        ##
+        ##
+
     #
     #     plunger_set = []
     #     plunger_set_npoints = []
