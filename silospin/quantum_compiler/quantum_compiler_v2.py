@@ -132,7 +132,7 @@ class GateSetTomographyQuantumCompiler:
             plunger_set.append((idx, gate_parameters["p"][idx]["tau"]))
             plunger_set_npoints.append(ceil(gate_parameters["p"][idx]["tau"]*2.4/16)*16)
             plunger_set_npoints_tups.append((idx, ceil(gate_parameters["p"][idx]["tau"]*2.4/16)*16))
-        hdawg_std_rf = awg_core_split[standard_rf_idx]
+        hdawg_std_rf = awg_core_split[standard_rf_idx][0]
 
         for core_idx in channel_mapping[hdawg_std_rf]:
             if channel_mapping[hdawg_std_rf][core_idx]['core_idx'] == standard_rf_idx:
