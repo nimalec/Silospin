@@ -304,6 +304,5 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                     rfline[item].append("t"+str(max_gt_len))
                 for item in diff_set_plunger:
                     plungerline[item].append("t"+str(max_gt_len))
-        sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
-    print(arbitrary_waveforms)
-    return sequence_table, arbitrary_gates
+        sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}  
+    return sequence_table, arbitrary_gates, arbitrary_waveforms
