@@ -276,7 +276,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                     waveform = obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)
                     gt_idx_awg = awg_core_split[gt_idx][0]
                     gt_idx_core = awg_core_split[gt_idx][1]
-                    arbitrary_waveforms[gt_idx_awg][gt_idx_core].append(waveform)
+                    arbitrary_waveforms[gt_idx_awg][gt_idx_core].append((gt_label, waveform))
                     length_set.append(ceil(1e9*len(waveform)/sample_rate))
 
                 elif item[item.find(')')+1] in {'x', 'y', 'm'}:
@@ -304,5 +304,5 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                     rfline[item].append("t"+str(max_gt_len))
                 for item in diff_set_plunger:
                     plungerline[item].append("t"+str(max_gt_len))
-        sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}  
+        sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
     return sequence_table, arbitrary_gates, arbitrary_waveforms
