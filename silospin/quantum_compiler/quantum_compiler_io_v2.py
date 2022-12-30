@@ -129,7 +129,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
         sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
     return sequence_table
 
-def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_picklefile_location = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
+def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, sample_rate = 2.4e9, arbgate_picklefile_location = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
     '''
     Outputs a dictionary representation of a quantum algorithm saved in a CSV file.
     Quantum algorithm should follow standard GST convention.
@@ -145,6 +145,12 @@ def gst_file_parser_v3(file_path, qubit_lengths, sample_rate = 2.4e9, arbgate_pi
     '''
     sequence_table = {}
     arbitrary_waveforms = {}
+    for awg_idx in channel_mapping:
+        arbitrary_waveforms[awg_idx] = {}
+        for core_idx in channel_mapping[awg_idx]:
+            arbitrary_waveforms[awg_idx][core_idx] =  []
+    print(arbitrary_waveforms)
+
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1) ## csv -> DF
     arb_gate_dict = unpickle_qubit_parameters(arbgate_picklefile_location) ## arb gate dict
