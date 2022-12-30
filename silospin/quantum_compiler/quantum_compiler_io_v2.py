@@ -129,7 +129,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
         sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
     return sequence_table
 
-def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, sample_rate = 2.4e9, arbgate_picklefile_location = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
+def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split, sample_rate = 2.4e9, arbgate_picklefile_location = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
     '''
     Outputs a dictionary representation of a quantum algorithm saved in a CSV file.
     Quantum algorithm should follow standard GST convention.
@@ -149,7 +149,6 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, sample_rate = 
         arbitrary_waveforms[awg_idx] = {}
         for core_idx in channel_mapping[awg_idx]:
             arbitrary_waveforms[awg_idx][core_idx] =  []
-    print(arbitrary_waveforms)
 
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1) ## csv -> DF
@@ -275,6 +274,9 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, sample_rate = 
                         pass
 
                     waveform = obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)
+                    gt_idx_awg = awg_core_split[gt_idx][0]
+                    gt_idx_core = awg_core_split[gt_idx][1]
+                    arbitrary_waveforms[gt_idx_awg][gt_idx_core].append(waveform)
                     length_set.append(ceil(1e9*len(waveform)/sample_rate))
 
                 elif item[item.find(')')+1] in {'x', 'y', 'm'}:
@@ -303,4 +305,5 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, sample_rate = 
                 for item in diff_set_plunger:
                     plungerline[item].append("t"+str(max_gt_len))
         sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
+    print(arbitrary_waveforms)
     return sequence_table, arbitrary_gates
