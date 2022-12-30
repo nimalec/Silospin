@@ -98,8 +98,6 @@ class GateSetTomographyQuantumCompiler:
         self._gate_parameters = {}
         gate_param_all_rf = gate_parameters["rf"]
         gate_param_all_dc = gate_parameters["p"]
-        print(awg_core_split)
-
 
         for awg in channel_mapping:
             self._gate_parameters[awg] = {"rf": {} , "p": {}}
@@ -183,7 +181,7 @@ class GateSetTomographyQuantumCompiler:
         # should output waveforms here as well ...
         ## Take in awg_core_split
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
- 
+        print(arbitrary_waveforms)
         ##Command table idxs funciton:
         ## 1. Outputs: command tables list, arb Z gates (with CT entry for each core based on channel grouping), arb gates list (w/ CT entry for each core)
         ##
