@@ -103,9 +103,9 @@ class GateSetTomographyQuantumCompiler:
         for awg in channel_mapping:
             self._gate_parameters[awg] = {"rf": {} , "p": {}}
         for gt_idx in gate_param_all_rf:
+            print(awg_core_split[gt_idx])
             self._gate_parameters[awg_core_split[gt_idx]]["rf"][gt_idx] = gate_param_all_rf[gt_idx]
         for gt_idx in gate_param_all_dc:
-            print(awg_core_split[gt_idx])
             self._gate_parameters[awg_core_split[gt_idx][0]]["p"][gt_idx] = gate_param_all_dc[gt_idx]
 
         if config_awg:
