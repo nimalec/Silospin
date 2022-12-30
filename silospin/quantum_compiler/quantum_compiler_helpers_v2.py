@@ -44,7 +44,7 @@ def channel_mapper(rf_dc_awg_grouping = {"hdawg1": {"rf":  [1,2,3,4], "dc": []},
             if core_idx in rf_cores:
                 rf_dc_awg_grouping[awg_idx]["rf"].append(core_count)
                 channel_mapping[awg_idx][core_idx] = {"core_idx": core_count, "channel_core_number":[ch_core_1_idx, ch_core_2_idx], "channel_number":[ch_1_idx, ch_2_idx], "trig_channel": trig_in, "channel_labels":["i"+str(core_count), "q"+str(core_count)],"gate_idx":[core_count,core_count], "rf": 1}
-                hdawg_mapping[core_count] = awg_idx
+                hdawg_mapping[core_count] = (awg_idx, core_idx)
             elif core_idx in dc_cores:
                 rf_dc_awg_grouping[awg_idx]["dc"].append(ch_1_idx)
                 rf_dc_awg_grouping[awg_idx]["dc"].append(ch_2_idx)
