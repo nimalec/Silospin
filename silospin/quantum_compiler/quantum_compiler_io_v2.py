@@ -146,10 +146,14 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
     '''
     sequence_table = {}
     arbitrary_waveforms = {}
+    arbitrary_z = {}
+
     for awg_idx in channel_mapping:
         arbitrary_waveforms[awg_idx] = {}
+        arbitrary_z[awg_idx] = {}
         for core_idx in channel_mapping[awg_idx]:
             arbitrary_waveforms[awg_idx][core_idx] =  []
+            arbitrary_z[awg_idx][core_idx] =  set({})
 
     gates = {"x": "pi_2", "y": "pi_2", "xxx": "pi_2", "yyy": "pi_2",  "xx": "pi", "yy":  "pi", "mxxm": "pi", "myym": "pi"}
     df = pd.read_csv(file_path, header = None, skiprows=1) ## csv -> DF
@@ -204,6 +208,10 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
             notz_set = []
             for gt in temp_set:
                 if gt[len(gt)-1] == 'z':
+                   ## Modified to add z gate to each  ...
+                    z_gt_idx_awg = awg_core_split[gt_idx][0]
+                    z_gt_idx_core = awg_core_split[gt_idx][1]
+                    arbitrary_z[z_gt_idx_awg][z_gt_idx_core].add(gt)
                     z_set.append(gt)
                 else:
                     notz_set.append(gt)
@@ -306,4 +314,4 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                 for item in diff_set_plunger:
                     plungerline[item].append("t"+str(max_gt_len))
         sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
-    return sequence_table, arbitrary_gates, arbitrary_waveforms
+    return sequence_table, arbitrary_gates, arbitrary_waveforms, arbitrary_z

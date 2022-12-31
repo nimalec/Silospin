@@ -180,8 +180,7 @@ class GateSetTomographyQuantumCompiler:
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
         # should output waveforms here as well ...
         ## Take in awg_core_split
-        self._gate_sequences, arbitrary_gates, arbitrary_waveforms = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
-        print(arbitrary_gates)
+        self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
         ##Command table idxs funciton:
         ## 1. Outputs: command tables list, arb Z gates (with CT entry for each core based on channel grouping), arb gates list (w/ CT entry for each core)
         ##
