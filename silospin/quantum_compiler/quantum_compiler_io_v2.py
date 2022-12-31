@@ -219,7 +219,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
 
                 z_gt_idx_awg = awg_core_split[gt_idx][0]
                 z_gt_idx_core = awg_core_split[gt_idx][1]
-                arbitrary_z[z_gt_idx_awg][z_gt_idx_core].add(gt)
+                arbitrary_z[z_gt_idx_awg][z_gt_idx_core].add(item)
 
                 rfline[gt_idx].append(item[item.find(')')+1:len(item)])
                 z_idx.add(gt_idx)
