@@ -317,13 +317,16 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
         sequence_table[idx+1] = {"rf": rfline, "plunger": plungerline}
 
     arbZs = {}
+    ## Dictionary. Indicates Z gate string, rotation angle, and command table index
     for core_idx in arbitrary_z:
         arbZs[core_idx] = {}
         for awg_idx in arbitrary_z[core_idx]:
             arbZs[core_idx][awg_idx] = {}
-            itr = 0
+            ## Command table index for this z rotation
+            itr = 56
             for arbZ in arbitrary_z[core_idx][awg_idx]:
+                ## gives tuple: (ct_idx, angle)
+                arbZs[core_idx][awg_idx][arbZ] = (itr, arbZ[arbZ.find('z'):len(arbZ)-1])
                 itr += 1
-                arbZs[core_idx][awg_idx][arbZ] = itr
 
     return sequence_table, arbitrary_gates, arbitrary_waveforms, arbZs
