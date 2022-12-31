@@ -130,6 +130,7 @@ def gst_file_parser_v2(file_path, qubit_lengths):
     return sequence_table
 
 def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split, sample_rate = 2.4e9, arbgate_picklefile_location = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
+    ## Modify arb Z to return for each line ==> should parse at end to ensure that z gate is not repeated
     '''
     Outputs a dictionary representation of a quantum algorithm saved in a CSV file.
     Quantum algorithm should follow standard GST convention.
