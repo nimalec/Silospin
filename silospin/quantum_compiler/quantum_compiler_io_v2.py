@@ -209,9 +209,6 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
             for gt in temp_set:
                 if gt[len(gt)-1] == 'z':
                    ## Modified to add z gate to each  ...
-                    z_gt_idx_awg = awg_core_split[gt_idx][0]
-                    z_gt_idx_core = awg_core_split[gt_idx][1]
-                    arbitrary_z[z_gt_idx_awg][z_gt_idx_core].add(gt)
                     z_set.append(gt)
                 else:
                     notz_set.append(gt)
@@ -219,6 +216,11 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
             z_idx = set({})
             for item in z_set:
                 gt_idx = int(item[item.find('(')+1:item.find(')')])
+
+                z_gt_idx_awg = awg_core_split[gt_idx][0]
+                z_gt_idx_core = awg_core_split[gt_idx][1]
+                arbitrary_z[z_gt_idx_awg][z_gt_idx_core].add(gt)
+
                 rfline[gt_idx].append(item[item.find(')')+1:len(item)])
                 z_idx.add(gt_idx)
                 diff_set_z = rf_idxs.difference(z_idx)
