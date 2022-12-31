@@ -326,4 +326,4 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                 itr += 1
                 arbZs[core_idx][awg_idx][arbZ] = {itr}
 
-    return sequence_table, arbitrary_gates, arbitrary_waveforms, arbitrary_z
+    return sequence_table, arbitrary_gates, arbitrary_waveforms, arbZs
