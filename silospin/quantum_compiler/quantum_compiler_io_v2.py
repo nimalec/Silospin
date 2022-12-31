@@ -320,7 +320,8 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
         for awg_idx in arbitrary_z[core_idx]:
             itr = 0
             for arbZ in arbitrary_z[core_idx][awg_idx]:
-                itr += 1
-                arbitrary_z[core_idx][awg_idx][arbZ] = itr
+            #    itr += 1
+                print(arbZ)
+                #arbitrary_z[core_idx][awg_idx][arbZ] = itr
 
     return sequence_table, arbitrary_gates, arbitrary_waveforms, arbitrary_z
