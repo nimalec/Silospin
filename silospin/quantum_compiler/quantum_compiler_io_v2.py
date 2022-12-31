@@ -319,7 +319,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
     arbZs = {}
     for core_idx in arbitrary_z:
         arbZs[core_idx] = {}
-         for awg_idx in arbitrary_z[core_idx]:
+        for awg_idx in arbitrary_z[core_idx]:
             arbZs[core_idx][awg_idx] = {}
             itr = 0
             for arbZ in arbitrary_z[core_idx][awg_idx]:
