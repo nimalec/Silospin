@@ -326,7 +326,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
             itr = 56
             for arbZ in arbitrary_z[core_idx][awg_idx]:
                 ## gives tuple: (ct_idx, angle)
-                arbZs[core_idx][awg_idx][arbZ] = (itr, arbZ[arbZ.find('z'):len(arbZ)-1])
+                arbZs[core_idx][awg_idx][arbZ] = (itr, float(arbZ[arbZ.find('z')+1:len(arbZ)-1]))
                 itr += 1
 
     return sequence_table, arbitrary_gates, arbitrary_waveforms, arbZs
