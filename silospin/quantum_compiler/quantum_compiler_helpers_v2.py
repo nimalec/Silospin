@@ -738,7 +738,89 @@ def make_plunger_command_table(n_p, n_rf):
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
-def make_waveform_placeholders(n_array):
+
+
+def make_rf_command_table_v2(n_std, arbZs):
+    #n_std = (n_pi_2_std, n_pi_std, n_p_std)
+    #n_p = [n_p1, ... , npn ] ==> number of points for each DC Pulse
+    #z_gates ==> dict of  Z gates used by this core ==> add to each
+    # arb RF gates =
+    # arb DC gates
+    n_pi_2_std = n_std[0]
+    n_pi_std = n_std[1]
+    n_p_std = n_std[2]
+    ct = []
+    ##Initial gates
+    #0- (pi)_pi
+    #1- (pi/2)_pi/2
+    #2- (pi/2)_pi
+    #3- (pi)_p
+    #4- (pi/2)_p
+    initial_gates = {"xx_pi_fr": {"phi": 0, "wave_idx": 0}, "yy_pi_fr": {"phi": -90, "wave_idx": 0}, "mxxm_pi_fr": {"phi": -180, "wave_idx": 0}, "myym_pi_fr": {"phi": 90, "wave_idx": 0},
+    "x_pi_2_fr": {"phi": 0, "wave_idx": 1},  "y_pi_2_fr": {"phi": -90, "wave_idx": 1},  "xxx_pi_2_fr": {"phi": -180, "wave_idx": 1},  "yyy_pi_2_fr": {"phi": 90, "wave_idx": 1},
+    "x_pi_fr": {"phi": 0, "wave_idx": 2},  "y_pi_fr": {"phi": -90, "wave_idx": 2},  "xxx_pi_fr": {"phi": -180, "wave_idx": 2},  "yyy_pi_fr": {"phi": 90, "wave_idx": 2},
+    "xx_p_fr": {"phi": 0, "wave_idx": 3}, "yy_p_fr": {"phi": -90, "wave_idx": 3}, "mxxm_p_fr": {"phi": -180, "wave_idx": 3}, "myym_p_fr": {"phi": 90, "wave_idx": 3},
+    "x_p_fr": {"phi": 0, "wave_idx": 4},  "y_p_fr": {"phi": -90, "wave_idx": 4},  "xxx_p_fr": {"phi": -180, "wave_idx": 4},  "yyy_p_fr": {"phi": 90, "wave_idx": 4}}
+    #Waves
+    #0- (pi)_pi
+    #1- (pi/2)_pi/2
+    #2- (pi/2)_pi
+    #3- (pi)_p
+    #4- (pi/2)_p
+    waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]},  {"index": 2, "awgChannel0": ["sigout0","sigout1"]}, {"index": 3, "awgChannel0": ["sigout0","sigout1"]}, {"index": 4, "awgChannel0": ["sigout0","sigout1"]}]
+    phases_0_I = [{"value": 0}, {"value": -90}, {"value": -180}, {"value": 90}]
+    phases_0_Q = [{"value": -90}, {"value": -180}, {"value": -270}, {"value": 0}]
+    phases_incr = [{"value": 0, "increment": True}, {"value": -90, "increment": True}, {"value": -180, "increment": True}, {"value": -270, "increment": True}, {"value": 90, "increment": True},  {"value": 180, "increment": True},{"value": 270, "increment": True}]
+    ct_idx = 0
+    ## Initial (pi)_pi gates
+    for i in range(len(phases_0_I)):
+        ct.append({"index": ct_idx, "waveform": waves[0], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+        ct_idx += 1
+    ## Initial (pi/2)_pi/2 gates
+    for i in range(len(phases_0_I)):
+        ct.append({"index": ct_idx, "waveform": waves[1], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+        ct_idx += 1
+    ## Initial (pi/2)_pi gates
+    for i in range(len(phases_0_I)):
+        ct.append({"index": ct_idx, "waveform": waves[2], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+        ct_idx += 1
+    ## Initial (pi)_p gates
+    for i in range(len(phases_0_I)):
+        ct.append({"index": ct_idx, "waveform": waves[3], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+        ct_idx += 1
+    ## Initial (pi/2)_p gates
+    for i in range(len(phases_0_I)):
+        ct.append({"index": ct_idx, "waveform": waves[4], "phase0": phases_0_I[i], "phase1": phases_0_Q[i]})
+        ct_idx += 1
+
+    ## Incremented (pi)_pi gates
+    for i in range(len(phases_incr)):
+        ct.append({"index": ct_idx, "waveform": waves[0], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+        ct_idx += 1
+    ## Incremented (pi/2)_pi/2 gates
+    for i in range(len(phases_incr)):
+        ct.append({"index": ct_idx, "waveform": waves[1], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+        ct_idx += 1
+    ## Incremented (pi/2)_pi gates
+    for i in range(len(phases_incr)):
+        ct.append({"index": ct_idx, "waveform": waves[2], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+        ct_idx += 1
+    ## Incremented (pi)_p gates
+    for i in range(len(phases_incr)):
+        ct.append({"index": ct_idx, "waveform": waves[3], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+        ct_idx += 1
+    ## Incremented (pi/2)_p gates
+    for i in range(len(phases_incr)):
+        ct.append({"index": ct_idx, "waveform": waves[4], "phase0": phases_incr[i], "phase1": phases_incr[i]})
+        ct_idx += 1
+    ##Z0Z table entry
+    ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ##Arbitrary Z gates to follow
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
+    return command_table
+
+
+def make_waveform_placeholders(n_array):     
     '''
     Generates sequencer code for waveform placeholders on HDAWG FPGAs.
 
