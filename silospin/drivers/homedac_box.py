@@ -82,7 +82,11 @@ class DacDriverSerial:
     def set_verbose(self, verbose):
         cmd = 'VEROBSE '+str(int(verbose))+'\n'
         self._dac.write(cmd.encode('utf-8'))
-
+        
+    def direct_write(self, cmd):
+        cmd = str(cmd)+'\n'        
+        print(cmd)        
+        self._dac.write(cmd.encode('utf-8'))
 
 class DacDriverSerialServer:
     def __init__(self, client="tcp://127.0.0.1:4243"):
