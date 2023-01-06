@@ -833,7 +833,7 @@ def make_rf_command_table_v2(n_std, arbZs, plunger_length_set, awgidx, coreidx):
 
     #Plunger pulse delays
     for p in plunger_length_set:
-        ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": plunger_length_set[1]}})
+        ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": p[1]}})
         ct_idx += 1
 
     ##Arb RF pulse delays
