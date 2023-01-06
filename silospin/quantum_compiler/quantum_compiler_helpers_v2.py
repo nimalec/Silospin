@@ -819,7 +819,7 @@ def make_rf_command_table_v2(n_std, arbZs, plunger_length_set, awgidx, coreidx):
     if len(arbZs) == 0:
         pass
     else:
-        for arbZ in arbZs[awg_idx][core_idx]:   
+        for arbZ in arbZs[awg_idx][core_idx]:
             ct.append({"index": arbZs[arbZ][0], "phase0": {"value": arbZs[arbZ][1], "increment": True}, "phase1": {"value": arbZs[arbZ][1],  "increment": True}})
             ct_idx += 1
 
