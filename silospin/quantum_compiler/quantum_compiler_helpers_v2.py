@@ -835,10 +835,11 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     for p in plunger_length_set:
         ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": p[1]}})
         ct_idx += 1
-   
+
     #Arb RF pulse delays
     for awg_idx in arbitrary_waveforms:
         for core_idx in arbitrary_waveforms[awg_idx]:
+            print(arbitrary_waveforms[awg_idx][core_idx])
             if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
                 pass
             else:
