@@ -820,6 +820,7 @@ def make_rf_command_table_v2(n_std, arbZs, plunger_length_set, awgidx, coreidx):
         pass
     else:
         for arbZ in arbZs:
+            print(arbZ)
             ct.append({"index": arbZs[arbZ][0], "phase0": {"value": arbZs[arbZ][1], "increment": True}, "phase1": {"value": arbZs[arbZ][1],  "increment": True}})
             ct_idx += 1
 
@@ -851,7 +852,7 @@ def make_rf_command_table_v2(n_std, arbZs, plunger_length_set, awgidx, coreidx):
 
 
 
-    
+
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
