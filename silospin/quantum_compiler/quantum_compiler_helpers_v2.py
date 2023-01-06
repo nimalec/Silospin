@@ -832,22 +832,22 @@ def make_rf_command_table_v2(n_std, arbZs, plunger_length_set, awgidx, coreidx):
     ct_idx += 1
 
     ##Plunger pulse delays
-    for p in plunger_pulse_times:
-        ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": plunger_pulse_times[p]}})
-        ct_idx += 1
+    # for p in plunger_pulse_times:
+    #     ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": plunger_pulse_times[p]}})
+    #     ct_idx += 1
 
     ##Arb RF pulse delays
-    for awg_idx in arbitrary_waveforms:
-        for core_idx in arbitrary_waveforms[awg_idx]:
-            if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
-                pass
-            else:
-                for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
-                    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
-                    ct_idx += 1
+    # for awg_idx in arbitrary_waveforms:
+    #     for core_idx in arbitrary_waveforms[awg_idx]:
+    #         if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
+    #             pass
+    #         else:
+    #             for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
+    #                 ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
+    #                 ct_idx += 1
 
     ##Arb RF pulses
-    arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
+    # arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
 
 
 
