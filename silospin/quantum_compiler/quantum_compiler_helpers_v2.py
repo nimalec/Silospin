@@ -843,14 +843,20 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 pass
             else:
                 for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
-                    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
+                    ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
                     ct_idx += 1
 
     ##Arb RF pulses
-    arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
-    print(arb_rf_pulses)
-
-
+    # arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
+    # if len(arb_rf_pulses) == 0:
+    #     pass
+    # else:
+    #     wave_idx = 5
+    #     for wave in arb_rf_pulses:
+    #         phase_I =  {"value": 0, "increment": True}
+    #         phase_Q = {"value": 0, "increment": True}
+    #         ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": phase_I , "phase1": phase_Q})
+    #         wave_idx += 1
 
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
