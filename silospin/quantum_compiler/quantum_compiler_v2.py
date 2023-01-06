@@ -184,7 +184,6 @@ class GateSetTomographyQuantumCompiler:
         # should output waveforms here as well ...
         ## Take in awg_core_split
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
-        print(arbitrary_waveforms)
 
         self._command_tables = {}
         for awg_idx in channel_mapping:
@@ -194,7 +193,7 @@ class GateSetTomographyQuantumCompiler:
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
                 #    arbitrary_z[awg_idx][core_idx], take this in
                 ## Input args for command table function: arbitrary_z[awg_idx][core_idx] (arb Zs), arbitrary_waveforms, std pulse lengths, pulse lengths
-                    self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, plunger_set_npoints_tups, awg_idx, core_idx)
+                    self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
                 else:
                     ## Call on DC CT function
                     self._command_tables[awg_idx][core_idx] = {}
