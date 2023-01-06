@@ -739,8 +739,7 @@ def make_plunger_command_table(n_p, n_rf):
     return command_table
 
 
-
-def make_rf_command_table_v2(n_std, arbZs):
+def make_rf_command_table_v2(n_std, arbZs, plunger_length_set, awgidx, coreidx):
     #n_std = (n_pi_2_std, n_pi_std, n_p_std)
     #n_p = [n_p1, ... , npn ] ==> number of points for each DC Pulse
     #z_gates ==> dict of  Z gates used by this core ==> add to each
@@ -815,12 +814,49 @@ def make_rf_command_table_v2(n_std, arbZs):
         ct_idx += 1
     ##Z0Z table entry
     ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ct_idx += 1
     ##Arbitrary Z gates to follow
+    if len(arbZs) == 0:
+        pass
+    else:
+        for arbZ in arbZs:
+            ct.append({"index": arbZs[arbZ][0], "phase0": {"value": arbZs[arbZ][1], "increment": True}, "phase1": {"value": arbZs[arbZ][1],  "increment": True}})
+            ct_idx += 1
+
+    ##Standard pulse delays
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2_std}})
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_std}})
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_p_std}})
+    ct_idx += 1
+
+    ##Plunger pulse delays
+    for p in plunger_pulse_times:
+        ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": plunger_pulse_times[p]}})
+        ct_idx += 1
+
+    ##Arb RF pulse delays
+    for awg_idx in arbitrary_waveforms:
+        for core_idx in arbitrary_waveforms[awg_idx]:
+            if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
+                pass
+            else:
+                for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
+                    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
+                    ct_idx += 1
+
+    ##Arb RF pulses
+    arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
+
+
+
+    
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
 
-def make_waveform_placeholders(n_array):     
+def make_waveform_placeholders(n_array):
     '''
     Generates sequencer code for waveform placeholders on HDAWG FPGAs.
 

@@ -123,6 +123,7 @@ class GateSetTomographyQuantumCompiler:
         tau_pi_2_standard = npoints_pi_2_standard/sample_rate
         tau_pi_standard = npoints_pi_standard/sample_rate
 
+
         plunger_set = []
         plunger_set_npoints = []
         plunger_set_npoints_tups = []
@@ -131,6 +132,7 @@ class GateSetTomographyQuantumCompiler:
             plunger_set_npoints.append(ceil(gate_parameters["p"][idx]["tau"]*2.4/16)*16)
             plunger_set_npoints_tups.append((idx, ceil(gate_parameters["p"][idx]["tau"]*2.4/16)*16))
         hdawg_std_rf = awg_core_split[standard_rf_idx][0]
+        npoints_p_standard = max(plunger_set_npoints)
 
         for core_idx in channel_mapping[hdawg_std_rf]:
             if channel_mapping[hdawg_std_rf][core_idx]['core_idx'] == standard_rf_idx:
@@ -139,7 +141,8 @@ class GateSetTomographyQuantumCompiler:
                 pass
 
         standard_rf = (hdawg_std_rf, standard_rf_idx)
-        #
+        n_std = (npoints_pi_2_standard, npoints_pi_standard, npoints_p_standard)
+
         # try:
         #  if tau_p_standard > tau_pi_2_standard:
         #     raise TypeError("DC pulse lengths should always be shorter than RF pulse lengths!!")
@@ -181,18 +184,19 @@ class GateSetTomographyQuantumCompiler:
         # should output waveforms here as well ...
         ## Take in awg_core_split
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
-        print(arbitrary_gates)
+
         self._command_tables = {}
         for awg_idx in channel_mapping:
-            self._command_tables[awg_idx] = {} 
+            self._command_tables[awg_idx] = {}
             for core_idx in channel_mapping[awg_idx]:
                 ## add conditional to check if rf or not
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
                 #    arbitrary_z[awg_idx][core_idx], take this in
                 ## Input args for command table function: arbitrary_z[awg_idx][core_idx] (arb Zs), arbitrary_waveforms, std pulse lengths, pulse lengths
-                    self._command_tables[awg_idx][core_idx] = {}
+                    self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbZs, plunger_set_npoints_tups, awg_idx, core_idx)
+                    print(self._command_tables[awg_idx][core_idx])
                 else:
-                    ## Call on DC CT function
+                    ## Call on DC CT function 
                     self._command_tables[awg_idx][core_idx] = {}
 
 
