@@ -820,7 +820,7 @@ def make_rf_command_table_v2(n_std, arbZs, plunger_length_set, awgidx, coreidx):
         pass
     else:
         for arbZ in arbZs[awgidx][coreidx]:
-            ct.append({"index": arbZs[arbZ][0], "phase0": {"value": arbZs[arbZ][1], "increment": True}, "phase1": {"value": arbZs[arbZ][1],  "increment": True}})
+            ct.append({"index": arbZs[awgidx][coreidx][arbZ][0], "phase0": {"value": arbZs[awgidx][coreidx][arbZ][1], "increment": True}, "phase1": {"value": arbZs[awgidx][coreidx][arbZ][1],  "increment": True}})
             ct_idx += 1
 
     ##Standard pulse delays
