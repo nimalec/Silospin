@@ -198,10 +198,8 @@ class GateSetTomographyQuantumCompiler:
                     self._command_tables[awg_idx][core_idx] = {}
 
 
-
         ## Generate command tables here
         ## parse through each
-
 
         ##Command table idxs funciton:
         ## 1. Outputs: command tables list, arb Z gates (with CT entry for each core based on channel grouping), arb gates list (w/ CT entry for each core)
