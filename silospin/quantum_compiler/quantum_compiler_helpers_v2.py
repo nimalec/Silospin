@@ -847,13 +847,13 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                     gate_str = arbitrary_waveforms[awg_idx][core_idx][i][0]
                     ct_idx += 1
     arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
-    print(arb_rf_pulses)
 
     if len(arb_rf_pulses) == 0:
         pass
     else:
         wave_idx = 5
         for wave in arb_rf_pulses:
+            print(wave)
             amplitude = float(gate_str[0:gate_str.find('*')])
             amb_idxs = [i for i, letter in enumerate(gate_str) if letter == '&']
             phase = float(gate_str[amb_idxs[0]+1:amb_idxs[1]])
