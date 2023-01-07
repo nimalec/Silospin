@@ -846,6 +846,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                     ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
                     gate_str = arbitrary_waveforms[awg_idx][core_idx][i][0]
                     ct_idx += 1
+    print(rbitrary_waveforms)                
     arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
 
     if len(arb_rf_pulses) == 0:
@@ -854,7 +855,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
         wave_idx = 5
         for wave in arb_rf_pulses:
             amplitude = float(gate_str[0:gate_str.find('*')])
-            amb_idxs = [i for i, letter in enumerate(gate_str) if letter == '&']  
+            amb_idxs = [i for i, letter in enumerate(gate_str) if letter == '&']
             phase = float(gate_str[amb_idxs[0]+1:amb_idxs[1]])
             if wave[0][wave[0].find('*')+1:wave[0].find('[')] in {'X', 'Y', 'MX', 'MY'}:
                 ## set of CT entries corresponding for this gate for different phases: 0, 90, 180, 270, -90, -180, -270 ==> each will be called depending on the phase used lastly
