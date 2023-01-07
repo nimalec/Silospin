@@ -846,7 +846,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                     ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
                     gate_str = arbitrary_waveforms[awg_idx][core_idx][i][0]
                     ct_idx += 1
-    print(rbitrary_waveforms)                
+    print(arbitrary_waveforms)                
     arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
 
     if len(arb_rf_pulses) == 0:
