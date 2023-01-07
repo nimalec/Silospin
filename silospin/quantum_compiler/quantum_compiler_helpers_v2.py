@@ -854,10 +854,10 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
         wave_idx = 5
         for wave in arb_rf_pulses:
             gate_str = wave[0]
-            print(gate_str)
             amplitude = float(gate_str[0:gate_str.find('*')])
             amb_idxs = [i for i, letter in enumerate(gate_str) if letter == '&']
             phase = float(gate_str[amb_idxs[0]+1:amb_idxs[1]])
+            print(amplitude, phase)
             if wave[0][wave[0].find('*')+1:wave[0].find('[')] in {'X', 'Y', 'MX', 'MY'}:
                 ## set of CT entries corresponding for this gate for different phases: 0, 90, 180, 270, -90, -180, -270 ==> each will be called depending on the phase used lastly
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -phase, "phase1": -phase, "amplitude0": amplitude, "amplitude1": amplitude})
