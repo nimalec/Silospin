@@ -837,7 +837,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
         ct_idx += 1
     #Arb pulse delays
     ##Should also extract phase if for current gate ...
-    print(arbitrary_waveforms)
+
     for awg_idx in arbitrary_waveforms:
         for core_idx in arbitrary_waveforms[awg_idx]:
             if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
@@ -858,7 +858,8 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
             amplitude = float(gate_str[0:gate_str.find('*')])
             amb_idxs = [i for i, letter in enumerate(gate_str) if letter == '&']
             phase = float(gate_str[amb_idxs[0]+1:amb_idxs[1]])
-            if wave[0][wave[0].find('*')+1:wave[0].find('[')] in {'X', 'Y', 'MX', 'MY'}:
+            if wave[0][wave[0].find('*')+1:wave[0].find('[')] in {'X', 'Y', 'U', 'V'}:
+                ## X = arb X, Y = arb Y , U = arb -X , V = arb -Y 
 
                 ## set of CT entries corresponding for this gate for different phases: 0, 90, 180, 270, -90, -180, -270 ==> each will be called depending on the phase used lastly
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -phase, "phase1": -phase, "amplitude0": amplitude, "amplitude1": amplitude})
@@ -878,7 +879,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
             else:
                 ##Case where gate is not special... (anything else) ==> frequencies requires no special attention .
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -phase, "phase1": -phase, "amplitude0": amplitude, "amplitude1": amplitude})
-                ct += 1
+                ct_idx += 1
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
