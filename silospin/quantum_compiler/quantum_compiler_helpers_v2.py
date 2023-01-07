@@ -835,8 +835,8 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     for p in plunger_length_set:
         ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": p[1]}})
         ct_idx += 1
-
-    #Arb RF pulse delays
+    #Arb pulse delays
+    ##Should also extract phase if for current gate ...
     for awg_idx in arbitrary_waveforms:
         for core_idx in arbitrary_waveforms[awg_idx]:
             if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
@@ -846,8 +846,11 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                     ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
                     ct_idx += 1
 
+
     ##Arb RF pulses
-    # arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
+    ## If an a proper arb RF (X, Y, etc.) is found ==> generate all permutations of angles for this specific gate length. idx function will take care of the rest...
+    arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
+    print(arb_rf_pulses)
     # if len(arb_rf_pulses) == 0:
     #     pass
     # else:
