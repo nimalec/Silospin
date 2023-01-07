@@ -844,9 +844,9 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
             else:
                 for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
                     ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
-                    print(arbitrary_waveforms[awg_idx][core_idx][i][0])
+                    gate_str = arbitrary_waveforms[awg_idx][core_idx][i][0]
+                    gate_str[0:gate_str.find('*')]    
                     ct_idx += 1
-
 
     ##Arb RF pulses
     ## If an a proper arb RF (X, Y, etc.) is found ==> generate all permutations of angles for this specific gate length. idx function will take care of the rest...
