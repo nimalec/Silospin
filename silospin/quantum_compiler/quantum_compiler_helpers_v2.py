@@ -845,12 +845,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
                     ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
                     gate_str = arbitrary_waveforms[awg_idx][core_idx][i][0]
-                    amb_idxs = [i for i, letter in enumerate(gate_str) if letter == '&']
-                    print(gate_str[amb_idxs[0]])  
                     ct_idx += 1
-
-    ##Arb RF pulses
-    ## If an a proper arb RF (X, Y, etc.) is found ==> generate all permutations of angles for this specific gate length. idx function will take care of the rest...
     arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
     if len(arb_rf_pulses) == 0:
         pass
@@ -858,14 +853,28 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
         wave_idx = 5
         for wave in arb_rf_pulses:
             amplitude = float(gate_str[0:gate_str.find('*')])
-            #comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
-            #phase  =
-            phase_I =  {"value": 0, "increment": True}
-            phase_Q = {"value": 0, "increment": True}
-    #         ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": phase_I , "phase1": phase_Q})
-    #         wave_idx += 1
-
-
+            amb_idxs = [i for i, letter in enumerate(gate_str) if letter == '&']
+            phase = float(gate_str[amb_idxs[0]+1:amb_idxs[1]])
+            if wave[0][wave[0].find('*')+1:wave[0].find('[')] in {'X', 'Y', 'MX', 'MY'}:
+                ## set of CT entries corresponding for this gate for different phases: 0, 90, 180, 270, -90, -180, -270 ==> each will be called depending on the phase used lastly
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -phase, "phase1": -phase, "amplitude0": amplitude, "amplitude1": amplitude})
+                ct += 1
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase+90), "phase1": -(phase+90), "amplitude0": amplitude, "amplitude1": amplitude})
+                ct += 1
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase+180), "phase1": -(phase+180),"amplitude0": amplitude, "amplitude1": amplitude})
+                ct += 1
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase+270), "phase1": -(phase+270),"amplitude0": amplitude, "amplitude1": amplitude})
+                ct += 1
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-90), "phase1": -(phase-90), "amplitude0": amplitude, "amplitude1": amplitude})
+                ct += 1
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-180), "phase1": -(phase-180), "amplitude0": amplitude, "amplitude1": amplitude})
+                ct += 1
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-270), "phase1": -(phase-270), "amplitude0": amplitude, "amplitude1": amplitudes})
+                ct += 1
+            else:
+                ##Case where gate is not special... (anything else) ==> frequencies requires no special attention .
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -phase, "phase1": -phase, "amplitude0": amplitude, "amplitude1": amplitude})
+                ct += 1
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
