@@ -872,7 +872,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 ct_idx += 1
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-180), "phase1": -(phase-180), "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
-                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-270), "phase1": -(phase-270), "amplitude0": amplitude, "amplitude1": amplitudes})
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-270), "phase1": -(phase-270), "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
             else:
                 ##Case where gate is not special... (anything else) ==> frequencies requires no special attention .
