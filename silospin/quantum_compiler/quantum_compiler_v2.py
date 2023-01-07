@@ -188,16 +188,15 @@ class GateSetTomographyQuantumCompiler:
         for awg_idx in channel_mapping:
             self._command_tables[awg_idx] = {}
             for core_idx in channel_mapping[awg_idx]:
-                print(channel_mapping[awg_idx][core_idx])
                 ## add conditional to check if rf or not
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
-                    pass
+                    print(awg_idx, core_idx)
                 #    print(channel_mapping[awg_idx][core_idx])
                 #    arbitrary_z[awg_idx][core_idx], take this in
                 ## Input args for command table function: arbitrary_z[awg_idx][core_idx] (arb Zs), arbitrary_waveforms, std pulse lengths, pulse lengths
                 #    self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
                 else:
-                    pass 
+                    pass
                     ## Call on DC CT function
                 #    self._command_tables[awg_idx][core_idx] = {}
 
