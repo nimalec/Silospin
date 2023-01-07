@@ -861,19 +861,19 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
             if wave[0][wave[0].find('*')+1:wave[0].find('[')] in {'X', 'Y', 'MX', 'MY'}:
                 ## set of CT entries corresponding for this gate for different phases: 0, 90, 180, 270, -90, -180, -270 ==> each will be called depending on the phase used lastly
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -phase, "phase1": -phase, "amplitude0": amplitude, "amplitude1": amplitude})
-                ct += 1
+                ct_idx += 1
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase+90), "phase1": -(phase+90), "amplitude0": amplitude, "amplitude1": amplitude})
-                ct += 1
+                ct_idx += 1
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase+180), "phase1": -(phase+180),"amplitude0": amplitude, "amplitude1": amplitude})
-                ct += 1
+                ct_idx += 1
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase+270), "phase1": -(phase+270),"amplitude0": amplitude, "amplitude1": amplitude})
-                ct += 1
+                ct_idx += 1
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-90), "phase1": -(phase-90), "amplitude0": amplitude, "amplitude1": amplitude})
-                ct += 1
+                ct_idx += 1
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-180), "phase1": -(phase-180), "amplitude0": amplitude, "amplitude1": amplitude})
-                ct += 1
+                ct_idx += 1
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-270), "phase1": -(phase-270), "amplitude0": amplitude, "amplitude1": amplitudes})
-                ct += 1
+                ct_idx += 1
             else:
                 ##Case where gate is not special... (anything else) ==> frequencies requires no special attention .
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -phase, "phase1": -phase, "amplitude0": amplitude, "amplitude1": amplitude})
