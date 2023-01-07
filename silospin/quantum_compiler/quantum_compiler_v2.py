@@ -187,7 +187,7 @@ class GateSetTomographyQuantumCompiler:
         self._command_tables = {}
         for awg_idx in channel_mapping:
             self._command_tables[awg_idx] = {}
-            print(channel_mapping[awg_idx]z)
+            print(channel_mapping[awg_idx])
             for core_idx in channel_mapping[awg_idx]:
                 ## add conditional to check if rf or not
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
