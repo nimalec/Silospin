@@ -932,6 +932,7 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
         ct_idx += 1
 
     ## Arb waveform delays
+    arb_ct = 0
     for awg_idx in arbitrary_waveforms:
         for core_idx in arbitrary_waveforms[awg_idx]:
             if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
@@ -940,7 +941,9 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
                 for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
                     ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
                     gate_str = arbitrary_waveforms[awg_idx][core_idx][i][0]
+                    arb_ct += 1
                     ct_idx += 1
+    print(arb_ct)
 
     ## Arb DC waveform delays
     arb_dc_pulses = arbitrary_waveforms[awgidx][coreidx]
