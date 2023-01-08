@@ -197,7 +197,7 @@ class GateSetTomographyQuantumCompiler:
                 ## Input args for command table function: arbitrary_z[awg_idx][core_idx] (arb Zs), arbitrary_waveforms, std pulse lengths, pulse lengths
                     self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
                 else:
-                    self._command_tables[awg_idx][core_idx] = {}
+                    self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awgidx, coreidx)
                     #self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_set, awgidx, coreidx)
 
 

@@ -941,7 +941,8 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
             ct_idx += 1
             wave_idx += 1
 
-
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
+    return command_table
 
 def make_waveform_placeholders(n_array):
     '''
