@@ -185,38 +185,16 @@ class GateSetTomographyQuantumCompiler:
         ## Take in awg_core_split
 
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
+        print(len(arbitrary_gates,))
         self._command_tables = {}
         for awg_idx in channel_mapping:
             self._command_tables[awg_idx] = {}
             for core_idx in channel_mapping[awg_idx]:
-                ## add conditional to check if rf or not
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
-                #    print(channel_mapping[awg_idx][core_idx])
-                #    arbitrary_z[awg_idx][core_idx], take this in
-                ## Input args for command table function: arbitrary_z[awg_idx][core_idx] (arb Zs), arbitrary_waveforms, std pulse lengths, pulse lengths
                     self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
                 else:
                     self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
-                    #self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_set, awgidx, coreidx)
 
-
-
-        ## Generate command tables here
-        ## parse through each
-
-        ##Command table idxs funciton:
-        ## 1. Outputs: command tables list, arb Z gates (with CT entry for each core based on channel grouping), arb gates list (w/ CT entry for each core)
-        ##
-        ##
-    #
-    #     plunger_set = []
-    #     plunger_set_npoints = []
-    #     plunger_set_npoints_tups = []
-    #     # for idx in self._gate_parameters["p"]:
-    #     #     plunger_set.append((idx, dc_lengths[idx-1]))
-    #     #     plunger_set_npoints.append(dc_npoints[idx-1])
-    #     #     plunger_set_npoints_tups.append((idx, dc_npoints[idx-1]))
-    #     # print(plunger_set_npoints_tups)
     #     ct_idxs_all = {}
     #     arbZs = []
     #     n_arbZ = 0

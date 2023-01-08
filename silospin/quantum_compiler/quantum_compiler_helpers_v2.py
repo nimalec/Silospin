@@ -931,7 +931,6 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
         ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": p[1]}})
         ct_idx += 1
 
-
     ## Arb waveform delays
     for awg_idx in arbitrary_waveforms:
         for core_idx in arbitrary_waveforms[awg_idx]:
