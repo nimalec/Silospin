@@ -196,6 +196,8 @@ class GateSetTomographyQuantumCompiler:
                     self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
                 else:
                     self._command_tables[awg_idx][core_idx] = {}
+                    #self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_set, awgidx, coreidx)
+
 
 
         ## Generate command tables here
