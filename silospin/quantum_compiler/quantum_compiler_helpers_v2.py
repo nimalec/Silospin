@@ -837,7 +837,6 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
         ct_idx += 1
     #Arb pulse delays
     ##Should also extract phase if for current gate ...
-
     for awg_idx in arbitrary_waveforms:
         for core_idx in arbitrary_waveforms[awg_idx]:
             if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
@@ -881,24 +880,67 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
-# def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_set, awgidx, coreidx):
-#     n_pi_2_std = n_std[0]
-#     n_pi_std = n_std[1]
-#     n_p_std = n_std[2]
-#     ct = []
-#     for i i in plunger_length_set
-#     ct_idx = 0
-#     for i in
-##     n_pi_2_std = n_std[0]
-    # n_pi_std = n_std[1]
-    # n_p_std = n_std[2]
-    # ct = []
-    # ##Initial gates
-    # #0- (pi)_pi
-    # #1- (pi/2)_pi/2
-    # #2- (pi/2)_pi
-    # #3- (pi)_p
-    # #4- (pi/2)_p
+def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx):
+    n_pi_2_std = n_std[0]
+    n_pi_std = n_std[1]
+    n_p_std = n_std[2]
+    ct = []
+    ct_idx = 0
+    ##1. (p1)_p1 - (p1)_pN
+    for i in range(len(plunger_length_tups)):
+        wave_idx = 0
+        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        wave_idx += 1
+        ct_idx += 1
+    ##2. (p2)_p1 - (p2)_pN
+    for i in range(len(plunger_length_tups)):
+        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        wave_idx += 1
+        ct_idx += 1
+    ## (p1)_pi
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+    ## (p2)_pi
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+    ## (p1)_pi/2
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+    ## (p2)_pi/2
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+
+    ##Z0Z table entry
+    ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ct_idx += 1
+
+    ## Arb waveform delays
+    for awg_idx in arbitrary_waveforms:
+        for core_idx in arbitrary_waveforms[awg_idx]:
+            if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
+                pass
+            else:
+                for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
+                    ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
+                    gate_str = arbitrary_waveforms[awg_idx][core_idx][i][0]
+                    ct_idx += 1
+
+    ## Arb DC waveform delays
+    arb_dc_pulses = arbitrary_waveforms[awgidx][coreidx]
+    if len(arb_dc_pulses) == 0:
+        pass
+    else:
+        for wave in arb_dc_pulses:
+            gate_str = wave[0]
+            amplitude = float(gate_str[0:gate_str.find('*')])
+            ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude, "amplitude1": amplitude})
+            ct_idx += 1
+            wave_idx += 1
+
 
 
 def make_waveform_placeholders(n_array):
