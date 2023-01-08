@@ -886,9 +886,9 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
     n_p_std = n_std[2]
     ct = []
     ct_idx = 0
+    wave_idx = 0
     ##1. (p1)_p1 - (p1)_pN
     for i in range(len(plunger_length_tups)):
-        wave_idx = 0
         ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
         wave_idx += 1
         ct_idx += 1
