@@ -185,7 +185,7 @@ class GateSetTomographyQuantumCompiler:
         ## Take in awg_core_split
 
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
-        print(len(arbitrary_gates,))
+        print(arbitrary_gates)
         self._command_tables = {}
         for awg_idx in channel_mapping:
             self._command_tables[awg_idx] = {}
