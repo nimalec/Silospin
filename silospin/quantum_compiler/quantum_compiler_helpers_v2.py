@@ -918,6 +918,20 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
     ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
     ct_idx += 1
 
+    ##Standard pulse delays
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2_std}})
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_std}})
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_p_std}})
+    ct_idx += 1
+
+    ##Plunger delays
+    for p in plunger_length_tups:
+        ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": p[1]}})
+        ct_idx += 1
+
+
     ## Arb waveform delays
     for awg_idx in arbitrary_waveforms:
         for core_idx in arbitrary_waveforms[awg_idx]:
