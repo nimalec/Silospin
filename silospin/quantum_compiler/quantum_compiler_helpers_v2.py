@@ -881,8 +881,24 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
-#def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_set, awgidx, coreidx):
-##
+# def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_set, awgidx, coreidx):
+#     n_pi_2_std = n_std[0]
+#     n_pi_std = n_std[1]
+#     n_p_std = n_std[2]
+#     ct = []
+#     for i i in plunger_length_set
+#     ct_idx = 0
+#     for i in
+##     n_pi_2_std = n_std[0]
+    # n_pi_std = n_std[1]
+    # n_p_std = n_std[2]
+    # ct = []
+    # ##Initial gates
+    # #0- (pi)_pi
+    # #1- (pi/2)_pi/2
+    # #2- (pi/2)_pi
+    # #3- (pi)_p
+    # #4- (pi/2)_p
 
 
 def make_waveform_placeholders(n_array):
