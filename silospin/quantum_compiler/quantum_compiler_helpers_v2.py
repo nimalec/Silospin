@@ -1201,7 +1201,6 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
     if len(arb_dc_pulses) == 0:
         pass
     else:
-        print(arb_dc_pulses)
         for wave in arb_dc_pulses:
             gate_str = wave[0]
             amplitude = float(gate_str[0:gate_str.find('*')])
