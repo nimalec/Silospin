@@ -642,18 +642,18 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             phi_l = phi_ls_gt[gt_0]
 #         ##Initialize phase for arbitrary gates
         elif gt_0.find('*') != -1:
-              if gt_0[gt_0.find(*)+1] == 'X':
+              if gt_0[gt_0.find('*')+1] == 'X':
                    phi_l = phi_ls_gt['x']
-              elif gt_0[gt_0.find(*)+1] == 'Y':
+              elif gt_0[gt_0.find('*')+1] == 'Y':
                    phi_l = phi_ls_gt['y']
-              elif gt_0[gt_0.find(*)+1] == 'U':
+              elif gt_0[gt_0.find('*')+1] == 'U':
                    phi_l = phi_ls_gt['xxx']
-              elif gt_0[gt_0.find(*)+1] == 'V':
+              elif gt_0[gt_0.find('*')+1] == 'V':
                    phi_l = phi_ls_gt['yyy']
               else:
                    pass
         else:
-            phi_l = 0 
+            phi_l = 0
 #         ##Loops over gates following the initial
 #         for idx in range(n_gates):
 #             gt = gate_sequence[idx]
