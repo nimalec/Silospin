@@ -623,7 +623,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     phi_ls_gt = {'x':  0, 'y': -90, 'xx':  0, 'yy': -90 , 'xxx':  -180, 'yyy': 90, 'mxxm': -180, 'myym': 90}
     pi_gt_set = {'xx', 'yy', 'mxxm', 'myym'}
     pi_2_gt_set = {'x', 'y', 'xxx', 'yyy'}
-    N_p = len(plunger_lengths)
+    N_p = len(plunger_tup_lengths)
     rf_gate_sequence = gt_seqs['rf']
     dc_gate_sequence = gt_seqs['plunger']
 
@@ -635,7 +635,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         gate_sequence = rf_gate_sequence[rf_idx]
         n_gates = len(gate_sequence)
         gt_0 = gate_sequence[0]
-
+        print(rf_diff_idxs)
 #         ##Initialize phase for non-arbitrary RF gates
 #         if gt_0[0] in {'x', 'y', 'm'}:
 #             phi_l = phi_ls_gt[gt_0]
