@@ -672,8 +672,9 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                             #Pi frame
                             else:
                                 gt_str = gt+'_pi_fr'
-                            ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
-                print(ct_idxs[awg_idx][core_idx])
+                        else:
+                            gt_str = gt+'_pi_fr'
+                        ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
 
 
 # #                 ## Gates with pi/2 length
