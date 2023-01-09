@@ -571,101 +571,101 @@ def make_command_table_indices_v2(gt_seqs, taus_std, taus_p, n_arbZ):
     return ct_idxs, arbZ
 
 
-def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_tup_lengths, taus_std):
-    ## Should return
-    ##Modifications here: 1. accomodate for multiple cores/channels, 2. arb Z should be counted and account for each edge case,
-    ## 3. arbitrary gates ==> need to add new command table index when these occur (per core).
-    ## Should alo return a list of command table indices corresponding to each arbitrary gate.
-    ## 1. Take in channel grouping ==> determine whcih are plunger and RF indices/cores ==> cores they belong to.
-    ## 2. Loop over gt seqsdd line.
-    ## 3.
-
-    ## Inputs:
-    ## 1. gate sequences  (for a specific line)
-    ## 2.  standard pi and pi/2 pulse lengths
-    ## 3. pulse lenghtths
-    ## 4. number of arb Z gates previously seen
-
-    '''
-    Generates a dictionary with lists of command table executions for each core, provided the output of 'gst_file_parser'.
-    This is the core of the quantum compiler, as it interprets longs RF and DC gate strings, converting them to FPGA instructions for amplitude and phase modulation.\n
-    Outer-most keys "plunger" and "rf", containing instructions to be addressed separatley on the dedicated RF and DC cores.
-    Outputs a dictionary with outer keys "rf" and "plunger", corresponding to executions for dedicated RF and DC AWG cores. The values for the "rf" keys are dictionaries with outer keys corresponding to each core and "plunger"
-    has values of dictionaries with keys corresponding to each DC channel. Each of these core and channel keys have values of lists of command table (CT) indices (integers) to be addressed on the AWG cores. \n
-    Each command table index maps to an entry of a CT, determining the waveform, amplitude, and phase to be played when the CT entry is executed. Phase changes for each gate are computed on-the-fly.
-    Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm', 'y', 'yyy', 'y y', 'myym', 'arbZ', 'p', 't'. See 'Quantum Compiler' tab for a more elaborate description.  \n
-    Note: this function is currently configured for 1 HDAWG unit with 4 AWG cores. \n
-
-    Parameters:
-                    gt_seqs (dict): dictionary output of 'gst_file_parser', representing sequence of RF and DC gate strings on each core.
-                    taus_std (list): list of standard pi/2 and pi pulse lengths in ns ([tau_pi2, tau_pi]).
-                    taus_p (list): list of tuples, each with elements (ch_idx, tau_p) representing the channel index and corresponding plunger pulse length.
-                    n_arbZ (int): the accumulated number of previously seen arbitrary-Z rotations over all lines in GST file being read.
-
-    Returns:
-       ct_idxs (dict), arbZ (list): dictonary of command table indices to execute, list of tuples of (arbitrary Z comman table index, rotation angle).
-     '''
-
-    ## Follow strucuture of channel map:
-
-    ct_idxs = {}
-    for awg_idx in channel_map:
-        ct_idxs[awg_idx] = {}
-        for core_idx in channel_map[awg_idx]:
-            ct_idxs[awg_idx][core_idx] = []
-
-    initial_gates = {'xx_pi_fr': 0, 'yy_pi_fr': 1, 'mxxm_pi_fr': 2, 'myym_pi_fr': 3, 'x_pi_fr': 4, 'y_pi_fr': 5, 'xxx_pi_fr': 6, 'yyy_pi_fr': 7, 'x_pi2_fr': 8, 'y_pi2_fr': 9, 'xxx_pi2_fr': 10, 'yyy_pi2_fr': 11, 'xx_p_fr': 12, 'yy_p_fr': 13, 'mxxm_p_fr': 14, 'myym_p_fr': 15, 'x_p_fr': 16, 'y_p_fr': 17, 'xxx_p_fr': 18, 'yyy_p_fr': 19}
-    ct_idx_incr_pi_pi_fr = {0: 20, -90: 21, -180: 22, -270: 23, 90: 24, 180: 25, 270: 26}
-    ct_idx_incr_pi_2_pi_fr = {0: 27, -90: 28, -180: 29, -270: 30, 90: 31, 180: 32,  270: 33}
-    ct_idx_incr_pi_2_pi_2_fr = {0: 34, -90: 35, -180: 36, -270: 37, 90: 38, 180: 39,  270:  40}
-    ct_idx_incr_pi_p_fr = {0: 41, -90: 42, -180: 43, -270: 44, 90: 45, 180: 46,  270:  47}
-    ct_idx_incr_pi_2_p_fr = {0: 48, -90: 49, -180: 50, -270: 51, 90: 51, 180: 53,  270:  54}
-    ct_idx_z0z = 55
-    phi_ls_gt = {'x':  0, 'y': -90, 'xx':  0, 'yy': -90 , 'xxx':  -180, 'yyy': 90, 'mxxm': -180, 'myym': 90}
-    pi_gt_set = {'xx', 'yy', 'mxxm', 'myym'}
-    pi_2_gt_set = {'x', 'y', 'xxx', 'yyy'}
-    N_p = len(plunger_lengths)
-    rf_gate_sequence = gt_seqs['rf']
-    dc_gate_sequence = gt_seqs['plunger']
-
-    for rf_idx in rf_gate_sequence:
-        awg_idx = awg_core_split[rf_idx][0]
-        core_idx = awg_core_split[rf_idx][1]
-        ct_idxs[awg_idx][core_idx] = []
-        rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]).difference(rf_idx))
-        gate_sequence = rf_gate_sequence[rf_idx]
-        n_gates = len(gate_sequence)
-        gt_0 = gate_sequence[0]
-
-        ##Initialize phase for non-arbitrary RF gates
-        if gt_0[0] in {'x', 'y', 'm'}:
-            phi_l = phi_ls_gt[gt_0]
-        ##Initialize phase for arbitrary gates
-        elif gt_0.find('*') != -1:
-             if gt_0[gt_0.find(*)+1] == 'X':
-                  phi_l = phi_ls_gt['x']
-             elif gt_0[gt_0.find(*)+1] == 'Y':
-                  phi_l = phi_ls_gt['y']
-             elif gt_0[gt_0.find(*)+1] == 'U':
-                  phi_l = phi_ls_gt['xxx']
-             elif gt_0[gt_0.find(*)+1] == 'V':
-                  phi_l = phi_ls_gt['yyy']
-             else:
-                  pass
-        else:
-            phi_l = 0
-
-        ##Loops over gates following the initial
-        for idx in range(n_gates):
-            gt = gate_sequence[idx]
-            rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
-            pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
-            pi_intersect = rf_gates_other.intersection(pi_gt_set)
-
-            if idx == 0:
-                if gt in pi_gt_set:
-                    gt_str = gt+'_pi_fr'
-                    rf_ct_idx_list.append(initial_gates[gt_str])
+# def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_tup_lengths, taus_std):
+#     ## Should return
+#     ##Modifications here: 1. accomodate for multiple cores/channels, 2. arb Z should be counted and account for each edge case,
+#     ## 3. arbitrary gates ==> need to add new command table index when these occur (per core).
+#     ## Should alo return a list of command table indices corresponding to each arbitrary gate.
+#     ## 1. Take in channel grouping ==> determine whcih are plunger and RF indices/cores ==> cores they belong to.
+#     ## 2. Loop over gt seqsdd line.
+#     ## 3.
+#
+#     ## Inputs:
+#     ## 1. gate sequences  (for a specific line)
+#     ## 2.  standard pi and pi/2 pulse lengths
+#     ## 3. pulse lenghtths
+#     ## 4. number of arb Z gates previously seen
+#
+#     '''
+#     Generates a dictionary with lists of command table executions for each core, provided the output of 'gst_file_parser'.
+#     This is the core of the quantum compiler, as it interprets longs RF and DC gate strings, converting them to FPGA instructions for amplitude and phase modulation.\n
+#     Outer-most keys "plunger" and "rf", containing instructions to be addressed separatley on the dedicated RF and DC cores.
+#     Outputs a dictionary with outer keys "rf" and "plunger", corresponding to executions for dedicated RF and DC AWG cores. The values for the "rf" keys are dictionaries with outer keys corresponding to each core and "plunger"
+#     has values of dictionaries with keys corresponding to each DC channel. Each of these core and channel keys have values of lists of command table (CT) indices (integers) to be addressed on the AWG cores. \n
+#     Each command table index maps to an entry of a CT, determining the waveform, amplitude, and phase to be played when the CT entry is executed. Phase changes for each gate are computed on-the-fly.
+#     Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm', 'y', 'yyy', 'y y', 'myym', 'arbZ', 'p', 't'. See 'Quantum Compiler' tab for a more elaborate description.  \n
+#     Note: this function is currently configured for 1 HDAWG unit with 4 AWG cores. \n
+#
+#     Parameters:
+#                     gt_seqs (dict): dictionary output of 'gst_file_parser', representing sequence of RF and DC gate strings on each core.
+#                     taus_std (list): list of standard pi/2 and pi pulse lengths in ns ([tau_pi2, tau_pi]).
+#                     taus_p (list): list of tuples, each with elements (ch_idx, tau_p) representing the channel index and corresponding plunger pulse length.
+#                     n_arbZ (int): the accumulated number of previously seen arbitrary-Z rotations over all lines in GST file being read.
+#
+#     Returns:
+#        ct_idxs (dict), arbZ (list): dictonary of command table indices to execute, list of tuples of (arbitrary Z comman table index, rotation angle).
+#      '''
+#
+#     ## Follow strucuture of channel map:
+#
+#     ct_idxs = {}
+#     for awg_idx in channel_map:
+#         ct_idxs[awg_idx] = {}
+#         for core_idx in channel_map[awg_idx]:
+#             ct_idxs[awg_idx][core_idx] = []
+#
+#     initial_gates = {'xx_pi_fr': 0, 'yy_pi_fr': 1, 'mxxm_pi_fr': 2, 'myym_pi_fr': 3, 'x_pi_fr': 4, 'y_pi_fr': 5, 'xxx_pi_fr': 6, 'yyy_pi_fr': 7, 'x_pi2_fr': 8, 'y_pi2_fr': 9, 'xxx_pi2_fr': 10, 'yyy_pi2_fr': 11, 'xx_p_fr': 12, 'yy_p_fr': 13, 'mxxm_p_fr': 14, 'myym_p_fr': 15, 'x_p_fr': 16, 'y_p_fr': 17, 'xxx_p_fr': 18, 'yyy_p_fr': 19}
+#     ct_idx_incr_pi_pi_fr = {0: 20, -90: 21, -180: 22, -270: 23, 90: 24, 180: 25, 270: 26}
+#     ct_idx_incr_pi_2_pi_fr = {0: 27, -90: 28, -180: 29, -270: 30, 90: 31, 180: 32,  270: 33}
+#     ct_idx_incr_pi_2_pi_2_fr = {0: 34, -90: 35, -180: 36, -270: 37, 90: 38, 180: 39,  270:  40}
+#     ct_idx_incr_pi_p_fr = {0: 41, -90: 42, -180: 43, -270: 44, 90: 45, 180: 46,  270:  47}
+#     ct_idx_incr_pi_2_p_fr = {0: 48, -90: 49, -180: 50, -270: 51, 90: 51, 180: 53,  270:  54}
+#     ct_idx_z0z = 55
+#     phi_ls_gt = {'x':  0, 'y': -90, 'xx':  0, 'yy': -90 , 'xxx':  -180, 'yyy': 90, 'mxxm': -180, 'myym': 90}
+#     pi_gt_set = {'xx', 'yy', 'mxxm', 'myym'}
+#     pi_2_gt_set = {'x', 'y', 'xxx', 'yyy'}
+#     N_p = len(plunger_lengths)
+#     rf_gate_sequence = gt_seqs['rf']
+#     dc_gate_sequence = gt_seqs['plunger']
+#
+#     for rf_idx in rf_gate_sequence:
+#         awg_idx = awg_core_split[rf_idx][0]
+#         core_idx = awg_core_split[rf_idx][1]
+#         ct_idxs[awg_idx][core_idx] = []
+#         rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]).difference(rf_idx))
+#         gate_sequence = rf_gate_sequence[rf_idx]
+#         n_gates = len(gate_sequence)
+#         gt_0 = gate_sequence[0]
+#
+#         ##Initialize phase for non-arbitrary RF gates
+#         if gt_0[0] in {'x', 'y', 'm'}:
+#             phi_l = phi_ls_gt[gt_0]
+#         ##Initialize phase for arbitrary gates
+#         elif gt_0.find('*') != -1:
+#              if gt_0[gt_0.find(*)+1] == 'X':
+#                   phi_l = phi_ls_gt['x']
+#              elif gt_0[gt_0.find(*)+1] == 'Y':
+#                   phi_l = phi_ls_gt['y']
+#              elif gt_0[gt_0.find(*)+1] == 'U':
+#                   phi_l = phi_ls_gt['xxx']
+#              elif gt_0[gt_0.find(*)+1] == 'V':
+#                   phi_l = phi_ls_gt['yyy']
+#              else:
+#                   pass
+#         else:
+#             phi_l = 0
+#
+#         ##Loops over gates following the initial
+#         for idx in range(n_gates):
+#             gt = gate_sequence[idx]
+#             rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+#             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+#             pi_intersect = rf_gates_other.intersection(pi_gt_set)
+#
+#             if idx == 0:
+#                 if gt in pi_gt_set:
+#                     gt_str = gt+'_pi_fr'
+#                     rf_ct_idx_list.append(initial_gates[gt_str])
     #             elif gt in pi_2_gt_set:
     #                 if len(pi_intersect)>0:
     #                     gt_str = gt+'_pi_fr'
