@@ -654,6 +654,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                    pass
         else:
             phi_l = 0
+        print(gt_0, phi_l)
 #         ##Loops over gates following the initial
 #         for idx in range(n_gates):
 #             gt = gate_sequence[idx]
