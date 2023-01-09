@@ -570,7 +570,6 @@ def make_command_table_indices_v2(gt_seqs, taus_std, taus_p, n_arbZ):
     ct_idxs['plunger'] = plunger_ct_idxs
     return ct_idxs, arbZ
 
-
 # def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_tup_lengths, taus_std):
 #     ## Should return
 #     ##Modifications here: 1. accomodate for multiple cores/channels, 2. arb Z should be counted and account for each edge case,
@@ -662,18 +661,24 @@ def make_command_table_indices_v2(gt_seqs, taus_std, taus_p, n_arbZ):
 #             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
 #             pi_intersect = rf_gates_other.intersection(pi_gt_set)
 #
+#            ##Possible RF gates:  x, y, xxx, yyy, ...., z gates, t gates, arb RF gates
+#            ## If initial gate in sequence
+#            ## Should enumerate on paper all possibilityies here...
 #             if idx == 0:
+#                 ## Gates with pi length
 #                 if gt in pi_gt_set:
 #                     gt_str = gt+'_pi_fr'
 #                     rf_ct_idx_list.append(initial_gates[gt_str])
-    #             elif gt in pi_2_gt_set:
-    #                 if len(pi_intersect)>0:
-    #                     gt_str = gt+'_pi_fr'
-    #                     rf_ct_idx_list.append(initial_gates[gt_str])
-    #                 else:
-    #                     gt_str = gt+'_pi2_fr'
-    #                     rf_ct_idx_list.append(initial_gates[gt_str])
-    #
+#                 ## Gates with pi/2 length
+#                 elif gt in pi_2_gt_set:
+#                     if len(pi_intersect)>0:
+#                         gt_str = gt+'_pi_fr'
+#                         rf_ct_idx_list.append(initial_gates[gt_str])
+#                     else:
+#                         gt_str = gt+'_pi2_fr'
+#                         rf_ct_idx_list.append(initial_gates[gt_str])
+    #            elif
+
     #             elif gt[0] == 't':
     #                 gt_t_str = int(gt[1:len(gt)])
     #                 if gt_t_str == taus_std[0]:
@@ -1084,6 +1089,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
         ct_idx += 1
     #Arb pulse delays
     ##Should also extract phase if for current gate ...
+
     for awg_idx in arbitrary_waveforms:
         for core_idx in arbitrary_waveforms[awg_idx]:
             if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
@@ -1093,6 +1099,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                     ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
                     gate_str = arbitrary_waveforms[awg_idx][core_idx][i][0]
                     ct_idx += 1
+
     arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
 
     if len(arb_rf_pulses) == 0:
@@ -1194,6 +1201,7 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
     if len(arb_dc_pulses) == 0:
         pass
     else:
+        print(arb_dc_pulses)
         for wave in arb_dc_pulses:
             gate_str = wave[0]
             amplitude = float(gate_str[0:gate_str.find('*')])
