@@ -636,26 +636,24 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         gate_sequence = rf_gate_sequence[rf_idx]
         n_gates = len(gate_sequence)
         gt_0 = gate_sequence[0]
-        print(gt_0)
 
-#         ##Initialize phase for non-arbitrary RF gates
-#         if gt_0[0] in {'x', 'y', 'm'}:
-#             phi_l = phi_ls_gt[gt_0]
+        ##Initialize phase for non-arbitrary RF gates
+        if gt_0[0] in {'x', 'y', 'm'}:
+            phi_l = phi_ls_gt[gt_0]
 #         ##Initialize phase for arbitrary gates
-#         elif gt_0.find('*') != -1:
-#              if gt_0[gt_0.find(*)+1] == 'X':
-#                   phi_l = phi_ls_gt['x']
-#              elif gt_0[gt_0.find(*)+1] == 'Y':
-#                   phi_l = phi_ls_gt['y']
-#              elif gt_0[gt_0.find(*)+1] == 'U':
-#                   phi_l = phi_ls_gt['xxx']
-#              elif gt_0[gt_0.find(*)+1] == 'V':
-#                   phi_l = phi_ls_gt['yyy']
-#              else:
-#                   pass
-#         else:
-#             phi_l = 0
-#
+        elif gt_0.find('*') != -1:
+              if gt_0[gt_0.find(*)+1] == 'X':
+                   phi_l = phi_ls_gt['x']
+              elif gt_0[gt_0.find(*)+1] == 'Y':
+                   phi_l = phi_ls_gt['y']
+              elif gt_0[gt_0.find(*)+1] == 'U':
+                   phi_l = phi_ls_gt['xxx']
+              elif gt_0[gt_0.find(*)+1] == 'V':
+                   phi_l = phi_ls_gt['yyy']
+              else:
+                   pass
+        else:
+            phi_l = 0 
 #         ##Loops over gates following the initial
 #         for idx in range(n_gates):
 #             gt = gate_sequence[idx]
