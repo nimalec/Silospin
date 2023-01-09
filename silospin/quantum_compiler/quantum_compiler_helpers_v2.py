@@ -637,10 +637,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         n_gates = len(gate_sequence)
         gt_0 = gate_sequence[0]
 
-        ##Initialize phase for non-arbitrary RF gates
         if gt_0[0] in {'x', 'y', 'm'}:
             phi_l = phi_ls_gt[gt_0]
-#         ##Initialize phase for arbitrary gates
         elif gt_0.find('*') != -1:
               if gt_0[gt_0.find('*')+1] == 'X':
                    phi_l = phi_ls_gt['x']
@@ -654,14 +652,15 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                    pass
         else:
             phi_l = 0
-        print(gt_0, phi_l)
-#         ##Loops over gates following the initial
-#         for idx in range(n_gates):
-#             gt = gate_sequence[idx]
-#             rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
-#             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
-#             pi_intersect = rf_gates_other.intersection(pi_gt_set)
-#
+
+        for idx in range(n_gates):
+            gt = gate_sequence[idx]
+            rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+            pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+            pi_intersect = rf_gates_other.intersection(pi_gt_set)
+            print(pi_2_intersect)
+            print(pi_intersect)
+
 #            ##Possible RF gates:  x, y, xxx, yyy, ...., z gates, t gates, arb RF gates
 #            ## If initial gate in sequence
 #            ## Should enumerate on paper all possibilityies here...
