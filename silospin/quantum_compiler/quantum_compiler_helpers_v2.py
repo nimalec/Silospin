@@ -627,7 +627,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     rf_gate_sequence = gt_seqs['rf']
     dc_gate_sequence = gt_seqs['plunger']
 
-    print(rf_gate_sequence.keys())
+    print(set([i for i in rf_gate_sequence.keys()])
     # for rf_idx in rf_gate_sequence:
     #     awg_idx = awg_core_split[rf_idx][0]
     #     core_idx = awg_core_split[rf_idx][1]
