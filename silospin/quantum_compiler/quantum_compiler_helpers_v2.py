@@ -627,15 +627,15 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     rf_gate_sequence = gt_seqs['rf']
     dc_gate_sequence = gt_seqs['plunger']
 
-    print(set([i for i in rf_gate_sequence.keys()]))
-    # for rf_idx in rf_gate_sequence:
-    #     awg_idx = awg_core_split[rf_idx][0]
-    #     core_idx = awg_core_split[rf_idx][1]
-    #     ct_idxs[awg_idx][core_idx] = []
-    #     rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]).difference(rf_idx))
-    #     gate_sequence = rf_gate_sequence[rf_idx]
-    #     n_gates = len(gate_sequence)
-    #     gt_0 = gate_sequence[0]
+
+    for rf_idx in rf_gate_sequence:
+        awg_idx = awg_core_split[rf_idx][0]
+        core_idx = awg_core_split[rf_idx][1]
+        ct_idxs[awg_idx][core_idx] = []
+        rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]).difference({rf_idx}))
+        gate_sequence = rf_gate_sequence[rf_idx]
+        n_gates = len(gate_sequence)
+        gt_0 = gate_sequence[0]
 
 #         ##Initialize phase for non-arbitrary RF gates
 #         if gt_0[0] in {'x', 'y', 'm'}:
