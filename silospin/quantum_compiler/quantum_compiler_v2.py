@@ -190,7 +190,7 @@ class GateSetTomographyQuantumCompiler:
         taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
         for idx in self._gate_sequences:
             gate_sequence = self._gate_sequences[idx]
-            make_command_table_indices_v3(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std)
+            make_command_table_indices_v3(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths)
 
     #     waveforms_awg = {}
     #     sequencer_code = {}

@@ -570,7 +570,7 @@ def make_command_table_indices_v2(gt_seqs, taus_std, taus_p, n_arbZ):
     ct_idxs['plunger'] = plunger_ct_idxs
     return ct_idxs, arbZ
 
-def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_tup_lengths, taus_std):
+def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_tup_lengths, taus_std, gate_lengths):
     ## Should return
     ##Modifications here: 1. accomodate for multiple cores/channels, 2. arb Z should be counted and account for each edge case,
     ## 3. arbitrary gates ==> need to add new command table index when these occur (per core).
@@ -658,14 +658,23 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
             pi_intersect = rf_gates_other.intersection(pi_gt_set)
             p_intersect = set([(seq, dc_gate_sequence[seq][idx]) for seq in dc_gate_sequence])
-            print(p_intersect)
 
 #            ## Should enumerate on paper all possibilityies here...
             if idx == 0:
-                ## Gates with pi length
                 if gt in pi_gt_set:
-                    gt_str = gt+'_pi_fr'
-                    ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+                    for tup in p_intersect:
+                        if tup[1] == 'p':
+                            tau_p = self._gate_lengths['plunger'][tup[0]]
+                            tau_pi = self._gate_lengths['rf'][rf_idx]
+                            #Plunger frame
+                            if tau_p > tau_pi:
+                                gt_str = gt+'_p_fr'
+                            #Pi frame
+                            else:
+                                gt_str = gt+'_pi_fr'
+                            ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+                print(ct_idxs[awg_idx][core_idx])
+
 
 # #                 ## Gates with pi/2 length
 #                 elif gt in pi_2_gt_set:
