@@ -661,11 +661,12 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
 #            ## Should enumerate on paper all possibilityies here...
             if idx == 0:
+                # pi gate
                 if gt in pi_gt_set:
                     for tup in p_intersect:
                         if tup[1] == 'p':
                             tau_p = self._gate_lengths['plunger'][tup[0]]
-                            tau_pi = self._gate_lengths['rf'][rf_idx]
+                            tau_pi = self._gate_lengths['rf'][rf_idx]['pi']
                             #Plunger frame
                             if tau_p > tau_pi:
                                 gt_str = gt+'_p_fr'
@@ -675,7 +676,21 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             gt_str = gt+'_pi_fr'
                         ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
-                        print(ct_idxs)
+
+                # pi/2 gate
+                elif gt in pi_2_gt_set:
+                    for tup in p_intersect:
+                        if tup[1] == 'p':
+                            tau_p = self._gate_lengths['plunger'][tup[0]]
+                            tau_pi_2 = self._gate_lengths['rf'][rf_idx]['pi_2']
+                            #Plunger frame
+                            if tau_p > tau_pi:
+                                gt_str = gt+'_p_fr'
+                            #Pi/2 frame
+                            else:
+                                gt_str = gt+'_pi2_fr'
+                        else:
+                            gt_str = gt+'_pi2_fr'
 
 
 # #                 ## Gates with pi/2 length
