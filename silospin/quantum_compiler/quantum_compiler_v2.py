@@ -78,12 +78,12 @@ class GateSetTomographyQuantumCompiler:
                 Sample rate of AWG in Sa/s.
         """
 
-        ## For arb gates : plunger channels can be either plunger or arb gate channels.
         sample_rate = 2.4e9
         self._gst_path = gst_file_path
         self._awgs = awgs
         channel_mapping = self._awgs["hdawg1"]._channel_mapping
         awg_core_split = self._awgs["hdawg1"]._hdawg_core_split
+        print(awg_core_split)
 
         rf_cores = []
         plunger_channels = []
@@ -123,7 +123,6 @@ class GateSetTomographyQuantumCompiler:
         tau_pi_2_standard = npoints_pi_2_standard/sample_rate
         tau_pi_standard = npoints_pi_standard/sample_rate
 
-
         plunger_set = []
         plunger_set_npoints = []
         plunger_set_npoints_tups = []
@@ -154,12 +153,9 @@ class GateSetTomographyQuantumCompiler:
         except TypeError:
             raise
 
-        ##Need to modify this....
         self._gate_npoints = {}
         for awg in self._gate_parameters:
             self._gate_npoints[awg] = make_gate_npoints(self._gate_parameters[awg], sample_rate)
-
-         ##Come back to padding scheme  ==> check edge case when plunger length with padding is smaller than the RF pulse length ==> should always be the same as the DC pulse length in total
         self._waveforms = generate_waveforms_v2(self._gate_npoints, channel_mapping, added_padding, standard_rf)
 
         dc_lengths = {}
@@ -179,13 +175,8 @@ class GateSetTomographyQuantumCompiler:
                 else:
                     pass
 
-        ## andle arbitrary waveforms in gst_file_parser_v2 ==> should be able to determine the length, given the called upon function
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
-        # should output waveforms here as well ...
-        ## Take in awg_core_split
-
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
-        print(arbitrary_gates)
         self._command_tables = {}
         for awg_idx in channel_mapping:
             self._command_tables[awg_idx] = {}
@@ -195,26 +186,12 @@ class GateSetTomographyQuantumCompiler:
                 else:
                     self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
 
-    #     ct_idxs_all = {}
-    #     arbZs = []
-    #     n_arbZ = 0
-    #     taus_std = (tau_waveform_pi_2_std,  tau_waveform_pi_std)
-    #
-    #     for idx in self._gate_sequences:
-    #         gate_sequence = self._gate_sequences[idx]
-    #         ct_idxs_all[idx], arbZ = make_command_table_indices(gate_sequence, taus_std, plunger_set, n_arbZ)
-    #         n_arbZ += len(arbZ)
-    #         arbZs.append(arbZ)
-    #
-    # #     arbZ_s = []
-    #     for lst in arbZs:
-    #         for i in lst:
-    #             arbZ_s.append(i)
-    #     command_tables_rf = make_rf_command_table(n_waveform_pi_2_std, n_waveform_pi_std, n_p=plunger_set_npoints, arbZ=arbZ_s)
-    #     command_table_plunger = make_plunger_command_table(n_p=plunger_set_npoints_tups, n_rf=(n_waveform_pi_2_std,  n_waveform_pi_std))
-    #     self._ct_idxs = ct_idxs_all
-    #     self._command_tables = {'rf': command_tables_rf, 'plunger': command_table_plunger}
-    #
+        # ct_idxs_all = {}
+        # taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
+        # for idx in self._gate_sequences:
+        #     gate_sequence = self._gate_sequences[idx]
+        #     make_command_table_indices_v3(gate_sequence, channel_mapping, arbitrary_waveforms, plunger_set_npoints_tups, taus_std)
+
     #     waveforms_awg = {}
     #     sequencer_code = {}
     #     seq_code = {}

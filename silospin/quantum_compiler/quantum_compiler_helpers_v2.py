@@ -571,6 +571,246 @@ def make_command_table_indices_v2(gt_seqs, taus_std, taus_p, n_arbZ):
     return ct_idxs, arbZ
 
 
+def make_command_table_indices_v3(gt_seqs, channel_map, arb_gates, plunger_lengths, taus_std):
+    ## Should return
+    ##Modifications here: 1. accomodate for multiple cores/channels, 2. arb Z should be counted and account for each edge case,
+    ## 3. arbitrary gates ==> need to add new command table index when these occur (per core).
+    ## Should alo return a list of command table indices corresponding to each arbitrary gate.
+    ## 1. Take in channel grouping ==> determine whcih are plunger and RF indices/cores ==> cores they belong to.
+    ## 2. Loop over gt seqsdd line.
+    ## 3.
+
+    ## Inputs:
+    ## 1. gate sequences  (for a specific line)
+    ## 2.  standard pi and pi/2 pulse lengths
+    ## 3. pulse lenghtths
+    ## 4. number of arb Z gates previously seen
+
+    '''
+    Generates a dictionary with lists of command table executions for each core, provided the output of 'gst_file_parser'.
+    This is the core of the quantum compiler, as it interprets longs RF and DC gate strings, converting them to FPGA instructions for amplitude and phase modulation.\n
+    Outer-most keys "plunger" and "rf", containing instructions to be addressed separatley on the dedicated RF and DC cores.
+    Outputs a dictionary with outer keys "rf" and "plunger", corresponding to executions for dedicated RF and DC AWG cores. The values for the "rf" keys are dictionaries with outer keys corresponding to each core and "plunger"
+    has values of dictionaries with keys corresponding to each DC channel. Each of these core and channel keys have values of lists of command table (CT) indices (integers) to be addressed on the AWG cores. \n
+    Each command table index maps to an entry of a CT, determining the waveform, amplitude, and phase to be played when the CT entry is executed. Phase changes for each gate are computed on-the-fly.
+    Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm', 'y', 'yyy', 'y y', 'myym', 'arbZ', 'p', 't'. See 'Quantum Compiler' tab for a more elaborate description.  \n
+    Note: this function is currently configured for 1 HDAWG unit with 4 AWG cores. \n
+
+    Parameters:
+                    gt_seqs (dict): dictionary output of 'gst_file_parser', representing sequence of RF and DC gate strings on each core.
+                    taus_std (list): list of standard pi/2 and pi pulse lengths in ns ([tau_pi2, tau_pi]).
+                    taus_p (list): list of tuples, each with elements (ch_idx, tau_p) representing the channel index and corresponding plunger pulse length.
+                    n_arbZ (int): the accumulated number of previously seen arbitrary-Z rotations over all lines in GST file being read.
+
+    Returns:
+       ct_idxs (dict), arbZ (list): dictonary of command table indices to execute, list of tuples of (arbitrary Z comman table index, rotation angle).
+     '''
+
+    ## Follow strucuture of channel map:
+
+    ct_idxs = {}
+    for awg_idx in channel_map:
+        ct_idxs[awg_idx] = {}
+        for core_idx in channel_map[awg_idx]:
+            ct_idxs[awg_idx][core_idx] = []
+    print(ct_idxs)
+
+
+    # ct_idxs = {'rf': {}, 'plunger': {}}
+    # initial_gates = {'xx_pi_fr': 0, 'yy_pi_fr': 1, 'mxxm_pi_fr': 2, 'myym_pi_fr': 3, 'x_pi2_fr': 4, 'y_pi2_fr': 5, 'xxx_pi2_fr': 6, 'yyy_pi2_fr': 7, 'x_pi_fr': 8, 'y_pi_fr':  9, 'xxx_pi_fr':  10, 'yyy_pi_fr': 11}
+    # ct_idx_incr_pi_pi_fr = {0: 12, -90: 13, -180: 14, -270: 15, 90: 16, 180: 17,  270:  18}
+    # ct_idx_incr_pi_2_pi_2_fr = {0: 19, -90: 20, -180: 21, -270: 22, 90: 23, 180: 24,  270: 25}
+    # ct_idx_incr_pi_2_pi_fr = {0: 26, -90: 27, -180: 28, -270: 29, 90: 30, 180: 31,  270: 32}
+    # phi_ls_gt = {'x':  0, 'y': -90, 'xx':  0, 'yy': -90 , 'xxx':  -180, 'yyy': 90, 'mxxm': -180, 'myym': 90}
+    # pi_gt_set = {'xx', 'yy', 'mxxm', 'myym'}
+    # pi_2_gt_set = {'x', 'y', 'xxx', 'yyy'}
+    #
+    # N_p = len(taus_p)
+    # arbZ_counter = 36 + N_p + n_arbZ
+    # taus_ct_idxs = {'rf': {'pi2': {'tau_pi2': taus_std[0], 'ct_idx': 33 }, 'pi': {'tau_pi': taus_std[1], 'ct_idx':  34} }, 'plunger': {}}
+    # idx = 1
+    # for item in taus_p:
+    #     taus_ct_idxs['plunger'][item[0]] = {'tau_p': item[1] , 'ct_idx': 34+idx}
+    #     idx += 1
+    # rf_gate_sequence = gt_seqs['rf']
+    # plunger_gate_sequence = gt_seqs['plunger']
+    #
+    # rf_ct_idxs = {}
+    # for rf_idx in rf_gate_sequence:
+    #     rf_ct_idxs[rf_idx] = []
+    #     rf_ct_idx_list = []
+    #     rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]).difference(rf_idx))
+    #     gate_sequence = rf_gate_sequence[rf_idx]
+    #     n_gates = len(gate_sequence)
+    #     gt_0 = gate_sequence[0]
+    #     if gt_0[0] in  {"x", "y", "m"}:
+    #         phi_l = phi_ls_gt[gt_0]
+    #     else:
+    #         phi_l = 0
+    #
+    #     for idx in range(n_gates):
+    #         gt = gate_sequence[idx]
+    #         rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+    #         pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+    #         pi_intersect = rf_gates_other.intersection(pi_gt_set)
+    #
+    #         if idx == 0:
+    #             if gt in pi_gt_set:
+    #                 gt_str = gt+'_pi_fr'
+    #                 rf_ct_idx_list.append(initial_gates[gt_str])
+    #
+    #             elif gt in pi_2_gt_set:
+    #                 if len(pi_intersect)>0:
+    #                     gt_str = gt+'_pi_fr'
+    #                     rf_ct_idx_list.append(initial_gates[gt_str])
+    #                 else:
+    #                     gt_str = gt+'_pi2_fr'
+    #                     rf_ct_idx_list.append(initial_gates[gt_str])
+    #
+    #             elif gt[0] == 't':
+    #                 gt_t_str = int(gt[1:len(gt)])
+    #                 if gt_t_str == taus_std[0]:
+    #                     rf_ct_idx_list.append(33)
+    #                 elif gt_t_str == taus_std[1]:
+    #                     rf_ct_idx_list.append(34)
+    #                 else:
+    #                     for item in taus_ct_idxs['plunger']:
+    #                         if gt_t_str == taus_ct_idxs['plunger'][item]['tau_p']:
+    #                             rf_ct_idx_list.append(taus_ct_idxs['plunger'][item]['ct_idx'])
+    #                             break
+    #                         else:
+    #                             continue
+    #
+    #             elif gt[0] == 'z':
+    #                 z_angle = float(gt[1:len((gt))-1])
+    #                 if int(z_angle) == 0:
+    #                     z0_idx = 35 + N_p
+    #                     rf_ct_idx_list.append(z0_idx)
+    #                 else:
+    #                     rf_ct_idx_list.append(arbZ_counter)
+    #                     arbZ.append((arbZ_counter, -z_angle))
+    #             else:
+    #                 pass
+    #         else:
+    #             if gt[0] in {"x", "y", "m"}:
+    #                 phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
+    #             else:
+    #                 pass
+    #             if gt in pi_gt_set:
+    #                 rf_ct_idx_list.append(ct_idx_incr_pi_pi_fr[-phi_a])
+    #
+    #             elif gt in pi_2_gt_set:
+    #                 if len(pi_intersect)>0:
+    #                     rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_fr[-phi_a])
+    #                 else:
+    #                     rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_2_fr[-phi_a])
+    #
+    #             elif gt[0] == 't':
+    #                 gt_t_str = int(gt[1:len(gt)])
+    #                 if gt_t_str == taus_std[0]:
+    #                     rf_ct_idx_list.append(33)
+    #                 elif gt_t_str == taus_std[1]:
+    #                     rf_ct_idx_list.append(34)
+    #                 else:
+    #                     for item in taus_ct_idxs['plunger']:
+    #                         if gt_t_str == taus_ct_idxs['plunger'][item]['tau_p']:
+    #                             rf_ct_idx_list.append(taus_ct_idxs['plunger'][item]['ct_idx'])
+    #                             break
+    #                         else:
+    #                             continue
+    #
+    #             elif gt[0] == 'z':
+    #                 z_angle = float(gt[1:len((gt))-1])
+    #                 if int(z_angle) == 0:
+    #                     z0_idx = 35 + N_p
+    #                     rf_ct_idx_list.append(z0_idx)
+    #                 else:
+    #                     rf_ct_idx_list.append(arbZ_counter)
+    #                     arbZ.append((arbZ_counter, -z_angle))
+    #
+    #             else:
+    #                 pass
+    #     rf_ct_idxs[rf_idx] = rf_ct_idx_list
+    # ct_idxs['rf'] = rf_ct_idxs
+    #
+    # plunger_ct_idxs = {}
+    # for p_idx in plunger_gate_sequence:
+    #     plunger_ct_idxs[p_idx] = []
+    #     p_ct_idx_list = []
+    #     p_diff_idxs = list(set([i for i in plunger_gate_sequence.keys()]).difference(p_idx))
+    #     rf_diff_idxs = list([i for i in rf_gate_sequence.keys()])
+    #     gate_sequence = plunger_gate_sequence[p_idx]
+    #     n_gates = len(gate_sequence)
+    #
+    #     for idx in range(n_gates):
+    #         gt = gate_sequence[idx]
+    #         p_gates_other = set([plunger_gate_sequence[j][idx] for j in p_diff_idxs])
+    #         rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+    #         pi_intersect = rf_gates_other.intersection(pi_gt_set)
+    #         pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+    #
+    #         if gt[0] == 'z':
+    #             p_ct_idx_list.append(14)
+    #         elif gt == 'p':
+    #             if list(p_gates_other)[0][0] != 'p':
+    #                 if len(pi_intersect) == 0 and len(pi_2_intersect) == 0:
+    #                     if p_idx == '6':
+    #                         p_ct_idx_list.append(0)
+    #                     else:
+    #                         p_ct_idx_list.append(1)
+    #
+    #                 elif len(pi_intersect) == 0 and len(pi_2_intersect) != 0:
+    #                     if p_idx == '6':
+    #                         p_ct_idx_list.append(4)
+    #                     else:
+    #                         p_ct_idx_list.append(5)
+    #
+    #                 elif len(pi_intersect) != 0:
+    #                     if p_idx == '6':
+    #                         p_ct_idx_list.append(6)
+    #                     else:
+    #                         p_ct_idx_list.append(7)
+    #
+    #             elif list(p_gates_other)[0][0] == 'p':
+    #                 if len(pi_intersect) == 0 and len(pi_2_intersect) == 0:
+    #                     p_ct_idx_list.append(2)
+    #                 elif len(pi_intersect) == 0 and len(pi_2_intersect) != 0:
+    #                     p_ct_idx_list.append(8)
+    #                 elif len(pi_intersect) != 0:
+    #                     p_ct_idx_list.append(9)
+    #             else:
+    #                 pass
+    #
+    #         elif gt[0] == 't':
+    #             gt_t_str = int(gt[1:len(gt)])
+    #             if gt_t_str == taus_std[0]:
+    #                 p_ct_idx_list.append(10)
+    #             elif gt_t_str == taus_std[1]:
+    #                 p_ct_idx_list.append(11)
+    #             else:
+    #                 if p_idx == '7':
+    #                     p_ct_idx_list.append(12)
+    #                 else:
+    #                     p_ct_idx_list.append(13)
+    #         else:
+    #             pass
+    #         plunger_ct_idxs[p_idx] = p_ct_idx_list
+    #
+    # new_p_gate_lst = []
+    # for i in range(len(plunger_ct_idxs['6'])):
+    #     if plunger_ct_idxs['6'][i] == plunger_ct_idxs['7'][i]:
+    #         new_p_gate_lst.append(plunger_ct_idxs['6'][i])
+    #     elif plunger_ct_idxs['6'][i] < 10 and  plunger_ct_idxs['7'][i] >= 10:
+    #         new_p_gate_lst.append(plunger_ct_idxs['6'][i])
+    #     elif plunger_ct_idxs['7'][i] < 10 and  plunger_ct_idxs['6'][i] >= 10:
+    #         new_p_gate_lst.append(plunger_ct_idxs['7'][i])
+    #     else:
+    #         pass
+    # plunger_ct_idxs['6'] = new_p_gate_lst
+    # plunger_ct_idxs['7'] = new_p_gate_lst
+    # ct_idxs['plunger'] = plunger_ct_idxs
+    # return ct_idxs, arbZ
+
 
 def make_rf_command_table(n_pi_2, n_pi, n_p=[], arbZ=[]):
     '''
@@ -927,7 +1167,6 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
     ct_idx += 1
 
     ##Plunger delays
-    print(len(plunger_length_tups))
     for p in plunger_length_tups:
         ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": p[1]}})
         ct_idx += 1
