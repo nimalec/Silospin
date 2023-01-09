@@ -626,8 +626,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     N_p = len(plunger_tup_lengths)
     rf_gate_sequence = gt_seqs['rf']
     dc_gate_sequence = gt_seqs['plunger']
-    print(dc_gate_sequence)
-
 
     for rf_idx in rf_gate_sequence:
         awg_idx = awg_core_split[rf_idx][0]
@@ -659,7 +657,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
             pi_intersect = rf_gates_other.intersection(pi_gt_set)
-            p_intersect = set([dc_gate_sequence[seq] for seq in dc_gate_sequence])
+            p_intersect = set([seq for seq in dc_gate_sequence])
             print(p_intersect)
 
 
