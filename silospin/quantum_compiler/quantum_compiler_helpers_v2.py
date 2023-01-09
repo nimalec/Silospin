@@ -626,6 +626,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     N_p = len(plunger_tup_lengths)
     rf_gate_sequence = gt_seqs['rf']
     dc_gate_sequence = gt_seqs['plunger']
+    print(dc_gate_sequence)
 
 
     for rf_idx in rf_gate_sequence:
@@ -656,19 +657,21 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         for idx in range(n_gates):
             gt = gate_sequence[idx]
             rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
-            print(rf_gates_other)
             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
             pi_intersect = rf_gates_other.intersection(pi_gt_set)
+            #p_intersect = set([dc_gate_sequence[j][idx] for j in rf_diff_idxs])
 
 #            ##Possible RF gates:  x, y, xxx, yyy, ...., z gates, t gates, arb RF gates
 #            ## If initial gate in sequence
 #            ## Should enumerate on paper all possibilityies here...
-#             if idx == 0:
-#                 ## Gates with pi length
-#                 if gt in pi_gt_set:
-#                     gt_str = gt+'_pi_fr'
-#                     rf_ct_idx_list.append(initial_gates[gt_str])
-#                 ## Gates with pi/2 length
+            # if idx == 0:
+            #     ## Gates with pi length
+            #     if gt in pi_gt_set:
+            #         gt_str = gt+'_pi_fr'
+            #         #rf_ct_idx_list.append(initial_gates[gt_str])
+            #         ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+
+# #                 ## Gates with pi/2 length
 #                 elif gt in pi_2_gt_set:
 #                     if len(pi_intersect)>0:
 #                         gt_str = gt+'_pi_fr'
