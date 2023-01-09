@@ -571,7 +571,7 @@ def make_command_table_indices_v2(gt_seqs, taus_std, taus_p, n_arbZ):
     return ct_idxs, arbZ
 
 
-def make_command_table_indices_v3(gt_seqs, channel_map, arb_gates, plunger_lengths, taus_std):
+def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_lengths, taus_std):
     ## Should return
     ##Modifications here: 1. accomodate for multiple cores/channels, 2. arb Z should be counted and account for each edge case,
     ## 3. arbitrary gates ==> need to add new command table index when these occur (per core).
