@@ -732,8 +732,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     elif gt_t_str == taus_std[0]:
                         ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
                     else:
-                        for item in taus_ct_idxs['plunger']:
-                            if gt_t_str == taus_ct_idxs['plunger'][item]['tau_p']:
+                        for item in plunger_tup_lengths:
+                            if gt_t_str == item[1]:
                                 rf_ct_idx_list.append(taus_ct_idxs['plunger'][item]['ct_idx'])
                                 break
                             else:
