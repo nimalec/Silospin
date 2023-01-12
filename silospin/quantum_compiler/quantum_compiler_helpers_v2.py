@@ -635,6 +635,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         gate_sequence = rf_gate_sequence[rf_idx]
         n_gates = len(gate_sequence)
         gt_0 = gate_sequence[0]
+        ct_idx_tau_pi = 56 + len(arbZs[core_idx][awg_idx])
+        ct_idx_tau_pi_2 = 57 + len(arbZs[core_idx][awg_idx])
 
         if gt_0[0] in {'x', 'y', 'm'}:
             phi_l = phi_ls_gt[gt_0]
@@ -684,6 +686,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                             if tup[1] == 'p':
                                 tau_p = self._gate_lengths['plunger'][tup[0]]
                                 tau_pi_2 = self._gate_lengths['rf'][rf_idx]['pi_2']
+                                tau_pi = self._gate_lengths['rf'][rf_idx]['pi']
                                 if len(pi_intersect) == 0 and tau_p > tau_pi_2:
                                     gt_str = gt+'_p_fr'
                                 elif len(pi_intersect) == 0 and tau_p < tau_pi_2:
@@ -700,15 +703,45 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         gt_str = gt+'_pi2_fr'
                     ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
 
-# #                 ## Gates with pi/2 length
-#                 elif gt in pi_2_gt_set:
-#                     if len(pi_intersect)>0:
-#                         gt_str = gt+'_pi_fr'
-#                         rf_ct_idx_list.append(initial_gates[gt_str])
-#                     else:
-#                         gt_str = gt+'_pi2_fr'
-#                         rf_ct_idx_list.append(initial_gates[gt_str])
-    #            elif
+                # pi gate
+                elif gt in pi_gt_set:
+                    if len(p_intersect) != 0:
+                        for tup in p_intersect:
+                            if tup[1] == 'p':
+                                tau_p = self._gate_lengths['plunger'][tup[0]]
+                                tau_pi = self._gate_lengths['rf'][rf_idx]['pi']
+                                if len(pi_intersect) == 0 and tau_p > tau_pi:
+                                    gt_str = gt+'_p_fr'
+                                elif len(pi_intersect) != 0 and tau_p < tau_pi:
+                                    gt_str = gt+'_pi_fr'
+                                else:
+                                    pass
+                            else:
+                                gt_str = gt+'_pi_fr'
+                    else:
+                        gt_str = gt+'_pi_fr'
+                    ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+                elif gt == 'z0z':
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
+                elif gt[0] == 'z':
+                    ct_idxs[awg_idx][core_idx].append(arbZs[core_idx][awg_idx][gt][0])
+                elif gt[0] == 't':
+                    gt_t_str = int(gt[1:len(gt)])
+                    if gt_t_str == taus_std[1]:
+                        ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
+                    elif gt_t_str == taus_std[0]:
+                        ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
+                    else:
+                        for item in taus_ct_idxs['plunger']:
+                            if gt_t_str == taus_ct_idxs['plunger'][item]['tau_p']:
+                                rf_ct_idx_list.append(taus_ct_idxs['plunger'][item]['ct_idx'])
+                                break
+                            else:
+                                continue
+
+
+
+
 
     #             elif gt[0] == 't':
     #                 gt_t_str = int(gt[1:len(gt)])
