@@ -761,7 +761,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                                         for k in range(len(arbitrary_waveforms[i][j])):
                                             itr_arb += 1
                                             if ceil(gt_t_str/2.4) == len(arbitrary_waveforms[i][j][k][1]):
-                                                ct_idx_arb_wait = 3+ct_idx_z0z+N_p+len(arbZs[core_idx][awg_idx])
+                                                ct_idx_arb_wait = 3+ct_idx_z0z+N_p+len(arbZs[awg_idx][core_idx])
                                                 ct_idxs[awg_idx][core_idx].append(ct_idx_arb_wait)
                                             else:
                                                 pass
