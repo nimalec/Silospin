@@ -178,9 +178,12 @@ class GateSetTomographyQuantumCompiler:
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
 
         self._command_tables = {}
+        arbgate_counter = {}
         for awg_idx in channel_mapping:
             self._command_tables[awg_idx] = {}
+            arbgate_counter[awg_idx] = {}
             for core_idx in channel_mapping[awg_idx]:
+                arbgate_counter[awg_idx][core_idx] = 0
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
                     self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
                 else:

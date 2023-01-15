@@ -70,7 +70,7 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
     return array.tolist()
 
 def compute_accumulated_phase(gt, phi_l):
-    phi_d_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90}
+    phi_d_gt = {"x":  0, "y": 90, "xx":  0, "yy": 90 , "xxx":  180, "yyy": -90, "mxxm": 180, "myym": -90, 'X': 0, 'Y': 90, 'U': 180, 'V': -90}
     phi_d = phi_d_gt[gt]
     phi_a = phi_d - phi_l
     phi_l = phi_l + phi_a

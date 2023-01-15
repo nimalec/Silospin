@@ -570,7 +570,7 @@ def make_command_table_indices_v2(gt_seqs, taus_std, taus_p, n_arbZ):
     ct_idxs['plunger'] = plunger_ct_idxs
     return ct_idxs, arbZ
 
-def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_tup_lengths, taus_std, gate_lengths):
+def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_tup_lengths, taus_std, gate_lengths, arbgate_counter, pickle_file_location='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
     ## Should return
     ##Modifications here: 1. accomodate for multiple cores/channels, 2. arb Z should be counted and account for each edge case,
     ## 3. arbitrary gates ==> need to add new command table index when these occur (per core).
@@ -606,6 +606,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
      '''
 
     ## Follow strucuture of channel map:
+    ## Note: should replace all parts with simultaneos plunger gates with a part that finds the max plunger length, then does comparison
 
     ct_idxs = {}
     for awg_idx in channel_map:
@@ -626,8 +627,17 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     N_p = len(plunger_tup_lengths)
     rf_gate_sequence = gt_seqs['rf']
     dc_gate_sequence = gt_seqs['plunger']
+    arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
+
+    N_arb_tot = 0
+    for i in arbitrary_waveforms:
+        for j in arbitrary_waveforms[i]:
+            for k in range(len(arbitrary_waveforms[i][j])):
+                N_arb_tot += 1
+    print(N_arb_tot)
 
     for rf_idx in rf_gate_sequence:
+        arb_gate_counter = 0
         awg_idx = awg_core_split[rf_idx][0]
         core_idx = awg_core_split[rf_idx][1]
         ct_idxs[awg_idx][core_idx] = []
@@ -661,16 +671,14 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             pi_intersect = rf_gates_other.intersection(pi_gt_set)
             p_intersect = set([(seq, dc_gate_sequence[seq][idx]) for seq in dc_gate_sequence])
 
-#            ## Should enumerate on paper all possibilityies here...
             if idx == 0:
                 # pi gate
                 if gt in pi_gt_set:
                     for tup in p_intersect:
                         if tup[1] == 'p':
-                            tau_p = self._gate_lengths['plunger'][tup[0]]
-                            tau_pi = self._gate_lengths['rf'][rf_idx]['pi']
+                            tau_p = int(self._gate_lengths['plunger'][tup[0]])
                             #Plunger frame
-                            if tau_p > tau_pi:
+                            if tau_p > taus_std[1]:
                                 gt_str = gt+'_p_fr'
                             #Pi frame
                             else:
@@ -684,14 +692,14 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     if len(p_intersect) != 0:
                         for tup in p_intersect:
                             if tup[1] == 'p':
-                                tau_p = self._gate_lengths['plunger'][tup[0]]
-                                tau_pi_2 = self._gate_lengths['rf'][rf_idx]['pi_2']
-                                tau_pi = self._gate_lengths['rf'][rf_idx]['pi']
-                                if len(pi_intersect) == 0 and tau_p > tau_pi_2:
+                                tau_p = int(self._gate_lengths['plunger'][tup[0]])
+                                tau_pi_2 = int(self._gate_lengths['rf'][rf_idx]['pi_2'])
+                                tau_pi = int(self._gate_lengths['rf'][rf_idx]['pi'])
+                                if len(pi_intersect) == 0 and tau_p > taus_std[0]:
                                     gt_str = gt+'_p_fr'
-                                elif len(pi_intersect) == 0 and tau_p < tau_pi_2:
+                                elif len(pi_intersect) == 0 and tau_p < taus_std[0]:
                                     gt_str = gt+'_pi2_fr'
-                                elif len(pi_intersect) != 0 and tau_p < tau_pi:
+                                elif len(pi_intersect) != 0 and tau_p < taus_std[1]:
                                     gt_str = gt+'_pi_fr'
                                 else:
                                     pass
@@ -708,11 +716,10 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     if len(p_intersect) != 0:
                         for tup in p_intersect:
                             if tup[1] == 'p':
-                                tau_p = self._gate_lengths['plunger'][tup[0]]
-                                tau_pi = self._gate_lengths['rf'][rf_idx]['pi']
-                                if len(pi_intersect) == 0 and tau_p > tau_pi:
+                                tau_p = int(self._gate_lengths['plunger'][tup[0]])
+                                if len(pi_intersect) == 0 and tau_p >  taus_std[1]:
                                     gt_str = gt+'_p_fr'
-                                elif len(pi_intersect) != 0 and tau_p < tau_pi:
+                                elif len(pi_intersect) != 0 and tau_p <  taus_std[1]:
                                     gt_str = gt+'_pi_fr'
                                 else:
                                     pass
@@ -721,52 +728,113 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         gt_str = gt+'_pi_fr'
                     ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+                # z0z gate
                 elif gt == 'z0z':
                     ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
+                # arb z gates
                 elif gt[0] == 'z':
                     ct_idxs[awg_idx][core_idx].append(arbZs[core_idx][awg_idx][gt][0])
+                # delays
                 elif gt[0] == 't':
                     gt_t_str = int(gt[1:len(gt)])
-                    if gt_t_str == taus_std[1]:
+                    # std pi delays
+                    if gt_t_str == int(taus_std[1]):
                         ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
-                    elif gt_t_str == taus_std[0]:
+                    # std pi/2 delays
+                    elif gt_t_str == int(taus_std[0]):
                         ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
+                    # plunger delays
                     else:
-                        for item in plunger_tup_lengths:
-                            if gt_t_str == item[1]:
-                                rf_ct_idx_list.append(taus_ct_idxs['plunger'][item]['ct_idx'])
-                                break
-                            else:
-                                continue
+                        plunger_len_set = set([item[1] for item in plunger_tup_lengths])
+                        if gt_t_str in plunger_len_set:
+                            for itm in plunger_tup_lengths:
+                                if gt_t_str == item[1]:
+                                    ct_idxs[awg_idx][core_idx].append(item[0])
+                                else:
+                                    continue
+                        elif len(arb_gates) != 0:
+                            itr_arb = 0
+                            for i in arbitrary_waveforms:
+                                for j in arbitrary_waveforms[i]:
+                                    if len(arbitrary_waveforms[i][j]) == 0:
+                                        pass
+                                    else:
+                                        for k in range(len(arbitrary_waveforms[i][j])):
+                                            itr_arb += 1
+                                            if ceil(gt_t_str/2.4) == len(arbitrary_waveforms[i][j][k][1]):
+                                                ct_idx_arb_wait = 3+ct_idx_z0z+N_p+len(arbZs[core_idx][awg_idx])
+                                                ct_idxs[awg_idx][core_idx].append(ct_idx_arb_wait)
+                                            else:
+                                                pass
+                        else:
+                            pass
+
+                elif gt.find('*') != -1:
+                    if gt[gt.find('*')+1] in arbgate_dict.keys():
+                        arb_gate_counter[awg_idx][cored_idx] += 1 ##Should return arb_gate_counter at the output
+                        N_arb_core = arb_gate_counter[awg_idx][cored_idx]
+                        ct_idx_rf_arb = 3+ct_idx_z0z+N_p+N_arb_tot+N_arb_core
+                        ct_idxs[awg_idx][core_idx].append(ct_idx_rf_arb)
+                    else:
+                        pass
+                else:
+                    pass
+
+            ##Case: gates following the first one
+            # else:
+            #     if gt[0] in {'x', 'y', 'm'}:
+            #         ##standard RF gates
+            #         phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
+            #     elif gt.find('*') != -1:
+            #         ##arbitrary RF gates
+            #         if gt[gt.find('*')+1] in {'X', 'Y', 'U', 'V'}:
+            #             phi_l, phi_a = compute_accumulated_phase(gt[gt.find('*')+1], phi_l)
+            #         else:
+            #             pass
+            #     else:
+            #         pass
+            #
+            #     #Case : std pi gate
+            #     if gt in pi_gt_set:
+            #         ## 1. standard pi gate: a. with only other pi gates (or pi/2 gate), only delay on others, or arb gates on others
+            #         if len(p_intersect) == 0:
+            #             rf_ct_idx_list.append(ct_idx_incr_pi_pi_fr[-phi_a])
+            #         else:
+            #             for tup in p_intersect:
+            #                 tau_p = self._gate_lengths['plunger'][tup[0]]
+            #                 if tau_p > taus_std[1]:
+            #                     rf_ct_idx_list.append(ct_idx_incr_pi_p_fr[-phi_a])
+            #                 else:
+            #                     rf_ct_idx_list.append(ct_idx_incr_pi_pi_fr[-phi_a])
+            #
+            #     #Case : std pi/2 gate
+            #     elif gt in pi_2_gt_set:
+            #          if len(p_intersect) == 0:
+            #              if len(pi_intersect) == 0:
+            #                  rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_2_fr[-phi_a])
+            #              else:
+            #                  rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_fr[-phi_a])
+            #          else:
+            #              for tup in p_intersect:
+            #                 tau_p = self._gate_lengths['plunger'][tup[0]]
+            #                 if tau_p > taus_std[0] and len(pi_intersect) == 0:
+            #                     rf_ct_idx_list.append(ct_idx_incr_pi_2_p_fr[-phi_a])
+            #                 elif tau_p < taus_std[0] and len(pi_intersect) == 0:
+            #                     rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_2_fr[-phi_a])
+            #                 elif tau_p > taus_std[1] and len(pi_intersect) != 0
+            #                     rf_ct_idx_list.append(ct_idx_incr_pi_2_p_fr[-phi_a])
+            #                 else:
+            #                     rf_ct_idx_list.append(ct_idx_incr_pi_2_pi_fr[-phi_a])
 
 
+                ##Cases to check:
+                # 1. standard pi gate: a. with only other pi gates (or pi/2 gate), b. with plunger gates (check case if plunger length > and  < std pi length), c. with other arb gates, d. with delays
+                # 2. standard pi/2 gate: a. with only other pi/2 gates, b. with other pi gates, c. with plunger gates (check case if plunger length > and  < std pi length), d. with other arb gates, e. with delays
+                # 3. arbitrary RF pulse: only one case, no centering
+                # 4. arb Z: no centering
+                # 5. delays: 1. std delays ,  2. arb delays
 
 
-
-    #             elif gt[0] == 't':
-    #                 gt_t_str = int(gt[1:len(gt)])
-    #                 if gt_t_str == taus_std[0]:
-    #                     rf_ct_idx_list.append(33)
-    #                 elif gt_t_str == taus_std[1]:
-    #                     rf_ct_idx_list.append(34)
-    #                 else:
-    #                     for item in taus_ct_idxs['plunger']:
-    #                         if gt_t_str == taus_ct_idxs['plunger'][item]['tau_p']:
-    #                             rf_ct_idx_list.append(taus_ct_idxs['plunger'][item]['ct_idx'])
-    #                             break
-    #                         else:
-    #                             continue
-    #
-    #             elif gt[0] == 'z':
-    #                 z_angle = float(gt[1:len((gt))-1])
-    #                 if int(z_angle) == 0:
-    #                     z0_idx = 35 + N_p
-    #                     rf_ct_idx_list.append(z0_idx)
-    #                 else:
-    #                     rf_ct_idx_list.append(arbZ_counter)
-    #                     arbZ.append((arbZ_counter, -z_angle))
-    #             else:
-    #                 pass
     #         else:
     #             if gt[0] in {"x", "y", "m"}:
     #                 phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
@@ -821,7 +889,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     #     for idx in range(n_gates):
     #         gt = gate_sequence[idx]
     #         p_gates_other = set([plunger_gate_sequence[j][idx] for j in p_diff_idxs])
-    #         rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+    #     d d      rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
     #         pi_intersect = rf_gates_other.intersection(pi_gt_set)
     #         pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
     #
