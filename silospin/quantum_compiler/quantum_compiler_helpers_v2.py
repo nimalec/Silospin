@@ -644,8 +644,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         gate_sequence = rf_gate_sequence[rf_idx]
         n_gates = len(gate_sequence)
         gt_0 = gate_sequence[0]
-        ct_idx_tau_pi = 56 + len(arbZs[core_idx][awg_idx])
-        ct_idx_tau_pi_2 = 57 + len(arbZs[core_idx][awg_idx])
+        ct_idx_tau_pi = 56 + len(arbZs[awg_idx][core_idx])
+        ct_idx_tau_pi_2 = 57 + len(arbZs[awg_idx][core_idx])
 
         if gt_0[0] in {'x', 'y', 'm'}:
             phi_l = phi_ls_gt[gt_0]
