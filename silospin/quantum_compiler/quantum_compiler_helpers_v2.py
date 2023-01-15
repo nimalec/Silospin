@@ -663,7 +663,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         else:
             phi_l = 0
 
-        print(phi_l)
         for idx in range(n_gates):
             gt = gate_sequence[idx]
             rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
