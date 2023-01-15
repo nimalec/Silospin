@@ -570,7 +570,7 @@ def make_command_table_indices_v2(gt_seqs, taus_std, taus_p, n_arbZ):
     ct_idxs['plunger'] = plunger_ct_idxs
     return ct_idxs, arbZ
 
-def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_tup_lengths, taus_std, gate_lengths, arbgate_counter, pickle_file_location='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
+def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_tup_lengths, taus_std, gate_lengths, arbgate_counter, arbitrary_z, pickle_file_location='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
     ## Should return
     ##Modifications here: 1. accomodate for multiple cores/channels, 2. arb Z should be counted and account for each edge case,
     ## 3. arbitrary gates ==> need to add new command table index when these occur (per core).
@@ -634,7 +634,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         for j in arb_gates[i]:
             for k in range(len(arb_gates[i][j])):
                 N_arb_tot += 1
-    print(N_arb_tot)
 
     for rf_idx in rf_gate_sequence:
         arb_gate_counter = 0
