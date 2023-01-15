@@ -630,9 +630,9 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
 
     N_arb_tot = 0
-    for i in arbitrary_waveforms:
-        for j in arbitrary_waveforms[i]:
-            for k in range(len(arbitrary_waveforms[i][j])):
+    for i in arb_gates:
+        for j in arb_gates[i]:
+            for k in range(len(arb_gates[i][j])):
                 N_arb_tot += 1
     print(N_arb_tot)
 
