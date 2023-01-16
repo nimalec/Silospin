@@ -744,8 +744,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     # plunger delays
                     else:
                         plunger_len_set = set([item[1] for item in plunger_tup_lengths])
+                        print(plunger_len_set)
                         if gt_t_str in plunger_len_set:
-                            print(gt_t_str)
                             for itm in plunger_tup_lengths:
                                 if gt_t_str == item[1]:
                                     ct_idxs[awg_idx][core_idx].append(item[0])
