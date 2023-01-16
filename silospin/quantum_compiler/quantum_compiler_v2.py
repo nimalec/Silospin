@@ -178,7 +178,7 @@ class GateSetTomographyQuantumCompiler:
 
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
 
-
+        print(arbitrary_gates)
         self._command_tables = {}
         arbgate_counter = {}
         for awg_idx in channel_mapping:
@@ -196,7 +196,6 @@ class GateSetTomographyQuantumCompiler:
         taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
         for idx in self._gate_sequences:
             gate_sequence = self._gate_sequences[idx]
-            print(arbitrary_waveforms)
             make_command_table_indices_v3(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arb_gate_couter, arbitrary_z)
 
     #     waveforms_awg = {}
