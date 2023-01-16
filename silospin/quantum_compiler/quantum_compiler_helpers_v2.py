@@ -772,15 +772,12 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                             for itm in arb_gate_taus:
                                 idx_a += 1
                                 if gt_t_str == itm:
-                                    print(gt_t_str)
                                     ct_idx_t_a  = 58 + idx_a + N_z + N_p
                                     ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
                                     break
                                 else:
                                     continue
-
-
-#    print(ct_idxs)
+    print(ct_idxs)
                 #         elif len(arb_gates) != 0:
                 #             itr_arb = 0
                 #             for i in arbitrary_waveforms:
