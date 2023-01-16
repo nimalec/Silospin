@@ -671,6 +671,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             p_intersect = set([dc_gate_sequence[seq][idx] for seq in dc_gate_sequence]).intersection({'p'})
             p_intersect_tups = set([(seq, dc_gate_sequence[seq][idx]) for seq in dc_gate_sequence])
 
+            print(tau_p, taus_std[1])
+
             if idx == 0:
                 # pi gate
                 if gt in pi_gt_set:
