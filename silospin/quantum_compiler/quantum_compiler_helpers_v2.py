@@ -749,8 +749,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
                         if gt_t_str in plunger_len_set:
                             for itm in plunger_len_tups:
-                                if gt_t_str == item[1]:
-                                     print(item) 
+                                if gt_t_str == itm[1]:
+                                     print(itm) 
                             #         ct_idxs[awg_idx][core_idx].append(item[0])
                             #         break
                                 # else:
