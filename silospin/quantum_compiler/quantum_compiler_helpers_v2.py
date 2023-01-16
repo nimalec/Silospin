@@ -679,10 +679,10 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         for tup in p_intersect_tups:
                             if tup[1] == 'p':
                                 tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
-                                print(taus_std[1], tau_p)
 
                                 #Plunger frame
                                 if tau_p > taus_std[1]:
+                                    print(taus_std[1], tau_p)
                                     gt_str = gt+'_p_fr'
                                 #Pi frame
                                 else:
