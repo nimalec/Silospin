@@ -634,6 +634,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         for j in arb_gates[i]:
             for k in range(len(arb_gates[i][j])):
                 N_arb_tot += 1
+    print(arb_gates)
 
     for rf_idx in rf_gate_sequence:
         arb_gate_counter = 0
@@ -746,7 +747,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         #plunger_len_set = set([item[1] for item in plunger_tup_lengths])
                         plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
                         plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
-                        
+
 
                         N_p = len(plunger_len_tups)
                         N_z = len(arbZs[awg_idx][core_idx])
