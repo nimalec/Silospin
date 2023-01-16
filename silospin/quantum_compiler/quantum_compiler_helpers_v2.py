@@ -682,8 +682,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
                                 #Plunger frame
                                 if tau_p > taus_std[1]:
-                                    print(taus_std[1], tau_p)
                                     gt_str = gt+'_p_fr'
+                                    break
                                 #Pi frame
                                 else:
                                     gt_str = gt+'_pi_fr'
