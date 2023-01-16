@@ -666,6 +666,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         for idx in range(n_gates):
             gt = gate_sequence[idx]
             rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+            print(rf_gates_other)
             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
             pi_intersect = rf_gates_other.intersection(pi_gt_set)
             p_intersect = set([dc_gate_sequence[seq][idx] for seq in dc_gate_sequence]).intersection({'p'})
@@ -723,14 +724,13 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         gt_str = gt+'_pi2_fr'
                     ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
-                print(ct_idxs)
 
-                # z0z gate
-                # elif gt == 'z0z':
-                #     ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
-                # # arb z gates
-                # elif gt[0] == 'z':
-                #     ct_idxs[awg_idx][core_idx].append(arbZs[core_idx][awg_idx][gt][0])
+                ##z0z gate
+                elif gt == 'z0z':
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
+                # arb z gates
+                elif gt[0] == 'z':
+                    ct_idxs[awg_idx][core_idx].append(arbZs[core_idx][awg_idx][gt][0])
                 # # delays
                 # elif gt[0] == 't':
                 #     gt_t_str = int(gt[1:len(gt)])
