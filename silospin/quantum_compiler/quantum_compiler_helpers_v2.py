@@ -746,11 +746,15 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         #plunger_len_set = set([item[1] for item in plunger_tup_lengths])
                         plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
                         plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
-                        print(plunger_len_tups)
 
-                        # if gt_t_str in plunger_len_set:
-                        #     for itm in plunger_len_tups:
-                        #         if gt_t_str == itm[1]:
+                        if gt_t_str in plunger_len_set:
+                            idx_p = 0
+                            for itm in plunger_len_tups:
+                                idx_p += 1
+                                if gt_t_str == itm[1]:
+                                    ct_idx_t_p  = 58 + idx_p + len(arbZs[awg_idx][core_idx])
+                                    print(idx_p,ct_idx_t_p ,  len(arbZs[awg_idx][core_idx]))
+
                         #             ct_idx_t_p = 58 + item[0]
                                     #ct_idxs[awg_idx][core_idx].append(item[0])
                             #         break
