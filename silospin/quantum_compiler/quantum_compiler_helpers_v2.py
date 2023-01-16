@@ -637,7 +637,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             for k in range(len(arb_gates[i][j])):
                 N_arb_tot += 1
                 #arb_gate_taus.append(ceil(1e9*len(arb_gates[i][j][k])/sample_rate))
-                arb_gate_taus.append(len(arb_gates[i][j][k]))
+                arb_gate_taus.append(len(arb_gates[i][j][k][1]))
     print(arb_gate_taus)
 
     for rf_idx in rf_gate_sequence:
