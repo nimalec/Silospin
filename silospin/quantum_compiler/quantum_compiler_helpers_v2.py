@@ -734,22 +734,23 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                 # # delays
                 elif gt[0] == 't':
                     gt_t_str = int(gt[1:len(gt)])
-                    print(gt_t_str)
+
                 #     # std pi delays
-                #     if gt_t_str == int(taus_std[1]):
-                #         ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
-                #     # std pi/2 delays
-                #     elif gt_t_str == int(taus_std[0]):
-                #         ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
-                #     # plunger delays
-                #     else:
-                #         plunger_len_set = set([item[1] for item in plunger_tup_lengths])
-                #         if gt_t_str in plunger_len_set:
-                #             for itm in plunger_tup_lengths:
-                #                 if gt_t_str == item[1]:
-                #                     ct_idxs[awg_idx][core_idx].append(item[0])
-                #                 else:
-                #                     continue
+                    if gt_t_str == int(taus_std[1]):
+                        ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
+                    # std pi/2 delays
+                    elif gt_t_str == int(taus_std[0]):
+                        ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
+                    # plunger delays
+                    else:
+                        plunger_len_set = set([item[1] for item in plunger_tup_lengths])
+                        if gt_t_str in plunger_len_set:
+                            print(gt_t_str)
+                            for itm in plunger_tup_lengths:
+                                if gt_t_str == item[1]:
+                                    ct_idxs[awg_idx][core_idx].append(item[0])
+                                else:
+                                    continue
                 #         elif len(arb_gates) != 0:
                 #             itr_arb = 0
                 #             for i in arbitrary_waveforms:
