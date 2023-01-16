@@ -630,11 +630,14 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
 
     N_arb_tot = 0
+    sample_rate = 2.4e9
+    arb_gate_taus = []
     for i in arb_gates:
         for j in arb_gates[i]:
             for k in range(len(arb_gates[i][j])):
                 N_arb_tot += 1
-    print(arb_gates)
+                arb_gate_taus.append(ceil(1e9*len(arb_gates[i][j][k])/sample_rate))
+    print(arb_gate_taus)
 
     for rf_idx in rf_gate_sequence:
         arb_gate_counter = 0
