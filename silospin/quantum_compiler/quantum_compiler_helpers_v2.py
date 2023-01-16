@@ -679,7 +679,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         for tup in p_intersect_tups:
                             if tup[1] == 'p':
                                 tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
-                                print(tup[0], tau_p, taus_std[1])
                                 #Plunger frame
                                 if tau_p > taus_std[1]:
                                     gt_str = gt+'_p_fr'
@@ -1630,10 +1629,29 @@ def generate_waveforms_v2(gate_npoints, channel_map, added_padding, standard_rf)
             elif channel_map[awg][core_idx]['rf'] == 0:
                 ch_1_idx = channel_map[awg][core_idx]['gate_idx'][0]
                 ch_2_idx = channel_map[awg][core_idx]['gate_idx'][1]
-                waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_pifr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_1_idx]["p"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
-                waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_pifr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_2_idx]["p"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
-                waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_1_idx]["p"], amp, min_points = n_std_waveform_pi_2, side_pad=added_padding)
-                waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_2_idx]["p"], amp, min_points = n_std_waveform_pi_2, side_pad=added_padding)
+                ## Note: a condition added when plunger size  > number of points
+                if n_std_waveform_pi < gate_npoints[awg]["plunger"][ch_1_idx]["p"]:
+                    n_p1_pi_fr = gate_npoints[awg]["plunger"][ch_1_idx]["p"]
+                else:
+                    n_p1_pi_fr =  n_std_waveform_pi
+                if n_std_waveform_pi < gate_npoints[awg]["plunger"][ch_2_idx]["p"]:
+                    n_p2_pi_fr = gate_npoints[awg]["plunger"][ch_2_idx]["p"]
+                else:
+                    n_p2_pi_fr =  n_std_waveform_pi
+                if n_std_waveform_pi_2 < gate_npoints[awg]["plunger"][ch_1_idx]["p"]:
+                    n_p1_pi_2_fr = gate_npoints[awg]["plunger"][ch_1_idx]["p"]
+                else:
+                    n_p1_pi_2_fr =  n_std_waveform_pi_2
+                if n_std_waveform_pi_2 < gate_npoints[awg]["plunger"][ch_2_idx]["p"]:
+                    n_p2_pi_fr = gate_npoints[awg]["plunger"][ch_2_idx]["p"]
+                else:
+                    n_p2_pi_2_fr =  n_std_waveform_pi_2
+
+
+                waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_pifr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_1_idx]["p"], amp, min_points = n_p1_pi_fr, side_pad=added_padding)
+                waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_pifr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_2_idx]["p"], amp, min_points = n_p2_pi_fr, side_pad=added_padding)
+                waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_1_idx]["p"], amp, min_points = n_p1_pi_2_fr, side_pad=added_padding)
+                waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_2_idx]["p"], amp, min_points =  n_p1_pi_2_fr, side_pad=added_padding)
                 for ch_idx in plunger_channels:
                     if gate_npoints[awg]["plunger"][ch_idx]["p"] < gate_npoints[awg]["plunger"][ch_1_idx]["p"]:
                         frame_p1_points = gate_npoints[awg]["plunger"][ch_1_idx]["p"]
