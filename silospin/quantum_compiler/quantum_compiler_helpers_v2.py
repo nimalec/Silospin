@@ -679,7 +679,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         for tup in p_intersect_tups:
                             if tup[1] == 'p':
                                 tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
-                                print(tau_p, taus_std[1])
 
                                 #Plunger frame
                                 if tau_p > taus_std[1]:
@@ -735,56 +734,56 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                 #         gt_str = gt+'_pi_fr'
                 #     ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
                 # z0z gate
-                elif gt == 'z0z':
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
-                # arb z gates
-                elif gt[0] == 'z':
-                    ct_idxs[awg_idx][core_idx].append(arbZs[core_idx][awg_idx][gt][0])
-                # delays
-                elif gt[0] == 't':
-                    gt_t_str = int(gt[1:len(gt)])
-                    # std pi delays
-                    if gt_t_str == int(taus_std[1]):
-                        ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
-                    # std pi/2 delays
-                    elif gt_t_str == int(taus_std[0]):
-                        ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
-                    # plunger delays
-                    else:
-                        plunger_len_set = set([item[1] for item in plunger_tup_lengths])
-                        if gt_t_str in plunger_len_set:
-                            for itm in plunger_tup_lengths:
-                                if gt_t_str == item[1]:
-                                    ct_idxs[awg_idx][core_idx].append(item[0])
-                                else:
-                                    continue
-                        elif len(arb_gates) != 0:
-                            itr_arb = 0
-                            for i in arbitrary_waveforms:
-                                for j in arbitrary_waveforms[i]:
-                                    if len(arbitrary_waveforms[i][j]) == 0:
-                                        pass
-                                    else:
-                                        for k in range(len(arbitrary_waveforms[i][j])):
-                                            itr_arb += 1
-                                            if ceil(gt_t_str/2.4) == len(arbitrary_waveforms[i][j][k][1]):
-                                                ct_idx_arb_wait = 3+ct_idx_z0z+N_p+len(arbZs[awg_idx][core_idx])
-                                                ct_idxs[awg_idx][core_idx].append(ct_idx_arb_wait)
-                                            else:
-                                                pass
-                        else:
-                            pass
-
-                elif gt.find('*') != -1:
-                    if gt[gt.find('*')+1] in arbgate_dict.keys():
-                        arb_gate_counter[awg_idx][cored_idx] += 1 ##Should return arb_gate_counter at the output
-                        N_arb_core = arb_gate_counter[awg_idx][cored_idx]
-                        ct_idx_rf_arb = 3+ct_idx_z0z+N_p+N_arb_tot+N_arb_core
-                        ct_idxs[awg_idx][core_idx].append(ct_idx_rf_arb)
-                    else:
-                        pass
-                else:
-                    pass
+                # elif gt == 'z0z':
+                #     ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
+                # # arb z gates
+                # elif gt[0] == 'z':
+                #     ct_idxs[awg_idx][core_idx].append(arbZs[core_idx][awg_idx][gt][0])
+                # # delays
+                # elif gt[0] == 't':
+                #     gt_t_str = int(gt[1:len(gt)])
+                #     # std pi delays
+                #     if gt_t_str == int(taus_std[1]):
+                #         ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
+                #     # std pi/2 delays
+                #     elif gt_t_str == int(taus_std[0]):
+                #         ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
+                #     # plunger delays
+                #     else:
+                #         plunger_len_set = set([item[1] for item in plunger_tup_lengths])
+                #         if gt_t_str in plunger_len_set:
+                #             for itm in plunger_tup_lengths:
+                #                 if gt_t_str == item[1]:
+                #                     ct_idxs[awg_idx][core_idx].append(item[0])
+                #                 else:
+                #                     continue
+                #         elif len(arb_gates) != 0:
+                #             itr_arb = 0
+                #             for i in arbitrary_waveforms:
+                #                 for j in arbitrary_waveforms[i]:
+                #                     if len(arbitrary_waveforms[i][j]) == 0:
+                #                         pass
+                #                     else:
+                #                         for k in range(len(arbitrary_waveforms[i][j])):
+                #                             itr_arb += 1
+                #                             if ceil(gt_t_str/2.4) == len(arbitrary_waveforms[i][j][k][1]):
+                #                                 ct_idx_arb_wait = 3+ct_idx_z0z+N_p+len(arbZs[awg_idx][core_idx])
+                #                                 ct_idxs[awg_idx][core_idx].append(ct_idx_arb_wait)
+                #                             else:
+                #                                 pass
+                #         else:
+                #             pass
+                #
+                # elif gt.find('*') != -1:
+                #     if gt[gt.find('*')+1] in arbgate_dict.keys():
+                #         arb_gate_counter[awg_idx][cored_idx] += 1 ##Should return arb_gate_counter at the output
+                #         N_arb_core = arb_gate_counter[awg_idx][cored_idx]
+                #         ct_idx_rf_arb = 3+ct_idx_z0z+N_p+N_arb_tot+N_arb_core
+                #         ct_idxs[awg_idx][core_idx].append(ct_idx_rf_arb)
+                #     else:
+                #         pass
+                # else:
+                #     pass
     print(ct_idxs)
             ##Case: gates following the first one
             # else:
