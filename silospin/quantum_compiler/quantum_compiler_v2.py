@@ -177,7 +177,7 @@ class GateSetTomographyQuantumCompiler:
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
 
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
-        print(arbitrary_waveforms)
+
 
         self._command_tables = {}
         arbgate_counter = {}

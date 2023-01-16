@@ -717,26 +717,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         gt_str = gt+'_pi2_fr'
                     ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
-                    print(ct_idxs)
 
-
-                # pi gate
-                # elif gt in pi_gt_set:
-                #     if len(p_intersect) != 0:
-                #         for tup in p_intersect:
-                #             if tup[1] == 'p':
-                #                 tau_p = int(gate_lengths['plunger'][tup[0]])
-                #                 if len(pi_intersect) == 0 and tau_p >  taus_std[1]:
-                #                     gt_str = gt+'_p_fr'
-                #                 elif len(pi_intersect) != 0 and tau_p <  taus_std[1]:
-                #                     gt_str = gt+'_pi_fr'
-                #                 else:
-                #                     pass
-                #             else:
-                #                 gt_str = gt+'_pi_fr'
-                #     else:
-                #         gt_str = gt+'_pi_fr'
-                #     ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
                 # z0z gate
                 # elif gt == 'z0z':
                 #     ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
