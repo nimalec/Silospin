@@ -1650,7 +1650,7 @@ def generate_waveforms_v2(gate_npoints, channel_map, added_padding, standard_rf)
 
                 waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_pifr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_1_idx]["p"], amp, min_points = n_p1_pi_fr, side_pad=added_padding)
                 waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_pifr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_2_idx]["p"], amp, min_points = n_p2_pi_fr, side_pad=added_padding)
-                print(gate_npoints[awg]["plunger"][ch_1_idx]["p"],n_p1_pi_2_fr)
+                print(gate_npoints[awg]["plunger"][ch_2_idx]["p"],n_p1_pi_2_fr)
                 waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_1_idx]["p"], amp, min_points = n_p1_pi_2_fr, side_pad=added_padding)
                 waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_2_idx]["p"], amp, min_points =  n_p1_pi_2_fr, side_pad=added_padding)
                 for ch_idx in plunger_channels:
