@@ -699,10 +699,10 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         for tup in p_intersect_tups:
                             if tup[1] == 'p':
                                 tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
-                                print(tau_p ,  taus_std[0])
 
                                 if len(pi_intersect) == 0 and tau_p > taus_std[0]:
                                     gt_str = gt+'_p_fr'
+                                    print(gt_str)
                                     break
                                 elif len(pi_intersect) == 0 and tau_p < taus_std[0]:
                                     gt_str = gt+'_pi2_fr'
