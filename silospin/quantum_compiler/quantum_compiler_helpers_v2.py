@@ -707,6 +707,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                                 gt_str = gt+'_pi2_fr'
                     elif len(pi_intersect) != 0:
                         gt_str = gt+'_pi_fr'
+                        print(initial_gates[gt_str])
                     else:
                         gt_str = gt+'_pi2_fr'
                     ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
