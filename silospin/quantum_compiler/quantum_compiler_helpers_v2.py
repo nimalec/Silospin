@@ -733,7 +733,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
                 # # delays
                 elif gt[0] == 't':
-                    print(taus_std)
                     gt_t_str = int(gt[1:len(gt)])
 
                 #     # std pi delays
