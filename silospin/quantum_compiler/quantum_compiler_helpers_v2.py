@@ -668,6 +668,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
             pi_intersect = rf_gates_other.intersection(pi_gt_set)
+            print(pi_intersect)   
             p_intersect = set([(seq, dc_gate_sequence[seq][idx]) for seq in dc_gate_sequence])
 
             if idx == 0:
@@ -707,7 +708,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                                 gt_str = gt+'_pi2_fr'
                     elif len(pi_intersect) != 0:
                         gt_str = gt+'_pi_fr'
-                        print(initial_gates[gt_str])
                     else:
                         gt_str = gt+'_pi2_fr'
                     ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
