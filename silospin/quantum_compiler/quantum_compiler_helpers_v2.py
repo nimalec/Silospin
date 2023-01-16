@@ -698,20 +698,25 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     if len(p_intersect) != 0:
                         for tup in p_intersect_tups:
                             if tup[1] == 'p':
+                                #Obtain DC pulse length
                                 tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
-
+                                #No pi pulses, just pi/2 and plunger ==> plunger > pi/2
                                 if len(pi_intersect) == 0 and tau_p > taus_std[0]:
                                     gt_str = gt+'_p_fr'
-                                    print(gt_str)
                                     break
-                                elif len(pi_intersect) == 0 and tau_p < taus_std[0]:
-                                    gt_str = gt+'_pi2_fr'
+                                #Pi pulses, with pi/2 and plunger ==> plunger > pi
+                                elif len(pi_intersect) != 0 and tau_p > taus_std[1]:
+                                    gt_str = gt+'_p_fr'
+                                    break
+                               #Pi pulses, with pi/2 and plunger ==> plunger < pi
                                 elif len(pi_intersect) != 0 and tau_p < taus_std[1]:
                                     gt_str = gt+'_pi_fr'
+                                elif len(pi_intersect) == 0 and tau_p < taus_std[0]:
+                                    gt_str = gt+'_pi2_fr'
                                 else:
                                     pass
                             else:
-                                gt_str = gt+'_pi2_fr'
+                                pass
 
                     elif len(pi_intersect) != 0:
                         gt_str = gt+'_pi_fr'
