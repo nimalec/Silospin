@@ -689,7 +689,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
                 # pi/2 gate
                 elif gt in pi_2_gt_set:
-                    print(pi_intersect)
+                    print(len(print(pi_intersect)))
                     if len(p_intersect) != 0:
                         for tup in p_intersect:
                             if tup[1] == 'p':
