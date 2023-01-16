@@ -677,6 +677,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     if len(p_intersect) != 0:
                         for tup in p_intersect_tups:
                             if tup[1] == 'p':
+                                print(tup[0])
                                 tau_p = int(gate_lengths['plunger'][tup[0]])
                                 #Plunger frame
                                 if tau_p > taus_std[1]:
