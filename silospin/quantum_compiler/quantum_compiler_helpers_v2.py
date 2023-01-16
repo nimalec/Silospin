@@ -745,15 +745,17 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         #plunger_len_set = set([item[1] for item in plunger_tup_lengths])
                         plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
-                        plunger_len_tups = set([(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']])
-                        print(plunger_len_tups)
+                        #plunger_len_tups = set([(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']])
 
-                        # if gt_t_str in plunger_len_set:
-                        #     for itm in plunger_tup_lengths:
-                        #         if gt_t_str == item[1]:
-                        #             ct_idxs[awg_idx][core_idx].append(item[0])
-                        #         else:
-                        #             continue
+                        if gt_t_str in plunger_len_set:
+                            print(gt_t_str)
+                            # for itm in plunger_tup_lengths:
+                            #     if gt_t_str == item[1]:
+                            #         ct_idxs[awg_idx][core_idx].append(item[0])
+                            #         break
+                                # else:
+                                #     continue
+
                 #         elif len(arb_gates) != 0:
                 #             itr_arb = 0
                 #             for i in arbitrary_waveforms:
