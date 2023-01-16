@@ -628,7 +628,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     rf_gate_sequence = gt_seqs['rf']
     dc_gate_sequence = gt_seqs['plunger']
     arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
-    print(ct_idxs)
 
     N_arb_tot = 0
     for i in arb_gates:
@@ -666,6 +665,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
         for idx in range(n_gates):
             gt = gate_sequence[idx]
+            print(gt)
             rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
             pi_intersect = rf_gates_other.intersection(pi_gt_set)
