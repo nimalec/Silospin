@@ -730,7 +730,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
                 # arb z gates
                 elif gt[0] == 'z':
-                    ct_idxs[awg_idx][core_idx].append(arbZs[core_idx][awg_idx][gt][0])
+                    ct_idxs[awg_idx][core_idx].append(arbZs[awg_idx][core_idx][gt][0])
                 # # delays
                 # elif gt[0] == 't':
                 #     gt_t_str = int(gt[1:len(gt)])
