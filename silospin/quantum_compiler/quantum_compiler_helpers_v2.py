@@ -802,7 +802,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         pass
                         ## Should throw an error here ...
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_g_a)
 
                         ## Check if  X, Y, or other gate ...
                         #ct_idx_g_a  = 58 + N_z + N_p + arb_gate_counter[awg_idx][core_idx]
