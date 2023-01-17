@@ -1293,7 +1293,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 ct_idx += 1
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": -(phase+270), "increment": True}, "phase1":  {"value": -(phase+270), "increment": True},"amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
-                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": -(phase-90), "increment": True}), "phase1":  {"value": -(phase-90), "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": -(phase-90), "increment": True}, "phase1":  {"value": -(phase-90), "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": -(phase-180), "increment": True}, "phase1":  {"value": -(phase-180), "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
