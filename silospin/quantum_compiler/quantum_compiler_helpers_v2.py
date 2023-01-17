@@ -793,9 +793,9 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         #N_p = len(plunger_len_tups)
                         #N_z = len(arbZs[awg_idx][core_idx])
                         if gt[gt.find('*')+1] in {'X', 'Y', 'U', 'V'}:
-                             print(gt[gt.find('*')+1])
                              init_gate_map = {'X': 1, 'Y': 2, 'U': 3, 'V': 4}
                              ct_idx_g_a = 58 + N_z + N_p + init_gate_map[gt[gt.find('*')+1]]
+                             print(ct_idx_g_a)
                              arbgate_counter[awg_idx][core_idx] += 11
                         else:
                              ct_idx_g_a = 58 + N_z + N_p + init_gate_map[gt[gt.find('*')+1]]
