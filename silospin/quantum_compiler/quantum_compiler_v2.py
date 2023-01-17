@@ -191,14 +191,12 @@ class GateSetTomographyQuantumCompiler:
                     self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
 
 
-        print(arbgate_counter)
         ct_idxs_all = {}
-        arb_gate_couter = {}
         taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
         for idx in self._gate_sequences:
             gate_sequence = self._gate_sequences[idx]
-        #    arb_gate_counter = make_command_table_indices_v3(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arb_gate_couter, arbitrary_z)
-        #print(arb_gate_counter)
+            arbgate_counter = make_command_table_indices_v3(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_couter, arbitrary_z)
+        print(arb_gate_counter)
 
     #     waveforms_awg = {}
     #     sequencer_code = {}
