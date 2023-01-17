@@ -624,10 +624,13 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     phi_ls_gt = {'x':  0, 'y': -90, 'xx':  0, 'yy': -90 , 'xxx':  -180, 'yyy': 90, 'mxxm': -180, 'myym': 90}
     pi_gt_set = {'xx', 'yy', 'mxxm', 'myym'}
     pi_2_gt_set = {'x', 'y', 'xxx', 'yyy'}
-    N_p = len(plunger_tup_lengths)
+
     rf_gate_sequence = gt_seqs['rf']
     dc_gate_sequence = gt_seqs['plunger']
     arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
+    plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
+    plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
+    N_p = len(plunger_tup_lengths)
 
     N_arb_tot = 0
     sample_rate = 2.4e9
@@ -643,6 +646,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         arb_gate_counter = 0
         awg_idx = awg_core_split[rf_idx][0]
         core_idx = awg_core_split[rf_idx][1]
+        N_z = len(arbZs[awg_idx][core_idx])
         ct_idxs[awg_idx][core_idx] = []
         rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]).difference({rf_idx}))
         gate_sequence = rf_gate_sequence[rf_idx]
@@ -748,12 +752,12 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     # plunger delays
                     else:
                         #plunger_len_set = set([item[1] for item in plunger_tup_lengths])
-                        plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
-                        plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
+                        #plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
+                        #plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
 
 
-                        N_p = len(plunger_len_tups)
-                        N_z = len(arbZs[awg_idx][core_idx])
+                        #N_p = len(plunger_len_tups)
+                        #N_z = len(arbZs[awg_idx][core_idx])
                         ## make a set of N_z gates ...
 
                         if gt_t_str in plunger_len_set:
@@ -768,8 +772,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                                     continue
                         ##Arb gate delays  (need to test with arb gate)
                         elif gt_t_str in set(arb_gate_taus):
-                            N_p = len(plunger_len_tups)
-                            N_z = len(arbZs[awg_idx][core_idx])
+                        #    N_p = len(plunger_len_tups)
+                        #    N_z = len(arbZs[awg_idx][core_idx])
 
                             idx_a = 0
                             for itm in arb_gate_taus:
@@ -786,8 +790,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
                 elif gt.find('*') != -1:
                     if gt[gt.find('*')+1] in arbgate_dict.keys():
-                        N_p = len(plunger_len_tups)
-                        N_z = len(arbZs[awg_idx][core_idx])                    
+                        #N_p = len(plunger_len_tups)
+                        #N_z = len(arbZs[awg_idx][core_idx])
                         if gt[gt.find('*')+1] in {'X', 'Y', 'U', 'V'}:
                              init_gate_map = {'X': 1, 'Y': 2, 'U': 3, 'V': 4}
                              ct_idx_g_a = 58 + N_z + N_p + init_gate_map[gt[gt.find('*')+1]]
