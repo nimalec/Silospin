@@ -150,6 +150,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
     for awg_idx in channel_mapping:
         arbitrary_waveforms[awg_idx] = {}
         arbitrary_z[awg_idx] = {}
+
         for core_idx in channel_mapping[awg_idx]:
             arbitrary_waveforms[awg_idx][core_idx] =  []
             arbitrary_z[awg_idx][core_idx] =  set({})
@@ -234,6 +235,8 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
             ## Loop over all non-Z gates
             for item in notz_set:
                 gt_idx = int(item[item.find('(')+1:item.find(')')]) ## obtain idx for this line
+                awg_ii = awg_core_split[gt_idx][0]
+                core_ii = awg_core_split[gt_idx][1]
 
                 ##Checks if  gate is plunger
                 if item[item.find(')')+1]== 'p':
@@ -242,8 +245,9 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                     qubit_length = qubit_lengths["plunger"][gt_idx]['p']
                     length_set.append(qubit_length)
 
-              ##Checks if  gate is arb
+              ##Checks if  gate is arb  ==>
                 elif item.find('*') != -1:
+
                     gt_label_idx = item.find('*') + 1
                     gt_label = item[gt_label_idx]
                     gt_parameters = arb_gate_dict[gt_label]['parameters']
