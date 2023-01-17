@@ -806,7 +806,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     pass
                     ##Throw an error here...
 
-    print(ct_idxs[awg_idx][core_idx])
+    print(ct_idxs)
     return arbgate_counter
             ##Case: gates following the first one
             # else:
