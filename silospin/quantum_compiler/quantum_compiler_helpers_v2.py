@@ -798,7 +798,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                 #     pass
 #    print(ct_idxs)
     #print(arb_gate_counter)
-    return arb_gate_counter
+    return arbgate_counter
 
             ##Case: gates following the first one
             # else:
