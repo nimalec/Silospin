@@ -796,7 +796,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                              init_gate_map = {'X': 1, 'Y': 2, 'U': 3, 'V': 4}
                              ct_idx_g_a = 58 + N_z + N_p + N_arb_tot + init_gate_map[gt[gt.find('*')+1]]+arbgate_counter[awg_idx][core_idx]
                              arbgate_counter[awg_idx][core_idx] += 11
-                             print(ct_idx_g_a)
                         else:
                              ct_idx_g_a = 59 + N_z + N_p + N_arb_tot + arbgate_counter[awg_idx][core_idx]
                              arbgate_counter[awg_idx][core_idx] += 1
@@ -807,6 +806,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     pass
                     ##Throw an error here...
 
+    print(ct_idxs[awg_idx][core_idx])
     return arbgate_counter
             ##Case: gates following the first one
             # else:
