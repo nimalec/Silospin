@@ -783,7 +783,13 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
                 elif gt.find('*') != -1:
                     if gt[gt.find('*')+1] in arbgate_dict.keys():
-                        arbgate_counter[awg_idx][core_idx] += 1
+                        if gt[gt.find('*')+1] in {'X', 'Y', 'U', 'V'}:
+                        
+                             ct_idx_g_a  = 58 + N_z + N_p + arb_gate_counter[awg_idx][core_idx]
+                             arbgate_counter[awg_idx][core_idx] += 11
+                        else:
+                             arbgate_counter[awg_idx][core_idx] += 1
+
                         ## Check if  X, Y, or other gate ...
                         #ct_idx_g_a  = 58 + N_z + N_p + arb_gate_counter[awg_idx][core_idx]
 
@@ -1266,22 +1272,30 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
             if wave[0][wave[0].find('*')+1:wave[0].find('[')] in {'X', 'Y', 'U', 'V'}:
                 ## X = arb X, Y = arb Y , U = arb -X , V = arb -Y
                 ## set of CT entries corresponding for this gate for different phases: 0, 90, 180, 270, -90, -180, -270 ==> each will be called depending on the phase used lastly
-                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -phase, "phase1": -phase, "amplitude0": amplitude, "amplitude1": amplitude})
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": {"value": -phase, "increment": False}, "phase1": {"value": -(phase+90), "increment": False}, "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
-                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase+90), "phase1": -(phase+90), "amplitude0": amplitude, "amplitude1": amplitude})
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": {"value": -(phase+90), "increment": False}, "phase1": {"value": -(phase+180), "increment": False}, "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
-                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase+180), "phase1": -(phase+180),"amplitude0": amplitude, "amplitude1": amplitude})
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": -(phase+180), "increment": False}, "phase1":  {"value": -(phase+270), "increment": False},"amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
-                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase+270), "phase1": -(phase+270),"amplitude0": amplitude, "amplitude1": amplitude})
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": phase+90, "increment": False}, "phase1":  {"value": phase, "increment":  False},"amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
-                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-90), "phase1": -(phase-90), "amplitude0": amplitude, "amplitude1": amplitude})
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": {"value": -phase, "increment": True}, "phase1": {"value": -phase, "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
-                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-180), "phase1": -(phase-180), "amplitude0": amplitude, "amplitude1": amplitude})
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": {"value": -(phase+90), "increment": True}, "phase1": {"value": -(phase+90), "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
-                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -(phase-270), "phase1": -(phase-270), "amplitude0": amplitude, "amplitude1": amplitude})
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": -(phase+180), "increment": True}, "phase1":  {"value": -(phase+180), "increment": True},"amplitude0": amplitude, "amplitude1": amplitude})
+                ct_idx += 1
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": -(phase+270), "increment": True}, "phase1":  {"value": -(phase+270), "increment": True},"amplitude0": amplitude, "amplitude1": amplitude})
+                ct_idx += 1
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": -(phase-90), "increment": True}), "phase1":  {"value": -(phase-90), "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
+                ct_idx += 1
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": -(phase-180), "increment": True}, "phase1":  {"value": -(phase-180), "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
+                ct_idx += 1
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0":  {"value": -(phase-270), "increment": True}, "phase1": -{"value": -(phase-270), "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
             else:
-                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": -phase, "phase1": -phase, "amplitude0": amplitude, "amplitude1": amplitude})
+                ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": - {"value": -phase, "increment": True}, "phase1": - {"value": -phase, "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
