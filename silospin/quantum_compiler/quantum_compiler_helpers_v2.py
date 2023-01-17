@@ -807,7 +807,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     pass
                     ##Throw an error here...
 
-   return arbgate_counter
+    return arbgate_counter
             ##Case: gates following the first one
             # else:
             #     if gt[0] in {'x', 'y', 'm'}:
