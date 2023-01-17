@@ -804,9 +804,29 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     ct_idxs[awg_idx][core_idx].append(ct_idx_g_a)
                 else:
                     pass
-            ## Other RF gates         
+            ## Other RF gates
             else:
-                pass
+                if gt in pi_gt_set:
+                    pass
+
+                elif gt in pi_2_gt_set:
+                    pass
+
+                elif gt == 'z0z':
+                    pass
+
+                elif gt[0] == 'z':
+                    pass
+
+
+                elif gt[0] == 't':
+                    pass
+ 
+                elif gt.find('*') != -1:
+                    pass
+                else:
+                    pass
+
 
     return arbgate_counter
             ##Case: gates following the first one
