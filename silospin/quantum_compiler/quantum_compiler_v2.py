@@ -197,8 +197,6 @@ class GateSetTomographyQuantumCompiler:
             gate_sequence = self._gate_sequences[idx]
             ct_idxs, arbgate_counter = make_command_table_indices_v3(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z)
             ct_idxs_all[idx] = ct_idxs
-        print(ct_idxs_all)
-
 
     #     waveforms_awg = {}
     #     sequencer_code = {}
