@@ -852,6 +852,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                                     ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
                             else:
                                 ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
+                        else:
+                            ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
                      ct_idxs[awg_idx][core_idx].append(ct_idx_incr)
 
 
