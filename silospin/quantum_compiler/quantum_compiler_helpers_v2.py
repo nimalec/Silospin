@@ -615,11 +615,11 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             ct_idxs[awg_idx][core_idx] = []
 
     initial_gates = {'xx_pi_fr': 0, 'yy_pi_fr': 1, 'mxxm_pi_fr': 2, 'myym_pi_fr': 3, 'x_pi_fr': 4, 'y_pi_fr': 5, 'xxx_pi_fr': 6, 'yyy_pi_fr': 7, 'x_pi2_fr': 8, 'y_pi2_fr': 9, 'xxx_pi2_fr': 10, 'yyy_pi2_fr': 11, 'xx_p_fr': 12, 'yy_p_fr': 13, 'mxxm_p_fr': 14, 'myym_p_fr': 15, 'x_p_fr': 16, 'y_p_fr': 17, 'xxx_p_fr': 18, 'yyy_p_fr': 19}
-    ct_idx_incr_pi_pi_fr = {0: 20, -90: 21, -180: 22, -270: 23, 90: 24, 180: 25, 270: 26}
-    ct_idx_incr_pi_2_pi_fr = {0: 27, -90: 28, -180: 29, -270: 30, 90: 31, 180: 32,  270: 33}
-    ct_idx_incr_pi_2_pi_2_fr = {0: 34, -90: 35, -180: 36, -270: 37, 90: 38, 180: 39,  270:  40}
-    ct_idx_incr_pi_p_fr = {0: 41, -90: 42, -180: 43, -270: 44, 90: 45, 180: 46,  270:  47}
-    ct_idx_incr_pi_2_p_fr = {0: 48, -90: 49, -180: 50, -270: 51, 90: 51, 180: 53,  270:  54}
+    ct_idx_incr_pi_pi_fr = {0: 20, -90: 21, -180: 22, -270: 23, 90: 24, 180: 25, 270: 26, 360: 20, -360: 20}
+    ct_idx_incr_pi_2_pi_fr = {0: 27, -90: 28, -180: 29, -270: 30, 90: 31, 180: 32,  270: 33, 360: 20, -360: 20}
+    ct_idx_incr_pi_2_pi_2_fr = {0: 34, -90: 35, -180: 36, -270: 37, 90: 38, 180: 39,  270:  40, 360: 20, -360: 20}
+    ct_idx_incr_pi_p_fr = {0: 41, -90: 42, -180: 43, -270: 44, 90: 45, 180: 46,  270:  47, 360: 20, -360: 20}
+    ct_idx_incr_pi_2_p_fr = {0: 48, -90: 49, -180: 50, -270: 51, 90: 51, 180: 53,  270:  54, 360: 20, -360: 20}
     ct_idx_z0z = 55
     phi_ls_gt = {'x':  0, 'y': -90, 'xx':  0, 'yy': -90 , 'xxx':  -180, 'yyy': 90, 'mxxm': -180, 'myym': 90}
     pi_gt_set = {'xx', 'yy', 'mxxm', 'myym'}
