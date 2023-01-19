@@ -833,7 +833,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
                 else:
                     pass
-                print(phi_a)
+
 
                 ##Incremented pi gate
                 if gt in pi_gt_set:
