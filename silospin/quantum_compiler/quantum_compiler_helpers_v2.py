@@ -813,10 +813,10 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                                phi_l, phi_a = compute_accumulated_phase('V', phi_l)
                            else:
                                pass
-                            incr_gate_map = {0: 5, -90 : 6, -180: 7, -270: 8, 90: 9, 180: 10, 270: 11}
-                            ct_idx_g_a = 58 + N_z + N_p + N_arb_tot + incr_gate_map[-phi_a]+arbgate_counter[awg_idx][core_idx]
-                            arbgate_counter[awg_idx][core_idx] += 11
-                            ct_idxs[awg_idx][core_idx].append(ct_idx_g_a)
+                           incr_gate_map = {0: 5, -90 : 6, -180: 7, -270: 8, 90: 9, 180: 10, 270: 11}
+                           ct_idx_g_a = 58 + N_z + N_p + N_arb_tot + incr_gate_map[-phi_a]+arbgate_counter[awg_idx][core_idx]
+                           arbgate_counter[awg_idx][core_idx] += 11
+                           ct_idxs[awg_idx][core_idx].append(ct_idx_g_a)
                         else:
                             pass
                     else:
