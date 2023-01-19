@@ -1225,9 +1225,9 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
             ct_idx += 1
 
     ##Standard pulse delays
-    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2_std}})
-    ct_idx += 1
     ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_std}})
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2_std}})
     ct_idx += 1
     ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_p_std}})
     ct_idx += 1
