@@ -1647,6 +1647,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
             else:
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": - {"value": -phase, "increment": True}, "phase1":  {"value": -phase, "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
+            wave_idx += 1
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
