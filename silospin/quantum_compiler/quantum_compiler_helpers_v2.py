@@ -890,7 +890,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     pass
 
     return ct_idxs, arbgate_counter
-    
+
     # ct_idxs['rf'] = rf_ct_idxs
     #
     # plunger_ct_idxs = {}
