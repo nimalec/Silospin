@@ -794,7 +794,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             ##Arbitrary gates
             elif gt.find('*') != -1:
                 if gt[gt.find('*')+1] in arbgate_dict.keys():
-                    print(gt)
                     if gt[gt.find('*')+1] in {'X', 'Y', 'U', 'V'}:
                         ##Initial gate
                         if rf_gt_idx == 1:
@@ -817,7 +816,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                            incr_gate_map = {0: 5, -90 : 6, -180: 7, -270: 8, 90: 9, 180: 10, 270: 11}
                            ct_idx_g_a = 58 + N_z + N_p + N_arb_tot + incr_gate_map[-phi_a]+arbgate_counter[awg_idx][core_idx]
                            arbgate_counter[awg_idx][core_idx] += 11
-                           ct_idxs[awg_idx][core_idx].append(ct_idx_g_a)
+                           #ct_idxs[awg_idx][core_idx].append(ct_idx_g_a)
                         else:
                             pass
                     else:
