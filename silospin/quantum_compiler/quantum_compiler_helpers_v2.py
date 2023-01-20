@@ -685,7 +685,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             p_intersect_tups = set([(seq, dc_gate_sequence[seq][idx]) for seq in dc_gate_sequence])
 
             ## Count initial RF gates per sequence
-            if gt in {'x', 'y', 'mxxm', 'myym', 'xxx', 'yyy'}:
+            if gt in {'x', 'y', 'mxxm', 'myym', 'xxx', 'yyy', 'xx', 'yy'}:
                 rf_gt_idx += 1
             elif gt.find('*') != -1:
                 if gt[gt.find('*')+1] in {'X', 'Y', 'U', 'V'}:
@@ -699,7 +699,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
             # initial pi gate
             if gt in pi_gt_set and rf_gt_idx == 1:
-                print(gt)
                 if len(p_intersect) != 0:
                     for tup in p_intersect_tups:
                         if tup[1] == 'p':
