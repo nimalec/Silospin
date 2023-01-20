@@ -904,11 +904,14 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         ct_idx_tau_pi = 2*N_p + 7
         ct_idx_tau_pi_2 =  2*N_p + 6
         ct_idx_z0z = 2*N_p + 5
+        print(ct_idx_tau_p_std)
+        print(ct_idx_tau_pi)
+        print(ct_idx_tau_pi_2)
+
 
         ##Loop through all gates
         for idx in range(n_gates):
             gt = gate_sequence[idx]
-            print(gt)
     #         rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
     #         pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
     #         pi_intersect = rf_gates_other.intersection(pi_gt_set)
