@@ -896,7 +896,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         core_idx = awg_core_split[dc_idx][1]
         ct_idxs[awg_idx][core_idx] = []
         dc_diff_idxs = list(set([i for i in dc_gate_sequence.keys()]).difference({dc_idx}))
-        print(dc_diff_idxs)
         gate_sequence = dc_gate_sequence[dc_idx]
         n_gates = len(gate_sequence)
         ct_idx_tau_p_std = 2*N_p + 8
@@ -904,13 +903,14 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         ct_idx_tau_pi_2 =  2*N_p + 6
         ct_idx_z0z = 2*N_p + 5
 
-        # ##Loop through all gates
-        # for idx in range(n_gates):
-        #     gt = gate_sequence[idx]
-        #     rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
-        #     pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
-        #     pi_intersect = rf_gates_other.intersection(pi_gt_set)
-        #     p_intersect = set([dc_gate_sequence[seq][idx] for seq in dc_gate_sequence]).intersection({'p'})
+        ##Loop through all gates
+        for idx in range(n_gates):
+            gt = gate_sequence[idx]
+            dc_gates_other = set([dc_gate_sequence[j][idx] for j in dc_diff_idxs])
+            print(dc_gates_other)
+            # pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+            # pi_intersect = rf_gates_other.intersection(pi_gt_set)
+            # p_intersect = set([dc_gate_sequence[seq][idx] for seq in dc_gate_sequence]).intersection({'p'})
 
     return ct_idxs, arbgate_counter
 
