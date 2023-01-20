@@ -909,26 +909,19 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             gt = gate_sequence[idx]
             dc_gates_other = set([dc_gate_sequence[j][idx] for j in dc_diff_idxs])
             p_gates_other = dc_gates_other.intersection({'p'})
-            print(p_gates_other)
-
-
-            # rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
-            # pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
-            # pi_intersect = rf_gates_other.intersection(pi_gt_set)
+            rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+            pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+            pi_intersect = rf_gates_other.intersection(pi_gt_set)
 
             ## Edge cases:
             ##1. single plunger, no other dc or rf gates ==> no pulse centering (use (p_i)_{p_i})
             ##2. single plunger, no pi/pi_2 RF gates or plunger gates, but arbitrary gates or delays present ==> no pulse centering (use (p_i)_{p_i})
             ##3. plunger with other plungers, no RF ==> find largest plunger gate length present (assign to p_max) ==> use (p_i)_{p_max}
-            ##4. plunger with other RF (pi or pi/2), no plunger
-            ##
-            ##
-            ##
-            ##
-            ##
-            ##
-            ##
-            ##
+            ##4. plunger with other RF (pi or pi/2), no plunger ==>
+            ## a. only pi ==> check if pi_std < p_std --> use (p_i)_{p_std} , elif pi > p_std --> use (p_i)_{pi}, b. only pi/2 --> check if pi_2_std < p_std --> use (p_i)_{p_std}, else --> use (p_i)_{pi/2},
+            ## c. if pi and pi/2 present ==> check if pi_std < p_std --> use (p_i)_{p_std} ,  elif pi > p_std --> use (p_i)_{pi},
+            if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                print(gt) 
 
     return ct_idxs, arbgate_counter
 
