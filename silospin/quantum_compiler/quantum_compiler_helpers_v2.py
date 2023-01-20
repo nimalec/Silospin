@@ -889,8 +889,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     pass
 
 
-    return ct_idxs, arbgate_counter
-
+#    return ct_idxs, arbgate_counter
 
 
     for dc_idx in dc_gate_sequence:
@@ -916,7 +915,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     #         p_intersect = set([dc_gate_sequence[seq][idx] for seq in dc_gate_sequence]).intersection({'p'})
     #         p_intersect_tups = set([(seq, dc_gate_sequence[seq][idx]) for seq in dc_gate_sequence])
 
-
+    return ct_idxs, arbgate_counter
 
     # ct_idxs['rf'] = rf_ct_idxs
     # plunger_ct_idxs = {}
