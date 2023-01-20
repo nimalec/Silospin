@@ -907,7 +907,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         ##Loop through all gates
         for idx in range(n_gates):
             gt = gate_sequence[idx]
-            print(gt)
             dc_gates_other = set([dc_gate_sequence[j][idx] for j in dc_diff_idxs])
             p_gates_other = dc_gates_other.intersection({'p'})
             rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
@@ -922,8 +921,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             ## a. only pi ==> check if pi_std < p_std --> use (p_i)_{p_std} , elif pi > p_std --> use (p_i)_{pi}, b. only pi/2 --> check if pi_2_std < p_std --> use (p_i)_{p_std}, else --> use (p_i)_{pi/2},
             ## c. if pi and pi/2 present ==> check if pi_std < p_std --> use (p_i)_{p_std} ,  elif pi > p_std --> use (p_i)_{pi},
             if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
-                #print(gt)
-                pass
+                print(gt)
             else:
                 pass
 
