@@ -908,8 +908,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             gt = gate_sequence[idx]
             rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]))
             dc_gates_other = set([dc_gate_sequence[j][idx] for j in dc_diff_idxs])
-            rf_gates_other = set([dc_gate_sequence[j][idx] for j in rf_diff_idxs])
-            print(rf_gates_other) 
+            rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+            print(rf_gates_other)
             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
             pi_intersect = rf_gates_other.intersection(pi_gt_set)
 
