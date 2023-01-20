@@ -896,6 +896,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         core_idx = awg_core_split[dc_idx][1]
         ct_idxs[awg_idx][core_idx] = []
         dc_diff_idxs = list(set([i for i in dc_gate_sequence.keys()]).difference({dc_idx}))
+        rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]))
         gate_sequence = dc_gate_sequence[dc_idx]
         n_gates = len(gate_sequence)
         ct_idx_tau_p_std = 2*N_p + 8
@@ -906,12 +907,28 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         ##Loop through all gates
         for idx in range(n_gates):
             gt = gate_sequence[idx]
-            rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]))
             dc_gates_other = set([dc_gate_sequence[j][idx] for j in dc_diff_idxs])
-            rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
-            pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
-            pi_intersect = rf_gates_other.intersection(pi_gt_set)
-            print(pi_intersect)
+            p_gates_other = dc_gates_other.intersection({'p'})
+            print(p_gates_other)
+
+
+            # rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+            # pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+            # pi_intersect = rf_gates_other.intersection(pi_gt_set)
+
+            ## Edge cases:
+            ##1. single plunger, no other dc or rf gates ==> no pulse centering (use (p_i)_{p_i})
+            ##2. single plunger, no pi/pi_2 RF gates or plunger gates, but arbitrary gates or delays present ==> no pulse centering (use (p_i)_{p_i})
+            ##3. plunger with other plungers, no RF ==> find largest plunger gate length present (assign to p_max) ==> use (p_i)_{p_max}
+            ##4. plunger with other RF (pi or pi/2), no plunger
+            ##
+            ##
+            ##
+            ##
+            ##
+            ##
+            ##
+            ##
 
     return ct_idxs, arbgate_counter
 
