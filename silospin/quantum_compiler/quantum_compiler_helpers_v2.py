@@ -640,7 +640,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             for k in range(len(arb_gates[i][j])):
                 N_arb_tot += 1
                 arb_gate_taus.append(ceil(1e9*len(arb_gates[i][j][k][1])/sample_rate))
-                #arb_gate_taus.append(len(arb_gates[i][j][k][1]))
 
     for rf_idx in rf_gate_sequence:
         arb_gate_counter = 0
@@ -834,7 +833,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                 else:
                     pass
 
-
                 ##Incremented pi gate
                 if gt in pi_gt_set:
                      if len(p_intersect) != 0:
@@ -890,10 +888,37 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                 else:
                     pass
 
+
     return ct_idxs, arbgate_counter
 
+
+
+    for dc_idx in dc_gate_sequence:
+        arb_gate_counter = 0
+        awg_idx = awg_core_split[dc_idx][0]
+        core_idx = awg_core_split[dc_idx][1]
+        ct_idxs[awg_idx][core_idx] = []
+        dc_diff_idxs = list(set([i for i in dc_gate_sequence.keys()]).difference({dc_idx}))
+        gate_sequence = dc_gate_sequence[dc_idx]
+        n_gates = len(gate_sequence)
+        ct_idx_tau_p_std = 2*N_p + 8
+        ct_idx_tau_pi = 2*N_p + 7
+        ct_idx_tau_pi_2 =  2*N_p + 6
+        ct_idx_z0z = 2*N_p + 5
+
+        ##Loop through all gates
+        for idx in range(n_gates):
+            gt = gate_sequence[idx]
+            print(gt)
+    #         rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+    #         pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+    #         pi_intersect = rf_gates_other.intersection(pi_gt_set)
+    #         p_intersect = set([dc_gate_sequence[seq][idx] for seq in dc_gate_sequence]).intersection({'p'})
+    #         p_intersect_tups = set([(seq, dc_gate_sequence[seq][idx]) for seq in dc_gate_sequence])
+
+
+
     # ct_idxs['rf'] = rf_ct_idxs
-    #
     # plunger_ct_idxs = {}
     # for p_idx in plunger_gate_sequence:
     #     plunger_ct_idxs[p_idx] = []
