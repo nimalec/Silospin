@@ -915,7 +915,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     #         rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
     #         pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
     #         pi_intersect = rf_gates_other.intersection(pi_gt_set)
-    #         p_intersect = set([dc_gate_sequence[seq][idx] for seq in dc_gate_sequence]).intersection({'p'})
+            p_intersect = set([dc_gate_sequence[seq][idx] for seq in dc_gate_sequence]).intersection({'p'})
+            print(p_intersect)
     #         p_intersect_tups = set([(seq, dc_gate_sequence[seq][idx]) for seq in dc_gate_sequence])
 
     return ct_idxs, arbgate_counter
