@@ -933,7 +933,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         if item[0] == dc_idx:
                             ct_idx_p = itr
                             ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-                            pritn(ct_idx_p)
+                            print(ct_idx_p)
                             break
                         else:
                             itr += 1
