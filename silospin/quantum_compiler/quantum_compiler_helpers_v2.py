@@ -931,17 +931,34 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                 if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
                     ## Determine if channel 1 or 2 if even or odd (ch 1 = odd, ch 2 = even)
                     itr = 0
-                    for item in plunger_len_tups:
-                        if item[0] == dc_idx:
-                            ## CH 1
-                            if dc_idx%2 != 0:
-                                ct_idx_p = itr
-                            ## CH 2
-                            else:
-                                ct_idx_p = itr + N_p
+                    for item in plunger_tup_lengths:
+                        if dc_idx == item[0]:
+                            break
                         else:
                             itr += 1
+
+                    ##CH 1
+                    if dc_idx%2 != 0:
+                        ct_idx_p = itr
+
+                    ##CH 2
+                    else:
+                        ct_idx_p = itr + N_p
                     print(ct_idx_p)
+
+
+                    # itr = 0
+                    # for item in plunger_len_tups:
+                    #     if item[0] == dc_idx:
+                    #         ## CH 1
+                    #         if dc_idx%2 != 0:
+                    #             ct_idx_p = itr
+                    #         ## CH 2
+                    #         else:
+                    #             ct_idx_p = itr + N_p
+                    #     else:
+                    #         itr += 1
+                    # print(ct_idx_p)
 
 
                 ##Case 3
