@@ -929,8 +929,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
 
 
-
-
             ## Edge cases:
             ##1. single plunger, no other dc or rf gates ==> no pulse centering (use (p_i)_{p_i})
             ##2. single plunger, no pi/pi_2 RF gates or plunger gates, but arbitrary gates or delays present ==> no pulse centering (use (p_i)_{p_i})
@@ -1101,15 +1099,23 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         for itm in arb_gate_taus:
                             idx_a += 1
                             if gt_t_str == itm:
-                                ct_idx_t_a = 3*N_p +7+idx_a
+                                ct_idx_t_a = 3*N_p + 7+idx_a
                                 ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
-                                print(ct_idx_t_a)
                                 break
                             else:
                                 continue
                     else:
-                        ## Can throw an error here instead
                         pass
+
+            ##Arbitrary gates
+            elif gt.find('*') != -1:
+                if gt[gt.find('*')+1] in arbgate_dict.keys():
+                    print(gt)
+
+            ##Throw an error
+           else:
+               pass
+
 
     return ct_idxs, arbgate_counter
 
