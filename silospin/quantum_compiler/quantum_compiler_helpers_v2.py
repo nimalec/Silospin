@@ -948,11 +948,11 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     ##CH 2
                     else:
                         ct_idx_p = itr + N_p
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
 
 
                 #Case 3
                 elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
-
                     itr = 0
                     for item in plunger_tup_lengths:
                         if dc_idx == item[0]:
@@ -974,8 +974,20 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             pass
                     p_diff_max_idx = max(p_diff_taus, key=p_diff_taus.get)
-                    print(p_diff_max_idx)
-                    print(p_diff_taus[p_diff_max_idx])
+
+                    itr_diff_idx = 0
+                    for item in plunger_tup_lengths:
+                        if p_diff_max_idx == item[0]:
+                            break
+                        else:
+                            itr_diff_idx += 1
+
+                    if dc_idx%2 != 0:
+                        ct_idx_p = itr_diff_idx
+                    else:
+                        ct_idx_p = itr_diff_idx + N_p
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                print(ct_idxs[awg_idx][core_idx])
 
 
                 #     pass
