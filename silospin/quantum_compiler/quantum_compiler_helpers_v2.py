@@ -938,7 +938,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                                 ct_idx_p = itr
                             ## CH 2
                             else:
-                                ct_idx_p = 2*itr
+                                ct_idx_p = itr + N_p
                         else:
                             itr += 1
                     print(ct_idx_p)
