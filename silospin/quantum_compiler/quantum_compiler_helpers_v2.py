@@ -1091,25 +1091,25 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                             if gt_t_str == itm[1]:
                                 ct_idx_t_p  = 2*N_p + 7 + idx_t_p
                                 ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
-                                print(ct_idx_t_p)
                                 break
                             else:
                                 continue
 
-            #         ##Arb gate delays  (need to test with arb gate)
-            #         elif gt_t_str in set(arb_gate_taus):
-            #             idx_a = 0
-            #             for itm in arb_gate_taus:
-            #                 idx_a += 1
-            #                 if gt_t_str == itm:
-            #                     ct_idx_t_a  = 58 + idx_a + N_z + N_p
-            #                     ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
-            #                     break
-            #                 else:
-            #                     continue
-            #         else:
-            #             ## Can throw an error here instead
-            #             pass
+                    ##Arb gate delays  (need to test with arb gate)
+                    elif gt_t_str in set(arb_gate_taus):
+                        idx_a = 0
+                        for itm in arb_gate_taus:
+                            idx_a += 1
+                            if gt_t_str == itm:
+                                ct_idx_t_a = 3*N_p +7+idx_a
+                                ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
+                                print(ct_idx_t_a)
+                                break
+                            else:
+                                continue
+                    else:
+                        ## Can throw an error here instead
+                        pass
 
     return ct_idxs, arbgate_counter
 
