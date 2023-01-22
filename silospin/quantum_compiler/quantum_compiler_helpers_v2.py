@@ -920,10 +920,34 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             ##4. plunger with other RF (pi or pi/2), no plunger ==>
             ## a. only pi ==> check if pi_std < p_std --> use (p_i)_{p_std} , elif pi > p_std --> use (p_i)_{pi}, b. only pi/2 --> check if pi_2_std < p_std --> use (p_i)_{p_std}, else --> use (p_i)_{pi/2},
             ## c. if pi and pi/2 present ==> check if pi_std < p_std --> use (p_i)_{p_std} ,  elif pi > p_std --> use (p_i)_{pi},
-            if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
-                print(gt)
-            else:
-                pass
+            ## 5. plunger delay
+            ## 6. std RF delay
+            ## 7. arb delay
+            ## 8. RF waveform
+
+            if gt == 'p':
+                ##Cases 1 and 2
+                if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                    ## (p_i)_{p_i}
+                    pass
+                ##Case 3
+                elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                    ## (p_i)_{p_max}
+                    print(p_idx)
+                    pass
+                else:
+                    pass
+                ##Case 4
+                # elif len(pi_intersect) != 0:
+                #     ## (p_i)_{p_max}
+                #     ##
+                #     for tup in p_intersect_tups:
+                #         if tup[1] == 'p':
+                #             #Obtain DC pulse length
+                #             tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
+                #             if tau_p
+
+
 
     return ct_idxs, arbgate_counter
 
