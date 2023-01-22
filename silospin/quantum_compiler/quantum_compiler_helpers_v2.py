@@ -1072,16 +1072,16 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             elif gt == 'z0z':
                 ct_idxs[awg_idx][core_idx].append(ct_p_idx_z0z)
 
-
             elif gt[0] == 't':
                 gt_t_str = int(gt[1:len(gt)])
 
                 if gt_t_str == int(taus_std[1]):
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
+                    ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi)
 
-            #     # std pi/2 delays
-            #     elif gt_t_str == int(taus_std[0]):
-            #         ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
+                # std pi/2 delays
+                elif gt_t_str == int(taus_std[0]):
+                    ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi_2)
+                print(ct_idxs[awg_idx][core_idx])
             #     # plunger delays
             #     else:
             #         if gt_t_str in plunger_len_set:
