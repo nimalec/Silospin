@@ -630,7 +630,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
     plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
     plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
-    print(plunger_len_tups)
     N_p = len(plunger_tup_lengths)
 
     N_arb_tot = 0
@@ -929,8 +928,17 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             if gt == 'p':
                 ##Cases 1 and 2
                 if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
-                    ## (p_i)_{p_i}
-                    pass
+                    itr = 0
+                    for item in plunger_len_tups:
+                        if item[0] == dc_idx:
+                            ct_idx_p = itr
+                            ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                            pritn(ct_idx_p)
+                            break
+                        else:
+                            itr += 1
+
+
                 ##Case 3
                 elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
                     ## (p_i)_{p_max}
