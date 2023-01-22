@@ -632,7 +632,23 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
     N_p = len(plunger_tup_lengths)
     p_tup_std = max(plunger_len_tups, key=lambda x:x[1])
-    print(p_tup_std)
+
+    p_std_idx = 0
+    for item in plunger_len_tups:
+        if p_tup_std[0] == item[0]:
+            break
+        else:
+            p_std_idx += 1
+
+
+    ct_idx_p1_pi = 2*N_p
+    ct_idx_p2_pi = 2*N_p + 1
+    ct_idx_p1_pi = 2*N_p + 2
+    ct_idx_p2_pi = 2*N_p + 3
+    ct_idx_z0z = 2*N_p + 4
+    ct_idx_tau_pi = 2*N_p + 5
+    ct_idx_tau_pi_2 = 2*N_p + 6
+    ct_idx_tau_p_std = 2*N_p + 7
 
     N_arb_tot = 0
     sample_rate = 2.4e9
@@ -991,13 +1007,27 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
 
                 # ##Case 4
-                # elif len(pi_intersect) != 0:
-
-
-
-
-
-
+                elif len(pi_intersect) != 0:
+                    itr = 0
+                    for item in plunger_tup_lengths:
+                        if dc_idx == item[0]:
+                            ##Work in std p frame
+                            if tau_p_gt > taus_std[1]:
+                                if dc_idx%2 != 0:
+                                    ct_idx_p = itr + p_std_idx
+                                else:
+                                    ct_idx_p = itr + N_p + p_std_idx
+                            else:
+                                ##Work in pi frame
+                                if dc_idx%2 != 0:
+                                    ct_idx_p = ct_idx_p1_pi
+                                else:
+                                    ct_idx_p = ct_idx_p2_pi
+                            break
+                        else:
+                            itr += 1
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                print(ct_idxs)
     return ct_idxs, arbgate_counter
 
     # ct_idxs['rf'] = rf_ct_idxs
