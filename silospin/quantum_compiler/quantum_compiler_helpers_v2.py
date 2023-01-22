@@ -930,22 +930,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
 
 
-            itr = 0
-            p_dc_intersect = {}
-            for j in dc_gate_sequence.keys():
-                gt_dc = dc_gate_sequence[j][idx]
-                if gt_dc == 'p':
-                    itr = 0
-                    for item in plunger_tup_lengths:
-                        if j == item[0]:
-                            p_dc_intersect[itr] = item[1]
-
-                        else:
-                            itr += 1
-                else:
-                    pass
-            p_dc_diff_max_idx = max(p_dc_intersect, key=p_dc_intersect.get)
-
 
             ## Edge cases:
             ##1. single plunger, no other dc or rf gates ==> no pulse centering (use (p_i)_{p_i})
@@ -960,6 +944,23 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             ## 8. RF waveform
 
             if gt == 'p':
+
+                itr = 0
+                p_dc_intersect = {}
+                for j in dc_gate_sequence.keys():
+                    gt_dc = dc_gate_sequence[j][idx]
+                    if gt_dc == 'p':
+                        itr = 0
+                        for item in plunger_tup_lengths:
+                            if j == item[0]:
+                                p_dc_intersect[itr] = item[1]
+
+                            else:
+                                itr += 1
+                    else:
+                        pass
+                p_dc_diff_max_idx = max(p_dc_intersect, key=p_dc_intersect.get)
+
                 ##Cases 1 and 2
                 if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
                     ## Determine if channel 1 or 2 if even or odd (ch 1 = odd, ch 2 = even)
