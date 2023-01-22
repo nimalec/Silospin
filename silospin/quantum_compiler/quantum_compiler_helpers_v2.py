@@ -1111,10 +1111,13 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             elif gt.find('*') != -1:
                 if gt[gt.find('*')+1] in arbgate_dict.keys():
                     print(gt)
+                else:
+                    pass 
+            else:
+                pass
 
             ##Throw an error
-           else:
-               pass
+
 
 
     return ct_idxs, arbgate_counter
