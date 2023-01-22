@@ -987,7 +987,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         ct_idx_p = itr_diff_idx + N_p
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-                print(ct_idxs[awg_idx][core_idx])
+                print(dc_idx, ct_idxs[awg_idx][core_idx])
 
 
                 #     pass
