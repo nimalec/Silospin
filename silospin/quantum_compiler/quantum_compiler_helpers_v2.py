@@ -918,16 +918,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         gate_sequence = dc_gate_sequence[dc_idx]
         n_gates = len(gate_sequence)
 
-        ct_idx_p1_pi = 2*N_p
-        ct_idx_p2_pi = 2*N_p + 1
-        ct_idx_p1_pi = 2*N_p + 2
-        ct_idx_p2_pi = 2*N_p + 3
-        ct_idx_z0z = 2*N_p + 4
-        ct_idx_tau_pi = 2*N_p + 5
-        ct_idx_tau_pi_2 = 2*N_p + 6
-        ct_idx_tau_p_std = 2*N_p + 7
-
-
         ##Loop through all gates
         for idx in range(n_gates):
             gt = gate_sequence[idx]
@@ -1030,6 +1020,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
                 print(dc_idx, ct_idxs[awg_idx][core_idx])
                 print(ct_idx_p1_pi, ct_idx_p2_pi)
+
 
             elif gt == 'z0z':
                 ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
