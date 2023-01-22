@@ -962,7 +962,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                             itr += 1
 
                     p_diff_taus = {}
-                    for j in dc_diff_idxs:
+                    #for j in dc_diff_idxs:
+                    for j in dc_gate_sequence.keys()
                         gt_dc = dc_gate_sequence[j][idx]
                         if gt_dc == 'p':
                             for item in plunger_tup_lengths:
