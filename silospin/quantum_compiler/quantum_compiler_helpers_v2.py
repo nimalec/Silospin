@@ -1027,87 +1027,14 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             itr += 1
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-                print(ct_idxs)
+                print(ct_idxs[awg_idx][core_idx])
+
+            elif gt == 'z0z':
+                ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
+
     return ct_idxs, arbgate_counter
 
-    # ct_idxs['rf'] = rf_ct_idxs
-    # plunger_ct_idxs = {}
-    # for p_idx in plunger_gate_sequence:
-    #     plunger_ct_idxs[p_idx] = []
-    #     p_ct_idx_list = []
-    #     p_diff_idxs = list(set([i for i in plunger_gate_sequence.keys()]).difference(p_idx))
-    #     rf_diff_idxs = list([i for i in rf_gate_sequence.keys()])
-    #     gate_sequence = plunger_gate_sequence[p_idx]
-    #     n_gates = len(gate_sequence)
-    #
-    #     for idx in range(n_gates):
-    #         gt = gate_sequence[idx]
-    #         p_gates_other = set([plunger_gate_sequence[j][idx] for j in p_diff_idxs])
-    #     d d      rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
-    #         pi_intersect = rf_gates_other.intersection(pi_gt_set)
-    #         pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
-    #
-    #         if gt[0] == 'z':
-    #             p_ct_idx_list.append(14)
-    #         elif gt == 'p':
-    #             if list(p_gates_other)[0][0] != 'p':
-    #                 if len(pi_intersect) == 0 and len(pi_2_intersect) == 0:
-    #                     if p_idx == '6':
-    #                         p_ct_idx_list.append(0)
-    #                     else:
-    #                         p_ct_idx_list.append(1)
-    #
-    #                 elif len(pi_intersect) == 0 and len(pi_2_intersect) != 0:
-    #                     if p_idx == '6':
-    #                         p_ct_idx_list.append(4)
-    #                     else:
-    #                         p_ct_idx_list.append(5)
-    #
-    #                 elif len(pi_intersect) != 0:
-    #                     if p_idx == '6':
-    #                         p_ct_idx_list.append(6)
-    #                     else:
-    #                         p_ct_idx_list.append(7)
-    #
-    #             elif list(p_gates_other)[0][0] == 'p':
-    #                 if len(pi_intersect) == 0 and len(pi_2_intersect) == 0:
-    #                     p_ct_idx_list.append(2)
-    #                 elif len(pi_intersect) == 0 and len(pi_2_intersect) != 0:
-    #                     p_ct_idx_list.append(8)
-    #                 elif len(pi_intersect) != 0:
-    #                     p_ct_idx_list.append(9)
-    #             else:
-    #                 pass
-    #
-    #         elif gt[0] == 't':
-    #             gt_t_str = int(gt[1:len(gt)])
-    #             if gt_t_str == taus_std[0]:
-    #                 p_ct_idx_list.append(10)
-    #             elif gt_t_str == taus_std[1]:
-    #                 p_ct_idx_list.append(11)
-    #             else:
-    #                 if p_idx == '7':
-    #                     p_ct_idx_list.append(12)
-    #                 else:
-    #                     p_ct_idx_list.append(13)
-    #         else:
-    #             pass
-    #         plunger_ct_idxs[p_idx] = p_ct_idx_list
-    #
-    # new_p_gate_lst = []
-    # for i in range(len(plunger_ct_idxs['6'])):
-    #     if plunger_ct_idxs['6'][i] == plunger_ct_idxs['7'][i]:
-    #         new_p_gate_lst.append(plunger_ct_idxs['6'][i])
-    #     elif plunger_ct_idxs['6'][i] < 10 and  plunger_ct_idxs['7'][i] >= 10:
-    #         new_p_gate_lst.append(plunger_ct_idxs['6'][i])
-    #     elif plunger_ct_idxs['7'][i] < 10 and  plunger_ct_idxs['6'][i] >= 10:
-    #         new_p_gate_lst.append(plunger_ct_idxs['7'][i])
-    #     else:
-    #         pass
-    # plunger_ct_idxs['6'] = new_p_gate_lst
-    # plunger_ct_idxs['7'] = new_p_gate_lst
-    # ct_idxs['plunger'] = plunger_ct_idxs
-    # return ct_idxs, arbZ
+
 
 
 def make_rf_command_table(n_pi_2, n_pi, n_p=[], arbZ=[]):
