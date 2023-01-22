@@ -961,8 +961,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             itr += 1
 
-                    for item in dc_gates_other:
-                        print(item)
+                    for dc_other_idx in dc_diff_idxs:
+                        print(dc_other_idx)
 
 
 
