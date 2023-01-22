@@ -631,7 +631,8 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
     plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
     N_p = len(plunger_tup_lengths)
-
+    p_tup_std = max(plunger_len_tups, key=lambda x:x[1])
+    print(p_tup_std)
 
     N_arb_tot = 0
     sample_rate = 2.4e9
@@ -963,7 +964,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
                     p_diff_taus = {}
                     #for j in dc_diff_idxs:
-                    for j in dc_gate_sequence.keys():  
+                    for j in dc_gate_sequence.keys():
                         gt_dc = dc_gate_sequence[j][idx]
                         if gt_dc == 'p':
                             for item in plunger_tup_lengths:
@@ -988,21 +989,12 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         ct_idx_p = itr_diff_idx + N_p
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-                print(dc_idx, ct_idxs[awg_idx][core_idx])
 
-
-                #     pass
-                # else:
-                #     pass
-                ##Case 4
+                # ##Case 4
                 # elif len(pi_intersect) != 0:
-                #     ## (p_i)_{p_max}
-                #     ##
-                #     for tup in p_intersect_tups:
-                #         if tup[1] == 'p':
-                #             #Obtain DC pulse length
-                #             tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
-                #             if tau_p
+
+
+
 
 
 
