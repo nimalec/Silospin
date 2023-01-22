@@ -630,6 +630,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
     plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
     plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
+    print(plunger_len_tups)
     N_p = len(plunger_tup_lengths)
 
     N_arb_tot = 0
@@ -926,7 +927,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             ## 8. RF waveform
 
             if gt == 'p':
-                print(dc_idx)
                 ##Cases 1 and 2
                 if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
                     ## (p_i)_{p_i}
