@@ -961,14 +961,19 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             itr += 1
 
+                    p_diff_taus = {}
                     for j in dc_diff_idxs:
                         gt_dc = dc_gate_sequence[j][idx]
                         if gt_dc == 'p':
-                            print(j)
+                            for item in plunger_tup_lengths:
+                                if j == item[0]:
+                                    p_diff_taus[j] = item[1]
+                                    break
+                                else:
                         else:
-                            pass  
-
-
+                            pass
+                    p_diff_max_idx = max(p_diff_taus, key=p_diff_taus.get)
+                    print(p_diff_max_idx)
 
 
                 #     pass
