@@ -1013,9 +1013,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             pass
                     p_diff_max_idx = max(p_pi_intersect, key=p_pi_intersect.get)
-                    print(p_diff_max_idx)
-
-
 
 
                     for item in plunger_tup_lengths:
@@ -1024,9 +1021,9 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                             ##Note: instead of tau_p_gt ,
                             if tau_p_gt > taus_std[1]:
                                 if dc_idx%2 != 0:
-                                    ct_idx_p = p_std_idx
+                                    ct_idx_p = p_diff_max_idx
                                 else:
-                                    ct_idx_p =  N_p + p_std_idx
+                                    ct_idx_p =  N_p + p_diff_max_idx
                             else:
                                 ##Work in pi frame
                                 if dc_idx%2 != 0:
