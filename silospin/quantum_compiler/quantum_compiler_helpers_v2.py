@@ -900,10 +900,16 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
         rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]))
         gate_sequence = dc_gate_sequence[dc_idx]
         n_gates = len(gate_sequence)
-        ct_idx_tau_p_std = 2*N_p + 8
-        ct_idx_tau_pi = 2*N_p + 7
-        ct_idx_tau_pi_2 =  2*N_p + 6
-        ct_idx_z0z = 2*N_p + 5
+
+        ct_idx_p1_pi = 2*N_p
+        ct_idx_p2_pi = 2*N_p + 1
+        ct_idx_p1_pi = 2*N_p + 2
+        ct_idx_p2_pi = 2*N_p + 3
+        ct_idx_z0z = 2*N_p + 4
+        ct_idx_tau_pi = 2*N_p + 5
+        ct_idx_tau_pi_2 = 2*N_p + 6
+        ct_idx_tau_p_std = 2*N_p + 7
+
 
         ##Loop through all gates
         for idx in range(n_gates):
@@ -936,37 +942,34 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                             break
                         else:
                             itr += 1
-
                     ##CH 1
                     if dc_idx%2 != 0:
                         ct_idx_p = itr
-
                     ##CH 2
                     else:
                         ct_idx_p = itr + N_p
-                    print(ct_idx_p)
 
 
-                    # itr = 0
-                    # for item in plunger_len_tups:
-                    #     if item[0] == dc_idx:
-                    #         ## CH 1
-                    #         if dc_idx%2 != 0:
-                    #             ct_idx_p = itr
-                    #         ## CH 2
-                    #         else:
-                    #             ct_idx_p = itr + N_p
-                    #     else:
-                    #         itr += 1
-                    # print(ct_idx_p)
-
-
-                ##Case 3
+                #Case 3
                 elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
-                    ## (p_i)_{p_max}
-                    pass
-                else:
-                    pass
+
+                    itr = 0
+                    for item in plunger_tup_lengths:
+                        if dc_idx == item[0]:
+                            tau_p_gt = item[1]
+                            break
+                        else:
+                            itr += 1
+
+                    for item in dc_gates_other:
+                        print(item)
+
+
+
+
+                #     pass
+                # else:
+                #     pass
                 ##Case 4
                 # elif len(pi_intersect) != 0:
                 #     ## (p_i)_{p_max}
