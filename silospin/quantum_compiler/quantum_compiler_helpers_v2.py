@@ -632,6 +632,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
     N_p = len(plunger_tup_lengths)
 
+
     N_arb_tot = 0
     sample_rate = 2.4e9
     arb_gate_taus = []
@@ -928,15 +929,19 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             if gt == 'p':
                 ##Cases 1 and 2
                 if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                    ## Determine if channel 1 or 2 if even or odd (ch 1 = odd, ch 2 = even)
                     itr = 0
                     for item in plunger_len_tups:
                         if item[0] == dc_idx:
-                            ct_idx_p = itr
-                            ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-                            print(ct_idx_p)
-                            break
+                            ## CH 1
+                            if dc_idx%2 != 0:
+                                ct_idx_p = itr
+                            ## CH 2
+                            else:
+                                ct_idx_p = 2*itr
                         else:
                             itr += 1
+                    print(ct_idx_p)
 
 
                 ##Case 3

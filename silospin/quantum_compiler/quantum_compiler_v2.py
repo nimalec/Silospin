@@ -81,7 +81,7 @@ class GateSetTomographyQuantumCompiler:
         sample_rate = 2.4e9 ##add to pickle
         self._gst_path = gst_file_path
         self._awgs = awgs
-        channel_mapping = self._awgs["hdawg1"]._channel_mapping
+        channel_mapping = self._awgs["hdawg1"]._channel_mapping  
         awg_core_split = self._awgs["hdawg1"]._hdawg_core_split
 
         rf_cores = []
