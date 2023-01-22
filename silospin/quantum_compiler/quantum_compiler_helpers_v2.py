@@ -1019,11 +1019,11 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         if dc_idx == item[0]:
                             ##Work in std p frame
                             ##Note: instead of tau_p_gt ,
-                            if tau_p_gt > taus_std[1]:
+                            if p_pi_intersect[p_diff_max_id] > taus_std[1]:
                                 if dc_idx%2 != 0:
-                                    ct_idx_p = p_diff_max_idx
+                                    ct_idx_p = p_std_idx
                                 else:
-                                    ct_idx_p =  N_p + p_diff_max_idx
+                                    ct_idx_p =  N_p + p_std_idx
                             else:
                                 ##Work in pi frame
                                 if dc_idx%2 != 0:
