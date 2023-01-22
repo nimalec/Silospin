@@ -1019,22 +1019,6 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
                 ##Case 4
                 elif len(pi_intersect) != 0:
-                    # itr = 0
-                    # p_pi_intersect = {}
-                    # for j in dc_gate_sequence.keys():
-                    #     gt_dc = dc_gate_sequence[j][idx]
-                    #     if gt_dc == 'p':
-                    #         itr = 0
-                    #         for item in plunger_tup_lengths:
-                    #             if j == item[0]:
-                    #                 p_pi_intersect[itr] = item[1]
-                    #
-                    #             else:
-                    #                 itr += 1
-                    #     else:
-                    #         pass
-                    # p_diff_max_idx = max(p_pi_intersect, key=p_pi_intersect.get)
-
                     for item in plunger_tup_lengths:
                         if dc_idx == item[0]:
                             ##Work in std p frame
@@ -1055,12 +1039,32 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             itr += 1
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-                    print(ct_idxs[awg_idx][core_idx])
+
 
                 ##Case 5: working in  pi/2 frame
-                # elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
-                #
-                #
+                elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
+                    for item in plunger_tup_lengths:
+                        if dc_idx == item[0]:
+                            ##Work in std p frame
+                            ##Note: instead of tau_p_gt ,
+                            #if p_pi_intersect[p_diff_max_idx] > taus_std[1]:
+                            if p_dc_intersect[p_dc_diff_max_idx] > taus_std[0]:
+                                if dc_idx%2 != 0:
+                                    ct_idx_p = p_std_idx
+                                else:
+                                    ct_idx_p =  N_p + p_std_idx
+                            else:
+                                ##Work in pi frame
+                                if dc_idx%2 != 0:
+                                    ct_idx_p = ct_idx_p1_pi_2
+                                else:
+                                    ct_idx_p = ct_idx_p2_pi_2
+                            break
+                        else:
+                            itr += 1
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                    print(ct_idxs[awg_idx][core_idx])
+
 
 
             elif gt == 'z0z':
