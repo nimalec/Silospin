@@ -642,11 +642,9 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
 
     ct_idx_p1_pi = 2*N_p
-    print(ct_idx_p1_pi, N_p)
-
     ct_idx_p2_pi = 2*N_p + 1
-    ct_idx_p1_pi = 2*N_p + 2
-    ct_idx_p2_pi = 2*N_p + 3
+    ct_idx_p1_pi_2 = 2*N_p + 2
+    ct_idx_p2_pi_2 = 2*N_p + 3
     ct_idx_z0z = 2*N_p + 4
     ct_idx_tau_pi = 2*N_p + 5
     ct_idx_tau_pi_2 = 2*N_p + 6
@@ -1020,9 +1018,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                             itr += 1
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
 
-        #        print(dc_idx, ct_idxs[awg_idx][core_idx])
-        #        print(ct_idx_p1_pi, ct_idx_p2_pi)
-
+                print(dc_idx, ct_idxs[awg_idx][core_idx])
 
             elif gt == 'z0z':
                 ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
