@@ -999,9 +999,27 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                 # ##Case 4
                 elif len(pi_intersect) != 0:
                     itr = 0
+                    p_pi_intersect = []
+                    for j in dc_gate_sequence.keys():
+                        gt_dc = dc_gate_sequence[j][idx]
+                        if gt_dc == 'p':
+                            itr = 0
+                            for item in plunger_tup_lengths:
+                                if j == item[0]:
+                                    p_pi_intersect.append((itr, item[1]))
+                                else:
+                                    itr += 1
+                        else:
+                            pass
+                    p_diff_max_idx = max(p_pi_intersect, key=p_pi_intersect.get)
+                    print(p_diff_max_idx)
+
+
+
                     for item in plunger_tup_lengths:
                         if dc_idx == item[0]:
                             ##Work in std p frame
+                            ##Note: instead of tau_p_gt ,
                             if tau_p_gt > taus_std[1]:
                                 if dc_idx%2 != 0:
                                     ct_idx_p = p_std_idx
