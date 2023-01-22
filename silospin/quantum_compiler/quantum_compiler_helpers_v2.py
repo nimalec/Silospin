@@ -961,8 +961,12 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             itr += 1
 
-                    for dc_other_idx in dc_diff_idxs:
-                        print(dc_other_idx)
+                    for j in dc_diff_idxs:
+                        gt_dc = dc_gate_sequence[j][idx]
+                        if gt_dc == 'p':
+                            print(j)
+                        else:
+                            pass  
 
 
 
