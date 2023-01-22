@@ -645,10 +645,10 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
     ct_idx_p2_pi = 2*N_p + 1
     ct_idx_p1_pi_2 = 2*N_p + 2
     ct_idx_p2_pi_2 = 2*N_p + 3
-    ct_idx_z0z = 2*N_p + 4
-    ct_idx_tau_pi = 2*N_p + 5
-    ct_idx_tau_pi_2 = 2*N_p + 6
-    ct_idx_tau_p_std = 2*N_p + 7
+    ct_p_idx_z0z = 2*N_p + 4
+    ct_p_idx_tau_pi = 2*N_p + 5
+    ct_p_idx_tau_pi_2 = 2*N_p + 6
+    ct_p_idx_tau_p_std = 2*N_p + 7
 
     N_arb_tot = 0
     sample_rate = 2.4e9
@@ -1063,12 +1063,51 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             itr += 1
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-                    print(ct_idxs[awg_idx][core_idx])
 
+               ##Consider throwing an error instead
+                else:
+                    pass
 
 
             elif gt == 'z0z':
-                ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
+                ct_idxs[awg_idx][core_idx].append(ct_p_idx_z0z)
+
+
+            elif gt[0] == 't':
+                gt_t_str = int(gt[1:len(gt)])
+
+                if gt_t_str == int(taus_std[1]):
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
+
+            #     # std pi/2 delays
+            #     elif gt_t_str == int(taus_std[0]):
+            #         ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
+            #     # plunger delays
+            #     else:
+            #         if gt_t_str in plunger_len_set:
+            #             idx_p = 0
+            #             for itm in plunger_len_tups:
+            #                 idx_p += 1
+            #                 if gt_t_str == itm[1]:
+            #                     ct_idx_t_p  = 58 + idx_p + N_z
+            #                     ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
+            #                     break
+            #                 else:
+            #                     continue
+            #         ##Arb gate delays  (need to test with arb gate)
+            #         elif gt_t_str in set(arb_gate_taus):
+            #             idx_a = 0
+            #             for itm in arb_gate_taus:
+            #                 idx_a += 1
+            #                 if gt_t_str == itm:
+            #                     ct_idx_t_a  = 58 + idx_a + N_z + N_p
+            #                     ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
+            #                     break
+            #                 else:
+            #                     continue
+            #         else:
+            #             ## Can throw an error here instead
+            #             pass
 
     return ct_idxs, arbgate_counter
 
