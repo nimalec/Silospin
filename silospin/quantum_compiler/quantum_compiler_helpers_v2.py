@@ -926,7 +926,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
             ## 8. RF waveform
 
             if gt == 'p':
-                print(p_idx)
+                print(dc_idx)
                 ##Cases 1 and 2
                 if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
                     ## (p_i)_{p_i}
