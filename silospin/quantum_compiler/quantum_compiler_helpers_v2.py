@@ -1081,19 +1081,21 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                 # std pi/2 delays
                 elif gt_t_str == int(taus_std[0]):
                     ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi_2)
-                print(ct_idxs[awg_idx][core_idx])
-            #     # plunger delays
-            #     else:
-            #         if gt_t_str in plunger_len_set:
-            #             idx_p = 0
-            #             for itm in plunger_len_tups:
-            #                 idx_p += 1
-            #                 if gt_t_str == itm[1]:
-            #                     ct_idx_t_p  = 58 + idx_p + N_z
-            #                     ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
-            #                     break
-            #                 else:
-            #                     continue
+
+                # plunger delays
+                else:
+                    if gt_t_str in plunger_len_set:
+                        idx_t_p = 0
+                        for itm in plunger_len_tups:
+                            idx_t_p += 1
+                            if gt_t_str == itm[1]:
+                                ct_idx_t_p  = 2*N_p + 7 + idx_t_p
+                                ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
+                                print((ct_idx_t_p)
+                                break
+                            else:
+                                continue
+
             #         ##Arb gate delays  (need to test with arb gate)
             #         elif gt_t_str in set(arb_gate_taus):
             #             idx_a = 0
