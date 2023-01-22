@@ -970,6 +970,7 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                                     p_diff_taus[j] = item[1]
                                     break
                                 else:
+                                    pass
                         else:
                             pass
                     p_diff_max_idx = max(p_diff_taus, key=p_diff_taus.get)
