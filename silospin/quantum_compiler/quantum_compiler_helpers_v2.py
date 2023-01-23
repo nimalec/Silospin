@@ -1613,7 +1613,7 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
                     ct_idx += 1
 
     ##14. Arb waveforms
-    #print(arb_dc_waveforms[awgidx][coreidx])
+    print(arb_dc_waveforms[awgidx][coreidx])
     # ## Arb DC waveforms
     # arb_dc_pulses = arbitrary_waveforms[awgidx][coreidx]
     # if len(arb_dc_pulses) == 0:
