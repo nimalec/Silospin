@@ -182,10 +182,10 @@ class GateSetTomographyQuantumCompiler:
 
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
 
-        for awg_idx in arb_dc_waveforms_dict:
-            for core_idx in arb_dc_waveforms_dict[awg_idx]:
-                for line in range(len(self._gate_sequences)):
-                    arb_dc_waveforms_dict[awg_idx][core_idx][line] = {}
+        # for awg_idx in arb_dc_waveforms_dict:
+        #     for core_idx in arb_dc_waveforms_dict[awg_idx]:
+        #         for line in range(len(self._gate_sequences)):
+        #             arb_dc_waveforms_dict[awg_idx][core_idx][line] = {}
 
 
 
@@ -221,7 +221,8 @@ class GateSetTomographyQuantumCompiler:
                         else:
                             wave1 = dc_arb_gates[line][idx][dc_idx-1]
                             wave2 = dc_arb_gates[line][idx][dc_idx]
-                        arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = (wave1, wave2)
+                        #arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = (wave1, wave2)
+                        arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = (wave1, wave2)  
                     else:
                         pass
         print(arb_dc_waveforms_dict)
