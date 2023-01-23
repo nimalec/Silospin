@@ -215,7 +215,6 @@ class GateSetTomographyQuantumCompiler:
                     #arb_dc_waveforms_dict[awg_idx][core_idx][line]  = {}
 
                     if dc_arb_gates[line][idx][dc_idx][0] != 't':
-                        arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = {}   
                         if dc_idx%2 != 0:
                             wave1 = dc_arb_gates[line][idx][dc_idx]
                             wave2 = dc_arb_gates[line][idx][dc_idx+1]
@@ -224,10 +223,11 @@ class GateSetTomographyQuantumCompiler:
                             wave2 = dc_arb_gates[line][idx][dc_idx]
                         #arb_dc_waveforms_dict[awg_idx][core_idx][idx] = (wave1, wave2)
                         arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = (wave1, wave2)
+                        print(arb_dc_waveforms_dict[awg_idx][core_idx][line][idx])
                     else:
                         pass
 
-        print(arb_dc_waveforms_dict)
+
         # self._command_tables = {}
         # arbgate_counter = {}
         # for awg_idx in channel_mapping:
