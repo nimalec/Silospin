@@ -184,7 +184,7 @@ class GateSetTomographyQuantumCompiler:
 
         for awg_idx in arb_dc_waveforms_dict:
             for core_idx in arb_dc_waveforms_dict[awg_idx]:
-                for line in self._gate_sequences:
+                for line in range(len(self._gate_sequences)):
                     arb_dc_waveforms_dict[awg_idx][core_idx][line] = {}
         print(arb_dc_waveforms_dict)
 
