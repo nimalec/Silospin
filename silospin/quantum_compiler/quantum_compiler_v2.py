@@ -192,6 +192,9 @@ class GateSetTomographyQuantumCompiler:
                         dc_arb_gates[line][itr] = {}
                         for dc_gt_idx in dc_gate_sequences[line]:
                             dc_arb_gates[line][itr][dc_gt_idx] = dc_gate_sequences[line][dc_gt_idx][itr]
+                    else:
+                        pass
+                    itr += 1 
 
 
         print(dc_arb_gates)
