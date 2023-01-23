@@ -1613,7 +1613,34 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
                     ct_idx += 1
 
     ##14. Arb waveforms
-    print(arb_dc_waveforms[awgidx][coreidx])
+    for line in arb_dc_waveforms[awgidx][coreidx]:
+        for idx in arb_dc_waveforms[awgidx][coreidx][line]:
+            if len(arb_dc_waveforms[awgidx][coreidx][line][idx]) != 0:
+                gate_tuple = arb_dc_waveforms[awgidx][coreidx][line][idx]
+                if gate_tuple[0] != 't' and gate_tuple[1] != 't':
+                    amplitude_1 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
+                    amplitude_2 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
+                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude1, "amplitude1": amplitude2})
+                    ct_idx += 1
+                    wave_idx += 1
+                elif gate_tuple[0] != 't' and gate_tuple[1] == 't':
+                    amplitude_1 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
+                    amplitude_2 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
+                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude1, "amplitude1": amplitude2})
+                    ct_idx += 1
+                    wave_idx += 1
+                elif gate_tuple[0] == 't' and gate_tuple[1] != 't':
+                    amplitude_1 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
+                    amplitude_2 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
+                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude1, "amplitude1": amplitude2})
+                    ct_idx += 1
+                    wave_idx += 1
+                else:
+                    ##Instead throw an error here
+                    pass
+            else:
+                continue
+
     # ## Arb DC waveforms
     # arb_dc_pulses = arbitrary_waveforms[awgidx][coreidx]
     # if len(arb_dc_pulses) == 0:
