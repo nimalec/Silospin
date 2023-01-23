@@ -97,6 +97,7 @@ class GateSetTomographyQuantumCompiler:
                     plunger_channels.append((awg, channel_mapping[awg][idx]['gate_idx'][0]))
                     plunger_channels.append((awg, channel_mapping[awg][idx]['gate_idx'][1]))
 
+        print(arb_dc_waveforms_dict)
         self._gate_parameters = {}
         gate_param_all_rf = gate_parameters["rf"]
         gate_param_all_dc = gate_parameters["p"]
@@ -216,27 +217,27 @@ class GateSetTomographyQuantumCompiler:
                     else:
                         pass
 
-        self._command_tables = {}
-        arbgate_counter = {}
-        for awg_idx in channel_mapping:
-            self._command_tables[awg_idx] = {}
-            arbgate_counter[awg_idx] = {}
-            for core_idx in channel_mapping[awg_idx]:
-                arbgate_counter[awg_idx][core_idx] = 0
-                if channel_mapping[awg_idx][core_idx]['rf'] == 1:
-                    self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
-                else:
-                    #self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
-                    self._command_tables[awg_idx][core_idx] = make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx, arb_dc_waveforms_dict)
-
-
-        ct_idxs_all = {}
-        taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
-        for idx in self._gate_sequences:
-            gate_sequence = self._gate_sequences[idx]
-            ct_idxs, arbgate_counter = make_command_table_indices_v3(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z)
-            ct_idxs_all[idx] = ct_idxs
-        self._ct_idxs_all = ct_idxs_all
+        # self._command_tables = {}
+        # arbgate_counter = {}
+        # for awg_idx in channel_mapping:
+        #     self._command_tables[awg_idx] = {}
+        #     arbgate_counter[awg_idx] = {}
+        #     for core_idx in channel_mapping[awg_idx]:
+        #         arbgate_counter[awg_idx][core_idx] = 0
+        #         if channel_mapping[awg_idx][core_idx]['rf'] == 1:
+        #             self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
+        #         else:
+        #             #self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
+        #             self._command_tables[awg_idx][core_idx] = make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx, arb_dc_waveforms_dict)
+        #
+        #
+        # ct_idxs_all = {}
+        # taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
+        # for idx in self._gate_sequences:
+        #     gate_sequence = self._gate_sequences[idx]
+        #     ct_idxs, arbgate_counter = make_command_table_indices_v3(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z)
+        #     ct_idxs_all[idx] = ct_idxs
+        # self._ct_idxs_all = ct_idxs_all
     #     waveforms_awg = {}
     #     sequencer_code = {}
     #     seq_code = {}
