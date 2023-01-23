@@ -225,7 +225,7 @@ class GateSetTomographyQuantumCompiler:
                         arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = (wave1, wave2)
                     else:
                         pass
-        print(arb_dc_waveforms_dict)
+        self._arb_dc_waveforms_dict = arb_dc_waveforms_dict 
 
         self._command_tables = {}
         arbgate_counter = {}
