@@ -180,7 +180,7 @@ class GateSetTomographyQuantumCompiler:
 
         dc_gate_sequences = {}
         for line in self._gate_sequences:
-            dc_gate_sequences[line] = self._gate_sequences['plunger']
+            dc_gate_sequences[line] = self._gate_sequences[line]['plunger']
         print(dc_gate_sequences)
 
 
