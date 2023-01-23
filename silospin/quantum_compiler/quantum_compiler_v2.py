@@ -178,6 +178,13 @@ class GateSetTomographyQuantumCompiler:
 
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
 
+        dc_gate_sequences = {}
+        for line in self._gate_sequences:
+            dc_gate_sequences[line] = self._gate_sequences['plunger']
+        print(dc_gate_sequences)
+
+
+
         # arb_dc_waveforms = {}
         # arb_dc_gate_sequences = {}
         # for awg_idx in channel_mapping:
