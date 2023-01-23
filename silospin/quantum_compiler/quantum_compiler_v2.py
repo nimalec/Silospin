@@ -179,17 +179,20 @@ class GateSetTomographyQuantumCompiler:
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
 
         arb_dc_waveforms = {}
+        arb_dc_gate_sequences = {}
         for awg_idx in channel_mapping:
             arb_dc_waveforms[awg_idx] = {}
+            arb_dc_gate_sequences[awg_idx] = {}
             for core_idx in channel_mapping[awg_idx]:
                 arb_dc_waveforms[awg_idx][core_idx] = {}
+                arb_dc_gate_sequences[awg_idx][core_idx] = {}
                 if channel_mapping[awg_idx][core_idx]['rf'] == 0:
+                    arb_dc_gate_sequences[awg_idx][core_idx] = self._gate_sequences[awg_idx][core_idx]
                     for arb_tup in arbitrary_waveforms[awg_idx][core_idx]:
                         arb_dc_waveforms[arb_tup[0]] = arb_tup[1]
                 else:
                     pass
-        print(arb_dc_waveforms)
-
+        print(arb_dc_gate_sequences)
 
         self._command_tables = {}
         arbgate_counter = {}
