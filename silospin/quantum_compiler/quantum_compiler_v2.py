@@ -222,7 +222,7 @@ class GateSetTomographyQuantumCompiler:
                             wave1 = dc_arb_gates[line][idx][dc_idx-1]
                             wave2 = dc_arb_gates[line][idx][dc_idx]
                         #arb_dc_waveforms_dict[awg_idx][core_idx][idx] = (wave1, wave2)
-                        arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = (wave1, wave2)
+                        arb_dc_waveforms_dict[awg_idx][core_idx][line-1][idx] = (wave1, wave2)
                         print(arb_dc_waveforms_dict[awg_idx][core_idx][line][idx])
                     else:
                         pass
