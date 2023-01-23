@@ -1617,6 +1617,7 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
         for idx in arb_dc_waveforms[awgidx][coreidx][line]:
             if len(arb_dc_waveforms[awgidx][coreidx][line][idx]) != 0:
                 gate_tuple = arb_dc_waveforms[awgidx][coreidx][line][idx]
+                print(gate_tuple)
                 if gate_tuple[0][0] != 't' and gate_tuple[1][0] != 't':
                     amplitude_1 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
                     amplitude_2 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
