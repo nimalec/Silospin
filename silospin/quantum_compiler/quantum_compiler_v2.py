@@ -186,7 +186,6 @@ class GateSetTomographyQuantumCompiler:
             for core_idx in arb_dc_waveforms_dict[awg_idx]:
                 for line in range(len(self._gate_sequences)):
                     arb_dc_waveforms_dict[awg_idx][core_idx][line] = {}
-        print(arb_dc_waveforms_dict)
 
 
 
@@ -225,7 +224,7 @@ class GateSetTomographyQuantumCompiler:
                         arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = (wave1, wave2)
                     else:
                         pass
-
+        print(arb_dc_waveforms_dict)
         # self._command_tables = {}
         # arbgate_counter = {}
         # for awg_idx in channel_mapping:
