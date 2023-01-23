@@ -83,11 +83,14 @@ class GateSetTomographyQuantumCompiler:
         self._awgs = awgs
         channel_mapping = self._awgs["hdawg1"]._channel_mapping
         awg_core_split = self._awgs["hdawg1"]._hdawg_core_split
+        arb_dc_waveforms = {}
 
         rf_cores = []
         plunger_channels = []
         for awg in channel_mapping:
+            arb_dc_waveforms[awg] = {}
             for idx in channel_mapping[awg]:
+                arb_dc_waveforms[awg][idx] = {}
                 if channel_mapping[awg][idx]['rf'] == 1:
                     rf_cores.append((awg, channel_mapping[awg][idx]['core_idx']))
                 else:
@@ -194,19 +197,11 @@ class GateSetTomographyQuantumCompiler:
                         pass
                     itr += 1
 
-        arb_dc_waveforms_dict = {}
-        for awg_idx in channel_mapping:
-             for core_idx in channel_mapping[awg_idx]:
-                 if channel_mapping[awg_idx][core_idx]['rf'] == 0:
-                         arb_dc_waveforms_dict[awg_idx] = {}
-                         arb_dc_waveforms_dict[awg_idx][core_idx] = {}
-                 else:
-                     pass
-        print(arb_dc_waveforms_dict)
 
 
 
 
+        print(arb_dc_waveforms)
         for line in dc_arb_gates:
             for idx in dc_arb_gates[line]:
                 arb_dc_waveforms_dict[idx] = {}
