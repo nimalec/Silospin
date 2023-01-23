@@ -83,7 +83,6 @@ class GateSetTomographyQuantumCompiler:
         self._awgs = awgs
         channel_mapping = self._awgs["hdawg1"]._channel_mapping
         awg_core_split = self._awgs["hdawg1"]._hdawg_core_split
-        print(channel_mapping)
 
         rf_cores = []
         plunger_channels = []
@@ -195,14 +194,27 @@ class GateSetTomographyQuantumCompiler:
                         pass
                     itr += 1
 
-        # arb_waveforms = {}
-        # itr = 0
-        # for line in dc_arb_gates:
-        #     for idx in dc_arb_gates[line]:
-        #         arb_waveforms[idx] = {}
-        #         for dc_idx in dc_arb_gates[line][idx]:
-        #             if dc_arb_gates[line][idx][dc_idx][0] != 't':
-        #                 arb_waveforms[idx][dc_idx] =
+        arb_dc_waveforms_dict = {}
+        for line in dc_arb_gates:
+            for idx in dc_arb_gates[line]:
+                arb_dc_waveforms_dict[idx] = {}
+                for dc_idx in dc_arb_gates[line][idx]:
+                    if dc_arb_gates[line][idx][dc_idx][0] != 't':
+                        awg_idx = awg_core_split[dc_idx][0]
+                        core_idx = awg_core_split[dc_idx][1]
+                        if dc_idx%2 != 0:
+                            #arb_dc_waveforms_dict[awg_idx][core_idx] = dc_arb_gates[line][idx]
+                            wave1 = dc_arb_gates[line][idx][dc_idx]
+                            wave2 = dc_arb_gates[line][idx][dc_idx+1]
+                        else:
+                            wave1 = dc_arb_gates[line][idx][dc_idx-1]
+                            wave2 = dc_arb_gates[line][idx][dc_idx]
+                        arb_dc_waveforms_dict[awg_idx][core_idx][idx] = (wave1, wave2)
+                    else:
+                        pass
+        print(arb_dc_waveforms_dict)
+
+
 
         # arb_dc_waveforms = {}
         # arb_dc_gate_sequences = {}
