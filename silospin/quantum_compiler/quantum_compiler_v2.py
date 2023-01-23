@@ -195,9 +195,9 @@ class GateSetTomographyQuantumCompiler:
                     itr += 1
 
         arb_dc_waveforms_dict = {}
-        for awg_idx in channel_map:
-             for core_idx in channel_map[awg_idx]:
-                 if channel_map[awg_idx][core_idx]['rf'] == 0:
+        for awg_idx in channel_mapping:
+             for core_idx in channel_mapping[awg_idx]:
+                 if channel_mapping[awg_idx][core_idx]['rf'] == 0:
                          arb_dc_waveforms_dict[awg_idx] = {}
                          arb_dc_waveforms_dict[awg_idx][core_idx] = {}
                  else:
@@ -227,7 +227,7 @@ class GateSetTomographyQuantumCompiler:
                         arb_dc_waveforms_dict[awg_idx][core_idx][idx] = (wave1, wave2)
                     else:
                         pass
-  
+
 
 
 
