@@ -226,6 +226,7 @@ class GateSetTomographyQuantumCompiler:
                         print(arb_dc_waveforms_dict[awg_idx][core_idx][line-1][idx])
                     else:
                         pass
+        print(arb_dc_waveforms_dict)
 
 
         # self._command_tables = {}
