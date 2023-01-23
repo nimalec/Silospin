@@ -216,26 +216,6 @@ class GateSetTomographyQuantumCompiler:
                         arb_dc_waveforms_dict[awg_idx][core_idx][idx] = (wave1, wave2)
                     else:
                         pass
-        print(arb_dc_waveforms_dict)
-
-
-
-
-        # arb_dc_waveforms = {}
-        # arb_dc_gate_sequences = {}
-        # for awg_idx in channel_mapping:
-        #     arb_dc_waveforms[awg_idx] = {}
-        #     arb_dc_gate_sequences[awg_idx] = {}
-        #     for core_idx in channel_mapping[awg_idx]:
-        #         arb_dc_waveforms[awg_idx][core_idx] = {}
-        #         arb_dc_gate_sequences[awg_idx][core_idx] = {}
-        #         if channel_mapping[awg_idx][core_idx]['rf'] == 0:
-        #             arb_dc_gate_sequences[awg_idx][core_idx] = self._gate_sequences[awg_idx][core_idx]
-        #             for arb_tup in arbitrary_waveforms[awg_idx][core_idx]:
-        #                 arb_dc_waveforms[arb_tup[0]] = arb_tup[1]
-        #         else:
-        #             pass
-
 
         self._command_tables = {}
         arbgate_counter = {}
@@ -247,7 +227,8 @@ class GateSetTomographyQuantumCompiler:
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
                     self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
                 else:
-                    self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
+                    #self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
+                    self._command_tables[awg_idx][core_idx] = make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx, arb_dc_waveforms_dict)
 
 
         ct_idxs_all = {}

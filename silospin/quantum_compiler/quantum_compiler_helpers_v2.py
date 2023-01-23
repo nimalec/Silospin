@@ -1523,7 +1523,7 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
     return command_table
 
 
-def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx):
+def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx, arb_dc_waveforms):
     n_pi_2_std = n_std[0]
     n_pi_std = n_std[1]
     n_p_std = n_std[2]
@@ -1613,7 +1613,7 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
                     ct_idx += 1
 
     ##14. Arb waveforms
-
+    print(arb_dc_waveforms[awgidx][coreidx])
     # ## Arb DC waveforms
     # arb_dc_pulses = arbitrary_waveforms[awgidx][coreidx]
     # if len(arb_dc_pulses) == 0:
@@ -1624,7 +1624,7 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
     #         amplitude = float(gate_str[0:gate_str.find('*')])
     #         ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude, "amplitude1": amplitude})
     #         ct_idx += 1
-            wave_idx += 1
+    #        wave_idx += 1
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
