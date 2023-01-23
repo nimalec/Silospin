@@ -1113,14 +1113,13 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
                     ct_idx_g_a = 3*N_p + 8 + N_arb_tot + arbgate_counter[awg_idx][core_idx]
                     ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
                     arbgate_counter[awg_idx][core_idx] += 1
-                    print(ct_idx_g_a)
                 else:
                     pass
+            ## Else, throw an error ...
             else:
                 pass
 
             ##Throw an error
-
 
 
     return ct_idxs, arbgate_counter
@@ -1522,6 +1521,114 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
+
+
+def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx):
+    n_pi_2_std = n_std[0]
+    n_pi_std = n_std[1]
+    n_p_std = n_std[2]
+    ct = []
+    ct_idx = 0
+    wave_idx = 0
+
+    ##1. [(p_1)_1, 0] - [(p_1)_N, 0]
+    for i in range(len(plunger_length_tups)):
+        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        wave_idx += 1
+        ct_idx += 1
+
+    ##2. [0, (p_2)_1] -  [0, (p_2)_N]
+    for i in range(len(plunger_length_tups)):
+        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        wave_idx += 1
+        ct_idx += 1
+
+    ##3. [(p_1)_1, (p_2)_1] -  [(p_1)_N, (p_2)_N]
+    for i in range(len(plunger_length_tups)):
+        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        wave_idx += 1
+        ct_idx += 1
+
+    ## 4. [(p_1)_pi, 0],  [0, (p_2)_pi]
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+
+    ## 5. [(p_1)_pi/2, 0],  [0, (p_2)_pi/2]
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+
+    ## 6. [(p_1)_pi, (p_2)_pi], [(p_1)_pi/2, (p_2)_pi/2]
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+
+    ## 7. [(p_1)_pi, (p_2)_pi], [(p_1)_pi/2, (p_2)_pi/2]
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+
+    ##8. Z0Z
+    ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ct_idx += 1
+
+    ##9. tau_pi
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_std}})
+    ct_idx += 1
+
+    ##10. tau_pi/2
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2_std}})
+    ct_idx += 1
+
+    ##11. tau_p_std
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_p_std}})
+    ct_idx += 1
+
+    ##12. tau_p_1 - tau_p_N
+    for p in plunger_length_tups:
+        ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": p[1]}})
+        ct_idx += 1
+
+    ##13. Arb waveform delays
+    for awg_idx in arbitrary_waveforms:
+        for core_idx in arbitrary_waveforms[awg_idx]:
+            if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
+                pass
+            else:
+                for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
+                    ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
+                    ct_idx += 1
+
+    ##14. Arb waveforms
+
+    # ## Arb DC waveforms
+    # arb_dc_pulses = arbitrary_waveforms[awgidx][coreidx]
+    # if len(arb_dc_pulses) == 0:
+    #     pass
+    # else:
+    #     for wave in arb_dc_pulses:
+    #         gate_str = wave[0]
+    #         amplitude = float(gate_str[0:gate_str.find('*')])
+    #         ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude, "amplitude1": amplitude})
+    #         ct_idx += 1
+            wave_idx += 1
+
+    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
+    return command_table
+
 
 def make_waveform_placeholders(n_array):
     '''
