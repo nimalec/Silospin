@@ -182,10 +182,10 @@ class GateSetTomographyQuantumCompiler:
 
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
 
-        # for awg_idx in arb_dc_waveforms_dict:
-        #     for core_idx in arb_dc_waveforms_dict[awg_idx]:
-        #         for line in range(len(self._gate_sequences)):
-        #             arb_dc_waveforms_dict[awg_idx][core_idx][line] = {}
+        for awg_idx in arb_dc_waveforms_dict:
+            for core_idx in arb_dc_waveforms_dict[awg_idx]:
+                for line in range(len(self._gate_sequences)):
+                    arb_dc_waveforms_dict[awg_idx][core_idx][line] = {}
 
 
 
@@ -212,19 +212,20 @@ class GateSetTomographyQuantumCompiler:
                 for dc_idx in dc_arb_gates[line][idx]:
                     awg_idx = awg_core_split[dc_idx][0]
                     core_idx = awg_core_split[dc_idx][1]
-                    #arb_dc_waveforms_dict[awg_idx][core_idx][line] = {}
+                    arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = {}
+
                     if dc_arb_gates[line][idx][dc_idx][0] != 't':
                         if dc_idx%2 != 0:
-                            #arb_dc_waveforms_dict[awg_idx][core_idx] = dc_arb_gates[line][idx]
                             wave1 = dc_arb_gates[line][idx][dc_idx]
                             wave2 = dc_arb_gates[line][idx][dc_idx+1]
                         else:
                             wave1 = dc_arb_gates[line][idx][dc_idx-1]
                             wave2 = dc_arb_gates[line][idx][dc_idx]
-                        #arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = (wave1, wave2)
-                        arb_dc_waveforms_dict[awg_idx][core_idx][idx] = (wave1, wave2)  
+                        #arb_dc_waveforms_dict[awg_idx][core_idx][idx] = (wave1, wave2)
+                        arb_dc_waveforms_dict[awg_idx][core_idx][idx] = (wave1, wave2)
                     else:
                         pass
+
         print(arb_dc_waveforms_dict)
         # self._command_tables = {}
         # arbgate_counter = {}
