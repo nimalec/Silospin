@@ -180,10 +180,12 @@ class GateSetTomographyQuantumCompiler:
 
         arb_dc_waveforms = {}
         for awg_idx in channel_mapping:
-            arb_dc_waveforms[awg_idx] = {}  
+            arb_dc_waveforms[awg_idx] = {}
             for core_idx in channel_mapping[awg_idx]:
+                arb_dc_waveforms[awg_idx][core_idx] = {}
                 if channel_mapping[awg_idx][core_idx]['rf'] == 0:
-                    arb_dc_waveforms[awg_idx][core_idx] = arbitrary_waveforms[awg_idx][core_idx]
+                    for arb_tup in arbitrary_waveforms[awg_idx][core_idx]:
+                        arb_dc_waveforms[arb_tup[0]] = arb_tup[1]
                 else:
                     pass
         print(arb_dc_waveforms)
