@@ -97,7 +97,7 @@ class GateSetTomographyQuantumCompiler:
                     plunger_channels.append((awg, channel_mapping[awg][idx]['gate_idx'][0]))
                     plunger_channels.append((awg, channel_mapping[awg][idx]['gate_idx'][1]))
 
-        print(arb_dc_waveforms_dict)
+
         self._gate_parameters = {}
         gate_param_all_rf = gate_parameters["rf"]
         gate_param_all_dc = gate_parameters["p"]
@@ -181,6 +181,15 @@ class GateSetTomographyQuantumCompiler:
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
 
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
+
+        for awg_idx in arb_dc_waveforms_dict:
+            for core_idx in arb_dc_waveforms_dict[awg_idx]:
+                for line in self._gate_sequences:
+                    arb_dc_waveforms_dict[awg_idx][core_idx] = {}
+        print(arb_dc_waveforms_dict)
+
+
+
 
         dc_gate_sequences = {}
         dc_arb_gates = {}
