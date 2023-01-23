@@ -83,7 +83,7 @@ class GateSetTomographyQuantumCompiler:
         self._awgs = awgs
         channel_mapping = self._awgs["hdawg1"]._channel_mapping
         awg_core_split = self._awgs["hdawg1"]._hdawg_core_split
-        print(awg_core_split)
+        print(channel_mapping)
 
         rf_cores = []
         plunger_channels = []
@@ -186,7 +186,6 @@ class GateSetTomographyQuantumCompiler:
             dc_gate_sequences[line] = self._gate_sequences[line]['plunger']
             for dc_idx in dc_gate_sequences[line]:
                 itr = 0
-                #dc_arb_gates[line][dc_idx] = {}
                 for gt in dc_gate_sequences[line][dc_idx]:
                     if gt.find('*') != -1:
                         dc_arb_gates[line][itr] = {}
