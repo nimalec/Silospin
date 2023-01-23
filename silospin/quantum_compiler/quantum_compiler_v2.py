@@ -199,9 +199,12 @@ class GateSetTomographyQuantumCompiler:
             for idx in dc_arb_gates[line]:
                 arb_dc_waveforms_dict[idx] = {}
                 for dc_idx in dc_arb_gates[line][idx]:
+                    awg_idx = awg_core_split[dc_idx][0]
+                    core_idx = awg_core_split[dc_idx][1]
+                    arb_dc_waveforms_dict[awg_idx] =  {}
+                    arb_dc_waveforms_dict[awg_idx][core_idx] = {}
+
                     if dc_arb_gates[line][idx][dc_idx][0] != 't':
-                        awg_idx = awg_core_split[dc_idx][0]
-                        core_idx = awg_core_split[dc_idx][1]
                         if dc_idx%2 != 0:
                             #arb_dc_waveforms_dict[awg_idx][core_idx] = dc_arb_gates[line][idx]
                             wave1 = dc_arb_gates[line][idx][dc_idx]
