@@ -1465,6 +1465,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     pass
 
     ##Start here
+    print(list(dc_gate_sequence.keys()))
     n_gates = len(gate_sequence[list(dc_gate_sequence.keys())[0]])
     check_dc_p_channels = {}
     for i in range(n_gates):
