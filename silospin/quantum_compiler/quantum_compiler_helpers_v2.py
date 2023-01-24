@@ -1703,7 +1703,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
             #     pass
             #
             # ##Throw an error
-   return ct_idxs, arbgate_counter
+      return ct_idxs, arbgate_counter
 
 
 def make_rf_command_table(n_pi_2, n_pi, n_p=[], arbZ=[]):
