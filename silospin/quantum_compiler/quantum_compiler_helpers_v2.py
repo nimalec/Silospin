@@ -1567,6 +1567,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
                     ## CH 1
                     if dc_idx%2 != 0:
+                        print(gt)
                         ## Check if index already generated for the other channel
                         if check_dc_p_channels[idx][dc_idx] == 0:
                             if dc_gate_sequence[dc_idx+1][idx] == 'p':
@@ -1584,7 +1585,6 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 pass
                             check_dc_p_channels[idx][dc_idx] += 1
                             check_dc_p_channels[idx][dc_idx+1] += 1
-                            print(check_dc_p_channels)
                         else:
                            pass
 
@@ -1612,12 +1612,6 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         pass
 
-                    ##CH 2
-                    # if dc_idx%2 != 0:
-                    #     ct_idx_p = itr_diff_idx
-                    # else:
-                    #     ct_idx_p = itr_diff_idx + N_p
-                    # ct_idxs[awg_idx][core_idx].append(ct_idx_p)
         else:
             continue
     return ct_idxs, arbgate_counter
