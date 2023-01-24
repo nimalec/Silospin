@@ -1614,9 +1614,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                 ##Case 4
                 elif len(pi_intersect) != 0:
                     if p_dc_intersect[p_dc_diff_max_idx] > taus_std[1]:
-                        print(p_dc_intersect[p_dc_diff_max_idx])
-                        print(taus_std[1])
-
+                        print(p_std_idx)
                     else:
                         pass
 
