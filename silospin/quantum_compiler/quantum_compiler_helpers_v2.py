@@ -1459,7 +1459,6 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
             check_dc_p_channels[i][dc_idx] = 0
 
     for dc_idx in dc_gate_sequence:
-        print(dc_idx)
         arb_gate_counter = 0
         awg_idx = awg_core_split[dc_idx][0]
         core_idx = awg_core_split[dc_idx][1]
@@ -1618,7 +1617,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     # else:
                     #     ct_idx_p = itr_diff_idx + N_p
                     # ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-
+        else:
+            continue
         return ct_idxs, arbgate_counter
 
             #     ##Case 4
