@@ -1191,14 +1191,26 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
         else:
             p_std_idx += 1
 
-    ct_idx_p1_pi = 2*N_p
-    ct_idx_p2_pi = 2*N_p + 1
-    ct_idx_p1_pi_2 = 2*N_p + 2
-    ct_idx_p2_pi_2 = 2*N_p + 3
-    ct_p_idx_z0z = 2*N_p + 4
-    ct_p_idx_tau_pi = 2*N_p + 5
-    ct_p_idx_tau_pi_2 = 2*N_p + 6
-    ct_p_idx_tau_p_std = 2*N_p + 7
+    # ct_idx_p1_pi = 2*N_p
+    # ct_idx_p2_pi = 2*N_p + 1
+    # ct_idx_p1_pi_2 = 2*N_p + 2
+    # ct_idx_p2_pi_2 = 2*N_p + 3
+    # ct_p_idx_z0z = 2*N_p + 4
+    # ct_p_idx_tau_pi = 2*N_p + 5
+    # ct_p_idx_tau_pi_2 = 2*N_p + 6
+    # ct_p_idx_tau_p_std = 2*N_p + 7
+
+    ##Now modify above
+    ct_idx_p1_pi = 3*N_p
+    ct_idx_p2_pi = 3*N_p + 1
+    ct_idx_p1_pi_2 = 3*N_p + 2
+    ct_idx_p2_pi_2 = 3*N_p + 3
+    ct_idx_p1_p2_pi = 3*N_p + 4
+    ct_idx_p1_p2_pi_2 = 3*N_p + 4
+    ct_idx_p_z0z = 3*N_p + 5
+    ct_p_idx_tau_pi = 3*N_p + 6
+    ct_p_idx_tau_pi_2 = 3*N_p + 7
+    ct_p_idx_tau_p_std = 3*N_p + 8
 
     N_arb_tot = 0
     sample_rate = 2.4e9
@@ -1456,6 +1468,14 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
             pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
             pi_intersect = rf_gates_other.intersection(pi_gt_set)
 
+           ##Cases to look for:
+           ## In addition to checking framing, check the gate that's present in the neighboring channel ==> decide on the appropriate CT entry
+           ##
+           ##
+           ##
+           ##
+           ##
+           ##
 
 
             ## Edge cases:
@@ -1490,6 +1510,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
                 ##Cases 1 and 2
                 if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                    ## Play plunger in it's own frame, check if left or right
                     ## Determine if channel 1 or 2 if even or odd (ch 1 = odd, ch 2 = even)
                     itr = 0
                     for item in plunger_tup_lengths:
@@ -2091,14 +2112,6 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
     ct_idx += 1
 
     ## 6. [(p_1)_pi, (p_2)_pi], [(p_1)_pi/2, (p_2)_pi/2]
-    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
-    wave_idx += 1
-    ct_idx += 1
-    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
-    wave_idx += 1
-    ct_idx += 1
-
-    ## 7. [(p_1)_pi, (p_2)_pi], [(p_1)_pi/2, (p_2)_pi/2]
     ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
     wave_idx += 1
     ct_idx += 1
