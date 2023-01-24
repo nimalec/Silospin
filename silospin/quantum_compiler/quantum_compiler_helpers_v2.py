@@ -1448,7 +1448,16 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                 else:
                     pass
 
-##Start here
+    ##Start here
+    n_gates = len(gate_sequence[list(dc_gate_sequence.keys())[0]])
+    check_dc_p_channels = {}
+    for i in range(n_gates):
+        check_dc_p_channels[i] = {}
+        for dc_idx in dc_gate_sequence:
+            check_dc_p_channels[i][dc_idx] = 0
+    print(check_dc_p_channels)
+
+
 
 
     for dc_idx in dc_gate_sequence:
@@ -1526,48 +1535,69 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         ct_idx_p = itr + N_p
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-                    #print(ct_idxs)
 
-    print(ct_idxs)
-    return ct_idxs, arbgate_counter
-            #     #Case 3
-            #     elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
-            #         itr = 0
-            #         for item in plunger_tup_lengths:
-            #             if dc_idx == item[0]:
-            #                 tau_p_gt = item[1]
-            #                 break
-            #             else:
-            #                 itr += 1
-            #
-            #         p_diff_taus = {}
-            #         #for j in dc_diff_idxs:
-            #         for j in dc_gate_sequence.keys():
-            #             gt_dc = dc_gate_sequence[j][idx]
-            #             if gt_dc == 'p':
-            #                 for item in plunger_tup_lengths:
-            #                     if j == item[0]:
-            #                         p_diff_taus[j] = item[1]
-            #                         break
-            #                     else:
-            #                         pass
-            #             else:
-            #                 pass
-            #         p_diff_max_idx = max(p_diff_taus, key=p_diff_taus.get)
-            #
-            #         itr_diff_idx = 0
-            #         for item in plunger_tup_lengths:
-            #             if p_diff_max_idx == item[0]:
-            #                 break
-            #             else:
-            #                 itr_diff_idx += 1
-            #
-            #         if dc_idx%2 != 0:
-            #             ct_idx_p = itr_diff_idx
-            #         else:
-            #             ct_idx_p = itr_diff_idx + N_p
-            #         ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-            #
+                # #Case 3
+                # elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                #     itr = 0
+                #     for item in plunger_tup_lengths:
+                #         if dc_idx == item[0]:
+                #             tau_p_gt = item[1]
+                #             break
+                #         else:
+                #             itr += 1
+                #
+                #     p_diff_taus = {}
+                #     #for j in dc_diff_idxs:
+                #     for j in dc_gate_sequence.keys():
+                #         gt_dc = dc_gate_sequence[j][idx]
+                #         if gt_dc == 'p':
+                #             for item in plunger_tup_lengths:
+                #                 if j == item[0]:
+                #                     p_diff_taus[j] = item[1]
+                #                     break
+                #                 else:
+                #                     pass
+                #         else:
+                #             pass
+                #     p_diff_max_idx = max(p_diff_taus, key=p_diff_taus.get)
+                #
+                #     itr_diff_idx = 0
+                #     for item in plunger_tup_lengths:
+                #         if p_diff_max_idx == item[0]:
+                #             break
+                #         else:
+                #             itr_diff_idx += 1
+                #
+                #     ## Make a counter here if plunger occured in the second channel
+                #     ## CH 1
+                #     if dc_idx%2 != 0:
+                #         if dc_gate_sequence[dc_idx+1][idx] == 'p':
+                #
+                #         elif dc_gate_sequence[dc_idx+1][idx] == 't':
+                #
+                #         else:
+                #             ##Throw error instead
+                #             pass
+                #
+                #    ## CH 2
+                #     elif dc_idx%2 == 0:
+                #         if dc_gate_sequence[dc_idx+1][idx] == 'p':
+                #
+                #         elif dc_gate_sequence[dc_idx+1][idx] == 't':
+                #
+                #         else:
+                #             ##Throw error instead
+                #             pass
+                #     else:
+                #         pass
+                #
+                #     ##CH 2
+                #     if dc_idx%2 != 0:
+                #         ct_idx_p = itr_diff_idx
+                #     else:
+                #         ct_idx_p = itr_diff_idx + N_p
+                #     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+
             #     ##Case 4
             #     elif len(pi_intersect) != 0:
             #         for item in plunger_tup_lengths:
@@ -1673,7 +1703,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
             #     pass
             #
             # ##Throw an error
-#    return ct_idxs, arbgate_counter
+   return ct_idxs, arbgate_counter
 
 
 def make_rf_command_table(n_pi_2, n_pi, n_p=[], arbZ=[]):
