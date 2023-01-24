@@ -1567,10 +1567,10 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
                     ## CH 1
                     if dc_idx%2 != 0:
-                        print(gt)
                         ## Check if index already generated for the other channel
                         if check_dc_p_channels[idx][dc_idx] == 0:
                             if dc_gate_sequence[dc_idx+1][idx] == 'p':
+                                print(dc_idx, gt)
                                 ##p1, p2 simulataneous
                                 ct_idx_p = itr_diff_idx + 2*N_p
                                 ct_idxs[awg_idx][core_idx].append(ct_idx_p)
@@ -1591,10 +1591,10 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
                    ## CH 2
                     elif dc_idx%2 == 0:
-                        print(gt)
                         ## Check if index already generated for the other channel
                         if check_dc_p_channels[idx][dc_idx] == 0:
                             if dc_gate_sequence[dc_idx-1][idx] == 'p':
+                                print(dc_idx, gt)
                                 ##p1, p2 simulataneous
                                 ct_idx_p = itr_diff_idx + 2*N_p
                                 ct_idxs[awg_idx][core_idx].append(ct_idx_p)
