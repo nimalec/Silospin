@@ -1178,8 +1178,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
     rf_gate_sequence = gt_seqs['rf']
     dc_gate_sequence = gt_seqs['plunger']
-    print(dc_gate_sequence)
-    
+    print(dc_gate_sequence.keys())
+
     arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
     plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
     plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
