@@ -1654,6 +1654,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
                                     ##only p2 in pi frame
                                     ct_idx_p = N_p + p_std_idx
+                                    print(ct_idx_p)
                                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
                                 else:
                                     ##Throw error instead
