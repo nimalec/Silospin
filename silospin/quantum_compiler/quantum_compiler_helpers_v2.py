@@ -1620,7 +1620,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     # ct_idxs[awg_idx][core_idx].append(ct_idx_p)
         else:
             continue
-        return ct_idxs, arbgate_counter
+    return ct_idxs, arbgate_counter
 
             #     ##Case 4
             #     elif len(pi_intersect) != 0:
