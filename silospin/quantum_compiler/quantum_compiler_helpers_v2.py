@@ -1525,7 +1525,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                         ct_idx_p = itr + N_p
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
                     #print(ct_idxs)
-                print(ct_idxs)
+            print(ct_idxs)
 
     return ct_idxs, arbgate_counter
             #     #Case 3
