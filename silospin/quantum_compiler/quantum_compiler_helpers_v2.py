@@ -1576,7 +1576,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
                             elif dc_gate_sequence[dc_idx+1][idx] == 't':
                                 ##only p1
-                                print(gt)  
+                                print(gt)
                                 ct_idx_p = itr_diff_idx
                                 ct_idxs[awg_idx][core_idx].append(ct_idx_p)
 
@@ -1599,6 +1599,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 ct_idxs[awg_idx][core_idx].append(ct_idx_p)
                             elif dc_gate_sequence[dc_idx-1][idx] == 't':
                                 ##only p2
+                                print(gt)   
                                 ct_idx_p = itr_diff_idx + N_p
                                 ct_idxs[awg_idx][core_idx].append(ct_idx_p)
                             else:
