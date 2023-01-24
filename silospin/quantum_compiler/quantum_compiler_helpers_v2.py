@@ -1361,7 +1361,9 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                             idx_a += 1
                             if gt_t_str == itm:
                                 ct_idx_t_a  = 58 + idx_a + N_z + N_p
-                                ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
+                                #ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
+                                ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_a
+
                                 break
                             else:
                                 continue
