@@ -1163,7 +1163,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
     for awg_idx in channel_map:
         ct_idxs[awg_idx] = {}
         for core_idx in channel_map[awg_idx]:
-            ct_idxs[awg_idx][core_idx] = []
+            ct_idxs[awg_idx][core_idx] = {}
 
     initial_gates = {'xx_pi_fr': 0, 'yy_pi_fr': 1, 'mxxm_pi_fr': 2, 'myym_pi_fr': 3, 'x_pi_fr': 4, 'y_pi_fr': 5, 'xxx_pi_fr': 6, 'yyy_pi_fr': 7, 'x_pi2_fr': 8, 'y_pi2_fr': 9, 'xxx_pi2_fr': 10, 'yyy_pi2_fr': 11, 'xx_p_fr': 12, 'yy_p_fr': 13, 'mxxm_p_fr': 14, 'myym_p_fr': 15, 'x_p_fr': 16, 'y_p_fr': 17, 'xxx_p_fr': 18, 'yyy_p_fr': 19}
     ct_idx_incr_pi_pi_fr = {0: 20, -90: 21, -180: 22, -270: 23, 90: 24, 180: 25, 270: 26, 360: 20, -360: 20}
@@ -1228,7 +1228,6 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
         awg_idx = awg_core_split[rf_idx][0]
         core_idx = awg_core_split[rf_idx][1]
         N_z = len(arbZs[awg_idx][core_idx])
-        #ct_idxs[awg_idx][core_idx] = []
         rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]).difference({rf_idx}))
         gate_sequence = rf_gate_sequence[rf_idx]
         n_gates = len(gate_sequence)
@@ -1290,7 +1289,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                             gt_str = gt+'_pi_fr'
                 else:
                     gt_str = gt+'_pi_fr'
-                ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+                #ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+                ct_idxs[awg_idx][core_idx][idx] = initial_gates[gt_str]
            # initial pi/2 gate
             elif gt in pi_2_gt_set and rf_gt_idx == 1:
                 if len(p_intersect) != 0:
@@ -1319,21 +1319,28 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     gt_str = gt+'_pi_fr'
                 else:
                     gt_str = gt+'_pi2_fr'
-                ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+                #ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+                ct_idxs[awg_idx][core_idx][idx] = initial_gates[gt_str]
+
            # z0z gate
             elif gt == 'z0z':
-                ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
+                #ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
+                ct_idxs[awg_idx][core_idx][idx] = ct_idx_z0z
+
             # z gate
             elif gt[0] == 'z':
-                ct_idxs[awg_idx][core_idx].append(arbZs[awg_idx][core_idx][gt][0])
+                #ct_idxs[awg_idx][core_idx].append(arbZs[awg_idx][core_idx][gt][0])
+                ct_idxs[awg_idx][core_idx][idx] = arbZs[awg_idx][core_idx][gt][0]
             #  delays
             elif gt[0] == 't':
                 gt_t_str = int(gt[1:len(gt)])
                 if gt_t_str == int(taus_std[1]):
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
+                    #ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
+                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_tau_pi
                 # std pi/2 delays
                 elif gt_t_str == int(taus_std[0]):
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
+                    #ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
+                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_tau_pi_2
                 # plunger delays
                 else:
                     if gt_t_str in plunger_len_set:
@@ -1342,7 +1349,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                             idx_p += 1
                             if gt_t_str == itm[1]:
                                 ct_idx_t_p  = 58 + idx_p + N_z
-                                ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
+                                #ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
+                                ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_p
                                 break
                             else:
                                 continue
@@ -1391,7 +1399,9 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                          arbgate_counter[awg_idx][core_idx] += 1
                 else:
                     pass
-                ct_idxs[awg_idx][core_idx].append(ct_idx_g_a)
+                #ct_idxs[awg_idx][core_idx].append(ct_idx_g_a)
+                ct_idxs[awg_idx][core_idx][idx] = ct_idx_g_a
+
             ## Incremented RF gates (non-arbitrary)
             elif rf_gt_idx > 1:
                 ##Compute phase
@@ -1416,7 +1426,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
                      else:
                          ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
-                     ct_idxs[awg_idx][core_idx].append(ct_idx_incr)
+                     #ct_idxs[awg_idx][core_idx].append(ct_idx_incr)
+                     ct_idxs[awg_idx][core_idx][idx] = ct_idx_incr
                 ##Incremented pi/2 gate
                 elif gt in pi_2_gt_set:
                     if len(p_intersect) != 0:
@@ -1445,7 +1456,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                         ct_idx_incr = ct_idx_incr_pi_2_pi_fr[-phi_a]
                     else:
                         ct_idx_incr = ct_idx_incr_pi_2_pi_2_fr[-phi_a]
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_incr)
+                    #ct_idxs[awg_idx][core_idx].append(ct_idx_incr)
+                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_incr
             ## Consider throwing error here
                 else:
                     pass
@@ -1531,8 +1543,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     ##CH 2
                     else:
                         ct_idx_p = itr + N_p
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-
+                    #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
                 #Case 3
                 elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
                     itr = 0
@@ -1572,12 +1584,14 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                             if dc_gate_sequence[dc_idx+1][idx] == 'p':
                                 ##p1, p2 simulataneous
                                 ct_idx_p = itr_diff_idx + 2*N_p
-                                ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
 
                             elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
                                 ##only p1
                                 ct_idx_p = itr_diff_idx
-                                ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                ct_idxs[awg_idx][core_idx][idx] =  ct_idx_p
 
                             else:
                                 ##Throw error instead
@@ -1595,11 +1609,14 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                             if dc_gate_sequence[dc_idx-1][idx] == 'p':
                                 ##p1, p2 simulataneous
                                 ct_idx_p = itr_diff_idx + 2*N_p
-                                ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+
                             elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
                                 ##only p2
                                 ct_idx_p = itr_diff_idx + N_p
-                                ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
                             else:
                                 ##Throw error instead
                                 pass
@@ -1607,8 +1624,6 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                             check_dc_p_channels[idx][dc_idx-1] += 1
                         else:
                            pass
-                        print(dc_idx, ct_idx_p)
-
                     else:
                         pass
 
@@ -1628,12 +1643,14 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 if dc_gate_sequence[dc_idx+1][idx] == 'p':
                                     ##p1, p2 simulataneous in p std frame
                                     ct_idx_p = p_std_idx + 2*N_p
-                                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
 
                                 elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
                                     ##only p1 in p std frame
                                     ct_idx_p = p_std_idx
-                                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
 
                                 else:
                                     ##Throw error instead
@@ -1651,11 +1668,14 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 if dc_gate_sequence[dc_idx-1][idx] == 'p':
                                     ##p1, p2 simulataneous in p frmae
                                     ct_idx_p = p_std_idx + 2*N_p
-                                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
                                 elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
                                     ##only p2 in pi frame
                                     ct_idx_p = N_p + p_std_idx
-                                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+
                                 else:
                                     ##Throw error instead
                                     pass
@@ -1677,12 +1697,14 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 if dc_gate_sequence[dc_idx+1][idx] == 'p':
                                     ##p1, p2 simulataneous in pi frame
                                     ct_idx_p = 3*N_p + 4
-                                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
 
                                 elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
                                     ##only p1
                                     ct_idx_p = 3*N_p
-                                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
 
                                 else:
                                     ##Throw error instead
@@ -1700,11 +1722,13 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 if dc_gate_sequence[dc_idx-1][idx] == 'p':
                                     ##p1, p2 simulataneous
                                     ct_idx_p = 3*N_p + 4
-                                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
                                 elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
                                     ##only p2
                                     ct_idx_p = 3*N_p + 1
-                                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    #ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
                                 else:
                                     ##Throw error instead
                                     pass
