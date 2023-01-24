@@ -1743,6 +1743,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
                 #Case 5: working in  pi/2 frame
                 elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
+                    print(gt)
                     if p_dc_intersect[p_dc_diff_max_idx] > taus_std[0]:
                         use_p_std = 1
                     else:
