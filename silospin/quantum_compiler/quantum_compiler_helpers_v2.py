@@ -1856,7 +1856,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                             pass
 
             elif gt == 'z0z':
-                ct_idxs[awg_idx][core_idx].append(ct_idx_p_z0z)
+                ct_idxs[awg_idx][core_idx][idx] = ct_idx_p_z0z 
 
         else:
             continue
