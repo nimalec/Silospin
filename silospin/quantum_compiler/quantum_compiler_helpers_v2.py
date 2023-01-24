@@ -1228,7 +1228,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
         awg_idx = awg_core_split[rf_idx][0]
         core_idx = awg_core_split[rf_idx][1]
         N_z = len(arbZs[awg_idx][core_idx])
-        ct_idxs[awg_idx][core_idx] = []
+        #ct_idxs[awg_idx][core_idx] = []
         rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]).difference({rf_idx}))
         gate_sequence = rf_gate_sequence[rf_idx]
         n_gates = len(gate_sequence)
@@ -1576,7 +1576,6 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
                             elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
                                 ##only p1
-                                print(dc_idx, gt)
                                 ct_idx_p = itr_diff_idx
                                 ct_idxs[awg_idx][core_idx].append(ct_idx_p)
 
@@ -1599,7 +1598,6 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 ct_idxs[awg_idx][core_idx].append(ct_idx_p)
                             elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
                                 ##only p2
-                                print(dc_idx, gt) 
                                 ct_idx_p = itr_diff_idx + N_p
                                 ct_idxs[awg_idx][core_idx].append(ct_idx_p)
                             else:
