@@ -1526,149 +1526,149 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
 
 
-                #Case 3
-                elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
-                    itr = 0
-                    for item in plunger_tup_lengths:
-                        if dc_idx == item[0]:
-                            tau_p_gt = item[1]
-                            break
-                        else:
-                            itr += 1
-
-                    p_diff_taus = {}
-                    #for j in dc_diff_idxs:
-                    for j in dc_gate_sequence.keys():
-                        gt_dc = dc_gate_sequence[j][idx]
-                        if gt_dc == 'p':
-                            for item in plunger_tup_lengths:
-                                if j == item[0]:
-                                    p_diff_taus[j] = item[1]
-                                    break
-                                else:
-                                    pass
-                        else:
-                            pass
-                    p_diff_max_idx = max(p_diff_taus, key=p_diff_taus.get)
-
-                    itr_diff_idx = 0
-                    for item in plunger_tup_lengths:
-                        if p_diff_max_idx == item[0]:
-                            break
-                        else:
-                            itr_diff_idx += 1
-
-                    if dc_idx%2 != 0:
-                        ct_idx_p = itr_diff_idx
-                    else:
-                        ct_idx_p = itr_diff_idx + N_p
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-
-                ##Case 4
-                elif len(pi_intersect) != 0:
-                    for item in plunger_tup_lengths:
-                        if dc_idx == item[0]:
-                            ##Work in std p frame
-                            ##Note: instead of tau_p_gt ,
-                            #if p_pi_intersect[p_diff_max_idx] > taus_std[1]:
-                            if p_dc_intersect[p_dc_diff_max_idx] > taus_std[1]:
-                                if dc_idx%2 != 0:
-                                    ct_idx_p = p_std_idx
-                                else:
-                                    ct_idx_p =  N_p + p_std_idx
-                            else:
-                                ##Work in pi frame
-                                if dc_idx%2 != 0:
-                                    ct_idx_p = ct_idx_p1_pi
-                                else:
-                                    ct_idx_p = ct_idx_p2_pi
-                            break
-                        else:
-                            itr += 1
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-
-
-                ##Case 5: working in  pi/2 frame
-                elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
-                    for item in plunger_tup_lengths:
-                        if dc_idx == item[0]:
-                            ##Work in std p frame
-                            ##Note: instead of tau_p_gt ,
-                            #if p_pi_intersect[p_diff_max_idx] > taus_std[1]:
-                            if p_dc_intersect[p_dc_diff_max_idx] > taus_std[0]:
-                                if dc_idx%2 != 0:
-                                    ct_idx_p = p_std_idx
-                                else:
-                                    ct_idx_p =  N_p + p_std_idx
-                            else:
-                                ##Work in pi frame
-                                if dc_idx%2 != 0:
-                                    ct_idx_p = ct_idx_p1_pi_2
-                                else:
-                                    ct_idx_p = ct_idx_p2_pi_2
-                            break
-                        else:
-                            itr += 1
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-
-               ##Consider throwing an error instead
-                else:
-                    pass
-
-
-            elif gt == 'z0z':
-                ct_idxs[awg_idx][core_idx].append(ct_p_idx_z0z)
-
-            elif gt[0] == 't':
-                gt_t_str = int(gt[1:len(gt)])
-
-                if gt_t_str == int(taus_std[1]):
-                    ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi)
-
-                # std pi/2 delays
-                elif gt_t_str == int(taus_std[0]):
-                    ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi_2)
-
-                # plunger delays
-                else:
-                    if gt_t_str in plunger_len_set:
-                        idx_t_p = 0
-                        for itm in plunger_len_tups:
-                            idx_t_p += 1
-                            if gt_t_str == itm[1]:
-                                ct_idx_t_p  = 2*N_p + 7 + idx_t_p
-                                ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
-                                break
-                            else:
-                                continue
-
-                    ##Arb gate delays  (need to test with arb gate)
-                    elif gt_t_str in set(arb_gate_taus):
-                        idx_a = 0
-                        for itm in arb_gate_taus:
-                            idx_a += 1
-                            if gt_t_str == itm:
-                                ct_idx_t_a = 3*N_p + 7+idx_a
-                                ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
-                                break
-                            else:
-                                continue
-                    else:
-                        pass
-
-            ##Arbitrary gates
-            elif gt.find('*') != -1:
-                if gt[gt.find('*')+1] in arbgate_dict.keys():
-                    ct_idx_g_a = 3*N_p + 8 + N_arb_tot + arbgate_counter[awg_idx][core_idx]
-                    ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
-                    arbgate_counter[awg_idx][core_idx] += 1
-                else:
-                    pass
-            ## Else, throw an error ...
-            else:
-                pass
-
-            ##Throw an error
+            #     #Case 3
+            #     elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+            #         itr = 0
+            #         for item in plunger_tup_lengths:
+            #             if dc_idx == item[0]:
+            #                 tau_p_gt = item[1]
+            #                 break
+            #             else:
+            #                 itr += 1
+            #
+            #         p_diff_taus = {}
+            #         #for j in dc_diff_idxs:
+            #         for j in dc_gate_sequence.keys():
+            #             gt_dc = dc_gate_sequence[j][idx]
+            #             if gt_dc == 'p':
+            #                 for item in plunger_tup_lengths:
+            #                     if j == item[0]:
+            #                         p_diff_taus[j] = item[1]
+            #                         break
+            #                     else:
+            #                         pass
+            #             else:
+            #                 pass
+            #         p_diff_max_idx = max(p_diff_taus, key=p_diff_taus.get)
+            #
+            #         itr_diff_idx = 0
+            #         for item in plunger_tup_lengths:
+            #             if p_diff_max_idx == item[0]:
+            #                 break
+            #             else:
+            #                 itr_diff_idx += 1
+            #
+            #         if dc_idx%2 != 0:
+            #             ct_idx_p = itr_diff_idx
+            #         else:
+            #             ct_idx_p = itr_diff_idx + N_p
+            #         ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+            #
+            #     ##Case 4
+            #     elif len(pi_intersect) != 0:
+            #         for item in plunger_tup_lengths:
+            #             if dc_idx == item[0]:
+            #                 ##Work in std p frame
+            #                 ##Note: instead of tau_p_gt ,
+            #                 #if p_pi_intersect[p_diff_max_idx] > taus_std[1]:
+            #                 if p_dc_intersect[p_dc_diff_max_idx] > taus_std[1]:
+            #                     if dc_idx%2 != 0:
+            #                         ct_idx_p = p_std_idx
+            #                     else:
+            #                         ct_idx_p =  N_p + p_std_idx
+            #                 else:
+            #                     ##Work in pi frame
+            #                     if dc_idx%2 != 0:
+            #                         ct_idx_p = ct_idx_p1_pi
+            #                     else:
+            #                         ct_idx_p = ct_idx_p2_pi
+            #                 break
+            #             else:
+            #                 itr += 1
+            #         ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+            #
+            #
+            #     ##Case 5: working in  pi/2 frame
+            #     elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
+            #         for item in plunger_tup_lengths:
+            #             if dc_idx == item[0]:
+            #                 ##Work in std p frame
+            #                 ##Note: instead of tau_p_gt ,
+            #                 #if p_pi_intersect[p_diff_max_idx] > taus_std[1]:
+            #                 if p_dc_intersect[p_dc_diff_max_idx] > taus_std[0]:
+            #                     if dc_idx%2 != 0:
+            #                         ct_idx_p = p_std_idx
+            #                     else:
+            #                         ct_idx_p =  N_p + p_std_idx
+            #                 else:
+            #                     ##Work in pi frame
+            #                     if dc_idx%2 != 0:
+            #                         ct_idx_p = ct_idx_p1_pi_2
+            #                     else:
+            #                         ct_idx_p = ct_idx_p2_pi_2
+            #                 break
+            #             else:
+            #                 itr += 1
+            #         ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+            #
+            #    ##Consider throwing an error instead
+            #     else:
+            #         pass
+            #
+            #
+            # elif gt == 'z0z':
+            #     ct_idxs[awg_idx][core_idx].append(ct_p_idx_z0z)
+            #
+            # elif gt[0] == 't':
+            #     gt_t_str = int(gt[1:len(gt)])
+            #
+            #     if gt_t_str == int(taus_std[1]):
+            #         ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi)
+            #
+            #     # std pi/2 delays
+            #     elif gt_t_str == int(taus_std[0]):
+            #         ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi_2)
+            #
+            #     # plunger delays
+            #     else:
+            #         if gt_t_str in plunger_len_set:
+            #             idx_t_p = 0
+            #             for itm in plunger_len_tups:
+            #                 idx_t_p += 1
+            #                 if gt_t_str == itm[1]:
+            #                     ct_idx_t_p  = 2*N_p + 7 + idx_t_p
+            #                     ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
+            #                     break
+            #                 else:
+            #                     continue
+            #
+            #         ##Arb gate delays  (need to test with arb gate)
+            #         elif gt_t_str in set(arb_gate_taus):
+            #             idx_a = 0
+            #             for itm in arb_gate_taus:
+            #                 idx_a += 1
+            #                 if gt_t_str == itm:
+            #                     ct_idx_t_a = 3*N_p + 7+idx_a
+            #                     ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
+            #                     break
+            #                 else:
+            #                     continue
+            #         else:
+            #             pass
+            #
+            # ##Arbitrary gates
+            # elif gt.find('*') != -1:
+            #     if gt[gt.find('*')+1] in arbgate_dict.keys():
+            #         ct_idx_g_a = 3*N_p + 8 + N_arb_tot + arbgate_counter[awg_idx][core_idx]
+            #         ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
+            #         arbgate_counter[awg_idx][core_idx] += 1
+            #     else:
+            #         pass
+            # ## Else, throw an error ...
+            # else:
+            #     pass
+            #
+            # ##Throw an error
     return ct_idxs, arbgate_counter
 
 
