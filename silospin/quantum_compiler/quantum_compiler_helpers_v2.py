@@ -1457,8 +1457,9 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
         check_dc_p_channels[i] = {}
         for dc_idx in dc_gate_sequence:
             check_dc_p_channels[i][dc_idx] = 0
-    print(dc_gate_sequence.keys())
+
     for dc_idx in dc_gate_sequence:
+        print(dc_idx)
         arb_gate_counter = 0
         awg_idx = awg_core_split[dc_idx][0]
         core_idx = awg_core_split[dc_idx][1]
