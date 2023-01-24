@@ -1491,7 +1491,6 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
             ## 8. RF waveform
 
             if gt == 'p':
-
                 itr = 0
                 p_dc_intersect = {}
                 for j in dc_gate_sequence.keys():
