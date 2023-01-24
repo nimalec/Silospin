@@ -1742,10 +1742,9 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
                         else:
                             pass
-                
+
                 #Case 5: working in  pi/2 frame
                 elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
-                    print(gt)
                     if p_dc_intersect[p_dc_diff_max_idx] > taus_std[0]:
                         use_p_std = 1
                     else:
@@ -1856,14 +1855,13 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             pass
 
+            elif gt == 'z0z':
+                ct_idxs[awg_idx][core_idx].append(ct_idx_p_z0z)
+
         else:
             continue
     return ct_idxs, arbgate_counter
 
-
-            #
-            # elif gt == 'z0z':
-            #     ct_idxs[awg_idx][core_idx].append(ct_p_idx_z0z)
             #
             # elif gt[0] == 't':
             #     gt_t_str = int(gt[1:len(gt)])
