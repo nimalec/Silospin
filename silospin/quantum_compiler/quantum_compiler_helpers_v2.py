@@ -1449,11 +1449,13 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     pass
 
 ##Start here
+
+
     for dc_idx in dc_gate_sequence:
         arb_gate_counter = 0
         awg_idx = awg_core_split[dc_idx][0]
         core_idx = awg_core_split[dc_idx][1]
-        ct_idxs[awg_idx][core_idx] = []
+        #ct_idxs[awg_idx][core_idx] = []
         dc_diff_idxs = list(set([i for i in dc_gate_sequence.keys()]).difference({dc_idx}))
         rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]))
         gate_sequence = dc_gate_sequence[dc_idx]
@@ -1525,8 +1527,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                         ct_idx_p = itr + N_p
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
                     #print(ct_idxs)
-            print(ct_idxs)
 
+    print(ct_idxs)
     return ct_idxs, arbgate_counter
             #     #Case 3
             #     elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
