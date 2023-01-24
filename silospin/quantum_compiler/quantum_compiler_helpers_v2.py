@@ -1459,7 +1459,6 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
             check_dc_p_channels[i][dc_idx] = 0
 
     for dc_idx in dc_gate_sequence:
-        print(dc_idx)
         arb_gate_counter = 0
         awg_idx = awg_core_split[dc_idx][0]
         core_idx = awg_core_split[dc_idx][1]
@@ -1536,6 +1535,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
                 #Case 3
                 elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                    print(gt)
                     itr = 0
                     for item in plunger_tup_lengths:
                         if dc_idx == item[0]:
