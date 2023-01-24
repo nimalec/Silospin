@@ -1509,7 +1509,6 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
 
                 ##Cases 1 and 2
                 if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
-                    print(gt)
                     ## Play plunger in it's own frame, check if left or right
                     ## Determine if channel 1 or 2 if even or odd (ch 1 = odd, ch 2 = even)
                     itr = 0
@@ -1525,6 +1524,7 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         ct_idx_p = itr + N_p
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+                    print(ct_idxs)
 
 
             #     #Case 3
