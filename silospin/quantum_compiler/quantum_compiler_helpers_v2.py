@@ -1124,7 +1124,532 @@ def make_command_table_indices_v3(gt_seqs, channel_map, awg_core_split, arb_gate
 
     return ct_idxs, arbgate_counter
 
+def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gates, plunger_tup_lengths, taus_std, gate_lengths, arbgate_counter, arbZs, line, arb_dc_dict, pickle_file_location='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
+    ## Should return
+    ##Modifications here: 1. accomodate for multiple cores/channels, 2. arb Z should be counted and account for each edge case,
+    ## 3. arbitrary gates ==> need to add new command table index when these occur (per core).
+    ## Should alo return a list of command table indices corresponding to each arbitrary gate.
+    ## 1. Take in channel grouping ==> determine whcih are plunger and RF indices/cores ==> cores they belong to.
+    ## 2. Loop over gt seqsdd line.
+    ## 3.
 
+    ## Inputs:
+    ## 1. gate sequences  (for a specific line)
+    ## 2.  standard pi and pi/2 pulse lengths
+    ## 3. pulse lenghtths
+    ## 4. number of arb Z gates previously seen
+
+    '''
+    Generates a dictionary with lists of command table executions for each core, provided the output of 'gst_file_parser'.
+    This is the core of the quantum compiler, as it interprets longs RF and DC gate strings, converting them to FPGA instructions for amplitude and phase modulation.\n
+    Outer-most keys "plunger" and "rf", containing instructions to be addressed separatley on the dedicated RF and DC cores.
+    Outputs a dictionary with outer keys "rf" and "plunger", corresponding to executions for dedicated RF and DC AWG cores. The values for the "rf" keys are dictionaries with outer keys corresponding to each core and "plunger"
+    has values of dictionaries with keys corresponding to each DC channel. Each of these core and channel keys have values of lists of command table (CT) indices (integers) to be addressed on the AWG cores. \n
+    Each command table index maps to an entry of a CT, determining the waveform, amplitude, and phase to be played when the CT entry is executed. Phase changes for each gate are computed on-the-fly.
+    Note that this function supports the following gates:  'x', 'xxx', 'xx', 'mxxm', 'y', 'yyy', 'y y', 'myym', 'arbZ', 'p', 't'. See 'Quantum Compiler' tab for a more elaborate description.  \n
+    Note: this function is currently configured for 1 HDAWG unit with 4 AWG cores. \n
+
+    Parameters:
+                    gt_seqs (dict): dictionary output of 'gst_file_parser', representing sequence of RF and DC gate strings on each core.
+                    taus_std (list): list of standard pi/2 and pi pulse lengths in ns ([tau_pi2, tau_pi]).
+                    taus_p (list): list of tuples, each with elements (ch_idx, tau_p) representing the channel index and corresponding plunger pulse length.
+                    n_arbZ (int): the accumulated number of previously seen arbitrary-Z rotations over all lines in GST file being read.
+
+    Returns:
+       ct_idxs (dict), arbZ (list): dictonary of command table indices to execute, list of tuples of (arbitrary Z comman table index, rotation angle).
+     '''
+
+    ct_idxs = {}
+    for awg_idx in channel_map:
+        ct_idxs[awg_idx] = {}
+        for core_idx in channel_map[awg_idx]:
+            ct_idxs[awg_idx][core_idx] = []
+
+    initial_gates = {'xx_pi_fr': 0, 'yy_pi_fr': 1, 'mxxm_pi_fr': 2, 'myym_pi_fr': 3, 'x_pi_fr': 4, 'y_pi_fr': 5, 'xxx_pi_fr': 6, 'yyy_pi_fr': 7, 'x_pi2_fr': 8, 'y_pi2_fr': 9, 'xxx_pi2_fr': 10, 'yyy_pi2_fr': 11, 'xx_p_fr': 12, 'yy_p_fr': 13, 'mxxm_p_fr': 14, 'myym_p_fr': 15, 'x_p_fr': 16, 'y_p_fr': 17, 'xxx_p_fr': 18, 'yyy_p_fr': 19}
+    ct_idx_incr_pi_pi_fr = {0: 20, -90: 21, -180: 22, -270: 23, 90: 24, 180: 25, 270: 26, 360: 20, -360: 20}
+    ct_idx_incr_pi_2_pi_fr = {0: 27, -90: 28, -180: 29, -270: 30, 90: 31, 180: 32,  270: 33, 360: 20, -360: 20}
+    ct_idx_incr_pi_2_pi_2_fr = {0: 34, -90: 35, -180: 36, -270: 37, 90: 38, 180: 39,  270:  40, 360: 20, -360: 20}
+    ct_idx_incr_pi_p_fr = {0: 41, -90: 42, -180: 43, -270: 44, 90: 45, 180: 46,  270:  47, 360: 20, -360: 20}
+    ct_idx_incr_pi_2_p_fr = {0: 48, -90: 49, -180: 50, -270: 51, 90: 51, 180: 53,  270:  54, 360: 20, -360: 20}
+    ct_idx_z0z = 55
+    phi_ls_gt = {'x':  0, 'y': -90, 'xx':  0, 'yy': -90 , 'xxx':  -180, 'yyy': 90, 'mxxm': -180, 'myym': 90}
+    pi_gt_set = {'xx', 'yy', 'mxxm', 'myym'}
+    pi_2_gt_set = {'x', 'y', 'xxx', 'yyy'}
+
+    rf_gate_sequence = gt_seqs['rf']
+    dc_gate_sequence = gt_seqs['plunger']
+    arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
+    plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
+    plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
+    N_p = len(plunger_tup_lengths)
+    p_tup_std = max(plunger_len_tups, key=lambda x:x[1])
+
+    p_std_idx = 0
+    for item in plunger_len_tups:
+        if p_tup_std[0] == item[0]:
+            break
+        else:
+            p_std_idx += 1
+
+    ct_idx_p1_pi = 2*N_p
+    ct_idx_p2_pi = 2*N_p + 1
+    ct_idx_p1_pi_2 = 2*N_p + 2
+    ct_idx_p2_pi_2 = 2*N_p + 3
+    ct_p_idx_z0z = 2*N_p + 4
+    ct_p_idx_tau_pi = 2*N_p + 5
+    ct_p_idx_tau_pi_2 = 2*N_p + 6
+    ct_p_idx_tau_p_std = 2*N_p + 7
+
+    N_arb_tot = 0
+    sample_rate = 2.4e9
+    arb_gate_taus = []
+    for i in arb_gates:
+        for j in arb_gates[i]:
+            for k in range(len(arb_gates[i][j])):
+                N_arb_tot += 1
+                arb_gate_taus.append(ceil(1e9*len(arb_gates[i][j][k][1])/sample_rate))
+
+    for rf_idx in rf_gate_sequence:
+        arb_gate_counter = 0
+        awg_idx = awg_core_split[rf_idx][0]
+        core_idx = awg_core_split[rf_idx][1]
+        N_z = len(arbZs[awg_idx][core_idx])
+        ct_idxs[awg_idx][core_idx] = []
+        rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]).difference({rf_idx}))
+        gate_sequence = rf_gate_sequence[rf_idx]
+        n_gates = len(gate_sequence)
+        gt_0 = gate_sequence[0]
+        ct_idx_tau_pi = 56 + len(arbZs[awg_idx][core_idx])
+        ct_idx_tau_pi_2 = 57 + len(arbZs[awg_idx][core_idx])
+
+        ##Compute initial phase
+        if gt_0 in {'x', 'y', 'xxx', 'yyy', 'mxxm', 'myym', 'xx', 'yy'}:
+            phi_l = phi_ls_gt[gt_0]
+        elif gt_0.find('*') != -1:
+              if gt_0[gt_0.find('*')+1] == 'X':
+                   phi_l = phi_ls_gt['x']
+              elif gt_0[gt_0.find('*')+1] == 'Y':
+                   phi_l = phi_ls_gt['y']
+              elif gt_0[gt_0.find('*')+1] == 'U':
+                   phi_l = phi_ls_gt['xxx']
+              elif gt_0[gt_0.find('*')+1] == 'V':
+                   phi_l = phi_ls_gt['yyy']
+              else:
+                   pass
+        else:
+            phi_l = 0
+
+        rf_gt_idx  = 0
+        non_rf_idx = 0
+        ##Loop through all gates
+        for idx in range(n_gates):
+            gt = gate_sequence[idx]
+            rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+            pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+            pi_intersect = rf_gates_other.intersection(pi_gt_set)
+            p_intersect = set([dc_gate_sequence[seq][idx] for seq in dc_gate_sequence]).intersection({'p'})
+            p_intersect_tups = set([(seq, dc_gate_sequence[seq][idx]) for seq in dc_gate_sequence])
+            ## Count initial RF gates per sequence
+            if gt in {'x', 'y', 'mxxm', 'myym', 'xxx', 'yyy', 'xx', 'yy'}:
+                rf_gt_idx += 1
+            elif gt.find('*') != -1:
+                if gt[gt.find('*')+1] in {'X', 'Y', 'U', 'V'}:
+                    rf_gt_idx += 1
+                else:
+                    pass
+            else:
+                non_rf_idx += 1
+            # initial pi gate
+            if gt in pi_gt_set and rf_gt_idx == 1:
+                if len(p_intersect) != 0:
+                    for tup in p_intersect_tups:
+                        if tup[1] == 'p':
+                            tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
+                            #Plunger frame
+                            if tau_p > taus_std[1]:
+                                gt_str = gt+'_p_fr'
+                                break
+                            #Pi frame
+                            else:
+                                gt_str = gt+'_pi_fr'
+                        else:
+                            gt_str = gt+'_pi_fr'
+                else:
+                    gt_str = gt+'_pi_fr'
+                ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+           # initial pi/2 gate
+            elif gt in pi_2_gt_set and rf_gt_idx == 1:
+                if len(p_intersect) != 0:
+                    for tup in p_intersect_tups:
+                        if tup[1] == 'p':
+                            #Obtain DC pulse length
+                            tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
+                            #No pi pulses, just pi/2 and plunger ==> plunger > pi/2
+                            if len(pi_intersect) == 0 and tau_p > taus_std[0]:
+                                gt_str = gt+'_p_fr'
+                                break
+                            #Pi pulses, with pi/2 and plunger ==> plunger > pi
+                            elif len(pi_intersect) != 0 and tau_p > taus_std[1]:
+                                gt_str = gt+'_p_fr'
+                                break
+                           #Pi pulses, with pi/2 and plunger ==> plunger < pi
+                            elif len(pi_intersect) != 0 and tau_p < taus_std[1]:
+                                gt_str = gt+'_pi_fr'
+                            elif len(pi_intersect) == 0 and tau_p < taus_std[0]:
+                                gt_str = gt+'_pi2_fr'
+                            else:
+                                pass
+                        else:
+                            pass
+                elif len(pi_intersect) != 0:
+                    gt_str = gt+'_pi_fr'
+                else:
+                    gt_str = gt+'_pi2_fr'
+                ct_idxs[awg_idx][core_idx].append(initial_gates[gt_str])
+           # z0z gate
+            elif gt == 'z0z':
+                ct_idxs[awg_idx][core_idx].append(ct_idx_z0z)
+            # z gate
+            elif gt[0] == 'z':
+                ct_idxs[awg_idx][core_idx].append(arbZs[awg_idx][core_idx][gt][0])
+            #  delays
+            elif gt[0] == 't':
+                gt_t_str = int(gt[1:len(gt)])
+                if gt_t_str == int(taus_std[1]):
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi)
+                # std pi/2 delays
+                elif gt_t_str == int(taus_std[0]):
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_tau_pi_2)
+                # plunger delays
+                else:
+                    if gt_t_str in plunger_len_set:
+                        idx_p = 0
+                        for itm in plunger_len_tups:
+                            idx_p += 1
+                            if gt_t_str == itm[1]:
+                                ct_idx_t_p  = 58 + idx_p + N_z
+                                ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
+                                break
+                            else:
+                                continue
+                    ##Arb gate delays  (need to test with arb gate)
+                    elif gt_t_str in set(arb_gate_taus):
+                        idx_a = 0
+                        for itm in arb_gate_taus:
+                            idx_a += 1
+                            if gt_t_str == itm:
+                                ct_idx_t_a  = 58 + idx_a + N_z + N_p
+                                ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
+                                break
+                            else:
+                                continue
+                    else:
+                        ## Can throw an error here instead
+                        pass
+            ##Arbitrary gates
+            elif gt.find('*') != -1:
+                if gt[gt.find('*')+1] in arbgate_dict.keys():
+                    if gt[gt.find('*')+1] in {'X', 'Y', 'U', 'V'}:
+                        ##Initial gate
+                        if rf_gt_idx == 1:
+                            init_gate_map = {'X': 1, 'Y': 2, 'U': 3, 'V': 4}
+                            ct_idx_g_a = 58 + N_z + N_p + N_arb_tot + init_gate_map[gt[gt.find('*')+1]]+arbgate_counter[awg_idx][core_idx]
+                            arbgate_counter[awg_idx][core_idx] += 11
+                        ##Incremented gate
+                        elif rf_gt_idx > 1:
+                           if gt[gt.find('*')+1] == 'X':
+                               phi_l, phi_a = compute_accumulated_phase('X', phi_l)
+                           elif gt[gt.find('*')+1] == 'Y':
+                               phi_l, phi_a = compute_accumulated_phase('Y', phi_l)
+                           elif gt[gt.find('*')+1] == 'U':
+                               phi_l, phi_a = compute_accumulated_phase('U', phi_l)
+                           elif gt[gt.find('*')+1] == 'V':
+                               phi_l, phi_a = compute_accumulated_phase('V', phi_l)
+                           else:
+                               pass
+                           incr_gate_map = {0: 5, -90 : 6, -180: 7, -270: 8, 90: 9, 180: 10, 270: 11, -360: 5, 360: 5}
+                           ct_idx_g_a = 58 + N_z + N_p + N_arb_tot + incr_gate_map[-phi_a]+arbgate_counter[awg_idx][core_idx]
+                           arbgate_counter[awg_idx][core_idx] += 11
+                        else:
+                            pass
+                    else:
+                         ct_idx_g_a = 59 + N_z + N_p + N_arb_tot + arbgate_counter[awg_idx][core_idx]
+                         arbgate_counter[awg_idx][core_idx] += 1
+                else:
+                    pass
+                ct_idxs[awg_idx][core_idx].append(ct_idx_g_a)
+            ## Incremented RF gates (non-arbitrary)
+            elif rf_gt_idx > 1:
+                ##Compute phase
+                if gt in {'x', 'y', 'xxx', 'yyy', 'xx', 'yy', 'mxxm', 'myym'}:
+                    phi_l, phi_a = compute_accumulated_phase(gt, phi_l)
+                else:
+                    pass
+                ##Incremented pi gate
+                if gt in pi_gt_set:
+                     if len(p_intersect) != 0:
+                        for tup in p_intersect_tups:
+                            if tup[1] == 'p':
+                                tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
+                                #Plunger frame
+                                if tau_p > taus_std[1]:
+                                    ct_idx_incr = ct_idx_incr_pi_p_fr[-phi_a]
+                                    break
+                                #Pi frame
+                                else:
+                                    ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
+                            else:
+                                ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
+                     else:
+                         ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
+                     ct_idxs[awg_idx][core_idx].append(ct_idx_incr)
+                ##Incremented pi/2 gate
+                elif gt in pi_2_gt_set:
+                    if len(p_intersect) != 0:
+                        for tup in p_intersect_tups:
+                            if tup[1] == 'p':
+                                #Obtain DC pulse length
+                                tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
+                                #No pi pulses, just pi/2 and plunger ==> plunger > pi/2
+                                if len(pi_intersect) == 0 and tau_p > taus_std[0]:
+                                    ct_idx_incr = ct_idx_incr_pi_2_p_fr[-phi_a]
+                                    break
+                                #Pi pulses, with pi/2 and plunger ==> plunger > pi
+                                elif len(pi_intersect) != 0 and tau_p > taus_std[1]:
+                                    ct_idx_incr = ct_idx_incr_pi_2_p_fr[-phi_a]
+                                    break
+                               #Pi pulses, with pi/2 and plunger ==> plunger < pi
+                                elif len(pi_intersect) != 0 and tau_p < taus_std[1]:
+                                    ct_idx_incr = ct_idx_incr_pi_2_pi_fr[-phi_a]
+                                elif len(pi_intersect) == 0 and tau_p < taus_std[0]:
+                                    ct_idx_incr = ct_idx_incr_pi_2_pi_2_fr[-phi_a]
+                                else:
+                                    pass
+                            else:
+                                pass
+                    elif len(pi_intersect) != 0:
+                        ct_idx_incr = ct_idx_incr_pi_2_pi_fr[-phi_a]
+                    else:
+                        ct_idx_incr = ct_idx_incr_pi_2_pi_2_fr[-phi_a]
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_incr)
+            ## Consider throwing error here
+                else:
+                    pass
+
+##Start here
+    for dc_idx in dc_gate_sequence:
+        arb_gate_counter = 0
+        awg_idx = awg_core_split[dc_idx][0]
+        core_idx = awg_core_split[dc_idx][1]
+        ct_idxs[awg_idx][core_idx] = []
+        dc_diff_idxs = list(set([i for i in dc_gate_sequence.keys()]).difference({dc_idx}))
+        rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]))
+        gate_sequence = dc_gate_sequence[dc_idx]
+        n_gates = len(gate_sequence)
+
+        ##Loop through all gates
+        for idx in range(n_gates):
+            gt = gate_sequence[idx]
+            dc_gates_other = set([dc_gate_sequence[j][idx] for j in dc_diff_idxs])
+            p_gates_other = dc_gates_other.intersection({'p'})
+            rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+            pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+            pi_intersect = rf_gates_other.intersection(pi_gt_set)
+
+
+
+            ## Edge cases:
+            ##1. single plunger, no other dc or rf gates ==> no pulse centering (use (p_i)_{p_i})
+            ##2. single plunger, no pi/pi_2 RF gates or plunger gates, but arbitrary gates or delays present ==> no pulse centering (use (p_i)_{p_i})
+            ##3. plunger with other plungers, no RF ==> find largest plunger gate length present (assign to p_max) ==> use (p_i)_{p_max}
+            ##4. plunger with other RF (pi or pi/2), no plunger ==>
+            ## a. only pi ==> check if pi_std < p_std --> use (p_i)_{p_std} , elif pi > p_std --> use (p_i)_{pi}, b. only pi/2 --> check if pi_2_std < p_std --> use (p_i)_{p_std}, else --> use (p_i)_{pi/2},
+            ## c. if pi and pi/2 present ==> check if pi_std < p_std --> use (p_i)_{p_std} ,  elif pi > p_std --> use (p_i)_{pi},
+            ## 5. plunger delay
+            ## 6. std RF delay
+            ## 7. arb delay
+            ## 8. RF waveform
+
+            if gt == 'p':
+
+                itr = 0
+                p_dc_intersect = {}
+                for j in dc_gate_sequence.keys():
+                    gt_dc = dc_gate_sequence[j][idx]
+                    if gt_dc == 'p':
+                        itr = 0
+                        for item in plunger_tup_lengths:
+                            if j == item[0]:
+                                p_dc_intersect[itr] = item[1]
+
+                            else:
+                                itr += 1
+                    else:
+                        pass
+                p_dc_diff_max_idx = max(p_dc_intersect, key=p_dc_intersect.get)
+
+                ##Cases 1 and 2
+                if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                    ## Determine if channel 1 or 2 if even or odd (ch 1 = odd, ch 2 = even)
+                    itr = 0
+                    for item in plunger_tup_lengths:
+                        if dc_idx == item[0]:
+                            break
+                        else:
+                            itr += 1
+                    ##CH 1
+                    if dc_idx%2 != 0:
+                        ct_idx_p = itr
+                    ##CH 2
+                    else:
+                        ct_idx_p = itr + N_p
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+
+
+                #Case 3
+                elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                    itr = 0
+                    for item in plunger_tup_lengths:
+                        if dc_idx == item[0]:
+                            tau_p_gt = item[1]
+                            break
+                        else:
+                            itr += 1
+
+                    p_diff_taus = {}
+                    #for j in dc_diff_idxs:
+                    for j in dc_gate_sequence.keys():
+                        gt_dc = dc_gate_sequence[j][idx]
+                        if gt_dc == 'p':
+                            for item in plunger_tup_lengths:
+                                if j == item[0]:
+                                    p_diff_taus[j] = item[1]
+                                    break
+                                else:
+                                    pass
+                        else:
+                            pass
+                    p_diff_max_idx = max(p_diff_taus, key=p_diff_taus.get)
+
+                    itr_diff_idx = 0
+                    for item in plunger_tup_lengths:
+                        if p_diff_max_idx == item[0]:
+                            break
+                        else:
+                            itr_diff_idx += 1
+
+                    if dc_idx%2 != 0:
+                        ct_idx_p = itr_diff_idx
+                    else:
+                        ct_idx_p = itr_diff_idx + N_p
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+
+                ##Case 4
+                elif len(pi_intersect) != 0:
+                    for item in plunger_tup_lengths:
+                        if dc_idx == item[0]:
+                            ##Work in std p frame
+                            ##Note: instead of tau_p_gt ,
+                            #if p_pi_intersect[p_diff_max_idx] > taus_std[1]:
+                            if p_dc_intersect[p_dc_diff_max_idx] > taus_std[1]:
+                                if dc_idx%2 != 0:
+                                    ct_idx_p = p_std_idx
+                                else:
+                                    ct_idx_p =  N_p + p_std_idx
+                            else:
+                                ##Work in pi frame
+                                if dc_idx%2 != 0:
+                                    ct_idx_p = ct_idx_p1_pi
+                                else:
+                                    ct_idx_p = ct_idx_p2_pi
+                            break
+                        else:
+                            itr += 1
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+
+
+                ##Case 5: working in  pi/2 frame
+                elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
+                    for item in plunger_tup_lengths:
+                        if dc_idx == item[0]:
+                            ##Work in std p frame
+                            ##Note: instead of tau_p_gt ,
+                            #if p_pi_intersect[p_diff_max_idx] > taus_std[1]:
+                            if p_dc_intersect[p_dc_diff_max_idx] > taus_std[0]:
+                                if dc_idx%2 != 0:
+                                    ct_idx_p = p_std_idx
+                                else:
+                                    ct_idx_p =  N_p + p_std_idx
+                            else:
+                                ##Work in pi frame
+                                if dc_idx%2 != 0:
+                                    ct_idx_p = ct_idx_p1_pi_2
+                                else:
+                                    ct_idx_p = ct_idx_p2_pi_2
+                            break
+                        else:
+                            itr += 1
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+
+               ##Consider throwing an error instead
+                else:
+                    pass
+
+
+            elif gt == 'z0z':
+                ct_idxs[awg_idx][core_idx].append(ct_p_idx_z0z)
+
+            elif gt[0] == 't':
+                gt_t_str = int(gt[1:len(gt)])
+
+                if gt_t_str == int(taus_std[1]):
+                    ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi)
+
+                # std pi/2 delays
+                elif gt_t_str == int(taus_std[0]):
+                    ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi_2)
+
+                # plunger delays
+                else:
+                    if gt_t_str in plunger_len_set:
+                        idx_t_p = 0
+                        for itm in plunger_len_tups:
+                            idx_t_p += 1
+                            if gt_t_str == itm[1]:
+                                ct_idx_t_p  = 2*N_p + 7 + idx_t_p
+                                ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
+                                break
+                            else:
+                                continue
+
+                    ##Arb gate delays  (need to test with arb gate)
+                    elif gt_t_str in set(arb_gate_taus):
+                        idx_a = 0
+                        for itm in arb_gate_taus:
+                            idx_a += 1
+                            if gt_t_str == itm:
+                                ct_idx_t_a = 3*N_p + 7+idx_a
+                                ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
+                                break
+                            else:
+                                continue
+                    else:
+                        pass
+
+            ##Arbitrary gates
+            elif gt.find('*') != -1:
+                if gt[gt.find('*')+1] in arbgate_dict.keys():
+                    ct_idx_g_a = 3*N_p + 8 + N_arb_tot + arbgate_counter[awg_idx][core_idx]
+                    ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
+                    arbgate_counter[awg_idx][core_idx] += 1
+                else:
+                    pass
+            ## Else, throw an error ...
+            else:
+                pass
+
+            ##Throw an error
+    return ct_idxs, arbgate_counter
 
 
 def make_rf_command_table(n_pi_2, n_pi, n_p=[], arbZ=[]):
@@ -1617,7 +2142,6 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
         for idx in arb_dc_waveforms[awgidx][coreidx][line]:
             if len(arb_dc_waveforms[awgidx][coreidx][line][idx]) != 0:
                 gate_tuple = arb_dc_waveforms[awgidx][coreidx][line][idx]
-                print(gate_tuple)
                 if gate_tuple[0][0] != 't' and gate_tuple[1][0] != 't':
                     amplitude_1 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
                     amplitude_2 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
@@ -1641,18 +2165,6 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
                     pass
             else:
                 continue
-
-    # ## Arb DC waveforms
-    # arb_dc_pulses = arbitrary_waveforms[awgidx][coreidx]
-    # if len(arb_dc_pulses) == 0:
-    #     pass
-    # else:
-    #     for wave in arb_dc_pulses:
-    #         gate_str = wave[0]
-    #         amplitude = float(gate_str[0:gate_str.find('*')])
-    #         ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude, "amplitude1": amplitude})
-    #         ct_idx += 1
-    #        wave_idx += 1
 
     command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table

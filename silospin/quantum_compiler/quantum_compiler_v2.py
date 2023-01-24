@@ -237,24 +237,24 @@ class GateSetTomographyQuantumCompiler:
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
                     self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
                 else:
-                    #self._command_tables[awg_idx][core_idx] = make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
                     self._command_tables[awg_idx][core_idx] = make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx, self._arb_dc_waveforms_dict)
 
-
-        # ct_idxs_all = {}
-        # taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
-        # for idx in self._gate_sequences:
-        #     gate_sequence = self._gate_sequences[idx]
+        ct_idxs_all = {}
+        taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
+        for idx in self._gate_sequences:
+            gate_sequence = self._gate_sequences[idx]
         #     ct_idxs, arbgate_counter = make_command_table_indices_v3(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z)
-        #     ct_idxs_all[idx] = ct_idxs
-        # self._ct_idxs_all = ct_idxs_all
+            ct_idxs, arbgate_counter = make_command_table_indices_v4(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z, idx, self._arb_dc_waveforms_dict)
+            ct_idxs_all[idx] = ct_idxs
+        self._ct_idxs_all = ct_idxs_all
+
+        ## Makea ictionaru of wavforms for each core
     #     waveforms_awg = {}
     #     sequencer_code = {}
     #     seq_code = {}
     #     command_code = {}
     #     n_array_rf = [len(self._waveforms[1]["pi_pifr"]), len(self._waveforms[1]["pi_2_pi_2fr"]), len(self._waveforms[1]["pi_2_pifr"])]
     #     n_array_p = [len(self._waveforms[4]["p1_p1fr"]), len(self._waveforms[4]["p2_p2fr"]),  len(self._waveforms[4]["p1_p2fr"]), len(self._waveforms[4]["p2_p1fr"]), len(self._waveforms[4]["p1_pi_2fr"]), len(self._waveforms[4]["p2_pi_2fr"]),len(self._waveforms[4]["p1_pifr"]), len(self._waveforms[4]["p2_pifr"])]
-    #     rf_cores = [1,2,3]
     #
     #     for idx in rf_cores:
     #         waveforms = Waveforms()
