@@ -1611,34 +1611,40 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         pass
 
+                ##Case 4
+                elif len(pi_intersect) != 0:
+                    if p_dc_intersect[p_dc_diff_max_idx] > taus_std[1]:
+                        print(p_dc_intersect[p_dc_diff_max_idx])
+                        print(taus_std[1])
+
+                    else:
+                        pass
+
+                    # use_p_std = 0
+                    # for item in plunger_tup_lengths:
+                    #     if dc_idx == item[0]:
+                    #         if p_dc_intersect[p_dc_diff_max_idx] > taus_std[1]:
+                    #             use_p_std = 1
+                    #             break
+                    #             # if dc_idx%2 != 0:
+                    #             #     ct_idx_p = p_std_idx
+                    #             # else:
+                    #             #     ct_idx_p =  N_p + p_std_idx
+                    #         else:
+                    #             use_p_std = 0
+                    #             ##Work in pi frame
+                    #             # if dc_idx%2 != 0:
+                    #             #     ct_idx_p = ct_idx_p1_pi
+                    #             # else:
+                    #             #     ct_idx_p = ct_idx_p2_pi
+                    #         #break
+                    #     else:
+                    #         itr += 1
+                    # ct_idxs[awg_idx][core_idx].append(ct_idx_p)
+
         else:
             continue
     return ct_idxs, arbgate_counter
-
-            #     ##Case 4
-            #     elif len(pi_intersect) != 0:
-            #         for item in plunger_tup_lengths:
-            #             if dc_idx == item[0]:
-            #                 ##Work in std p frame
-            #                 ##Note: instead of tau_p_gt ,
-            #                 #if p_pi_intersect[p_diff_max_idx] > taus_std[1]:
-            #                 if p_dc_intersect[p_dc_diff_max_idx] > taus_std[1]:
-            #                     if dc_idx%2 != 0:
-            #                         ct_idx_p = p_std_idx
-            #                     else:
-            #                         ct_idx_p =  N_p + p_std_idx
-            #                 else:
-            #                     ##Work in pi frame
-            #                     if dc_idx%2 != 0:
-            #                         ct_idx_p = ct_idx_p1_pi
-            #                     else:
-            #                         ct_idx_p = ct_idx_p2_pi
-            #                 break
-            #             else:
-            #                 itr += 1
-            #         ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-            #
-            #
             #     ##Case 5: working in  pi/2 frame
             #     elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
             #         for item in plunger_tup_lengths:
