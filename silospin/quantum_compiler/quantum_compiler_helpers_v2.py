@@ -1524,8 +1524,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                     else:
                         ct_idx_p = itr + N_p
                     ct_idxs[awg_idx][core_idx].append(ct_idx_p)
-                    print(ct_idxs)
-
+                    #print(ct_idxs)
+     print(ct_idxs)
     return ct_idxs, arbgate_counter
             #     #Case 3
             #     elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
