@@ -145,6 +145,7 @@ class GateSetTomographyQuantumCompiler:
 
         standard_rf = (hdawg_std_rf, standard_rf_idx)
         n_std = (npoints_pi_2_standard, npoints_pi_standard, npoints_p_standard)
+        print(n_stdd)
 
 
         try:
@@ -178,7 +179,7 @@ class GateSetTomographyQuantumCompiler:
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
 
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
-        self._arb_waveforms_all = arbitrary_waveforms 
+        self._arb_waveforms_all = arbitrary_waveforms
         for awg_idx in arb_dc_waveforms_dict:
             for core_idx in arb_dc_waveforms_dict[awg_idx]:
                 for line in range(len(self._gate_sequences)):
@@ -274,12 +275,22 @@ class GateSetTomographyQuantumCompiler:
         #         non_arb_waves = self._waveforms[awg_idx][core_idx]
         #         if channel_mapping[awg_idx][core_idx]['rf'] == 1:
         #             ##First assign non_arb, then assign arb
-        #              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[idx]["p1_p1fr"]))
+        #              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[idx]['pi_pifr']))
         #              wave_idx += 1
-        #              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[idx]["p1_p1fr"]))
+        #              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[idx]['pi_2_pifr']))
         #              wave_idx += 1
-        #              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[idx]["p1_p1fr"]))
+        #              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[idx]['pi_p_stdfr']))
         #              wave_idx += 1
+        #              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[idx]['pi_2_p_stdfr']))
+        #              wave_idx += 1
+        #
+        #              if len(self._arb_waveforms_all[awg_idx][core_idx]) == 0:
+        #                  pass
+        #              else:
+        #                  for arbwav in self._arb_waveforms_all[awg_idx][core_idx]:
+        #                      waveforms.assign_waveform(slot = wave_idx, wave1 = self._arb_waveforms_all[awg_idx][core_idx][arbwav])
+        #                      wave_idx += 1
+        #
         #
         #
         #         else:
@@ -287,10 +298,10 @@ class GateSetTomographyQuantumCompiler:
         #
         #
         #         waveforms_awg[awg_idx][core_idx] = waveforms
-
-
-
-
+        #
+        #
+        #
+        #
 
 
 
