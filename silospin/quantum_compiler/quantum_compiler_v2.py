@@ -295,7 +295,7 @@ class GateSetTomographyQuantumCompiler:
                 else:
                     arb_waveforms = self._arb_dc_waveforms_dict[awg_idx][core_idx]
                     channel_idxs_core = channel_mapping[awg_idx][core_idx]['channel_number']
-                    plunger_idxs = list(gst_program._gate_lengths['plunger'].keys())
+                    plunger_idxs = list(self._gate_lengths['plunger'].keys())
                     ## Str1  == 'p'+channel_idxs_core[0]+'_p'+str(wave_idx)+'fr'
                     ## Str2   == 'p'+channel_idxs_core[1]+'_p'+str(wave_idx)+'fr'
                     ## Order:
