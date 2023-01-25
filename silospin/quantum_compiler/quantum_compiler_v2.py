@@ -84,6 +84,7 @@ class GateSetTomographyQuantumCompiler:
         channel_mapping = self._awgs["hdawg1"]._channel_mapping
         awg_core_split = self._awgs["hdawg1"]._hdawg_core_split
         arb_dc_waveforms_dict = {}
+        self._channel_mapping = channel_mapping
 
         rf_cores = []
         plunger_channels = []
@@ -145,11 +146,7 @@ class GateSetTomographyQuantumCompiler:
         standard_rf = (hdawg_std_rf, standard_rf_idx)
         n_std = (npoints_pi_2_standard, npoints_pi_standard, npoints_p_standard)
 
-        # try:
-        #  if tau_p_standard > tau_pi_2_standard:
-        #     raise TypeError("DC pulse lengths should always be shorter than RF pulse lengths!!")
-        # except TypeError:
-        #     raise
+
         try:
          if added_padding > 5e-9:
             raise TypeError("Padding should not exceed 5 ns!!")
@@ -181,13 +178,11 @@ class GateSetTomographyQuantumCompiler:
         self._gate_lengths = make_gate_lengths_v2(dc_lengths, tau_waveform_pi_2_std, tau_waveform_pi_std, channel_mapping)
 
         self._gate_sequences, arbitrary_gates, arbitrary_waveforms, arbitrary_z = gst_file_parser_v3(self._gst_path, self._gate_lengths, channel_mapping, awg_core_split, sample_rate=sample_rate)
-
+        print(arbitrary_waveforms)
         for awg_idx in arb_dc_waveforms_dict:
             for core_idx in arb_dc_waveforms_dict[awg_idx]:
                 for line in range(len(self._gate_sequences)):
                     arb_dc_waveforms_dict[awg_idx][core_idx][line+1] = {}
-
-
 
 
         dc_gate_sequences = {}
@@ -264,8 +259,42 @@ class GateSetTomographyQuantumCompiler:
         self._ct_idxs_all = ct_idxs_all
 
 
-        ## Makea ictionaru of wavforms for each core
-    #     waveforms_awg = {}
+        # ## Makea dict for each core following channel groupign
+        # waveforms_awg = {}
+        # sequencer_code = {}
+        # n_array_rf = [len(self._waveforms[1]["pi_pifr"]), len(self._waveforms[1]["pi_2_pi_2fr"]), len(self._waveforms[1]["pi_2_pifr"])]
+        # for awg_idx in channel_mapping:
+        #     waveforms_awg[awg_idx] = {}
+        #     sequencer_code[awg_idx] = {}
+        #     for core_idx in channel_mapping[awg_idx]:
+        #         wave_idx = 0
+        #         waveforms_awg[awg_idx][core_idx] = {}
+        #         sequencer_code[awg_idx][core_idx] = {}
+        #         waveforms = Waveforms()
+        #         non_arb_waves = self._waveforms[awg_idx][core_idx]
+        #         if channel_mapping[awg_idx][core_idx]['rf'] == 1:
+        #             ##First assign non_arb, then assign arb
+        #              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[idx]["p1_p1fr"]))
+        #              wave_idx += 1
+        #              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[idx]["p1_p1fr"]))
+        #              wave_idx += 1
+        #              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[idx]["p1_p1fr"]))
+        #              wave_idx += 1
+        #
+        #
+        #         else:
+        #             arb_waveforms = self._arb_dc_waveforms_dict[awg_idx][core_idx]
+        #
+        #
+        #         waveforms_awg[awg_idx][core_idx] = waveforms
+
+
+
+
+
+
+
+
     #     sequencer_code = {}
     #     seq_code = {}
     #     command_code = {}
