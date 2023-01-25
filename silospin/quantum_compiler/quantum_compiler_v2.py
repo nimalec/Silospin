@@ -145,7 +145,7 @@ class GateSetTomographyQuantumCompiler:
 
         standard_rf = (hdawg_std_rf, standard_rf_idx)
         n_std = (npoints_pi_2_standard, npoints_pi_standard, npoints_p_standard)
-        print(n_stdd)
+        print(n_std)
 
 
         try:
