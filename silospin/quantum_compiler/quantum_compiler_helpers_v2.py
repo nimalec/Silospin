@@ -1907,13 +1907,11 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                         else:
                             pass
 
-            # elif gt.find('*') != -1:
-            #     if gt[gt.find('*')+1] in arbgate_dict.keys():
-            #         ct_idx_g_a = 3*N_p + 8 + N_arb_tot + arbgate_counter[awg_idx][core_idx]
-            #         ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
-            #         arbgate_counter[awg_idx][core_idx] += 1
-            #     else:
-            #         pass
+            elif gt.find('*') != -1:
+                if gt[gt.find('*')+1] in arbgate_dict.keys():
+                    print(gt)
+                else:
+                    pass
         else:
             continue
     return ct_idxs, arbgate_counter
