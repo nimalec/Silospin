@@ -241,9 +241,6 @@ class GateSetTomographyQuantumCompiler:
                             ct_idx += 1
                             tup = self._arb_dc_waveforms_dict[awg_idx][core_idx][line][idx]
                             arb_dc_waveforms_dict_temp[awg_idx][core_idx][line][idx] = (tup, ct_idx)
-        print(arb_dc_waveforms_dict_temp)
-
-
 
 
         self._command_tables = {}
@@ -262,7 +259,7 @@ class GateSetTomographyQuantumCompiler:
         taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
         for idx in self._gate_sequences:
             gate_sequence = self._gate_sequences[idx]
-            ct_idxs, arbgate_counter = make_command_table_indices_v4(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z, idx, self._arb_dc_waveforms_dict)
+            ct_idxs, arbgate_counter = make_command_table_indices_v4(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z, idx, arb_dc_waveforms_dict_temp)
             ct_idxs_all[idx] = ct_idxs
         self._ct_idxs_all = ct_idxs_all
 
