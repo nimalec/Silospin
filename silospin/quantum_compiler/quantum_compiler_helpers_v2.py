@@ -2788,7 +2788,7 @@ def generate_waveforms_v2(gate_npoints, channel_map, added_padding, standard_rf)
 ## 3. Every time a gate shows up with specified parameters, generate a pickle file.
 ##
 
-def generate_waveforms_v3(gate_npoints, channel_map, added_padding, standard_rf):
+def generate_waveforms_v3(gate_npoints, channel_map, added_padding, standard_rf, n_std):
     ## gate_npoints  ==> dictionary over the hdawg units
     ## channel_map ==> another dictionary over the nubmer of HDAWG units
     ## added_padding = 0
@@ -2848,15 +2848,40 @@ def generate_waveforms_v3(gate_npoints, channel_map, added_padding, standard_rf)
 
     npoints_pi_std = gate_npoints[standard_rf[0]]['rf'][standard_rf[1]]["pi"]
     npoints_pi_2_std = gate_npoints[standard_rf[0]]['rf'][standard_rf[1]]["pi_2"]
+    if n_std_waveform_pi >= n_std[2]:
+        n_pi_p_std = n_std_waveform_pi
+    else:
+        n_pi_p_std = n_std[2]
+
+    if n_std_waveform_pi_2 >= n_std[2]:
+        n_pi_2_p_std = n_std_waveform_pi_2
+    else:
+        n_pi_2_p_std = n_std[2]
+
     n_std_waveform_pi = len(rectangular_add_padding(npoints_pi_std, amp, min_points = npoints_pi_std, side_pad=added_padding))
     n_std_waveform_pi_2 = len(rectangular_add_padding(npoints_pi_2_std, amp, min_points = npoints_pi_2_std, side_pad=added_padding))
 
+    n_std_waveform_pi_p_std = len(rectangular_add_padding(n_pi_p_std, amp, min_points = n_pi_p_std, side_pad=added_padding))
+    n_std_waveform_pi_2_p_std = len(rectangular_add_padding(n_pi_2_p_std, amp, min_points = n_pi_2_p_std, side_pad=added_padding))
+
+
     if n_std_waveform_pi < 48:
          n_std_waveform_pi = 48
-    elif n_std_waveform_pi_2 < 48:
+    else:
+        pass
+    if n_std_waveform_pi_2 < 48:
          n_std_waveform_pi_2 = 48
     else:
         pass
+    if n_std_waveform_pi_p_std  < 48:
+         n_std_waveform_pi_p_std  = 48
+    else:
+        pass
+    if n_std_waveform_pi_2_p_std< 48:
+         n_std_waveform_pi_2_p_std = 48
+    else:
+        pass
+
 
     for awg in channel_map:
         waveforms[awg] = {}
@@ -2867,6 +2892,9 @@ def generate_waveforms_v3(gate_npoints, channel_map, added_padding, standard_rf)
                 waveforms[awg][core_idx]["pi_pifr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
                 waveforms[awg][core_idx]["pi_2_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi_2"], amp, min_points = n_std_waveform_pi_2, side_pad=added_padding)
                 waveforms[awg][core_idx]["pi_2_pifr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi_2"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
+                waveforms[awg][core_idx]["pi_p_stdfr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi"], amp, min_points = n_std_waveform_pi_p_std, side_pad=added_padding)
+                waveforms[awg][core_idx]["pi_2_p_stdfr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi_2"], amp, min_points = n_std_waveform_pi_2_p_std, side_pad=added_padding)
+
 
             elif channel_map[awg][core_idx]['rf'] == 0:
                 ch_1_idx = channel_map[awg][core_idx]['gate_idx'][0]
