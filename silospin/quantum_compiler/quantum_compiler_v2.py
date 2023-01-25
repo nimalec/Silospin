@@ -312,7 +312,7 @@ class GateSetTomographyQuantumCompiler:
 
                     ## 1. [(p1)_1, 0]...[(p1)_N, 0]
                     for i in plunger_idxs:
-                        wave_1 = np.array(self._waveforms[[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr'])
+                        wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr'])
                         waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
                         wave_idx += 1
                     ## 2. [0, (p2)_1]...[0, (p2)_N]
