@@ -1908,10 +1908,35 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                             pass
 
             elif gt.find('*') != -1:
-                if gt[gt.find('*')+1] in arbgate_dict.keys():
-                    print(arb_dc_dict[awg_idx][core_idx][line][idx])
-                else:
-                    pass
+                pass  
+                # if gt[gt.find('*')+1] in arbgate_dict.keys():
+                #     ## PI/2 frame
+                #     ##CH 1
+                #     if dc_idx%2 != 0:
+                #         ## Check if index already generated for the other channel
+                #         if check_dc_p_channels[idx][dc_idx] == 0:
+                #             ## Add command table entry
+                #             check_dc_p_channels[idx][dc_idx] += 1
+                #             check_dc_p_channels[idx][dc_idx+1] += 1
+                #         else:
+                #            pass
+                #
+                #    ## CH 2
+                #     elif dc_idx%2 == 0:
+                #         ## Check if index already generated for the other channel
+                #         if check_dc_p_channels[idx][dc_idx] == 0:
+                #             check_dc_p_channels[idx][dc_idx] += 1
+                #             check_dc_p_channels[idx][dc_idx-1] += 1
+                #         else:
+                #            pass
+                #
+                #     else:
+                #         pass
+                #
+                #     ct_idx_t_a = ct_p_idx_tau_p_std+ N_p+len(arb_gate_taus) + idx_p_a
+                #     print(arb_dc_dict[awg_idx][core_idx][line][idx])
+                # else:
+                #     pass
         else:
             continue
     return ct_idxs, arbgate_counter

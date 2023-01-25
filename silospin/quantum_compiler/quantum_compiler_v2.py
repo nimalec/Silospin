@@ -212,7 +212,6 @@ class GateSetTomographyQuantumCompiler:
                 for dc_idx in dc_arb_gates[line][idx]:
                     awg_idx = awg_core_split[dc_idx][0]
                     core_idx = awg_core_split[dc_idx][1]
-                    #arb_dc_waveforms_dict[awg_idx][core_idx][line]  = {}
 
                     if dc_arb_gates[line][idx][dc_idx][0] != 't':
                         if dc_idx%2 != 0:
@@ -224,7 +223,28 @@ class GateSetTomographyQuantumCompiler:
                         arb_dc_waveforms_dict[awg_idx][core_idx][line][idx] = (wave1, wave2)
                     else:
                         pass
+
         self._arb_dc_waveforms_dict = arb_dc_waveforms_dict
+
+        arb_dc_waveforms_dict_temp = {}
+        for awg_idx in self._arb_dc_waveforms_dict:
+            arb_dc_waveforms_dict_temp[awg_idx]  = {}
+            for core_idx in self._arb_dc_waveforms_dict[awg_idx]:
+                arb_dc_waveforms_dict_temp[awg_idx][core_idx] = {}
+                ct_idx = 0
+                for line in self._arb_dc_waveforms_dict[awg_idx][core_idx]:
+                    arb_dc_waveforms_dict_temp[awg_idx][core_idx][idx][line] = {}
+                    if len(self._arb_dc_waveforms_dict[awg_idx][core_idx][line]) == 0:
+                        pass
+                    else:
+                        for idx in self._arb_dc_waveforms_dict[awg_idx][core_idx][line]:
+                            ct_idx += 1
+                            tup = self._arb_dc_waveforms_dict[awg_idx][core_idx][line][idx]
+                            arb_dc_waveforms_dict_temp[awg_idx][core_idx][idx][line][idx] = (tup, ct_idx)
+        print(arb_dc_waveforms_dict_temp)
+
+
+
 
         self._command_tables = {}
         arbgate_counter = {}
@@ -242,11 +262,10 @@ class GateSetTomographyQuantumCompiler:
         taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
         for idx in self._gate_sequences:
             gate_sequence = self._gate_sequences[idx]
-        #    ct_idxs, arbgate_counter = make_command_table_indices_v3(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z)
             ct_idxs, arbgate_counter = make_command_table_indices_v4(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z, idx, self._arb_dc_waveforms_dict)
             ct_idxs_all[idx] = ct_idxs
         self._ct_idxs_all = ct_idxs_all
-        
+
 
         ## Makea ictionaru of wavforms for each core
     #     waveforms_awg = {}
