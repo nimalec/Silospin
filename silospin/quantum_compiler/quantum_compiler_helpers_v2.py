@@ -2848,13 +2848,13 @@ def generate_waveforms_v3(gate_npoints, channel_map, added_padding, standard_rf,
 
     npoints_pi_std = gate_npoints[standard_rf[0]]['rf'][standard_rf[1]]["pi"]
     npoints_pi_2_std = gate_npoints[standard_rf[0]]['rf'][standard_rf[1]]["pi_2"]
-    if n_std_waveform_pi >= n_std[2]:
-        n_pi_p_std = n_std_waveform_pi
+    if npoints_pi_std >= n_std[2]:
+        n_pi_p_std = npoints_pi_std
     else:
         n_pi_p_std = n_std[2]
 
-    if n_std_waveform_pi_2 >= n_std[2]:
-        n_pi_2_p_std = n_std_waveform_pi_2
+    if npoints_pi_2_std  >= n_std[2]:
+        n_pi_2_p_std = npoints_pi_2_std 
     else:
         n_pi_2_p_std = n_std[2]
 
