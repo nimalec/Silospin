@@ -1208,11 +1208,11 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
     ct_idx_p1_pi_2 = 3*N_p + 2
     ct_idx_p2_pi_2 = 3*N_p + 3
     ct_idx_p1_p2_pi = 3*N_p + 4
-    ct_idx_p1_p2_pi_2 = 3*N_p + 4
-    ct_idx_p_z0z = 3*N_p + 5
-    ct_p_idx_tau_pi = 3*N_p + 6
-    ct_p_idx_tau_pi_2 = 3*N_p + 7
-    ct_p_idx_tau_p_std = 3*N_p + 8
+    ct_idx_p1_p2_pi_2 = 3*N_p + 6
+    ct_idx_p_z0z = 3*N_p + 7
+    ct_p_idx_tau_pi = 3*N_p + 7
+    ct_p_idx_tau_pi_2 = 3*N_p + 8
+    ct_p_idx_tau_p_std = 3*N_p + 9
 
     N_arb_tot = 0
     sample_rate = 2.4e9
@@ -1856,51 +1856,57 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                             pass
 
             elif gt == 'z0z':
-                ct_idxs[awg_idx][core_idx][idx] = ct_idx_p_z0z 
+                ct_idxs[awg_idx][core_idx][idx] = ct_idx_p_z0z
 
-        else:
-            continue
-    return ct_idxs, arbgate_counter
+            elif gt[0] == 't':
+                if dc_idx%2 != 0:
+                    if dc_gate_sequence[dc_idx+1][idx][0] != 't':
+                        dual_channel = 0
+                    else:
+                        dual_channel = 1
+                else:
+                    if dc_gate_sequence[dc_idx-1][idx][0] != 't':
+                        dual_channel = 0
+                    else:
+                        dual_channel = 1
 
-            #
-            # elif gt[0] == 't':
-            #     gt_t_str = int(gt[1:len(gt)])
-            #
-            #     if gt_t_str == int(taus_std[1]):
-            #         ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi)
-            #
-            #     # std pi/2 delays
-            #     elif gt_t_str == int(taus_std[0]):
-            #         ct_idxs[awg_idx][core_idx].append(ct_p_idx_tau_pi_2)
-            #
-            #     # plunger delays
-            #     else:
-            #         if gt_t_str in plunger_len_set:
-            #             idx_t_p = 0
-            #             for itm in plunger_len_tups:
-            #                 idx_t_p += 1
-            #                 if gt_t_str == itm[1]:
-            #                     ct_idx_t_p  = 2*N_p + 7 + idx_t_p
-            #                     ct_idxs[awg_idx][core_idx].append(ct_idx_t_p)
-            #                     break
-            #                 else:
-            #                     continue
-            #
-            #         ##Arb gate delays  (need to test with arb gate)
-            #         elif gt_t_str in set(arb_gate_taus):
-            #             idx_a = 0
-            #             for itm in arb_gate_taus:
-            #                 idx_a += 1
-            #                 if gt_t_str == itm:
-            #                     ct_idx_t_a = 3*N_p + 7+idx_a
-            #                     ct_idxs[awg_idx][core_idx].append(ct_idx_t_a)
-            #                     break
-            #                 else:
-            #                     continue
-            #         else:
-            #             pass
-            #
-            # ##Arbitrary gates
+                if dual_channel == 0:
+                    pass
+                else:
+                    gt_t_str = int(gt[1:len(gt)])
+                    ## pi delays
+                    if gt_t_str == int(taus_std[1]):
+                        ct_idxs[awg_idx][core_idx][idx] = ct_p_idx_tau_pi
+                    # std pi/2 delays
+                    elif gt_t_str == int(taus_std[0]):
+                        ct_idxs[awg_idx][core_idx][idx] = ct_p_idx_tau_pi_2
+
+                    # plunger delays
+                    else:
+                        if gt_t_str in plunger_len_set:
+                            idx_t_p = 0
+                            for itm in plunger_len_tups:
+                                idx_t_p += 1
+                                if gt_t_str == itm[1]:
+                                    ct_idx_t_p  = ct_p_idx_tau_p_std + idx_t_p
+                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_p
+                                    break
+                                else:
+                                    continue
+
+                        elif gt_t_str in set(arb_gate_taus):
+                            idx_a = 0
+                            for itm in arb_gate_taus:
+                                idx_a += 1
+                                if gt_t_str == itm:
+                                    ct_idx_t_a =  ct_p_idx_tau_p_std+ N_p+idx_a
+                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_a
+                                    break
+                                else:
+                                    continue
+                        else:
+                            pass
+
             # elif gt.find('*') != -1:
             #     if gt[gt.find('*')+1] in arbgate_dict.keys():
             #         ct_idx_g_a = 3*N_p + 8 + N_arb_tot + arbgate_counter[awg_idx][core_idx]
@@ -1908,13 +1914,9 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
             #         arbgate_counter[awg_idx][core_idx] += 1
             #     else:
             #         pass
-            # ## Else, throw an error ...
-            # else:
-            #     pass
-            #
-            # ##Throw an error
-
-
+        else:
+            continue
+    return ct_idxs, arbgate_counter
 
 def make_rf_command_table(n_pi_2, n_pi, n_p=[], arbZ=[]):
     '''

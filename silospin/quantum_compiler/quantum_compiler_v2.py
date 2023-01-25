@@ -246,6 +246,7 @@ class GateSetTomographyQuantumCompiler:
             ct_idxs, arbgate_counter = make_command_table_indices_v4(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z, idx, self._arb_dc_waveforms_dict)
             ct_idxs_all[idx] = ct_idxs
         self._ct_idxs_all = ct_idxs_all
+        
 
         ## Makea ictionaru of wavforms for each core
     #     waveforms_awg = {}
