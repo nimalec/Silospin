@@ -233,14 +233,14 @@ class GateSetTomographyQuantumCompiler:
                 arb_dc_waveforms_dict_temp[awg_idx][core_idx] = {}
                 ct_idx = 0
                 for line in self._arb_dc_waveforms_dict[awg_idx][core_idx]:
-                    arb_dc_waveforms_dict_temp[awg_idx][core_idx][idx][line] = {}
+                    arb_dc_waveforms_dict_temp[awg_idx][core_idx][line] = {}
                     if len(self._arb_dc_waveforms_dict[awg_idx][core_idx][line]) == 0:
                         pass
                     else:
                         for idx in self._arb_dc_waveforms_dict[awg_idx][core_idx][line]:
                             ct_idx += 1
                             tup = self._arb_dc_waveforms_dict[awg_idx][core_idx][line][idx]
-                            arb_dc_waveforms_dict_temp[awg_idx][core_idx][idx][line][idx] = (tup, ct_idx)
+                            arb_dc_waveforms_dict_temp[awg_idx][core_idx][line][idx] = (tup, ct_idx)
         print(arb_dc_waveforms_dict_temp)
 
 
