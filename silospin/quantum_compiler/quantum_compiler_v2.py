@@ -158,7 +158,7 @@ class GateSetTomographyQuantumCompiler:
         for awg in self._gate_parameters:
             self._gate_npoints[awg] = make_gate_npoints(self._gate_parameters[awg], sample_rate)
         #self._waveforms = generate_waveforms_v2(self._gate_npoints, channel_mapping, added_padding, standard_rf)
-        self._waveforms = generate_waveforms_v2(self._gate_npoints, channel_mapping, added_padding, standard_rf, n_std) 
+        self._waveforms = generate_waveforms_v3(self._gate_npoints, channel_mapping, added_padding, standard_rf, n_std) 
 
         dc_lengths = {}
         for awg in channel_mapping:
