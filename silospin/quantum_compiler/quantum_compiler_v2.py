@@ -470,10 +470,11 @@ class GateSetTomographyQuantumCompiler:
         #
         for awg_idx in self._channel_mapping:
             for core_idx in self._channel_mapping[awg_idx]:
-                for wave_idx in self._channel_mapping[awg_idx][core_idx]:
-                    daq = self._awgs[awg_idx]._daq
-                    device_id = self._awgs[awg_idx]._connection_settings["hdawg_id"]
-                    daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/waveform/waves/"+str(wave_idx), waveforms_to_awg[awg_idx][core_idx][wave_idx])
+                for wave_idx in waveforms_to_awg[awg_idx][core_idx]:
+                    print(waveforms_to_awg[awg_idx][core_idx][wave_idx])
+                    # daq = self._awgs[awg_idx]._daq
+                    # device_id = self._awgs[awg_idx]._connection_settings["hdawg_id"]
+                    # daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/waveform/waves/"+str(wave_idx), waveforms_to_awg[awg_idx][core_idx][wave_idx])
 
 
     #     for idx in range(0,4):
