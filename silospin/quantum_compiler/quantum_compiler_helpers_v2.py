@@ -2929,7 +2929,7 @@ def generate_waveforms_v3(gate_npoints, channel_map, added_padding, standard_rf,
                         frame_p1_points = gate_npoints[awg]["plunger"][ch_idx]["p"]
                     else:
                         pass
-                    if gate_npoints[awg]["plunger"][ch_idx]["p "] < gate_npoints[awg]["plunger"][ch_2_idx]["p"]:
+                    if gate_npoints[awg]["plunger"][ch_idx]["p"] < gate_npoints[awg]["plunger"][ch_2_idx]["p"]:
                         frame_p2_points = gate_npoints[awg]["plunger"][ch_2_idx]["p"]
                     elif gate_npoints[awg]["plunger"][ch_idx]["p"] >= gate_npoints[awg]["plunger"][ch_2_idx]["p"]:
                         frame_p2_points = gate_npoints[awg]["plunger"][ch_idx]["p"]
