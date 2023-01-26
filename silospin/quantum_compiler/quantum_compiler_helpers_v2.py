@@ -3090,11 +3090,11 @@ def evaluate_arb_waveform(gate_str, pickle_file_location='C:\\Users\\Sigillito L
      if len(gt_parameters) == 0:
          pass
      elif len(gt_parameters) == 1:
-         param_values.append((gt_parameters[0], float(item[comma_idxs[0]+1:item.find(']')])))
+         param_values.append((gt_parameters[0], float(item[comma_idxs[0]+1:gt_label.find(']')])))
      else:
          for idx in range(len(param_values)-1):
-             param_values.append((gt_parameters[idx], float(item[comma_idxs[idx]+1:comma_idxs[idx+1]])))
-         param_values.append(gt_parameters[len(param_values)], float(item[comma_idxs[idx]+1:item.find(']')]))
+             param_values.append((gt_parameters[idx], float(gt_label[comma_idxs[idx]+1:comma_idxs[idx+1]])))
+         param_values.append(gt_parameters[len(param_values)], float(gt_label[comma_idxs[idx]+1:gt_label.find(']')]))
 
      waveform = obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, pickle_file_location)
      return waveform
