@@ -302,7 +302,6 @@ class GateSetTomographyQuantumCompiler:
                              waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(arbwav[1])), len(np.array(arbwav[1])))
                              wave_idx += 1
                      waveforms_awg[awg_idx][core_idx] = waveforms
-                     print(waveform_lengths[awg_idx][core_idx])
 
                 else:
                     arb_waveforms = self._arb_dc_waveforms_dict[awg_idx][core_idx]
@@ -402,6 +401,7 @@ class GateSetTomographyQuantumCompiler:
                                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                                      wave_idx += 1
                     waveforms_awg[awg_idx][core_idx] = waveforms
+                    print(waveform_lengths[awg_idx][core_idx])
 
 
         sequencer_code = {}
