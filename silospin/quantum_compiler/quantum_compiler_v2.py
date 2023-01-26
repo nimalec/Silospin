@@ -465,6 +465,11 @@ class GateSetTomographyQuantumCompiler:
             for core_idx in self._channel_mapping[awg_idx]:
                 self._awgs[awg_idx]._awgs["awg"+str(core_idx)].write_to_waveform_memory(waveforms_awg[awg_idx][core_idx])
 
+        for awg_idx in self._channel_mapping:
+            for core_idx in self._channel_mapping[awg_idx]:
+                self._awgs[awg_idx]._awgs["awg"+str(core_idx)].single(True)
+                self._awgs[awg_idx]._awgs["awg"+str(core_idx)].enable(True)
+
 
         # for awg_idx in self._channel_mapping:
         #     for core_idx in self._channel_mapping[awg_idx]:
@@ -472,9 +477,9 @@ class GateSetTomographyQuantumCompiler:
         #             daq = self._awgs[awg_idx]._daq
         #             device_id = self._awgs[awg_idx]._connection_settings["hdawg_id"]
         #             daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/waveform/waves/"+str(wave_idx), waveforms_to_awg[awg_idx][core_idx][wave_idx])
+        #
 
 
-    #
     # def run_program(self, awg_idxs=None):
     #     """
     #      Runs uploaded quantum algorithm on the specified AWG cores.
