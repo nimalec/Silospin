@@ -219,7 +219,7 @@ class GateSetTomographyQuantumCompiler:
         self._sequencer_code = sequencer_code
         for idx in range(0,4):
             #self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
-            self._awg.compile_seqc(self._sequencer_code[idx+1], 'HDAWG8')
+            self._awg._awgs["awg"+str(idx+1 )compile_seqc(self._sequencer_code[idx+1], 'HDAWG8')
             self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
 
         daq = self._awg._daq
