@@ -427,7 +427,6 @@ class GateSetTomographyQuantumCompiler:
                 command_code[awg_idx][core_idx] = command_code[awg_idx][core_idx] + sequence
                 sequencer_code[awg_idx][core_idx] = seq_code[awg_idx][core_idx] + command_code[awg_idx][core_idx]+ "}"
 
-        ## Loading sequncer code
         self._sequencer_code = sequencer_code
         for awg_idx in self._channel_mapping:
             for core_idx in self._channel_mapping[awg_idx]:
@@ -437,14 +436,12 @@ class GateSetTomographyQuantumCompiler:
                 samplerate = daq.getDouble(f"/{device_id}/system/clocks/sampleclock/freq")
                 elf, compiler_info = zhinst.core.compile_seqc(self._sequencer_code[awg_idx][core_idx], devtype=device_type, samplerate=samplerate, index = core_idx-1)
                 daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/elf/data", elf)
+                daq.setVector(f"/{device_id}/awgs/0/commandtable/data", json.dumps(self._command_tables[awg_idx][core_idx]))
 
 
     #     for idx in range(0,4):
     #         self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
     #         self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
-    #
-    #     daq = self._awg._daq
-    #     dev = self._awg._connection_settings["hdawg_id"]
     #
     #     for idx in rf_cores:
     #           daq.setVector(f"/{dev}/awgs/{idx-1}/commandtable/data", json.dumps(self._command_tables['rf']))
