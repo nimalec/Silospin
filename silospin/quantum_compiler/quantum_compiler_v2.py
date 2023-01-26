@@ -291,9 +291,8 @@ class GateSetTomographyQuantumCompiler:
                      if len(self._arb_waveforms_all[awg_idx][core_idx]) == 0:
                          pass
                      else:
-                         for arbwav in self._arb_waveforms_all[awg_idx][core_idx]:
-                             print(arbwav)
-                             waveforms.assign_waveform(slot = wave_idx, wave1 = self._arb_waveforms_all[awg_idx][core_idx][arbwav])
+                         for arbwav in self._arb_waveforms_all[awg_idx][core_idx]: 
+                             waveforms.assign_waveform(slot = wave_idx, wave1 = arbwav[1])
                              wave_idx += 1
                      waveforms_awg[awg_idx][core_idx] = waveforms
 
