@@ -2486,7 +2486,7 @@ def make_waveform_placeholders_v2(waveform_lengths):
     sequence_code = ""
     for wave_idx in waveform_lengths:
         line = "assignWaveIndex(placeholder("+str(waveform_lengths[wave_idx][0])+"),"+"placeholder("+str(waveform_lengths[wave_idx][1])+"),"+str(wave_idx)+");\n"
-        sequence_code = sequence_code + line 
+        sequence_code = sequence_code + line
     return sequence_code
 
 def make_waveform_placeholders_plungers(n_array):

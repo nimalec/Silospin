@@ -459,9 +459,9 @@ class GateSetTomographyQuantumCompiler:
                 daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/elf/data", elf)
                 daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/commandtable/data", json.dumps(self._command_tables[awg_idx][core_idx]))
 
-        # for awg_idx in self._channel_mapping:
-        #     for core_idx in self._channel_mapping[awg_idx]:
-        #         self._awgs[awg_idx]._awgs["awg"+str(core_idx)].write_to_waveform_memory(waveforms_awg[awg_idx][core_idx])
+        for awg_idx in self._channel_mapping:
+            for core_idx in self._channel_mapping[awg_idx]:
+                self._awgs[awg_idx]._awgs["awg"+str(core_idx)].write_to_waveform_memory(waveforms_awg[awg_idx][core_idx])
 
         # for awg_idx in self._channel_mapping:
         #     for core_idx in self._channel_mapping[awg_idx]:
