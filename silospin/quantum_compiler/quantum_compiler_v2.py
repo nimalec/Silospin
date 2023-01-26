@@ -462,7 +462,6 @@ class GateSetTomographyQuantumCompiler:
         for awg_idx in self._channel_mapping:
             for core_idx in self._channel_mapping[awg_idx]:
                 self._awgs[awg_idx]._awgs["awg"+str(core_idx)].write_to_waveform_memory(waveforms_awg[awg_idx][core_idx])
-            self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
 
         # for awg_idx in self._channel_mapping:
         #     for core_idx in self._channel_mapping[awg_idx]:
