@@ -324,12 +324,10 @@ class GateSetTomographyQuantumCompiler:
                     ## 3.[(p1)_1, (p2)_1]...[(p1)_N, (p2)_N]
                     for i in plunger_idxs:
                     #    print('p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr','p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr')
-                        print('p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr')
-                        print('p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr')
                         wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr'])
                         wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr'])
-                        print('p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr', len(wave_1))
-                        print('p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr', len(wave_2))
+                        # print('p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr', len(wave_1))
+                        # print('p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr', len(wave_2))
                     #     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                     #     wave_idx += 1
                     # ## 4. [(p1)_pi, 0]
