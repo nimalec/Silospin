@@ -261,16 +261,17 @@ class GateSetTomographyQuantumCompiler:
         self._ct_idxs_all = ct_idxs_all
         ##Note: need to modify waveforms function to adapt for size
 
-
-
         # Make a dict for each core following channel groupign
+        waveform_lengths = {}
         waveforms_awg = {}
         sequencer_code = {}
         for awg_idx in channel_mapping:
+            waveform_lengths[awg_idx] = {}
             waveforms_awg[awg_idx] = {}
             sequencer_code[awg_idx] = {}
             for core_idx in channel_mapping[awg_idx]:
                 wave_idx = 0
+                waveform_lengths[awg_idx][core_idx] = {}
                 waveforms_awg[awg_idx][core_idx] = {}
                 sequencer_code[awg_idx][core_idx] = {}
                 waveforms = Waveforms()
@@ -278,14 +279,19 @@ class GateSetTomographyQuantumCompiler:
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
                     ##First assign non_arb, then assign arb
                      waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[awg_idx][core_idx]['pi_pifr']))
+                     waveform_lengths[awg_idx][core_idx][wave_idx] = (len(np.array(self._waveforms[awg_idx][core_idx]['pi_pifr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_pifr'])))
                      wave_idx += 1
                      waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[awg_idx][core_idx]['pi_2_pifr']))
+                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pifr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pifr'])))
                      wave_idx += 1
                      waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr']))
+                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pi_fr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr'])))
                      wave_idx += 1
                      waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[awg_idx][core_idx]['pi_p_stdfr']))
+                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(self._waveforms[awg_idx][core_idx]['pi_p_stdfr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_p_stdfr'])))
                      wave_idx += 1
                      waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[awg_idx][core_idx]['pi_2_p_stdfr']))
+                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_p_stdfr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_p_stdfr'])))
                      wave_idx += 1
 
                      if len(self._arb_waveforms_all[awg_idx][core_idx]) == 0:
@@ -293,8 +299,10 @@ class GateSetTomographyQuantumCompiler:
                      else:
                          for arbwav in self._arb_waveforms_all[awg_idx][core_idx]:
                              waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(arbwav[1]))
+                             waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(arbwav[1])), len(np.array(arbwav[1])))
                              wave_idx += 1
                      waveforms_awg[awg_idx][core_idx] = waveforms
+                     print(waveform_lengths[awg_idx][core_idx])
 
                 else:
                     arb_waveforms = self._arb_dc_waveforms_dict[awg_idx][core_idx]
@@ -318,11 +326,13 @@ class GateSetTomographyQuantumCompiler:
                     for i in plunger_idxs:
                         wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr'])
                         waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
+                        waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                         wave_idx += 1
                     ## 2. [0, (p2)_1]...[0, (p2)_N]
                     for i in plunger_idxs:
                         wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr'])
                         waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
+                        waveform_lengths[awg_idx][core_idx][wave_idx] = (len(wave_2),len(wave_2))
                         wave_idx += 1
                     ## 3.[(p1)_1, (p2)_1]...[(p1)_N, (p2)_N]
                     for i in plunger_idxs:
@@ -331,32 +341,39 @@ class GateSetTomographyQuantumCompiler:
                         wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr'])
                         # print('p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr', len(wave_1))
                         # print('p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr', len(wave_2))
+                        waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                         waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                         wave_idx += 1
                     ## 4. [(p1)_pi, 0]
                     wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pifr'])
+                    waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
                     wave_idx += 1
                     ## 5. [0, (p2)_pi]
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pifr'])
+                    waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_2),len(wave_2))
                     waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
                     wave_idx += 1
                     ## 6. [(p1)_pi/2, 0]
                     wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pi_2fr'])
+                    waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
                     wave_idx += 1
                     ## 7. [0, (p2)_pi/2]
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pi_2fr'])
+                    waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_2),len(wave_2))
                     waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
                     wave_idx += 1
                     ## 8. [(p1)_pi, (p2)_pi]
                     wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pifr'])
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pifr'])
+                    waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                     wave_idx += 1
                     ## 9. [(p1)_pi/2, (p2)_pi/2]
                     wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pi_2fr'])
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pi_2fr'])
+                    waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                     wave_idx += 1
                    ## 10. arbitrary gates
@@ -369,17 +386,20 @@ class GateSetTomographyQuantumCompiler:
                                  if gate_tup[0][0] == 't':
                                      wave_2 = evaluate_arb_waveform(gate_tup[1])
                                      waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
+                                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_2),len(wave_2))
                                      wave_idx += 1
 
                                  elif gate_tup[1][0] == 't':
                                      wave_1 = evaluate_arb_waveform(gate_tup[0])
                                      waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
+                                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                                      wave_idx += 1
 
                                  else:
                                      wave_1 = evaluate_arb_waveform(gate_tup[0])
                                      wave_2 = evaluate_arb_waveform(gate_tup[1])
                                      waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
+                                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                                      wave_idx += 1
                     waveforms_awg[awg_idx][core_idx] = waveforms
 
@@ -403,8 +423,6 @@ class GateSetTomographyQuantumCompiler:
                     sequence += seq
                 command_code[awg_idx][core_idx] = command_code[awg_idx][core_idx] + sequence
                 # sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
-        print(command_code)
-
 
     #     self._sequencer_code = sequencer_code
         # for awg_idx in self._channel_mapping:
