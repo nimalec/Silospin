@@ -2929,7 +2929,7 @@ def generate_waveforms_v3(gate_npoints, channel_map, added_padding, standard_rf,
                         frame_p1_points = gate_npoints[awg]["plunger"][ch_idx]["p"]
                     else:
                         pass
-                    if gate_npoints[awg]["plunger"][ch_idx]["p"] < gate_npoints[awg]["plunger"][ch_2_idx]["p"]:
+                    if gate_npoints[awg]["plunger"][ch_idx]["p "] < gate_npoints[awg]["plunger"][ch_2_idx]["p"]:
                         frame_p2_points = gate_npoints[awg]["plunger"][ch_2_idx]["p"]
                     elif gate_npoints[awg]["plunger"][ch_idx]["p"] >= gate_npoints[awg]["plunger"][ch_2_idx]["p"]:
                         frame_p2_points = gate_npoints[awg]["plunger"][ch_idx]["p"]
@@ -2941,8 +2941,10 @@ def generate_waveforms_v3(gate_npoints, channel_map, added_padding, standard_rf,
                         frame_p2_points = 48
                     else:
                         pass
+                    #waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_p"+str(ch_idx)+"fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_1_idx]["p"], amp, min_points = frame_p1_points, side_pad=added_padding)
+                    #waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_p"+str(ch_idx)+"fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_2_idx]["p"], amp, min_points =  frame_p2_points, side_pad=added_padding)
                     waveforms[awg][core_idx]["p"+str(ch_1_idx)+"_p"+str(ch_idx)+"fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_1_idx]["p"], amp, min_points = frame_p1_points, side_pad=added_padding)
-                    waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_p"+str(ch_idx)+"fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_2_idx]["p"], amp, min_points =  frame_p2_points, side_pad=added_padding)
+                    waveforms[awg][core_idx]["p"+str(ch_2_idx)+"_p"+str(ch_idx)+"fr"] = rectangular_add_padding(gate_npoints[awg]["plunger"][ch_2_idx]["p"], amp, min_points = frame_p1_points, side_pad=added_padding)
             else:
                 pass
     return waveforms
