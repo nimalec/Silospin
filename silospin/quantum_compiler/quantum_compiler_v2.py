@@ -398,6 +398,7 @@ class GateSetTomographyQuantumCompiler:
                 for line in range(len(self._ct_idxs_all)):
                     n_seq = self._ct_idxs_all[line+1][awg_idx][core_idx]
                     seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=True)
+                    print(seq)
                 #     if idx-1 == trigger_channel:
                 #         seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=True)
                 #     else:
