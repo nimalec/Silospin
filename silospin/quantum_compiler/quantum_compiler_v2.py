@@ -379,6 +379,7 @@ class GateSetTomographyQuantumCompiler:
                                      waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 =  wave_2)
                                      wave_idx += 1
                     waveforms_awg[awg_idx][core_idx] = waveforms
+                    print(waveforms_awg)
 
     #     sequencer_code = {}
     #     seq_code = {}
