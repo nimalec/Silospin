@@ -259,6 +259,7 @@ class GateSetTomographyQuantumCompiler:
             ct_idxs, arbgate_counter = make_command_table_indices_v4(gate_sequence, channel_mapping, awg_core_split, arbitrary_waveforms, plunger_set_npoints_tups, taus_std, self._gate_lengths, arbgate_counter, arbitrary_z, idx, arb_dc_waveforms_dict_temp)
             ct_idxs_all[idx] = ct_idxs
         self._ct_idxs_all = ct_idxs_all
+        ##Note: need to modify waveforms function to adapt for size
 
 
 
@@ -291,10 +292,11 @@ class GateSetTomographyQuantumCompiler:
                          pass
                      else:
                          for arbwav in self._arb_waveforms_all[awg_idx][core_idx]:
+                             print(self._arb_waveforms_all[awg_idx][core_idx][arbwav])
                              waveforms.assign_waveform(slot = wave_idx, wave1 = self._arb_waveforms_all[awg_idx][core_idx][arbwav])
                              wave_idx += 1
                      waveforms_awg[awg_idx][core_idx] = waveforms
-                     print(waveforms_awg)
+
                 else:
                     arb_waveforms = self._arb_dc_waveforms_dict[awg_idx][core_idx]
                     channel_idxs_core = channel_mapping[awg_idx][core_idx]['channel_number']
