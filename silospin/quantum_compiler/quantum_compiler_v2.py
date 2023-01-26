@@ -425,10 +425,17 @@ class GateSetTomographyQuantumCompiler:
                 command_code[awg_idx][core_idx] = command_code[awg_idx][core_idx] + sequence
                 sequencer_code[awg_idx][core_idx] = seq_code[awg_idx][core_idx] + command_code[awg_idx][core_idx]+ "}"
 
+        ## Loading sequncer code
         self._sequencer_code = sequencer_code
-        # for awg_idx in self._channel_mapping:
-        #     command_code[awg_idx] = {}
-        #     for core_idx in self._channel_mapping[awg_idx]:
+        for awg_idx in self._channel_mapping:
+            for core_idx in self._channel_mapping[awg_idx]:
+                device_id = self._awgs[awg_idx]._connection_settings["hdawg_id"]
+                self._awgs[awg_idx]._daq.setVector(f"/{device_id}/awgs/"+str(core_idx)+"/elf/data", elf)
+                #elf, compiler_info = zhinst.core.compile_seqc(awg_program, devtype=device_type, samplerate=samplerate)
+                #daq.setVector(f"/{device_id}/awgs/0/elf/data", elf)
+
+
+
     #     for idx in range(0,4):
     #         self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
     #         self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
