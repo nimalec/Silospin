@@ -395,8 +395,8 @@ class GateSetTomographyQuantumCompiler:
             #    seq_code[idx] =  make_waveform_placeholders(n_array_rf)
         #        command_code[idx] = ""
         #        sequence = "repeat("+str(n_outer)+"){\n "
-                for line in ct_idxs_all[awg_idx][core_idx]:
-                    n_seq = ct_idxs_all[awg_idx][core_idx][line]
+                for line in self._ct_idxs_all[awg_idx][core_idx]:
+                    n_seq = self._[awg_idx][core_idx][line]
                     seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=True)
                     print(seq)
                 #     if idx-1 == trigger_channel:
