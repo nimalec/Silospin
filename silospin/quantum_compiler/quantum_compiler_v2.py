@@ -401,7 +401,6 @@ class GateSetTomographyQuantumCompiler:
                                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                                      wave_idx += 1
                     waveforms_awg[awg_idx][core_idx] = waveforms
-                    print(waveform_lengths[awg_idx][core_idx])
 
 
         sequencer_code = {}
@@ -410,7 +409,10 @@ class GateSetTomographyQuantumCompiler:
 
         for awg_idx in self._channel_mapping:
             command_code[awg_idx] = {}
+            seq_code[awg_idx] = {}
             for core_idx in self._channel_mapping[awg_idx]:
+                seq_code[awg_idx][core_idx] = make_waveform_placeholders_v2(waveform_lengths[awg_idx][core_idx])
+                print(seq_code[awg_idx][core_idx])
                 #seq_code[idx] =  make_waveform_placeholders(n_array_rf)
                 command_code[awg_idx][core_idx] = ""
                 sequence = "repeat("+str(n_outer)+"){\n "
