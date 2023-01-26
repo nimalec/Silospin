@@ -391,28 +391,27 @@ class GateSetTomographyQuantumCompiler:
         for awg_idx in self._channel_mapping:
             command_code[awg_idx] = {}
             for core_idx in self._channel_mapping[awg_idx]:
-                command_code[awg_idx][core_idx] = {}
+            #    command_code[awg_idx][core_idx] = {}
             #    seq_code[idx] =  make_waveform_placeholders(n_array_rf)
-        #        command_code[idx] = ""
-        #        sequence = "repeat("+str(n_outer)+"){\n "
+                command_code[awg_idx][core_idx] = ""
+                sequence = "repeat("+str(n_outer)+"){\n "
                 for line in range(len(self._ct_idxs_all)):
                     n_seq = self._ct_idxs_all[line+1][awg_idx][core_idx]
                     seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=True)
-                    print(seq)
                 #     if idx-1 == trigger_channel:
                 #         seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=True)
                 #     else:
                 #         seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=False)
-                #     sequence += seq
-                # command_code[idx] = command_code[idx] + sequence
+                    sequence += seq
+                command_code[awg_idx][core_idx] = command_code[awg_idx][core_idx] + sequence
                 # sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
+        print(command_code)
 
 
-    #     waveforms_awg[idx] = waveforms
-    #     seq_code[idx] = make_waveform_placeholders_plungers(n_array_p)
-    #     command_code[idx] = ""
-    #
     #     self._sequencer_code = sequencer_code
+        # for awg_idx in self._channel_mapping:
+        #     command_code[awg_idx] = {}
+        #     for core_idx in self._channel_mapping[awg_idx]:
     #     for idx in range(0,4):
     #         self._awg.load_sequence(self._sequencer_code[idx+1], awg_idx=idx)
     #         self._awg._awgs["awg"+str(idx+1 )].write_to_waveform_memory(waveforms_awg[idx+1])
