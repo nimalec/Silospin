@@ -384,24 +384,29 @@ class GateSetTomographyQuantumCompiler:
                     waveforms_awg[awg_idx][core_idx] = waveforms
 
 
-    #     sequencer_code = {}
-    #     seq_code = {}
-    #     command_code = {}
+        sequencer_code = {}
+        seq_code = {}
+        command_code = {}
 
-    #     for idx in rf_cores:
-    #         seq_code[idx] =  make_waveform_placeholders(n_array_rf)
-    #         command_code[idx] = ""
-    #         sequence = "repeat("+str(n_outer)+"){\n "
-    #         for ii in range(len(ct_idxs_all)):
-    #             n_seq = ct_idxs_all[ii]['rf'][str(idx-1)]
-    #             if idx-1 == trigger_channel:
-    #                 seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=True)
-    #             else:
-    #                 seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=False)
-    #             sequence += seq
-    #         command_code[idx] = command_code[idx] + sequence
-    #         sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
-    #
+        for awg_idx in self._channel_mapping:
+            command_code[awg_idx] = {}
+            for core_idx in self._channel_mapping[awg_idx]:
+                command_code[awg_idx][core_idx] = {}
+            #    seq_code[idx] =  make_waveform_placeholders(n_array_rf)
+        #        command_code[idx] = ""
+        #        sequence = "repeat("+str(n_outer)+"){\n "
+                for line in ct_idxs_all[awg_idx][core_idx]:
+                    n_seq = ct_idxs_all[awg_idx][core_idx][line]
+                    seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=True)
+                    print(seq)
+                #     if idx-1 == trigger_channel:
+                #         seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=True)
+                #     else:
+                #         seq = make_gateset_sequencer_hard_trigger(n_seq, n_inner, trig_channel=False)
+                #     sequence += seq
+                # command_code[idx] = command_code[idx] + sequence
+                # sequencer_code[idx] = seq_code[idx] + command_code[idx] + "}"
+
 
     #     waveforms_awg[idx] = waveforms
     #     seq_code[idx] = make_waveform_placeholders_plungers(n_array_p)
