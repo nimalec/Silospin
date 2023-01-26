@@ -424,9 +424,8 @@ class GateSetTomographyQuantumCompiler:
                     sequence += seq
                 command_code[awg_idx][core_idx] = command_code[awg_idx][core_idx] + sequence
                 sequencer_code[awg_idx][core_idx] = seq_code[awg_idx][core_idx] + command_code[awg_idx][core_idx]+ "}"
-                print(sequencer_code[awg_idx][core_idx])
 
-    #     self._sequencer_code = sequencer_code
+        self._sequencer_code = sequencer_code
         # for awg_idx in self._channel_mapping:
         #     command_code[awg_idx] = {}
         #     for core_idx in self._channel_mapping[awg_idx]:
