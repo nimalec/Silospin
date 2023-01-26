@@ -435,8 +435,8 @@ class GateSetTomographyQuantumCompiler:
                 device_id = self._awgs[awg_idx]._connection_settings["hdawg_id"]
                 device_type = daq.getString(f"/{device_id}/features/devtype")
                 samplerate = daq.getDouble(f"/{device_id}/system/clocks/sampleclock/freq")
-                elf, compiler_info = zhinst.core.compile_seqc(self._sequencer_code[awg_idx][core_idx], devtype=device_type, samplerate=samplerate)
-                daq.setVector(f"/{device_id}/awgs/"+str(core_idx)+"/elf/data", elf)
+                elf, compiler_info = zhinst.core.compile_seqc(self._sequencer_code[awg_idx][core_idx], devtype=device_type, samplerate=samplerate, index = core_idx-1)
+                daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/elf/data", elf)
 
 
     #     for idx in range(0,4):
