@@ -349,15 +349,11 @@ class GateSetTomographyQuantumCompiler:
                     ## 8. [(p1)_pi, (p2)_pi]
                     wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pifr'])
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pifr'])
-                    print(len(wave_1))
-                    print(len(wave_2))
                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                     wave_idx += 1
                     ## 9. [(p1)_pi/2, (p2)_pi/2]
                     wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pi_2fr'])
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pi_2fr'])
-                    print(len(wave_1))
-                    print(len(wave_2))
                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                     wave_idx += 1
                    ## 10. arbitrary gates
