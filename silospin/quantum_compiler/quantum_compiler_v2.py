@@ -8,6 +8,8 @@ from operator import itemgetter
 from pkg_resources import resource_filename
 from zhinst.toolkit import Waveforms
 import zhinst.utils
+import zhinst.core
+import zhinst.utils
 from silospin.drivers.zi_hdawg_driver_v2 import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.quantum_compiler_helpers_v2 import *
