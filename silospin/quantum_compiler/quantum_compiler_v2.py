@@ -330,32 +330,32 @@ class GateSetTomographyQuantumCompiler:
                         # print('p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr', len(wave_2))
                         waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                         wave_idx += 1
-                    # ## 4. [(p1)_pi, 0]
-                    # wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pifr'])
-                    # waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
-                    # wave_idx += 1
-        #             ## 5. [0, (p2)_pi]
-        #             wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pifr'])
-        #             waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
-        #             wave_idx += 1
-        #             ## 6. [(p1)_pi/2, 0]
-        #             wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pi_2fr'])
-        #             waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
-        #             wave_idx += 1
-        #             ## 7. [0, (p2)_pi/2]
-        #             wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pi_2fr'])
-        #             waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
-        #             wave_idx += 1
-        #             ## 8. [(p1)_pi, (p2)_pi]
-        #             wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pifr'])
-        #             wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pifr'])
-        #             waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
-        #             wave_idx += 1
-        #             ## 9. [(p1)_pi/2, (p2)_pi/2]
-        #             wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pi_2fr'])
-        #             wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pi_2fr'])
-        #             waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
-        #             wave_idx += 1
+                    ## 4. [(p1)_pi, 0]
+                    wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pifr'])
+                    waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
+                    wave_idx += 1
+                    ## 5. [0, (p2)_pi]
+                    wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pifr'])
+                    waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
+                    wave_idx += 1
+                    ## 6. [(p1)_pi/2, 0]
+                    wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pi_2fr'])
+                    waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
+                    wave_idx += 1
+                    ## 7. [0, (p2)_pi/2]
+                    wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pi_2fr'])
+                    waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
+                    wave_idx += 1
+                    ## 8. [(p1)_pi, (p2)_pi]
+                    wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pifr'])
+                    wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pifr'])
+                    waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
+                    wave_idx += 1
+                    ## 9. [(p1)_pi/2, (p2)_pi/2]
+                    wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pi_2fr'])
+                    wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pi_2fr'])
+                    waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
+                    wave_idx += 1
         #            # ## 10. arbitrary gates
         #            #  for line in arb_waveforms:
         #            #      if len(arb_waveforms[line]) == 0:
