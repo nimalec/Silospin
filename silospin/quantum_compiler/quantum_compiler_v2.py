@@ -356,30 +356,30 @@ class GateSetTomographyQuantumCompiler:
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pi_2fr'])
                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                     wave_idx += 1
-        #            # ## 10. arbitrary gates
-        #            #  for line in arb_waveforms:
-        #            #      if len(arb_waveforms[line]) == 0:
-        #            #          pass
-        #            #      else:
-        #            #          for itr in arb_waveforms[line]:
-        #            #               gate_tup = arb_waveforms[line][itr]
-        #            #               if gate_tup[0][0] == 't':
-        #            #                   wave_2 = evaluate_arb_waveform(gate_tup[1])
-        #            #                   waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
-        #            #                   wave_idx += 1
-        #            #
-        #            #               elif gate_tup[1][0] == 't':
-        #            #                   wave_1 = evaluate_arb_waveform(gate_tup[0])
-        #            #                   waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
-        #            #                   wave_idx += 1
-        #            #
-        #            #               else:
-        #            #                   wave_1 = evaluate_arb_waveform(gate_tup[0])
-        #            #                   wave_2 = evaluate_arb_waveform(gate_tup[1])
-        #            #                   waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 =  wave_2)
-        #            #                   wave_idx += 1
-        #             waveforms_awg[awg_idx][core_idx] = waveforms
-        #
+                   ## 10. arbitrary gates
+                    for line in arb_waveforms:
+                        if len(arb_waveforms[line]) == 0:
+                            pass
+                        else:
+                            for itr in arb_waveforms[line]:
+                                 gate_tup = arb_waveforms[line][itr]
+                                 if gate_tup[0][0] == 't':
+                                     wave_2 = evaluate_arb_waveform(gate_tup[1])
+                                     waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
+                                     wave_idx += 1
+
+                                 elif gate_tup[1][0] == 't':
+                                     wave_1 = evaluate_arb_waveform(gate_tup[0])
+                                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
+                                     wave_idx += 1
+
+                                 else:
+                                     wave_1 = evaluate_arb_waveform(gate_tup[0])
+                                     wave_2 = evaluate_arb_waveform(gate_tup[1])
+                                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 =  wave_2)
+                                     wave_idx += 1
+                    waveforms_awg[awg_idx][core_idx] = waveforms
+
 
 
     #     sequencer_code = {}
