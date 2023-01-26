@@ -293,6 +293,8 @@ class GateSetTomographyQuantumCompiler:
                          for arbwav in self._arb_waveforms_all[awg_idx][core_idx]:
                              waveforms.assign_waveform(slot = wave_idx, wave1 = self._arb_waveforms_all[awg_idx][core_idx][arbwav])
                              wave_idx += 1
+                     waveforms_awg[awg_idx][core_idx] = waveforms
+                     print(waveforms_awg)
                 else:
                     arb_waveforms = self._arb_dc_waveforms_dict[awg_idx][core_idx]
                     channel_idxs_core = channel_mapping[awg_idx][core_idx]['channel_number']
@@ -379,7 +381,7 @@ class GateSetTomographyQuantumCompiler:
                                      waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 =  wave_2)
                                      wave_idx += 1
                     waveforms_awg[awg_idx][core_idx] = waveforms
-                    print(waveforms_awg)
+
 
     #     sequencer_code = {}
     #     seq_code = {}
