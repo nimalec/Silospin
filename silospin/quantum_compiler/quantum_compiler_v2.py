@@ -422,7 +422,7 @@ class GateSetTomographyQuantumCompiler:
                         seq = make_gateset_sequencer_hard_trigger_v2(n_seq, n_inner, trig_channel=False)
                     sequence += seq
                 command_code[awg_idx][core_idx] = command_code[awg_idx][core_idx] + sequence
-                sequencer_code[awg_idx][core_idx] = seq_code[awg_idx][core_idx] + command_code[idx] + "}"
+                sequencer_code[awg_idx][core_idx] = seq_code[awg_idx][core_idx] + command_code[awg_idx][core_idx]+ "}"
                 print(sequencer_code[awg_idx][core_idx])
 
     #     self._sequencer_code = sequencer_code
