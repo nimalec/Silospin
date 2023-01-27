@@ -283,23 +283,18 @@ class GateSetTomographyQuantumCompiler:
                 non_arb_waves = self._waveforms[awg_idx][core_idx]
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
                     ##First assign non_arb, then assign arb
-                     waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[awg_idx][core_idx]['pi_pifr']))
                      waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(self._waveforms[awg_idx][core_idx]['pi_pifr'], self._waveforms[awg_idx][core_idx]['pi_pifr'])
                      waveform_lengths[awg_idx][core_idx][wave_idx] = (len(np.array(self._waveforms[awg_idx][core_idx]['pi_pifr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_pifr'])))
                      wave_idx += 1
-                     waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[awg_idx][core_idx]['pi_2_pifr']))
                      waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(self._waveforms[awg_idx][core_idx]['pi_2_pifr'], self._waveforms[awg_idx][core_idx]['pi_2_pifr'])
                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pifr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pifr'])))
                      wave_idx += 1
-                     waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr']))
                      waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr'], self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr'])
                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr'])))
                      wave_idx += 1
-                     waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[awg_idx][core_idx]['pi_p_stdfr']))
                      waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(self._waveforms[awg_idx][core_idx]['pi_p_stdfr'], self._waveforms[awg_idx][core_idx]['pi_p_stdfr'])
                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(self._waveforms[awg_idx][core_idx]['pi_p_stdfr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_p_stdfr'])))
                      wave_idx += 1
-                     waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(self._waveforms[awg_idx][core_idx]['pi_2_p_stdfr']))
                      waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(self._waveforms[awg_idx][core_idx]['pi_2_p_stdfr'], self._waveforms[awg_idx][core_idx]['pi_2_p_stdfr'])
                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_p_stdfr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_p_stdfr'])))
                      wave_idx += 1
@@ -308,7 +303,6 @@ class GateSetTomographyQuantumCompiler:
                          pass
                      else:
                          for arbwav in self._arb_waveforms_all[awg_idx][core_idx]:
-                             waveforms.assign_waveform(slot = wave_idx, wave1 = np.array(arbwav[1]))
                              waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(np.array(arbwav[1]),np.array(arbwav[1]))
                              waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(arbwav[1])), len(np.array(arbwav[1])))
                              wave_idx += 1
@@ -336,14 +330,12 @@ class GateSetTomographyQuantumCompiler:
                     for i in plunger_idxs:
                         wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr'])
                         waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(wave_1, np.zeros(len(wave_1)))
-                        waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
                         waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                         wave_idx += 1
                     ## 2. [0, (p2)_1]...[0, (p2)_N]
                     for i in plunger_idxs:
                         wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr'])
                         waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(np.zeros(len(wave_2)), wave_2)
-                        waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
                         waveform_lengths[awg_idx][core_idx][wave_idx] = (len(wave_2),len(wave_2))
                         wave_idx += 1
                     ## 3.[(p1)_1, (p2)_1]...[(p1)_N, (p2)_N]
@@ -355,45 +347,38 @@ class GateSetTomographyQuantumCompiler:
                         # print('p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr', len(wave_1))
                         # print('p'+str(channel_idxs_core[1])+'_p'+str(i)+'fr', len(wave_2))
                         waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
-                        waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                         wave_idx += 1
                     ## 4. [(p1)_pi, 0]
                     wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pifr'])
                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                     waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(wave_1, np.zeros(len(wave_1)))
-                    waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
                     wave_idx += 1
                     ## 5. [0, (p2)_pi]
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pifr'])
                     waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(np.zeros(len(wave_2)), wave_2)
                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_2),len(wave_2))
-                    waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
                     wave_idx += 1
                     ## 6. [(p1)_pi/2, 0]
                     wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pi_2fr'])
                     waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(wave_1, np.zeros(len(wave_1)))
                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
-                    waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
                     wave_idx += 1
                     ## 7. [0, (p2)_pi/2]
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pi_2fr'])
                     waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(np.zeros(len(wave_2)), wave_2)
                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_2),len(wave_2))
-                    waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
                     wave_idx += 1
                     ## 8. [(p1)_pi, (p2)_pi]
                     wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pifr'])
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pifr'])
                     waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(wave_1, wave_2)
                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
-                    waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                     wave_idx += 1
                     ## 9. [(p1)_pi/2, (p2)_pi/2]
                     wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_pi_2fr'])
                     wave_2 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[1])+'_pi_2fr'])
                     waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(wave_1, wave_2)
                     waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
-                    waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                     wave_idx += 1
                    ## 10. arbitrary gates
                     for line in arb_waveforms:
@@ -405,14 +390,12 @@ class GateSetTomographyQuantumCompiler:
                                  if gate_tup[0][0] == 't':
                                      wave_2 = evaluate_arb_waveform(gate_tup[1])
                                      waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(np.zeros(len(wave_2)), wave_2)
-                                     waveforms.assign_waveform(slot = wave_idx, wave1 = np.zeros(len(wave_2)), wave2 = wave_2)
                                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_2),len(wave_2))
                                      wave_idx += 1
 
                                  elif gate_tup[1][0] == 't':
                                      wave_1 = evaluate_arb_waveform(gate_tup[0])
                                      waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(wave_1,  np.zeros(len(wave_1)))
-                                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
                                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                                      wave_idx += 1
 
@@ -420,7 +403,6 @@ class GateSetTomographyQuantumCompiler:
                                      wave_1 = evaluate_arb_waveform(gate_tup[0])
                                      wave_2 = evaluate_arb_waveform(gate_tup[1])
                                      waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(wave_1, wave_2)
-                                     waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = wave_2)
                                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                                      wave_idx += 1
                     waveforms_awg[awg_idx][core_idx] = waveforms
@@ -471,37 +453,27 @@ class GateSetTomographyQuantumCompiler:
                 for wave_idx in waveforms_to_awg[awg_idx][core_idx]:
                     daq = self._awgs[awg_idx]._daq
                     device_id = self._awgs[awg_idx]._connection_settings["hdawg_id"]
-                    print(awg_idx, core_idx, wave_idx, len(waveforms_to_awg[awg_idx][core_idx][wave_idx]))
                     daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/waveform/waves/"+str(wave_idx), waveforms_to_awg[awg_idx][core_idx][wave_idx])
 
+    def compile_program(self):
+        """
+         Runs uploaded quantum algorithm on the specified AWG cores.
+
+         Waits for external hardware trigger event to execute program.
+
+         Parameters
+         ----------
+         awg_idxs : 'list'
+         List of awg_idxs (default set to [0,1,2,3]) to run.
+
+         Returns
+         -------
+         None.
+        """
         for awg_idx in self._channel_mapping:
             for core_idx in self._channel_mapping[awg_idx]:
                 self._awgs[awg_idx]._awgs["awg"+str(core_idx)].single(True)
                 self._awgs[awg_idx]._awgs["awg"+str(core_idx)].enable(True)
-
-    # def run_program(self, awg_idxs=None):
-    #     """
-    #      Runs uploaded quantum algorithm on the specified AWG cores.
-    #
-    #      Waits for external hardware trigger event to execute program.
-    #
-    #      Parameters
-    #      ----------
-    #      awg_idxs : 'list'
-    #      List of awg_idxs (default set to [0,1,2,3]) to run.
-    #
-    #      Returns
-    #      -------
-    #      None.
-    #     """
-    #     if awg_idxs:
-    #         awg_idxs = awg_idxs
-    #     else:
-    #         awg_idxs = [0,1,2,3]
-    #     for idx in awg_idxs:
-    #         self._awg._awgs["awg"+str(idx+1)].single(True)
-    #         self._awg._awgs["awg"+str(idx+1)].enable(True)
-
 
 class GateSetTomographyQuantumCompiler_v2:
     """
