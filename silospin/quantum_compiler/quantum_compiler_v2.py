@@ -335,6 +335,7 @@ class GateSetTomographyQuantumCompiler:
                     ## 1. [(p1)_1, 0]...[(p1)_N, 0]
                     for i in plunger_idxs:
                         wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr'])
+                        print(len(wave_1))
                         waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(wave_1, np.zeros(len(wave_1)))
                         waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
                         waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
