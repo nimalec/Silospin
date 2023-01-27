@@ -3060,6 +3060,67 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
         else:
            pass
 
+def config_hdawg_v2(awg, gate_parameters, channel_mapping, channels_on=True):
+    ## Should have a generic channel mapping funciton from channels to cores
+    '''
+    Configures HDAWG module to run a quantum algorithm. In particular, this function does the following:
+    - enables oscillator control \n
+    - sets oscillator frequencies \n
+    - sets output amplitudes for each channel \n
+    - turns on output channels \n
+
+
+    Parameters:
+                    awg (silospin.drivers.zi_hdawg.HdawgDriver): instance of HDAWG.
+                    gate_parameters (dict): dictionary of gate paramters for each qubit.
+
+    Returns:
+       None.
+    '''
+    daq = awg._daq
+    dev = awg._connection_settings["hdawg_id"]
+    daq.setInt(f"/{dev}/system/awg/oscillatorcontrol", 1)
+    rf_gate_param = gate_parameters["rf"]
+    p_gate_param = gate_parameters["p"]
+    channel_idxs = {"1": [1,2], "2": [3,4], "3": [5,6], "4": [7,8]}
+    channel_osc_idxs = {1: 1, 2: 5, 3: 9, 4: 13}
+
+    for core in channel_mapping:
+        if channel_mapping[core]['rf'] == 1:
+            core_idx = channel_mapping[core]['core_idx']
+            osc_idx = channel_osc_idxs[core]
+            i_idx = channel_mapping[core]['channel_core_number'][0]
+            q_idx = channel_mapping[core]['channel_core_number'][1]
+            awg.set_osc_freq(osc_idx, rf_gate_param[core_idx]["mod_freq"])
+            awg.set_sine(i_idx, osc_idx)
+            awg.set_sine(q_idx, osc_idx)
+            awg.set_out_amp(i_idx, 1, rf_gate_param[core_idx]["i_amp"])
+            awg.set_out_amp(q_idx, 2, rf_gate_param[core_idx]["q_amp"])
+            if channels_on == True:
+                awg._hdawg.sigouts[i_idx-1].on(1)
+                awg._hdawg.sigouts[q_idx-1].on(1)
+            else:
+                pass
+        elif channel_mapping[core]['rf'] == 0:
+            if len(p_gate_param) == 0:
+                pass
+            else:
+                core_idx = channel_mapping[core]['core_idx']
+                p1_idx = channel_mapping[core]['channel_number'][0]
+                p2_idx = channel_mapping[core]['channel_number'][1]
+                p1_core_idx = channel_mapping[core]['channel_core_number'][0]
+                p2_core_idx = channel_mapping[core]['channel_core_number'][1]
+                awg.set_out_amp(p1_core_idx, 1, p_gate_param[p1_idx]["p_amp"])
+                awg.set_out_amp(p2_core_idx, 2, p_gate_param[p2_idx]["p_amp"])
+                if channels_on == True:
+                    awg._hdawg.sigouts[p1_core_idx-1].on(1)
+                    awg._hdawg.sigouts[p2_core_idx-1].on(1)
+                else:
+                    pass
+        else:
+           pass
+
+
 def add_arbitrary_gate(gate_symbol, gate_description, waveform_function, waveform_parameters, rf_output, pickle_file_location='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
     ##gate_symbol (str), symbol dedicated for this specific gate
     ##gate_description (str), description of the gate's inputs/outputs and general funcionality
