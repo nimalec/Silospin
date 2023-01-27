@@ -336,7 +336,6 @@ class GateSetTomographyQuantumCompiler:
                     for i in plunger_idxs:
                         wave_1 = np.array(self._waveforms[awg_idx][core_idx]['p'+str(channel_idxs_core[0])+'_p'+str(i)+'fr'])
                         waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(wave_1, np.zeros(len(wave_1)))
-                        print(len(waveforms_to_awg[awg_idx][core_idx][wave_idx]))
                         waveforms.assign_waveform(slot = wave_idx, wave1 = wave_1, wave2 = np.zeros(len(wave_1)))
                         waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(wave_1),len(wave_1))
                         wave_idx += 1
@@ -459,7 +458,11 @@ class GateSetTomographyQuantumCompiler:
                 device_type = daq.getString(f"/{device_id}/features/devtype")
                 samplerate = daq.getDouble(f"/{device_id}/system/clocks/sampleclock/freq")
                 elf, compiler_info = zhinst.core.compile_seqc(self._sequencer_code[awg_idx][core_idx], devtype=device_type, samplerate=samplerate, index = core_idx-1)
+                assert not compiler_info[
+                "messages"
+                ], f"There was an error during compilation: {compiler_info['messages']}"
                 daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/elf/data", elf)
+                assert(daq.getDouble(f"/{device_id}/awgs/0/elf/progress") == 100.0)
                 daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/commandtable/data", json.dumps(self._command_tables[awg_idx][core_idx]))
 
         # for awg_idx in self._channel_mapping:
