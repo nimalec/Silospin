@@ -1,7 +1,7 @@
 import zerorpc
 from silospin.drivers.homedac_box import DacDriverSerial
 class DacServer(object):
-    device_id='COM3'
+    device_id='COM1'
     dac_driver = DacDriverSerial(dev_id = device_id, verbose=0, init=False,  baud_rate=250000)
 
     def close(self):
