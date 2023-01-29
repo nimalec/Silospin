@@ -38,7 +38,7 @@ class DacDriver:
 
 class DacDriverSerial:
     ##Note: timing error with N still persists. Alternative is to catch a write timeout error and restart the Driver connection  (~every 600 connections)
-    def __init__(self, dev_id = 'COM3', verbose=0, init=True, baud_rate=250000):
+    def __init__(self, dev_id = 'COM1', verbose=0, init=True, baud_rate=250000):
         self._dev_id = dev_id
         self._baud_rate = baud_rate
         self._dac = serial.Serial(self._dev_id, baudrate=baud_rate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,timeout=1)
