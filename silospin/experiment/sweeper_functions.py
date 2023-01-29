@@ -23,7 +23,8 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     Returns:
        channel_mapper (dict): Dictionary representing channel mapping.
     '''
-    dac_server = DacDriverSerialServer()
+
+    #dac_server = DacDriverSerialServer()
     mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
     gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS", "Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
     lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1,3}, 5: {1}, 6: {2}, 7: {3}}
@@ -72,7 +73,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                     if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
                         pass
                     else:
-                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+                        #set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(mflis[0].get_sample_r())
                         V_out_2.append(mflis[1].get_sample_r())
                         V_out_3.append(mflis[2].get_sample_r())
@@ -105,7 +106,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                     if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
                         pass
                     else:
-                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+                    #    set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(mflis[0].get_sample_r())
                         V_out_2.append(mflis[1].get_sample_r())
                         V_out_3.append(mflis[2].get_sample_r())
@@ -146,7 +147,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                     if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
                         pass
                     else:
-                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+                        #set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(mflis[idx_1-1].get_sample_r())
                         V_out_2.append(mflis[idx_2-1].get_sample_r())
                         if j%n_r == 0:
@@ -170,7 +171,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                     if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
                         pass
                     else:
-                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+                    #    set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(mflis[idx_1-1].get_sample_r())
                         V_out_2.append(mflis[idx_2-1].get_sample_r())
                 V_out_all_1.append(V_out_1)
@@ -196,7 +197,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                     if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
                         pass
                     else:
-                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+            #            set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(mflis[idx_1-1].get_sample_r())
 
                         if j%n_r == 0:
@@ -212,7 +213,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                     if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
                         pass
                     else:
-                        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+                #        set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(mflis[idx_1-1].get_sample_r())
                 V_out_all_1.append(V_out_1)
         return_value = {"v_applied": v_in_array.tolist(), "v_out1": np.mean(np.array(V_out_all_1),axis=0).tolist()}
