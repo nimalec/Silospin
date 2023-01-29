@@ -245,7 +245,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
        channel_mapper (dict): Dictionary representing channel mapping.
     '''
 #    dac_server = DacDriverSerialServer()
-    mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
+    #mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
+    mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq)}
     gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS", "Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
     lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1,3}, 5: {1}, 6: {2}, 7: {3}}
     dac_dict = unpickle_qubit_parameters(dac_mapping_file_path)
@@ -279,10 +280,10 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 
                  for j in range(len(V_x_f)):
                      if j == 0:
-                         dac_server = DacDriverSerialServer()
-                         set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
-                         set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
-                         dac_server.close()
+                        # dac_server = DacDriverSerialServer()
+                        # set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                        # set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                        # dac_server.close()
                          v_meas_1 = mflis[0].get_sample_r()
                          v_meas_2 = mflis[1].get_sample_r()
                          v_meas_3 = mflis[2].get_sample_r()
@@ -328,15 +329,15 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              pass
                      else:
                          if j%npoints1 == 0:
-                             dac_server = DacDriverSerialServer()
-                             set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
-                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                            # dac_server = DacDriverSerialServer()
+                            # set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                            # set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                              dac_server.close()
 
                          else:
-                             dac_server = DacDriverSerialServer()
-                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
-                             dac_server.close()
+                            # dac_server = DacDriverSerialServer()
+                            # set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                            # dac_server.close()
 
                          v_meas_1 = mflis[0].get_sample_r()
                          v_meas_2 = mflis[1].get_sample_r()
@@ -390,10 +391,10 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 
                  for j in range(len(V_x_f)):
                      if j == 0:
-                         dac_server = DacDriverSerialServer()
-                         set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
-                         set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
-                         dac_server.close()
+                    #     dac_server = DacDriverSerialServer()
+                    #     set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                    #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                    #     dac_server.close()
                          v_meas_1 = mflis[idx_1].get_sample_r()
                          v_meas_2 = mflis[idx_2].get_sample_r()
 
@@ -428,15 +429,15 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              pass
                      else:
                          if j%npoints1 == 0:
-                             dac_server = DacDriverSerialServer()
-                             set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
-                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
-                             dac_server.close()
+                        #     dac_server = DacDriverSerialServer()
+                        #     set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                        #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                        #     dac_server.close()
 
                          else:
-                             dac_server = DacDriverSerialServer()
-                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
-                             dac_server.close()
+                        #     dac_server = DacDriverSerialServer()
+                        #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                        #     dac_server.close()
 
                          v_meas_1 = mflis[idx_1].get_sample_r()
                          v_meas_2 = mflis[idx_2].get_sample_r()
@@ -475,10 +476,10 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                  v_out_1 = np.ones((npoints1,npoints2)).flatten()
                  for j in range(len(V_x_f)):
                      if j == 0:
-                         dac_server = DacDriverSerialServer()
-                         set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
-                         set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
-                         dac_server.close()
+                        # dac_server = DacDriverSerialServer()
+                    #     set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                    #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                    #     dac_server.close()
                          v_meas_1 = mflis[idx_1].get_sample_r()
                          v_out_1  = v_meas_1*v_out_1
                          V_out1 =  v_out_1.reshape([npoints1, npoints2])
@@ -497,15 +498,15 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              pass
                      else:
                          if j%npoints1 == 0:
-                             dac_server = DacDriverSerialServer()
-                             set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
-                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                        #     dac_server = DacDriverSerialServer()
+                        #     set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                        #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                              dac_server.close()
 
                          else:
-                             dac_server = DacDriverSerialServer()
-                             set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
-                             dac_server.close()
+                        #     dac_server = DacDriverSerialServer()
+                        #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                        #     dac_server.close()
 
                          v_meas_1 = mflis[idx_1].get_sample_r()
                          v_out_1[j] = v_meas_1
