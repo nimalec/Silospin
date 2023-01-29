@@ -83,17 +83,17 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                             line1.set_data(v_in_array[0:len(V_out_1)], V_out_1)
                             fig1.canvas.draw()
                             fig1.canvas.flush_events()
-                            ax1.set_ylim(np.amin(V_out_1), np.amax(V_out_1))
+                            #ax1.set_ylim(np.amin(V_out_1), np.amax(V_out_1))
 
                             line2.set_data(v_in_array[0:len(V_out_2)], V_out_2)
                             fig2.canvas.draw()
                             fig2.canvas.flush_events()
-                            ax2.set_ylim(np.amin(V_out_2), np.amax(V_out_2))
+                            #ax2.set_ylim(np.amin(V_out_2), np.amax(V_out_2))
 
                             line3.set_data(v_in_array[0:len(V_out_3)], V_out_3)
                             fig3.canvas.draw()
                             fig3.canvas.flush_events()
-                            ax3.set_ylim(np.amin(V_out_3), np.amax(V_out_3))
+                            #ax3.set_ylim(np.amin(V_out_3), np.amax(V_out_3))
 
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
@@ -155,12 +155,12 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                             line1.set_data(v_in_array[0:len(V_out_1)], V_out_1)
                             fig1.canvas.draw()
                             fig1.canvas.flush_events()
-                            ax1.set_ylim(np.amin(V_out_1), np.amax(V_out_1))
+                            #ax1.set_ylim(np.amin(V_out_1), np.amax(V_out_1))
 
                             line2.set_data(v_in_array[0:len(V_out_2)], V_out_2)
                             fig2.canvas.draw()
                             fig2.canvas.flush_events()
-                            ax2.set_ylim(np.amin(V_out_2), np.amax(V_out_2))
+                            #ax2.set_ylim(np.amin(V_out_2), np.amax(V_out_2))
                 V_out_all_1.append(V_out_1)
                 V_out_all_2.append(V_out_2)
 
@@ -205,7 +205,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                             line1.set_data(v_in_array[0:len(V_out_1)], V_out_1)
                             fig1.canvas.draw()
                             fig1.canvas.flush_events()
-                            ax1.set_ylim(np.amin(V_out_1), np.amax(V_out_1))
+                        #    ax1.set_ylim(np.amin(V_out_1), np.amax(V_out_1))
                 V_out_all_1.append(V_out_1)
         else:
             for i in range(n_fr):
