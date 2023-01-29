@@ -329,12 +329,14 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              pass
                      else:
                          if j%npoints1 == 0:
+                             pass
                             # dac_server = DacDriverSerialServer()
                             # set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
                             # set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
-                             dac_server.close()
+                        #     dac_server.close()
 
                          else:
+                             pass
                             # dac_server = DacDriverSerialServer()
                             # set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                             # dac_server.close()
@@ -429,12 +431,14 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              pass
                      else:
                          if j%npoints1 == 0:
+                             pass
                         #     dac_server = DacDriverSerialServer()
                         #     set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
                         #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                         #     dac_server.close()
 
                          else:
+                             pass
                         #     dac_server = DacDriverSerialServer()
                         #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                         #     dac_server.close()
@@ -498,12 +502,14 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              pass
                      else:
                          if j%npoints1 == 0:
+                             pass
                         #     dac_server = DacDriverSerialServer()
                         #     set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
                         #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
-                             dac_server.close()
+                        #     dac_server.close()
 
                          else:
+                             pass 
                         #     dac_server = DacDriverSerialServer()
                         #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                         #     dac_server.close()
