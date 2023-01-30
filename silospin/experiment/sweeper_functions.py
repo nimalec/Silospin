@@ -477,7 +477,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                  V_out_all_1.append(v_out_1)
                  V_out_all_2.append(v_out_2)
 
-        return_value = {"v_applied": [V_x.tolist(), V_y.tolist()], "v_out1": np.mean(np.array(V_out_all_1),axis=0).tolist(), "v_out2": np.mean(np.array(V_out_all_3),axis=0).tolist()}
+        return_value = {"v_applied": [V_x.tolist(), V_y.tolist()], "v_out1": np.mean(np.array(V_out_all_1),axis=0).tolist(), "v_out2": np.mean(np.array(V_out_all_2),axis=0).tolist()}
 
     elif lockins == lockin_configs[5] or lockins == lockin_configs[6] or lockins == lockin_configs[7]:
         idx_1 = list(lockins)[0]-1
@@ -540,4 +540,4 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 
     else:
         pass
-    return return_value 
+    return return_value
