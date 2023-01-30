@@ -9,18 +9,18 @@ Version from November 2022.
 
 import serial
 from zerorpc import Client
-from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
+from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters, pickle_dac_parameters
 from silospin.analysis.virtualgates import virtual_to_physical
 
-def make_dac_channel_mapping(channel_map=None):
+def make_dac_channel_mapping(channel_map=None, dac_param_file ='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_dac.pickle', dev_id='COM3'):
     if channel_map:
         dac_channel_mapping = channel_map
     else:
         dac_channel_mapping = {"gates":
          {"B1": 1, "B2": 2, "B3": 3, "B4": 4, "B5": 5, "P1": 6, "P2": 7,  "P3": 8, "P4": 9, "L1": 10, "L2": 11,  "M1": 12, "M2": 13,  "R1": 14, "R2": 15,  "BS1": 16, "BS2": 17, "TS": 18, "MS": 19} ,
         "ohmics": {"Source1": 20, "Drain1": 21, "Source2": 22, "Drain2": 23, "Source3": 24}}
+    pickle_dac_parameters(channel_mapping=channel_map, instruments_file_path=dac_param_file,dev_id=dev_id)
     return dac_channel_mapping
-
 
 def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_virtual_param.pickle'):
     ## parameter ==> string of parameter passed in
