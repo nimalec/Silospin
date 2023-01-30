@@ -258,6 +258,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
     V_x_f = V_x.flatten()
     V_y_f = V_y.flatten()
 
+    ## All lockins simultaneous: 1,2,3.
     if lockins == lockin_configs[1]:
         V_out_all_1 = []
         V_out_all_2 = []
@@ -372,6 +373,11 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 
                          else:
                             pass
+                 V_out_all_1.append(v_out_1)
+                 V_out_all_2.append(v_out_2)
+                 V_out_all_3.append(v_out_3)
+
+        return_value = {"v_applied": [V_x.tolist(), V_y.tolist()], "v_out1": np.mean(np.array(V_out_all_1),axis=0).tolist(), "v_out2": np.mean(np.array(V_out_all_3),axis=0).tolist(), "v_out3": np.mean(np.array(V_out_all_3),axis=0).tolist()}
 
     elif lockins == lockin_configs[2] or lockins == lockin_configs[3] or lockins == lockin_configs[4]:
         idx_1 = list(lockins)[0]-1
@@ -468,6 +474,10 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 
                          else:
                             pass
+                 V_out_all_1.append(v_out_1)
+                 V_out_all_2.append(v_out_2)
+
+        return_value = {"v_applied": [V_x.tolist(), V_y.tolist()], "v_out1": np.mean(np.array(V_out_all_1),axis=0).tolist(), "v_out2": np.mean(np.array(V_out_all_3),axis=0).tolist()}
 
     elif lockins == lockin_configs[5] or lockins == lockin_configs[6] or lockins == lockin_configs[7]:
         idx_1 = list(lockins)[0]-1
@@ -509,7 +519,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                         #     dac_server.close()
 
                          else:
-                             pass 
+                             pass
                         #     dac_server = DacDriverSerialServer()
                         #     set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                         #     dac_server.close()
@@ -524,5 +534,10 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              fig1.canvas.flush_events()
                          else:
                             pass
+                 V_out_all_1.append(v_out_1)
+
+        return_value = {"v_applied": [V_x.tolist(), V_y.tolist()], "v_out1": np.mean(np.array(V_out_all_1),axis=0).tolist()}
+
     else:
         pass
+    return return_value 
