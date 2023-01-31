@@ -56,7 +56,6 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             dac_client.set_voltage(value[i][1])
 
     elif parameter == "gates_voltages_set":
-        ##List of tuples of gate ID with value
         for i in range(len(value)):
             if value[i][0] in all_gates:
                 dac_client.set_channel(channel_mapping["gates"][value[i][0]])
@@ -69,7 +68,6 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
                 pass
 
     elif parameter in all_gates:
-        print(channel_mapping["gates"][parameter])
         dac_client.set_channel(channel_mapping["gates"][parameter])
         dac_client.set_voltage(value)
 

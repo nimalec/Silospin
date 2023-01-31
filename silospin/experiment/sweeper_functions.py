@@ -156,6 +156,8 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(mflis[idx_1-1].get_sample_r())
                         V_out_2.append(mflis[idx_2-1].get_sample_r())
+                        print(V_out_1)
+                        print(V_out_2)
                         dac_server.close()
                         if j%n_r == 0:
                             line1.set_data(v_in_array[0:len(V_out_1)], V_out_1)
