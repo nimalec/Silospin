@@ -439,7 +439,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          plt.show(block=False)
 
                          #img2 = ax2.imshow(V_out2, extent=[start_value1,end_value1,start_value2,end_value2])
-                         img2 = ax2.imshow(V_out2, extent=[end_value1,start_value1,start_value2,end_value2])
+                         img2 = ax1.imshow(V_out2, extent=[start_value1,end_value1,end_value2,start_value2])
+                         #img2 = ax2.imshow(V_out2, extent=[end_value1,start_value1,start_value2,end_value2])
                          #img2 = ax2.imshow(V_out2, extent=[start_value2,end_value2,start_value1,end_value1])
                          ax2.set_xlabel(parameter1+" gate voltage [V]")
                          ax2.set_ylabel(parameter2+" gate voltage [V]")
