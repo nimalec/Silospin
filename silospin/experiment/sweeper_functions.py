@@ -271,8 +271,6 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
     V_x, V_y = np.meshgrid(v_x, v_y)
     V_x_f = V_x.flatten()
     V_y_f = V_y.flatten()
-    print(V_x)
-    print(V_y)
 
     ## All lockins simultaneous: 1,2,3.
     if lockins == lockin_configs[1]:
@@ -453,6 +451,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              pass
                      else:
                          if j%npoints1 == 0:
+                             print(V_y_f[j])
                              dac_server = DacDriverSerialServer()
                              set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
                              set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
