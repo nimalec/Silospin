@@ -38,6 +38,8 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
     sensors2 = {"L2", "M2", "R2"}
     virtual_gates = {"VP1", "VP2", "VP3", "VP4"}
 
+    print(parameter)
+
     if parameter == "channel":
         dac_client.set_channel(value)
 
