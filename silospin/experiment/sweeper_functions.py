@@ -429,7 +429,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          V_out1 =  v_out_1.reshape([npoints1, npoints2]).T
                          V_out2 =  v_out_2.reshape([npoints1, npoints2]).T
 
-                         img1 = ax1.imshow(V_out1, extent=[end_value1,start_value1,start_value2,end_value2])
+                         img1 = ax1.imshow(V_out1, extent=[start_value1,end_value1,end_value2,start_value2])
                          #img1 = ax1.imshow(V_out1, extent=[start_value2,end_value2,start_value1,end_value1])
                          ax1.set_xlabel(parameter1+" gate voltage [V]")
                          ax1.set_ylabel(parameter2+" gate voltage [V]")
