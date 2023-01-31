@@ -271,8 +271,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
     V_x, V_y = np.meshgrid(v_x, v_y)
     V_x_f = V_x.flatten()
     V_y_f = V_y.flatten()
-    print(V_x_f)
-    print(V_y_f)
+    print(V_x)
+    print(V_y)
 
     ## All lockins simultaneous: 1,2,3.
     if lockins == lockin_configs[1]:
