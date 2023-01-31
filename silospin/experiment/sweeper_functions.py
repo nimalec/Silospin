@@ -271,8 +271,6 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
     V_x, V_y = np.meshgrid(v_x, v_y)
     V_x_f = V_x.flatten()
     V_y_f = V_y.flatten()
-    print(V_x_f)
-    print(V_y_f)
 
     ## All lockins simultaneous: 1,2,3.
     if lockins == lockin_configs[1]:
@@ -425,13 +423,12 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          v_out_1  = v_meas_1*v_out_1
                          v_out_2  = v_meas_2*v_out_2
 
-                        # V_out1 =  v_out_1.reshape([npoints1, npoints2])
-                         #V_out2 =  v_out_2.reshape([npoints1, npoints2])
+
                          V_out1 =  v_out_1.reshape([npoints1, npoints2]).T
                          V_out2 =  v_out_2.reshape([npoints1, npoints2]).T
 
-                         #img1 = ax1.imshow(V_out1, extent=[start_value1,end_value1,start_value2,end_value2])
-                         img1 = ax1.imshow(V_out1, extent=[start_value2,end_value2,start_value1,end_value1])
+                         img1 = ax1.imshow(V_out1, extent=[start_value1,end_value1,start_value2,end_value2])
+                         #img1 = ax1.imshow(V_out1, extent=[start_value2,end_value2,start_value1,end_value1])
                          ax1.set_xlabel(parameter1+" gate voltage [V]")
                          ax1.set_ylabel(parameter2+" gate voltage [V]")
                          fig1.canvas.draw()
@@ -439,8 +436,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
                          plt.show(block=False)
 
-                         #img2 = ax2.imshow(V_out2, extent=[start_value1,end_value1,start_value2,end_value2])
-                         img2 = ax2.imshow(V_out2, extent=[start_value2,end_value2,start_value1,end_value1])
+                         img2 = ax2.imshow(V_out2, extent=[start_value1,end_value1,start_value2,end_value2])
+                         #img2 = ax2.imshow(V_out2, extent=[start_value2,end_value2,start_value1,end_value1])
                          ax2.set_xlabel(parameter1+" gate voltage [V]")
                          ax2.set_ylabel(parameter2+" gate voltage [V]")
                          fig2.canvas.draw()
