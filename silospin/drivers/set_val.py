@@ -68,6 +68,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
                 pass
 
     elif parameter in all_gates:
+        print(parameter,value)
         dac_client.set_channel(channel_mapping["gates"][parameter])
         dac_client.set_voltage(value)
 
