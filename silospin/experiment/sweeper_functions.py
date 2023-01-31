@@ -457,8 +457,9 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          else:
                              pass
                      else:
+                         print(V_x_f[j])
                          if j%npoints1 == 0:
-                             print(j, V_x_f[j])  
+                             print(j, V_x_f[j])
                              print(j, V_y_f[j])
                              dac_server = DacDriverSerialServer()
                              set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
