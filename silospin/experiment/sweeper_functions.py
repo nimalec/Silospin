@@ -425,10 +425,13 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          v_out_1  = v_meas_1*v_out_1
                          v_out_2  = v_meas_2*v_out_2
 
-                         V_out1 =  v_out_1.reshape([npoints1, npoints2])
-                         V_out2 =  v_out_2.reshape([npoints1, npoints2])
+                        # V_out1 =  v_out_1.reshape([npoints1, npoints2])
+                         #V_out2 =  v_out_2.reshape([npoints1, npoints2])
+                         V_out1 =  v_out_1.reshape([npoints1, npoints2]).T
+                         V_out2 =  v_out_2.reshape([npoints1, npoints2]).T
 
-                         img1 = ax1.imshow(V_out1, extent=[start_value1,end_value1,start_value2,end_value2])
+                         #img1 = ax1.imshow(V_out1, extent=[start_value1,end_value1,start_value2,end_value2])
+                         img1 = ax1.imshow(V_out1, extent=[start_value2,end_value2,start_value1,end_value1])
                          ax1.set_xlabel(parameter1+" gate voltage [V]")
                          ax1.set_ylabel(parameter2+" gate voltage [V]")
                          fig1.canvas.draw()
@@ -436,7 +439,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
                          plt.show(block=False)
 
-                         img2 = ax2.imshow(V_out2, extent=[start_value1,end_value1,start_value2,end_value2])
+                         #img2 = ax2.imshow(V_out2, extent=[start_value1,end_value1,start_value2,end_value2])
+                         img2 = ax2.imshow(V_out2, extent=[start_value2,end_value2,start_value1,end_value1])
                          ax2.set_xlabel(parameter1+" gate voltage [V]")
                          ax2.set_ylabel(parameter2+" gate voltage [V]")
                          fig2.canvas.draw()
@@ -453,7 +457,6 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              pass
                      else:
                          if j%npoints1 == 0:
-                             print(V_y_f[j])
                              dac_server = DacDriverSerialServer()
                              set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
                              set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
@@ -472,10 +475,12 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 
 
                          if j%n_r == 0:
-                             img1.set_data(v_out_1.reshape([npoints1, npoints2]))
+                             #img1.set_data(v_out_1.reshape([npoints1, npoints2]))
+                             img1.set_data(v_out_1.reshape([npoints2, npoints1]))
                              img1.set_clim(np.amin(v_out_1), np.amax(v_out_1))
 
-                             img2.set_data(v_out_2.reshape([npoints1, npoints2]))
+                             #img2.set_data(v_out_2.reshape([npoints1, npoints2]))
+                             img2.set_data(v_out_2.reshape([npoints2, npoints1]))
                              img2.set_clim(np.amin(v_out_2), np.amax(v_out_2))
 
 
