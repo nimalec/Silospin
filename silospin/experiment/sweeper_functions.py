@@ -27,6 +27,9 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     dac_server = DacDriverSerialServer()
     #mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
     mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq)}
+    print(mflis[0])
+    print(mflis[1].)
+
     gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS", "Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
     lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1,3}, 5: {1}, 6: {2}, 7: {3}}
     dac_dict = unpickle_qubit_parameters(dac_mapping_file_path)
@@ -156,8 +159,6 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         V_out_1.append(mflis[idx_1-1].get_sample_r())
                         V_out_2.append(mflis[idx_2-1].get_sample_r())
-                        print(mflis[idx_1-1].get_sample_r())
-                        print(mflis[idx_2-1].get_sample_r()) 
 
                         dac_server.close()
                         if j%n_r == 0:
@@ -452,14 +453,12 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              pass
                      else:
                          if j%npoints1 == 0:
-                             pass
                              dac_server = DacDriverSerialServer()
                              set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
                              set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                              dac_server.close()
 
-                         else:
-                             pass
+                         else: 
                              dac_server = DacDriverSerialServer()
                              set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                              dac_server.close()
