@@ -2426,19 +2426,22 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
                 if gate_tuple[0][0] != 't' and gate_tuple[1][0] != 't':
                     amplitude_1 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
                     amplitude_2 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
-                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
+                    #ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
+                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}})
                     ct_idx += 1
                     wave_idx += 1
                 elif gate_tuple[0][0] != 't' and gate_tuple[1][0] == 't':
                     amplitude_1 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
                     amplitude_2 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
-                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
+                    #ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
+                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}})
                     ct_idx += 1
                     wave_idx += 1
                 elif gate_tuple[0][0] == 't' and gate_tuple[1][0] != 't':
                     amplitude_1 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
                     amplitude_2 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
-                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
+                    #ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
+                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}})
                     ct_idx += 1
                     wave_idx += 1
                 else:
