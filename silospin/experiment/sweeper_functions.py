@@ -3,10 +3,12 @@ from silospin.drivers.homedac_box import DacDriverSerialServer
 from silospin.drivers.zi_mfli_driver import MfliDriverChargeStability, MfliDriver, MfliScopeModulePoint
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters, pickle_charge_data
 
+import itertools
+from itertools import permutations
 import numpy as np
 import matplotlib.pyplot as plt
 
-def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, plot = True, lockins = {1,2,3}, filter_tc=10e-3, demod_freq = 0, dac_mapping_file_path = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_dac.pickle', save_path=None, scope=True):
+def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, plot = True, lockin_config =  (1,2), lockins = {1: 'dev5759', 2: 'dev5761'}, dac_settings = {1: 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_dac1.pickle', 2: 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_dac2.pickle'}, filter_tc=10e-3, demod_freq = 0=, save_path=None):
     '''
     Outputs the mapping between AWG cores/channels and gate labels. \n
     Outer keys of dictionary correspond to core number running from 1-4 (e.g. chanel_mapping = {1 : {}, ... , 4: {}). These keys have values in the form of dictonaries with the following keys and values. \n
@@ -23,12 +25,20 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     Returns:
        channel_mapper (dict): Dictionary representing channel mapping.
     '''
+    lockin_cofigs = {}
+    lockin_drivers = {}
+    idxs_all = list(lockins.keys())
+    itr = 1
+    for idx in range(len(lockins)):
+        configs = set(list(itertools.permutations(lockins, idx+1)))
+        lockin_cofigs[itr] = configs
+        lockin_drivers[itr] = MfliDriverChargeStability(dev_id = lockins[itr], timeconstant=filter_tc, demod_freq=demod_freq, sig_path= f"/{lockins[itr]}/demods/0/sample")
+        itr += 1
 
-    dac_server = DacDriverSerialServer()
-    #mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
+
+#    dac_server = DacDriverSerialServer()
     mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq, sig_path="/dev5759/demods/0/sample"), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq, sig_path="/dev5761/demods/0/sample")}
-    #mflis_2 = {0: MfliDriver("dev5759"), 1: MfliDriver("dev5761")}
-    #scopes = {0: MfliScopeModulePoint(mflis_2[0]), 1: MfliScopeModulePoint(mflis_2[1])}
+0]), 1: MfliScopeModulePoint(mflis_2[1])}
 
     gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS", "Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
     lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1,3}, 5: {1}, 6: {2}, 7: {3}}

@@ -11,20 +11,34 @@ import zerorpc
 from silospin.drivers.homedac_box import DacDriverSerial
 
 class DacServer(object):
-    device_id='COM14'
-    dac_driver = DacDriverSerial(dev_id = device_id, verbose=0, init=False,  baud_rate=250000)
+    device_id_1='COM14'
+    device_id_2='COM13'
+    dac_driver_1 = DacDriverSerial(dev_id = device_id_1, verbose=0, init=False,  baud_rate=250000)
+    dac_driver_2 = DacDriverSerial(dev_id = device_id_2, verbose=0, init=False,  baud_rate=250000)
 
-    def close(self):
-        self.dac_driver._dac.close()
+    def close_1(self):
+        self.dac_driver_1._dac.close()
 
-    def open_connection(self):
-        self.dac_driver._dac.open()
+    def open_connection_1(self):
+        self.dac_driver_1._dac.open()
 
-    def set_voltage(self, voltage):
-        self.dac_driver.set_voltage(voltage)
+    def set_voltage_1(self, voltage):
+        self.dac_driver_1.set_voltage(voltage)
 
-    def set_channel(self, channel):
-        self.dac_driver.set_channel(channel)
+    def set_channel_1(self, channel):
+        self.dac_driver_1.set_channel(channel)
+
+    def close_2(self):
+        self.dac_driver_2._dac.close()
+
+    def open_connection_2(self):
+        self.dac_driver_2._dac.open()
+
+    def set_voltage_2(self, voltage):
+        self.dac_driver_2.set_voltage(voltage)
+
+    def set_channel_2(self, channel):
+        self.dac_driver_2.set_channel(channel)
 
 server = zerorpc.Server(DacServer())
 server.bind("tcp://0.0.0.0:4243")
