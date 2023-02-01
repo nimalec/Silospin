@@ -755,5 +755,133 @@ class MfliScopeModule:
 
    #def save()
    #def subscribe()
+class MfliScopeModule:
+##Goals for implementation: 1. configuraiton, 2. cont. data acquisiiton w/o triggering (time domain), 3. cont. data acquisiiton w/o triggering (freq. domain),
+##4. get data function (get scope records), 5. triggered measurements ...
+    def __init__(self, mfli_driver):
+        self._mfli = mfli_driver
+        self._daq  = self._mfli._daq
+        self._dev_id = self._mfli._connection_settings["mfli_id"]
+        self._scope_module = self._mfli._scope_module
 
-#class MfliSweeperModule:
+        self._counter = 0
+
+
+
+    def continuous_scope_time_domain(self, duration,  trace_num = float('inf'), sig_port = 'Aux_in_1'):
+
+        sig_source = { 'sig_in_1': 0 , 'Aux_in_1': 8   }
+
+        sampling_rate_dict = {0: 60e6, 1: 30e6  , 2: 15e6, 3: 7.5e6, 4: 3.75e6, 5: 1.88e6, 6: 938e3, 7: 469e3,  8: 234e3, 9: 117e3,
+                              10:58.6e3, 11:29.3e3, 12: 14.6e3, 13: 7.32e3, 14: 3.66e3, 15: 1.83e3, 16: 916   }
+
+        #without this, execute() does not take in data
+
+        #by calling the read function here, it clears whatever data may have been left in the earlier run, allowing us to
+        #change the length of each trace and plotting it. Otherwise, there's clash between the size set for the figure and some of
+        #the earlier data being fed
+        self._scope_module.read()
+
+        sampling_rate_key = self._daq.getInt(f'/{self._dev_id}/scopes/0/time')
+        sampling_rate = sampling_rate_dict[sampling_rate_key]
+
+        columns = np.ceil(duration * sampling_rate)
+
+
+        #set the number of points per trace
+        self._daq.setDouble(f'/{self._dev_id}/scopes/0/length', columns)
+
+
+        self._scope_module.subscribe(f'/{self._dev_id}/scopes/0/wave')
+
+        #you have to give it some time for the proper number of pts per trace to be registered and read back
+        time.sleep(0.5)
+
+        #see what was actually accepted for the number of points per trace
+        num_of_points_per_trace = self._daq.getInt(f'/{self._dev_id}/scopes/0/length')
+        # print(num_of_points_per_trace)
+
+
+        length_in_sec = num_of_points_per_trace/sampling_rate_dict[sampling_rate_key]
+
+        time_axis = np.linspace(0, length_in_sec,  num_of_points_per_trace)
+        # time_axis = np.linspace(0, num_of_points_per_trace,  num_of_points_per_trace)
+        v_outputs = np.zeros(num_of_points_per_trace)
+
+
+        #for some reason, when starting a scope module, 'averager/weight' is set to 10, so you want to set it to 0 for no averaging
+        self._scope_module.set('averager/weight', 0)  #"Specify the averaging behaviour. weight=0: Averaging disabled. weight>1: Moving average, updating last history entry.",
+
+        # print()
+        # print('trace length', num_of_points_per_trace, 'sampling rate', sampling_rate_dict[sampling_rate_key], 'length in sec', length_in_sec)
+
+        #ratio of the plot size -> figsize=(80, 6), dpi=80
+
+        # centers = [-0.3, 0.3, 0,  length_in_sec]  #this is where you change the scale label
+
+        v_outputs = np.zeros(num_of_points_per_trace)
+
+        #scope turned on
+        self._daq.setInt(f'/{self._dev_id}/scopes/0/enable', 1)
+        self._daq.setInt(f'/{self._dev_id}/scopes/0/trigenable', 0)    #disable trigger (just in case it was enabled before)
+
+        self._daq.setInt(f'/{self._dev_id}/scopes/0/stream/enables/0', 0)  #disable the continuous streaming
+        self._daq.setInt(f'/{self._dev_id}/scopes/0/stream/enables/1', 0)
+
+        self._scope_module.execute()
+
+        # self._daq.setInt(f'/{self._dev_id}/scopes/0/channels/0/inputselect', 0)  #assume we are measuring signal in 1
+        self._daq.setInt(f'/{self._dev_id}/scopes/0/channels/0/inputselect', sig_source[sig_port])  #assume we are measuring Aux in 1
+
+        counter = 0    #keeping track of the num of traces being stored.  only for testing
+        sample_data = []
+        result = {}
+
+        #if set to infinite, keep running the scope module
+
+        if trace_num == float('inf'):
+
+            while not self._scope_module.finished() and len(sample_data)< trace_num:
+                result = self._scope_module.read()
+                if len(result) != 0 and self._dev_id in result.keys():  #the read function is much faster than how often data get transferred from the module
+                    # print(len(result[self._dev_id]['scopes']['0']['wave']), 'this is the number?')  #how many traces is each call returning?
+                    counter += len(result[self._dev_id]['scopes']['0']['wave'])
+
+        else:
+            #keep in mind that the data stream is uncontrolled, so sample_data being returned may end up with more than
+            while not self._scope_module.finished() and len(sample_data)< trace_num:
+
+                result = self._scope_module.read()
+
+                if len(result) != 0 and self._dev_id in result.keys():  #the read function is much faster than how often data get transferred from the module
+                    for each_trace_index in range(len(result[self._dev_id]['scopes']['0']['wave'])):
+
+                        sample_data.append( result[self._dev_id]['scopes']['0']['wave'][each_trace_index][0]['wave'][0]  )
+
+                    # print(len(result[self._dev_id]['scopes']['0']['wave']), 'this is the number?')  #how many traces is each call returning?
+                    counter += len(result[self._dev_id]['scopes']['0']['wave'])
+
+
+            #scope turned off
+            self._daq.setInt(f'/{self._dev_id}/scopes/0/enable', 0)
+
+            #in case there's some leftover data collected before exiting the conditional statements, we will append them to the 'sample_data'
+            if self._dev_id in result.keys():
+                for each_trace_index in range(len(result[self._dev_id]['scopes']['0']['wave'])):
+
+                    sample_data.append( result[self._dev_id]['scopes']['0']['wave'][each_trace_index][0]['wave'][0]  )
+
+            # print(len(result['dev6541']['scopes']['0']['wave']), 'num of traces of leftover data')
+
+            # print(self._scope_module.getInt("records"), 'this is the final number before closing',   len(sample_data), 'length of the sample data')
+
+
+            #this block of code here is being used to have a well defined stop to the data acquisition
+            self._daq.setInt(f'/{self._dev_id}/scopes/0/enable', 0)
+            self._scope_module.finish()
+            self._scope_module.unsubscribe('*')
+            self._scope_module.unsubscribe('*')
+            self._scope_module.subscribe(f'/{self._dev_id}/scopes/0/wave')
+
+
+            return np.mean(sample_data)
