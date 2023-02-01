@@ -49,6 +49,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         ##Modify the first section for plot to appear
         fig_str = ''
         for idx in lockin_config:
+            print(idx)
             fig_str += f'fig{idx}= plt.figure()\nax{idx}=fig{idx}.add_subplot(111)\n'
         print(fig_str)
 
