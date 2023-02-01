@@ -27,8 +27,8 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     dac_server = DacDriverSerialServer()
     #mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq), 2: MfliDriverChargeStability(dev_id = "dev6573", timeconstant=filter_tc, demod_freq=demod_freq)}
     mflis = {0: MfliDriverChargeStability(dev_id = "dev5759", timeconstant=filter_tc, demod_freq=demod_freq, sig_path="/dev5759/demods/0/sample"), 1: MfliDriverChargeStability(dev_id = "dev5761", timeconstant=filter_tc, demod_freq=demod_freq, sig_path="/dev5761/demods/0/sample")}
-    mflis_2 = {0: MfliDriver("dev5759"), 1: MfliDriver("dev5761")}
-    scopes = {0: MfliScopeModulePoint(mflis_2[0]), 1: MfliScopeModulePoint(mflis_2[1])}
+    #mflis_2 = {0: MfliDriver("dev5759"), 1: MfliDriver("dev5761")}
+    #scopes = {0: MfliScopeModulePoint(mflis_2[0]), 1: MfliScopeModulePoint(mflis_2[1])}
 
     gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS", "Source1", "Drain1", "Source2", "Drain2", "Source3", "Drain3"}
     lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1,3}, 5: {1}, 6: {2}, 7: {3}}
@@ -267,8 +267,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
     lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1,3}, 5: {1}, 6: {2}, 7: {3}}
     dac_dict = unpickle_qubit_parameters(dac_mapping_file_path)
     channel_mapping = dac_dict["channel_mapping"]
-    mflis_2 = {0: MfliDriver("dev5759"), 1: MfliDriver("dev5761")}
-    scopes = {0: MfliScopeModulePoint(mflis_2[0]), 1: MfliScopeModulePoint(mflis_2[1])}
+    # mflis_2 = {0: MfliDriver("dev5759"), 1: MfliDriver("dev5761")}
+    # scopes = {0: MfliScopeModulePoint(mflis_2[0]), 1: MfliScopeModulePoint(mflis_2[1])}
 
     v_x = np.linspace(start_value1, end_value1, npoints1)
     v_y = np.linspace(start_value2, end_value2, npoints2)
