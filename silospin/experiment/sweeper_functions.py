@@ -53,7 +53,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         for idx in lockin_config:
             fig_str += f'fig{idx} = plt.figure()\nax{idx}=fig{idx}.add_subplot(111)\n'
             plot_0 += f'line{idx},=ax{idx}.plot(v_in_array, np.zeros(len(v_in_array)))\nax{idx}.set_xlabel("Applied voltage [V]")\nax{idx}.set_ylabel("Measured output on lock-in {idx} [V]")\nfig{idx}.canvas.draw()\nax{idx}background = fig{idx}.canvas.copy_from_bbox(ax{idx}.bbox)\nplt.show(block=False)\n'
-
+        exec(fig_str+plot_0)
 #    if lockins == lockin_configs[1]:
     # if lockins == lockin_configs[1]:
     #     V_out_all_1 = []
