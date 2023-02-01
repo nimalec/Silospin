@@ -768,7 +768,7 @@ class MfliScopeModulePoint:
 
 
 
-    def continuous_scope_time_domain(self, duration,  trace_num = float('inf'), sig_port = 'Aux_in_1'):
+    def averaged_point(self, duration,  trace_num = float('inf'), sig_port = 'Aux_in_1'):
 
         sig_source = { 'sig_in_1': 0 , 'Aux_in_1': 8   }
 
