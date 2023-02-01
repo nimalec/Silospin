@@ -95,16 +95,32 @@ class DacDriverSerialServer:
         self._client = zerorpc.Client()
         self._client.connect(self._client_address)
 
-    def close(self):
-        self._client.close()
+    def close_1(self):
+        self._client.close_1()
 
-    def open_connection(self):
-        self._client.open_connection()
+    def open_connection_1(self):
+        self._client.open_connection_1()
 
-    def set_voltage(self, voltage):
-        #self._client.connect(self._client_address)
-        self._client.set_voltage(voltage)
+    def set_voltage_1(self, voltage):
+        self._client.set_voltage_1(voltage)
 
-    def set_channel(self, channel):
-        #self._client.connect(self._client_address)
-        self._client.set_channel(channel)
+    def set_channel_1(self, channel):
+        self._client.set_channel_1(channel)
+
+    def init_1(self):
+        self._client.init_1()
+
+    def close_2(self):
+        self._client.close_2()
+
+    def open_connection_2(self):
+        self._client.open_connection_2()
+
+    def set_voltage_2(self, voltage):
+        self._client.set_voltage_2(voltage)
+
+    def set_channel_2(self, channel):
+        self._client.set_channel_2(channel)
+
+    def init_2(self):
+        self._client.init_2()
