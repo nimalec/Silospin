@@ -755,8 +755,7 @@ class MfliScopeModule:
 
    #def save()
    #def subscribe()
-
-class MfliScopeModulePointAverage:
+class MfliScopeModule:
 ##Goals for implementation: 1. configuraiton, 2. cont. data acquisiiton w/o triggering (time domain), 3. cont. data acquisiiton w/o triggering (freq. domain),
 ##4. get data function (get scope records), 5. triggered measurements ...
     def __init__(self, mfli_driver):
