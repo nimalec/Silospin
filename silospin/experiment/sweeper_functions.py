@@ -422,10 +422,10 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
                          set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                          dac_server.close()
-                         #v_meas_1 = mflis[idx_1].get_sample_r()
-                         #v_meas_2 = mflis[idx_2].get_sample_r()
-                         v_meas_1 = scopes[idx_1].averaged_point(duration=1e-3,  trace_num = 1, sig_port = 'Aux_in_1')
-                         v_meas_2 = scopes[idx_2].averaged_point(duration=1e-3,  trace_num = 1, sig_port = 'Aux_in_1')
+                         v_meas_1 = mflis[idx_1].get_sample_r()
+                         v_meas_2 = mflis[idx_2].get_sample_r()
+                         # v_meas_1 = scopes[idx_1].averaged_point(duration=1e-3,  trace_num = 1, sig_port = 'Aux_in_1')
+                         # v_meas_2 = scopes[idx_2].averaged_point(duration=1e-3,  trace_num = 1, sig_port = 'Aux_in_1')
 
                          v_out_1  = v_meas_1*v_out_1
                          v_out_2  = v_meas_2*v_out_2
@@ -474,11 +474,11 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                              dac_server.close()
 
-                         # v_meas_1 = mflis[idx_1].get_sample_r()
-                         # v_meas_2 = mflis[idx_2].get_sample_r()
-                         v_meas_1 = scopes[idx_1].averaged_point(duration=1e-6,  trace_num = 1, sig_port = 'Aux_in_1')
-                         v_meas_2 = scopes[idx_2].averaged_point(duration=1e-6,  trace_num = 1, sig_port = 'Aux_in_1')
-
+                         v_meas_1 = mflis[idx_1].get_sample_r()
+                         v_meas_2 = mflis[idx_2].get_sample_r()
+                         # v_meas_1 = scopes[idx_1].averaged_point(duration=1e-6,  trace_num = 1, sig_port = 'Aux_in_1')
+                         # v_meas_2 = scopes[idx_2].averaged_point(duration=1e-6,  trace_num = 1, sig_port = 'Aux_in_1')
+                         #
 
                          v_out_1[j] = v_meas_1
                          v_out_2[j] = v_meas_2
