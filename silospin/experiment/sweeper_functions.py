@@ -28,7 +28,6 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     ## Find all Lock-In permutations
     lockin_cofigs = {}
     lockin_drivers = {}
-    idxs_all = list(lockins.keys())
     itr = 1
     for idx in range(len(lockins)):
         configs = set(list(itertools.permutations(lockins, idx+1)))
@@ -48,12 +47,12 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
 
     if plot == True:
         ##Modify the first section for plot to appear
-
-        initial_plot_commands = []
+        fig_str = ''
         for idx in lockin_config:
-            fig_str = f'fig{idx}= plt.figure()\nax{idx}=fig{idx}.add_subplot(111)\n'
-            initial_plot_commands.append(fig_str)
-            print(fig_str)
+            fig_str += f'fig{idx}= plt.figure()\nax{idx}=fig{idx}.add_subplot(111)\n'
+        print(fig_str)
+
+
 
 
 
