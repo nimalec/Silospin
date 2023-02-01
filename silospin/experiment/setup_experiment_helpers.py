@@ -44,3 +44,8 @@ def pickle_charge_data(data, file_path):
     data_dict = {"timestamp": str(datetime.datetime.now()), "data": data}
     with open(file_path, 'wb') as handle:
         pickle.dump(data_dict, handle, protocol = pickle.HIGHEST_PROTOCOL)
+
+def pickle_dac_parameters_v2(channel_mapping, voltage_divide,instruments_file_path, dev_id = "COM14", dac_name = "DAC1"):
+    instrument_parameters = {"timestamp": str(datetime.datetime.now()), "dac_name": dac_name,  "id": dev_id, "channel_mapping": channel_mapping,, "dividers": voltage_divide}
+    with open(instruments_file_path, 'wb') as handle:
+        pickle.dump(instrument_parameters, handle, protocol = pickle.HIGHEST_PROTOCOL)
