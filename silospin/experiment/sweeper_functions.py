@@ -267,8 +267,6 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
     lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1,3}, 5: {1}, 6: {2}, 7: {3}}
     dac_dict = unpickle_qubit_parameters(dac_mapping_file_path)
     channel_mapping = dac_dict["channel_mapping"]
-    # mflis_2 = {0: MfliDriver("dev5759"), 1: MfliDriver("dev5761")}
-    # scopes = {0: MfliScopeModulePoint(mflis_2[0]), 1: MfliScopeModulePoint(mflis_2[1])}
 
     v_x = np.linspace(start_value1, end_value1, npoints1)
     v_y = np.linspace(start_value2, end_value2, npoints2)
@@ -424,18 +422,14 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          dac_server.close()
                          v_meas_1 = mflis[idx_1].get_sample_r()
                          v_meas_2 = mflis[idx_2].get_sample_r()
-                         # v_meas_1 = scopes[idx_1].averaged_point(duration=1e-3,  trace_num = 1, sig_port = 'Aux_in_1')
-                         # v_meas_2 = scopes[idx_2].averaged_point(duration=1e-3,  trace_num = 1, sig_port = 'Aux_in_1')
 
                          v_out_1  = v_meas_1*v_out_1
                          v_out_2  = v_meas_2*v_out_2
-
 
                          V_out1 =  v_out_1.reshape([npoints1, npoints2]).T
                          V_out2 =  v_out_2.reshape([npoints1, npoints2]).T
 
                          img1 = ax1.imshow(V_out1, extent=[start_value1,end_value1,end_value2,start_value2])
-                         #img1 = ax1.imshow(V_out1, extent=[start_value2,end_value2,start_value1,end_value1])
                          ax1.set_xlabel(parameter1+" gate voltage [V]")
                          ax1.set_ylabel(parameter2+" gate voltage [V]")
                          fig1.canvas.draw()
@@ -443,10 +437,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          cbar1.set_label('Demodulated voltage from lock-in 1 [V]', rotation=270, labelpad=30)
                          plt.show(block=False)
 
-                         #img2 = ax2.imshow(V_out2, extent=[start_value1,end_value1,start_value2,end_value2])
                          img2 = ax2.imshow(V_out2, extent=[start_value1,end_value1,end_value2,start_value2])
-                         #img2 = ax2.imshow(V_out2, extent=[end_value1,start_value1,start_value2,end_value2])
-                         #img2 = ax2.imshow(V_out2, extent=[start_value2,end_value2,start_value1,end_value1])
                          ax2.set_xlabel(parameter1+" gate voltage [V]")
                          ax2.set_ylabel(parameter2+" gate voltage [V]")
                          fig2.canvas.draw()
@@ -476,20 +467,16 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 
                          v_meas_1 = mflis[idx_1].get_sample_r()
                          v_meas_2 = mflis[idx_2].get_sample_r()
-                         # v_meas_1 = scopes[idx_1].averaged_point(duration=1e-6,  trace_num = 1, sig_port = 'Aux_in_1')
-                         # v_meas_2 = scopes[idx_2].averaged_point(duration=1e-6,  trace_num = 1, sig_port = 'Aux_in_1')
-                         #
+
 
                          v_out_1[j] = v_meas_1
                          v_out_2[j] = v_meas_2
 
 
                          if j%n_r == 0:
-                             #img1.set_data(v_out_1.reshape([npoints1, npoints2]))
                              img1.set_data(v_out_1.reshape([npoints2, npoints1]))
                              img1.set_clim(np.amin(v_out_1), np.amax(v_out_1))
 
-                             #img2.set_data(v_out_2.reshape([npoints1, npoints2]))
                              img2.set_data(v_out_2.reshape([npoints2, npoints1]))
                              img2.set_clim(np.amin(v_out_2), np.amax(v_out_2))
 
