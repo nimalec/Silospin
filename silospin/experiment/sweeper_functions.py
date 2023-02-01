@@ -26,6 +26,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
        channel_mapper (dict): Dictionary representing channel mapping.
     '''
     ## Find all Lock-In permutations
+    print(lockin_config)
     lockin_cofigs = {}
     lockin_drivers = {}
     itr = 1
