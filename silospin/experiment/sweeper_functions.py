@@ -267,14 +267,15 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
     lockin_configs = {1: {1,2,3}, 2: {1,2}, 3: {2,3}, 4: {1,3}, 5: {1}, 6: {2}, 7: {3}}
     dac_dict = unpickle_qubit_parameters(dac_mapping_file_path)
     channel_mapping = dac_dict["channel_mapping"]
+    mflis_2 = {0: MfliDriver("dev5759"), 1: MfliDriver("dev5761")}
+    scopes = {0: MfliScopeModulePoint(mflis_2[0]), 1: MfliScopeModulePoint(mflis_2[1])}
 
     v_x = np.linspace(start_value1, end_value1, npoints1)
     v_y = np.linspace(start_value2, end_value2, npoints2)
     V_x, V_y = np.meshgrid(v_x, v_y)
     V_x_f = V_x.flatten()
     V_y_f = V_y.flatten()
-    print(V_x_f)
-    print(V_y_f)
+
 
     ## All lockins simultaneous: 1,2,3.
     if lockins == lockin_configs[1]:
@@ -421,8 +422,10 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                          set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
                          set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                          dac_server.close()
-                         v_meas_1 = mflis[idx_1].get_sample_r()
-                         v_meas_2 = mflis[idx_2].get_sample_r()
+                         #v_meas_1 = mflis[idx_1].get_sample_r()
+                         #v_meas_2 = mflis[idx_2].get_sample_r()
+                         v_meas_1 = scopes[idx_1].averaged_point(duration=1e-3,  trace_num = 1, sig_port = 'Aux_in_1')
+                         v_meas_2 = scopes[idx_2].averaged_point(duration=1e-3,  trace_num = 1, sig_port = 'Aux_in_1')
 
                          v_out_1  = v_meas_1*v_out_1
                          v_out_2  = v_meas_2*v_out_2
@@ -471,8 +474,11 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                              set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
                              dac_server.close()
 
-                         v_meas_1 = mflis[idx_1].get_sample_r()
-                         v_meas_2 = mflis[idx_2].get_sample_r()
+                         # v_meas_1 = mflis[idx_1].get_sample_r()
+                         # v_meas_2 = mflis[idx_2].get_sample_r()
+                         v_meas_1 = scopes[idx_1].averaged_point(duration=1e-3,  trace_num = 1, sig_port = 'Aux_in_1')
+                         v_meas_2 = scopes[idx_2].averaged_point(duration=1e-3,  trace_num = 1, sig_port = 'Aux_in_1')
+
 
                          v_out_1[j] = v_meas_1
                          v_out_2[j] = v_meas_2
