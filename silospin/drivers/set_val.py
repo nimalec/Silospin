@@ -78,81 +78,101 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             pass
 
     elif parameter == "channel_voltage_set":
+        ## set of channels and  voltages
         for i in range(len(value)):
             dac_idx = dac_channel_map[value[i][0]][0]
             ch_idx =  dac_channel_map[value[i][0]][1]
-            dac_client.set_channel(ch_idx)
-            dac_client.set_voltage(value[i][1])
-
-    elif parameter == "gates_voltages_set":
-        for i in range(len(value)):
-            dac_idx = dac_channel_map[value[i][0]][0]
-            ch_idx =  dac_channel_map[value[i][0]][1]
-
-            if value[i][0] in all_gates:
-                dac_client.set_channel(channel_mapping["gates"][value[i][0]])
-                dac_client.set_voltage(value[i][1])
-
-            elif value[i][0] in ohmic_gates:
-                dac_client.set_channel(channel_mapping["gates"][value[i][0]])
-                dac_client.set_voltage(value[i][1])
+            if dac_idx == 1:
+                dac_client.set_channel_1(ch_idx)
+                dac_client.set_voltage_1(value[i][1])
+            elif dac_idx == 2:
+                dac_client.set_channel_2(ch_idx)
+                dac_client.set_voltage_2(value[i][1])
             else:
                 pass
 
-    elif parameter in all_gates:
-        dac_client.set_channel(channel_mapping["gates"][parameter])
-        dac_client.set_voltage(value)
+    elif parameter == "gates_voltages_set":
+        ##Set of gates and voltages
+        for i in range(len(value)):
+            dac_idx = dac_channel_map[all_gate_maps[value[i][0]]][0]
+            ch_idx =  dac_channel_map[all_gate_maps[value[i][0]]][1]
+            if dac_idx == 1:
+                dac_client.set_channel_1(ch_idx)
+                dac_client.set_voltage_1(value[i][1])
+            elif dac_idx == 2:
+                dac_client.set_channel_2(ch_idx)
+                dac_client.set_voltage_2(value[i][1])
+            else:
+                pass
 
-    elif parameter in ohmic_gates:
-        dac_client.set_channel(channel_mapping["ohmics"][parameter])
-        dac_client.set_voltage(value)
 
-    elif parameter == "allgates":
+    elif parameter in all_gates or parameter in ohmic_gates:
+        dac_idx = dac_channel_map[all_gate_maps[parameter]][0]
+        ch_idx = dac_channel_map[all_gate_maps[parameter]][1]
+        dac_client.set_channel(ch_idx)
+        dac_client.set_voltage(value[1])
+
+    elif parameter == 'allgates':
         for gt in all_gates:
-            dac_client.set_channel(channel_mapping["gates"][gt])
+            dac_idx = dac_channel_map[all_gate_maps[gt]][0]
+            ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            dac_client.set_channel(ch_idx)
             dac_client.set_voltage(value)
 
-    elif parameter == "ohmics":
-        for gt in ohmic_gates:
-            dac_client.set_channel(channel_mapping["ohmics"][gt])
+    elif parameter == 'ohmics':
+        for gt in ohmics:
+            dac_idx = dac_channel_map[all_gate_maps[gt]][0]
+            ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            dac_client.set_channel(ch_idx)
             dac_client.set_voltage(value)
 
-    elif parameter == "topgates":
+    elif parameter == 'topgates':
         for gt in topgates:
-            dac_client.set_channel(channel_mapping["gates"][gt])
+            dac_idx = dac_channel_map[all_gate_maps[gt]][0]
+            ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            dac_client.set_channel(ch_idx)
             dac_client.set_voltage(value)
 
-    elif parameter == "sensors02":
+    elif parameter == 'ohmics':
+        for gt in ohmic_gates:
+            dac_idx = dac_channel_map[all_gate_maps[gt]][0]
+            ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            dac_client.set_channel(ch_idx)
+            dac_client.set_voltage(value)
+
+    elif parameter == 'sensors02':
         for gt in sensors02:
-            dac_client.set_channel(channel_mapping["gates"][gt])
+            dac_idx = dac_channel_map[all_gate_maps[gt]][0]
+            ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            dac_client.set_channel(ch_idx)
             dac_client.set_voltage(value)
 
-    elif parameter == "sensors1":
+    elif parameter == 'sensors1':
         for gt in sensors1:
-            dac_client.set_channel(channel_mapping["gates"][gt])
+            dac_idx = dac_channel_map[all_gate_maps[gt]][0]
+            ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            dac_client.set_channel(ch_idx)
             dac_client.set_voltage(value)
 
-    elif parameter == "sensors2":
+    elif parameter == 'sensors2':
         for gt in sensors2:
-            dac_client.set_channel(channel_mapping["gates"][gt])
+            dac_idx = dac_channel_map[all_gate_maps[gt]][0]
+            ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            dac_client.set_channel(ch_idx)
             dac_client.set_voltage(value)
 
-    elif parameter == "rightddgates":
-        for gt in rightddgates:
-            dac_client.set_channel(channel_mapping["gates"][gt])
-            dac_client.set_voltage(value)
-
-    elif parameter in virtual_gates:
-         virtual_gate_param = unpickle_qubit_parameters(virtual_gate_param_file_path)
-         idx = int(parameter[2])-1
-         physical_gates = virtual_to_physical(idx, virtual_gate_param)
-         dac_client.set_channel(channel_mapping["gates"]["P1"])
-         dac_client.set_voltage(physical_gates[0])
-         dac_client.set_channel(channel_mapping["gates"]["P2"])
-         dac_client.set_voltage(physical_gates[1])
-         dac_client.set_channel(channel_mapping["gates"]["P3"])
-         dac_client.set_voltage(physical_gates[2])
-         dac_client.set_channel(channel_mapping["gates"]["P4"])
-         dac_client.set_voltage(physical_gates[3])
-    else:
-        pass
+    #
+    # elif parameter in virtual_gates:
+    #      virtual_gate_param = unpickle_qubit_parameters(virtual_gate_param_file_path)
+    #      idx = int(parameter[2])-1
+    #      physical_gates = virtual_to_physical(idx, virtual_gate_param)
+    #      dac_client.set_channel(channel_mapping["gates"]["P1"])
+    #      dac_client.set_voltage(physical_gates[0])
+    #      dac_client.set_channel(channel_mapping["gates"]["P2"])
+    #      dac_client.set_voltage(physical_gates[1])
+    #      dac_client.set_channel(channel_mapping["gates"]["P3"])
+    #      dac_client.set_voltage(physical_gates[2])
+    #      dac_client.set_channel(channel_mapping["gates"]["P4"])
+    #      dac_client.set_voltage(physical_gates[3])
+    # else:
+    #     pass
