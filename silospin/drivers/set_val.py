@@ -29,10 +29,11 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
     ##dac_client ==> pre-connected client for dac
 
     ##Groupings for each gate
-    all_gates = {"B1", "B2", "B3", "B4", "B5", "P1", "P2",  "P3", "P4", "L1", "L2",  "M1", "M2",  "R1", "R2",  "BS1", "BS2", "TS", "MS"}
+    all_gates = {'B1', 'B2', 'B3', 'B4', 'B5', 'P1', 'P2', 'P3', 'P4', 'SM', 'ST', 'L1', 'L2', 'L3', 'L4', 'A01', 'O1', 'O2', 'AO2', 'M1', 'M2', 'M3', 'R1', 'R3', 'SL',  'AOM', 'AOR', 'OR'}
+    rightgates = {'B3', 'P3', 'P4', 'B5'}
     ohmic_gates = {"Source1", "Drain1", "Source2", "Drain2", "Source3"}
-    sensors02 = {"L2", "M2", "R2"}
-    topgates = {"B1", "P1", "P2", "B3", "P3", "B4", "P4", "B5"}
+    sensors02 = {'L2', 'M2', 'R2'}
+    topgates = {'B1', 'B2', 'B3', 'B4', 'B5', 'P1', 'P2', 'P3', 'P4'}
     rightddgates = {"B3", "P3", "P4", "B5"}
     sensors1 = {"L1", "M1", "R1"}
     sensors2 = {"L2", "M2", "R2"}
