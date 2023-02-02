@@ -27,7 +27,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     '''
     ## Find all Lock-In permutations
     itr = 1
-    lockin_drivers = {} 
+    lockin_drivers = {}
     for idx in range(len(lockins)):
         lockin_drivers[itr] = MfliDriverChargeStability(dev_id = lockins[itr], timeconstant=filter_tc, demod_freq=demod_freq, sig_path= f"/{lockins[itr]}/demods/0/sample")
         itr += 1
@@ -39,7 +39,6 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         dac_dict = unpickle_qubit_parameters(dac_settings[idx])
         dac_parameters[idx] = dac_dict
 
-    print(dac_parameters)
     v_in_array = np.linspace(start_value, end_value, npoints)
 
     V_out_average = {}
