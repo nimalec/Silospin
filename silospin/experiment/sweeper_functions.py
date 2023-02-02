@@ -73,7 +73,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         #dac_server.close()
                         if j%n_r == 0:
                             print(plot_1)
-                            #exec(plot_1)
+                            exec(plot_1)
 
             for idx in lockin_config:
                 V_out_average[idx].append(V_out_lockins[idx])
