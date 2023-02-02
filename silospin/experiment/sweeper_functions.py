@@ -62,17 +62,14 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
             for idx in lockin_config:
                 V_out_lockins[idx] = []
             for j in range(npoints):
-                # if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
-                #     pass
-                # else:
-                #dac_server = DacDriverSerialServer()
+                dac_server = DacDriverSerialServer()
                 #set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                 for idx in lockin_config:
                     print(V_out_lockins[idx])
                     V_out_lockins[idx].append(lockin_drivers[idx].get_sample_r())
-                #dac_server.close()
+                dac_server.close_1()
+                dac_server.close_2()
                 if j%n_r == 0:
-                    print(plot_1)
                     exec(plot_1)
                 else:
                     pass
@@ -293,7 +290,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
     #     pickle_charge_data(return_value, save_path)
     # else:
     #     pass
-    # return return_value
+    return return_value
 #
 # def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_value2, end_value2, npoints2, n_r = 10, n_fr = 1, plot = True, lockins = {1,2,3}, filter_tc=10e-3, demod_freq = 0, dac_mapping_file_path = 'C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_dac.pickle', save_path=None):
 #     '''
