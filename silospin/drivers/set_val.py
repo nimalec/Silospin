@@ -64,47 +64,47 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         else:
             pass
 
-    elif parameter == "channel_voltage":
-        ## Comes as pair: (ch_idx, voltage)
-        dac_idx = dac_channel_map[value[0]][0]
-        ch_idx =  dac_channel_map[value[0]][1]
-        ##Takes in a tuple of chanel with voltage
-        if dac_idx == 1:
-            dac_client.set_channel_1(ch_idx)
-            dac_client.set_voltage_1(value[1])
-        elif dac_idx == 2:
-            dac_client.set_channel_2(ch_idx)
-            dac_client.set_voltage_2(value[1])
-        else:
-            pass
+    # elif parameter == "channel_voltage":
+    #     ## Comes as pair: (ch_idx, voltage)
+    #     dac_idx = dac_channel_map[value[0]][0]
+    #     ch_idx =  dac_channel_map[value[0]][1]
+    #     ##Takes in a tuple of chanel with voltage
+    #     if dac_idx == 1:
+    #         dac_client.set_channel_1(ch_idx)
+    #         dac_client.set_voltage_1(value[1])
+    #     elif dac_idx == 2:
+    #         dac_client.set_channel_2(ch_idx)
+    #         dac_client.set_voltage_2(value[1])
+    #     else:
+    #         pass
 
-    elif parameter == "channel_voltage_set":
-        ## set of channels and  voltages
-        for i in range(len(value)):
-            dac_idx = dac_channel_map[value[i][0]][0]
-            ch_idx =  dac_channel_map[value[i][0]][1]
-            if dac_idx == 1:
-                dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value[i][1])
-            elif dac_idx == 2:
-                dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value[i][1])
-            else:
-                pass
+    # elif parameter == "channel_voltage_set":
+    #     ## set of channels and  voltages
+    #     for i in range(len(value)):
+    #         dac_idx = dac_channel_map[value[i][0]][0]
+    #         ch_idx =  dac_channel_map[value[i][0]][1]
+    #         if dac_idx == 1:
+    #             dac_client.set_channel_1(ch_idx)
+    #             dac_client.set_voltage_1(value[i][1])
+    #         elif dac_idx == 2:
+    #             dac_client.set_channel_2(ch_idx)
+    #             dac_client.set_voltage_2(value[i][1])
+    #         else:
+    #             pass
 
-    elif parameter == "gates_voltages_set":
-        ##Set of gates and voltages
-        for i in range(len(value)):
-            dac_idx = dac_channel_map[all_gate_maps[value[i][0]]][0]
-            ch_idx =  dac_channel_map[all_gate_maps[value[i][0]]][1]
-            if dac_idx == 1:
-                dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value[i][1])
-            elif dac_idx == 2:
-                dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value[i][1])
-            else:
-                pass
+    # elif parameter == "gates_voltages_set":
+    #     ##Set of gates and voltages
+    #     for i in range(len(value)):
+    #         dac_idx = dac_channel_map[all_gate_maps[value[i][0]]][0]
+    #         ch_idx =  dac_channel_map[all_gate_maps[value[i][0]]][1]
+    #         if dac_idx == 1:
+    #             dac_client.set_channel_1(ch_idx)
+    #             dac_client.set_voltage_1(value[i][1])
+    #         elif dac_idx == 2:
+    #             dac_client.set_channel_2(ch_idx)
+    #             dac_client.set_voltage_2(value[i][1])
+    #         else:
+    #             pass
 
 
     elif parameter in all_gates or parameter in ohmic_gates:
