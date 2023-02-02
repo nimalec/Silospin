@@ -26,7 +26,6 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
        channel_mapper (dict): Dictionary representing channel mapping.
     '''
     ## Find all Lock-In permutations
-    print(lockin_config)
     lockin_cofigs = {}
     lockin_drivers = {}
     itr = 1
@@ -50,10 +49,37 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         ##Modify the first section for plot to appear
         fig_str = ''
         plot_0 = ''
+        plot_1 = ''
         for idx in lockin_config:
             fig_str += f'fig{idx} = plt.figure()\nax{idx}=fig{idx}.add_subplot(111)\n'
             plot_0 += f'line{idx},=ax{idx}.plot(v_in_array, np.zeros(len(v_in_array)))\nax{idx}.set_xlabel("Applied voltage [V]")\nax{idx}.set_ylabel("Measured output on lock-in {idx} [V]")\nfig{idx}.canvas.draw()\nax{idx}background = fig{idx}.canvas.copy_from_bbox(ax{idx}.bbox)\nplt.show(block=False)\n'
+            plot_1 += f'line{idx}.set_data(v_in_array[0:len(V_out_lockins[{idx}])], V_out_lockins[{idx}])\nfig{idx}.canvas.draw()\nfig{idx}.canvas.flush_events()\nax{idx}.set_ylim(np.amin(V_out_lockins[{idx}]), np.amax(V_out_lockins[{idx}]))'
         exec(fig_str+plot_0)
+
+        for i in range(n_fr):
+            V_out_lockins = {}
+            for idx in lockin_config:
+                V_out_lockins[idx] = []
+                for j in range(npoints):
+                    if parameter == "channel_voltage_set" or parameter == "gates_voltages_set":
+                        pass
+                    else:
+                        dac_server = DacDriverSerialServer()
+                        #set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+                        for idx in lockin_config:
+                            V_out_lockins[idx].append(lockin_drivers[idx].get_sample_r())
+                        dac_server.close()
+                        if j%n_r == 0:
+                            exec(plot_1)
+
+            for idx in lockin_config:
+                V_out_average[idx].append(V_out_lockins[idx])
+
+        return_value = {}
+        return_value["v_applied"] = v_in_array.tolist()
+        for idx in lockin_config:
+            return_value[f'v_out{idx}'] =  np.mean(np.array(V_out_average[idx]),axis=0)
+
 #    if lockins == lockin_configs[1]:
     # if lockins == lockin_configs[1]:
     #     V_out_all_1 = []
