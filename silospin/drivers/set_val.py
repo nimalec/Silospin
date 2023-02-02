@@ -110,7 +110,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         dac_idx = dac_channel_map[all_gate_maps[parameter]][0]
         ch_idx = dac_channel_map[all_gate_maps[parameter]][1]
 
-        if dac_idx == 1:  
+        if dac_idx == 1:
             dac_client.set_channel_1(ch_idx)
             dac_client.set_voltage_1(value)
         elif dac_idx == 2:
