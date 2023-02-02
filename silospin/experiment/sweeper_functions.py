@@ -34,6 +34,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         lockin_cofigs[itr] = configs
         lockin_drivers[itr] = MfliDriverChargeStability(dev_id = lockins[itr], timeconstant=filter_tc, demod_freq=demod_freq, sig_path= f"/{lockins[itr]}/demods/0/sample")
         itr += 1
+
     ##Make connection to DAC server
     dac_server = DacDriverSerialServer()
     # dac_dict = unpickle_qubit_parameters(dac_mapping_file_path)
@@ -67,6 +68,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         dac_server = DacDriverSerialServer()
                         #set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         for idx in lockin_config:
+                            print(lockin_drivers[idx])
                             V_out_lockins[idx].append(lockin_drivers[idx].get_sample_r())
                         dac_server.close()
                         if j%n_r == 0:
