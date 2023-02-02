@@ -68,7 +68,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                         dac_server = DacDriverSerialServer()
                         #set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                         for idx in lockin_config:
-                            print(lockin_drivers[idx])
+                            print(idx, lockin_drivers[idx])
                             V_out_lockins[idx].append(lockin_drivers[idx].get_sample_r())
                         dac_server.close()
                         if j%n_r == 0:
