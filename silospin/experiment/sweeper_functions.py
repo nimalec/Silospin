@@ -65,7 +65,6 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
                 dac_server = DacDriverSerialServer()
                 #set_val(parameter, v_in_array[j], channel_mapping, dac_server)
                 for idx in lockin_config:
-                    print(V_out_lockins[idx])
                     V_out_lockins[idx].append(lockin_drivers[idx].get_sample_r())
                 dac_server.close_1()
                 dac_server.close_2()
@@ -81,7 +80,26 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         return_value["v_applied"] = v_in_array.tolist()
         for idx in lockin_config:
             return_value[f'v_out{idx}'] =  np.mean(np.array(V_out_average[idx]),axis=0)
+    else:
+        for i in range(n_fr):
+            V_out_lockins = {}
+            for idx in lockin_config:
+                V_out_lockins[idx] = []
+            for j in range(npoints):
+                dac_server = DacDriverSerialServer()
+                #set_val(parameter, v_in_array[j], channel_mapping, dac_server)
+                for idx in lockin_config:
+                    V_out_lockins[idx].append(lockin_drivers[idx].get_sample_r())
+                dac_server.close_1()
+                dac_server.close_2()
 
+            for idx in lockin_config:
+                V_out_average[idx].append(V_out_lockins[idx])
+
+        return_value = {}
+        return_value["v_applied"] = v_in_array.tolist()
+        for idx in lockin_config:
+            return_value[f'v_out{idx}'] =  np.mean(np.array(V_out_average[idx]),axis=0)
 #    if lockins == lockin_configs[1]:
     # if lockins == lockin_configs[1]:
     #     V_out_all_1 = []
