@@ -2136,8 +2136,8 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     #3- (pi)_p
     #4- (pi/2)_p
     waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]},  {"index": 2, "awgChannel0": ["sigout0","sigout1"]}, {"index": 3, "awgChannel0": ["sigout0","sigout1"]}, {"index": 4, "awgChannel0": ["sigout0","sigout1"]}]
-    phases_0_I = [{"value": 0}, {"value": -90}, {"value": -180}, {"value": 90}]
-    phases_0_Q = [{"value": -90}, {"value": -180}, {"value": -270}, {"value": 0}]
+    phases_0_I = [{"value": 0, "increment": False}, {"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": 90, "increment": False}]
+    phases_0_Q = [{"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": -270, "increment": False}, {"value": 0, "increment": False}]
     phases_incr = [{"value": 0, "increment": True}, {"value": -90, "increment": True}, {"value": -180, "increment": True}, {"value": -270, "increment": True}, {"value": 90, "increment": True},  {"value": 180, "increment": True},{"value": 270, "increment": True}]
     ct_idx = 0
     ## Initial (pi)_pi gates
@@ -2257,7 +2257,9 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "phase0": - {"value": -phase, "increment": True}, "phase1":  {"value": -phase, "increment": True}, "amplitude0": amplitude, "amplitude1": amplitude})
                 ct_idx += 1
             wave_idx += 1
-    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
+
+    #command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
+    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_1/schema', 'header': {'version': '1.1.0'}, 'table': ct}
     return command_table
 
 def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx):
@@ -2450,7 +2452,8 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
             else:
                 continue
 
-    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
+    #command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
+    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_1/schema', 'header': {'version': '1.1.0'}, 'table': ct}
     return command_table
 
 
