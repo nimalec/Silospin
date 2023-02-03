@@ -155,29 +155,23 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
             plot_2 += f'img{idx}.set_data(V_out_lockins[{idx}].reshape([npoints1, npoints2]).T)\nimg{idx}.set_clim(np.amin(V_out_lockins[{idx}]), np.amax(V_out_lockins[{idx}]))\n\n'
             plot_3 += f'fig{idx}.canvas.draw()\nplt.show(block=False)\nfig{idx}.canvas.flush_events()\n\n'
 
-    print(fig_str)
-    print(plot_0)
-    print(plot_1)
-    print(plot_2)
-    print(plot_3)
 
+        exec(fig_str)
 
-        # exec(fig_str)
-        #
-        # for i in range(n_fr):
-        #     V_out_lockins = {}
-        #     for idx in lockin_config:
-        #         V_out_lockins[idx] = np.ones((npoints1,npoints2)).flatten()
-        #
-        #         for j in range(len(V_x_f)):
-        #             if j == 0:
-        #                 set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
-        #                 set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
-        #
-        #                 for idx in lockin_config:
-        #                     v_meas = lockin_drivers[idx].get_sample_r()
-        #                     V_out_lockins[idx] = v_meas*V_out_lockins[idx]
-        #
+        for i in range(n_fr):
+            V_out_lockins = {}
+            for idx in lockin_config:
+                V_out_lockins[idx] = np.ones((npoints1,npoints2)).flatten()
+
+                for j in range(len(V_x_f)):
+                    if j == 0:
+                        set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
+                        set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+
+                        for idx in lockin_config:
+                            v_meas = lockin_drivers[idx].get_sample_r()
+                            V_out_lockins[idx] = v_meas*V_out_lockins[idx]
+
         #                 exec(plot_0)
         #                 if i > 0:
         #                     exec(plot_1)
