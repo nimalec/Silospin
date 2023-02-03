@@ -40,10 +40,14 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
     virtual_gates = {"VP1", "VP2", "VP3", "VP4"}
 
     all_gate_maps = {}
+    voltage_divide = {}
     for dac in channel_mapping:
         gate_map = channel_mapping[dac]['channel_mapping']
+        volage_dividers = channel_mapping[dac]['dividers']
         for gate in gate_map:
             all_gate_maps[gate] = gate_map[gate]
+        for ch in volage_dividers:
+            voltage_divide[ch] = volage_dividers[idx]
 
     dac_channel_map = {1: (1,1), 2: (1,2), 3: (1,3), 4: (1,4), 5: (1,5), 6: (1,6),
     7: (1,7), 8: (1,8), 9: (1,9), 10: (1,10), 11: (1,11), 12: (1,12), 13: (1,13), 14: (1,14),
@@ -113,10 +117,10 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
 
         if dac_idx == 1:
             dac_client.set_channel_1(ch_idx)
-            dac_client.set_voltage_1(value)
+            dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[parameter]])
         elif dac_idx == 2:
             dac_client.set_channel_2(ch_idx)
-            dac_client.set_voltage_2(value)
+            dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[parameter]])
         else:
             pass
 
@@ -127,10 +131,10 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
 
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value)
+                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value)
+                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
             else:
                 pass
 
@@ -140,10 +144,10 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value)
+                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value)
+                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
             else:
                 pass
 
@@ -154,10 +158,10 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value)
+                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value)
+                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
             else:
                 pass
 
@@ -167,10 +171,10 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value)
+                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value)
+                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
             else:
                 pass
     elif parameter == 'sensors02':
@@ -179,10 +183,10 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value)
+                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value)
+                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
             else:
                 pass
 
@@ -192,10 +196,10 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value)
+                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value)
+                dac_client.set_voltage_2(value)/voltage_divide[all_gate_maps[gt]]
             else:
                 pass
 
@@ -205,10 +209,10 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value)
+                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value)
+                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
             else:
                 pass
     #
