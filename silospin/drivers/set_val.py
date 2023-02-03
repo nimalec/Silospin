@@ -49,6 +49,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         for ch in volage_dividers:
             voltage_divide[ch] = volage_dividers[ch]
 
+
     dac_channel_map = {1: (1,1), 2: (1,2), 3: (1,3), 4: (1,4), 5: (1,5), 6: (1,6),
     7: (1,7), 8: (1,8), 9: (1,9), 10: (1,10), 11: (1,11), 12: (1,12), 13: (1,13), 14: (1,14),
     15: (1,15), 16: (1,16), 17: (1,17), 18: (1,18), 19: (1,19), 20: (1,20), 21: (1,21),
@@ -114,13 +115,16 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
     elif parameter in all_gates or parameter in ohmic_gates:
         dac_idx = dac_channel_map[all_gate_maps[parameter]][0]
         ch_idx = dac_channel_map[all_gate_maps[parameter]][1]
+        print(ch_idx)
 
         if dac_idx == 1:
             dac_client.set_channel_1(ch_idx)
-            dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[parameter]])
+            #dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[parameter]])
+            dac_client.set_voltage_1(value)
         elif dac_idx == 2:
             dac_client.set_channel_2(ch_idx)
-            dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[parameter]])
+            #dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[parameter]])
+            dac_client.set_voltage_2(value)
         else:
             pass
 
