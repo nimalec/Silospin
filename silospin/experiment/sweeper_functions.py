@@ -150,7 +150,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
         plot_3 = ''
         for idx in lockin_config:
             fig_str += f'fig{idx} = plt.figure()\nax{idx}=fig{idx}.add_subplot(111)\n'
-            plot_0 += f'img{idx} = ax{idx}.imshow(V_out_lockins[{idx}].reshape([npoints1, npoints2]).T, extent=[start_value1,end_value1,end_value2,start_value2])\nax{idx}.set_xlabel(parameter1+" gate voltage [V]")\nax{idx}.set_ylabel(parameter2+" gate voltage [V]")\nfig{idx}.canvas.draw()\ncbar{idx} = fig{idx}.colorbar(img{idx}, ax=ax{idx}, extend="both")\ncbar{idx}.set_label("Demodulated voltage from lock-in {idx} [V]", rotation=270, labelpad=30)'
+            plot_0 += f'img{idx} = ax{idx}.imshow(V_out_lockins[{idx}].reshape([npoints1, npoints2]).T, extent=[start_value1,end_value1,end_value2,start_value2])\nax{idx}.set_xlabel(parameter1+" gate voltage [V]")\nax{idx}.set_ylabel(parameter2+" gate voltage [V]")\nfig{idx}.canvas.draw()\ncbar{idx} = fig{idx}.colorbar(img{idx}, ax=ax{idx}, extend="both")\ncbar{idx}.set_label("Demodulated voltage from lock-in {idx} [V]", rotation=270, labelpad=30)\n'
             plot_1 = f'cbar{idx}.remove()\ncbar{idx} = fig{idx}.colorbar(img{idx}, ax=ax{idx}, extend="both")\n'
             plot_2 = f'img{idx}.set_data(V_out_lockins[{idx}].reshape([npoints1, npoints2]).T\nimg{idx}.set_clim(np.amin(V_out_lockins[{idx}]), np.amax(V_out_lockins[{idx}]))\n'
             plot_3 = f'fig{idx}.canvas.draw()\nplt.show(block=False){idx}\nfig{idx}.canvas.flush_events()\n'
