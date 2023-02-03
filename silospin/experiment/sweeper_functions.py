@@ -190,11 +190,6 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                         pass
                     for idx in lockin_config:
                         V_out_average[idx].append(V_out_lockins[idx])
-
-        return_value = {}
-        return_value["v_applied"] = v_in_array.tolist()
-        for idx in lockin_config:
-            return_value[f'v_out{idx}'] =  np.mean(np.array(V_out_average[idx]),axis=0)
     else:
         for i in range(n_fr):
             set_val(parameter1, V_x_f[0], dac_parameters, dac_server)
