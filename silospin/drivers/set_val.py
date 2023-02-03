@@ -118,12 +118,15 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
 
         if dac_idx == 1:
             dac_client.set_channel_1(ch_idx)
-            dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[parameter]])
+            V_ap = value/voltage_divide[all_gate_maps[parameter]]
+            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+            dac_client.set_voltage_1(V_ap)
             #dac_client.set_voltage_1(value)
         elif dac_idx == 2:
             dac_client.set_channel_2(ch_idx)
-            dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[parameter]])
-            # dac_client.set_voltage_2(value)
+            V_ap = value/voltage_divide[all_gate_maps[parameter]]
+            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+            dac_client.set_voltage_2(V_ap)
         else:
             pass
 
@@ -131,13 +134,15 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         for gt in all_gates:
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            V_ap = value/voltage_divide[all_gate_maps[parameter]]
+            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
 
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_1(V_ap)
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_2(V_ap)
             else:
                 pass
 
@@ -145,12 +150,15 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         for gt in ohmics:
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            V_ap = value/voltage_divide[all_gate_maps[gt]]
+            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_1(V_ap)
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_2(V_ap)
             else:
                 pass
 
@@ -159,12 +167,15 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         for gt in topgates:
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            V_ap = value/voltage_divide[all_gate_maps[gt]]
+            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_1(V_ap)
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_2(V_ap)
             else:
                 pass
 
@@ -172,24 +183,30 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         for gt in ohmic_gates:
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            V_ap = value/voltage_divide[all_gate_maps[gt]]
+            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_1(V_ap)
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_2(V_ap)
             else:
                 pass
     elif parameter == 'sensors02':
         for gt in sensors02:
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            V_ap = value/voltage_divide[all_gate_maps[gt]]
+            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_1(V_ap)
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_2(V_ap)
             else:
                 pass
 
@@ -197,12 +214,15 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         for gt in sensors1:
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            V_ap = value/voltage_divide[all_gate_maps[gt]]
+            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_1(V_ap)
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value)/voltage_divide[all_gate_maps[gt]]
+                dac_client.set_voltage_2(V_ap)
             else:
                 pass
 
@@ -210,12 +230,15 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         for gt in sensors2:
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
+            V_ap = value/voltage_divide[all_gate_maps[gt]]
+            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
-                dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_1(V_ap)
             elif dac_idx == 2:
                 dac_client.set_channel_2(ch_idx)
-                dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[gt]])
+                dac_client.set_voltage_2(V_ap)
             else:
                 pass
     #
