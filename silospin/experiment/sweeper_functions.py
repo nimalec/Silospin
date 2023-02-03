@@ -117,7 +117,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
     itr = 1
     lockin_drivers = {}
     for idx in range(len(lockins)):
-        lockin_drivers[itr] = MfliDriverChargeStability(dev_id = lockins[itr], timeconstant=filter_tc, demod_freq=demod_freq, sig_path= f"/{lockins[itr]}/demods/0/sample")
+        lockin_drivers[itr] = MfliDriverChargeStability(dev_id = lockins[itr], timeconstant=filter_tc, demod_freq=demod_freq, sig_path= f'/{lockins[itr]}/demods/0/sample')
         itr += 1
 
     ##Make connection to DAC server
