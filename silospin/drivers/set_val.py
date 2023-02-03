@@ -119,12 +119,12 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
 
         if dac_idx == 1:
             dac_client.set_channel_1(ch_idx)
-            #dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[parameter]])
-            dac_client.set_voltage_1(value)
+            dac_client.set_voltage_1(value/voltage_divide[all_gate_maps[parameter]])
+            #dac_client.set_voltage_1(value)
         elif dac_idx == 2:
             dac_client.set_channel_2(ch_idx)
-            #dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[parameter]])
-            dac_client.set_voltage_2(value)
+            dac_client.set_voltage_2(value/voltage_divide[all_gate_maps[parameter]])
+            # dac_client.set_voltage_2(value)
         else:
             pass
 
