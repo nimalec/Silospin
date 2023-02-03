@@ -116,8 +116,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         dac_idx = dac_channel_map[all_gate_maps[parameter]][0]
         ch_idx = dac_channel_map[all_gate_maps[parameter]][1]
         V_ap = value/voltage_divide[all_gate_maps[parameter]]
-        print(value, V_ap)
-        assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+        assert value < 1 , 'Applied voltage must be less than 1 V!!'
 
         if dac_idx == 1:
             dac_client.set_channel_1(ch_idx)
@@ -134,7 +133,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             V_ap = value/voltage_divide[all_gate_maps[gt]]
-            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+            assert value < 1 , 'Applied voltage must be less than 1 V!!'
 
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
@@ -150,7 +149,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             V_ap = value/voltage_divide[all_gate_maps[gt]]
-            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+            assert value < 1 , 'Applied voltage must be less than 1 V!!'
 
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
@@ -167,7 +166,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             V_ap = value/voltage_divide[all_gate_maps[gt]]
-            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+            assert value < 1 , 'Applied voltage must be less than 1 V!!'
 
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
@@ -183,7 +182,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             V_ap = value/voltage_divide[all_gate_maps[gt]]
-            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+            assert value < 1 , 'Applied voltage must be less than 1 V!!'
 
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
@@ -198,7 +197,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             V_ap = value/voltage_divide[all_gate_maps[gt]]
-            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+            assert value < 1 , 'Applied voltage must be less than 1 V!!'
 
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
@@ -214,7 +213,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             V_ap = value/voltage_divide[all_gate_maps[gt]]
-            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+            assert value < 1 , 'Applied voltage must be less than 1 V!!'
 
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
@@ -230,7 +229,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             dac_idx = dac_channel_map[all_gate_maps[gt]][0]
             ch_idx = dac_channel_map[all_gate_maps[gt]][1]
             V_ap = value/voltage_divide[all_gate_maps[gt]]
-            assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
+            assert value < 1 , 'Applied voltage must be less than 1 V!!'
 
             if dac_idx == 1:
                 dac_client.set_channel_1(ch_idx)
