@@ -2539,9 +2539,9 @@ def make_gateset_sequencer_hard_trigger(n_seq, n_av, trig_channel=True):
         command_code = command_code + line
 
     if trig_channel == True:
-        trig_program = "repeat("+str(n_av)+"){"+"waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\n"+"\nwaitDIOTrigger();\nresetOscPhase();"
+        trig_program = "repeat("+str(n_av)+"){"+"waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\n"+"\nwaitDIOTrigger();\nresetOscPhase();\nsetSinePhase(0,0);\nsetSinePhase(1,0);\n"
     else:
-        trig_program = "repeat("+str(n_av)+"){"+"\nwaitDIOTrigger();\nresetOscPhase();\n"
+        trig_program = "repeat("+str(n_av)+"){"+"\nwaitDIOTrigger();\nresetOscPhase();\nsetSinePhase(0,0)\n;setSinePhase(1,0);\n"
     program = trig_program + command_code +"}\n"
     return program
 
@@ -2565,9 +2565,9 @@ def make_gateset_sequencer_hard_trigger_v2(n_seq, n_av, trig_channel=True):
         command_code = command_code + line
 
     if trig_channel == True:
-        trig_program = "repeat("+str(n_av)+"){"+"waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\n"+"\nwaitDIOTrigger();\nresetOscPhase();"
+        trig_program = "repeat("+str(n_av)+"){"+"waitDigTrigger(1);\nsetDIO(1);wait(2);\nsetDIO(0);\n"+"\nwaitDIOTrigger();\nresetOscPhase();\nsetSinePhase(0,0);\nsetSinePhase(1,0);\n"
     else:
-        trig_program = "repeat("+str(n_av)+"){"+"\nwaitDIOTrigger();\nresetOscPhase();\n"
+        trig_program = "repeat("+str(n_av)+"){"+"\nwaitDIOTrigger();\nresetOscPhase();\nsetSinePhase(0,0);\nsetSinePhase(1,0);\n"
     program = trig_program + command_code +"}\n"
     return program
 
