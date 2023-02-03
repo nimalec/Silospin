@@ -155,9 +155,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
             plot_2 += f'img{idx}.set_data(V_out_lockins[{idx}].reshape([npoints1, npoints2]).T)\nimg{idx}.set_clim(np.amin(V_out_lockins[{idx}]), np.amax(V_out_lockins[{idx}]))\n\n'
             plot_3 += f'fig{idx}.canvas.draw()\nplt.show(block=False)\nfig{idx}.canvas.flush_events()\n\n'
 
-
         exec(fig_str)
-
         for i in range(n_fr):
             V_out_lockins = {}
             for idx in lockin_config:
@@ -172,7 +170,7 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                         v_meas = lockin_drivers[idx].get_sample_r()
                         V_out_lockins[idx] = v_meas*V_out_lockins[idx]
 
-    #                 exec(plot_0)
+                    exec(plot_0)
         #                 if i > 0:
         #                     exec(plot_1)
         #                 else:
