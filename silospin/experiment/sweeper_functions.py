@@ -176,8 +176,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                     else:
                         pass
                 else:
-                    set_val(parameter1, V_x_f[j], channel_mapping, dac_server)
-                    set_val(parameter2, V_y_f[j], channel_mapping, dac_server)
+                    set_val(parameter1, V_x_f[j], dac_parameters, dac_server)
+                    set_val(parameter2, V_y_f[j], dac_parameters, dac_server)
                     for idx in lockin_config:
                         V_out_lockins[idx][j] = lockin_drivers[idx].get_sample_r()
         #
