@@ -163,16 +163,16 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
             for idx in lockin_config:
                 V_out_lockins[idx] = np.ones((npoints1,npoints2)).flatten()
 
-                for j in range(len(V_x_f)):
-                    if j == 0:
-                        set_val(parameter1, V_x_f[j], dac_parameters, dac_server)
-                        set_val(parameter2, V_y_f[j], dac_parameters, dac_server)
+            for j in range(len(V_x_f)):
+                if j == 0:
+                    set_val(parameter1, V_x_f[j], dac_parameters, dac_server)
+                    set_val(parameter2, V_y_f[j], dac_parameters, dac_server)
 
-                        for idx in lockin_config:
-                            v_meas = lockin_drivers[idx].get_sample_r()
-                            V_out_lockins[idx] = v_meas*V_out_lockins[idx]
+                    for idx in lockin_config:
+                        v_meas = lockin_drivers[idx].get_sample_r()
+                        V_out_lockins[idx] = v_meas*V_out_lockins[idx]
 
-        #                 exec(plot_0)
+    #                 exec(plot_0)
         #                 if i > 0:
         #                     exec(plot_1)
         #                 else:
