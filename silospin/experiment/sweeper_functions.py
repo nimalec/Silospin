@@ -140,9 +140,6 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
     V_x, V_y = np.meshgrid(v_x, v_y)
     V_x_f = V_x.flatten()
     V_y_f = V_y.flatten()
- 
-    set_val(parameter1, V_x_f[0], dac_parameters, dac_server)
-    set_val(parameter2, V_y_f[0], dac_parameters, dac_server)
 
     if plot == True:
         fig_str = ''
@@ -159,6 +156,8 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
 
         exec(fig_str)
         for i in range(n_fr):
+            set_val(parameter1, V_x_f[0], dac_parameters, dac_server)
+            set_val(parameter2, V_y_f[0], dac_parameters, dac_server)
             V_out_lockins = {}
             for idx in lockin_config:
                 V_out_lockins[idx] = np.ones((npoints1,npoints2)).flatten()
