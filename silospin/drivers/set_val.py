@@ -47,7 +47,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         for gate in gate_map:
             all_gate_maps[gate] = gate_map[gate]
         for ch in volage_dividers:
-            voltage_divide[ch] = volage_dividers[idx]
+            voltage_divide[ch] = volage_dividers[ch]
 
     dac_channel_map = {1: (1,1), 2: (1,2), 3: (1,3), 4: (1,4), 5: (1,5), 6: (1,6),
     7: (1,7), 8: (1,8), 9: (1,9), 10: (1,10), 11: (1,11), 12: (1,12), 13: (1,13), 14: (1,14),
