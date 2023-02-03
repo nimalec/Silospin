@@ -55,6 +55,7 @@ def do1DSweep(parameter, start_value, end_value, npoints, n_r = 10, n_fr = 1, pl
         exec(fig_str+plot_0)
 
         for i in range(n_fr):
+            set_val(parameter, v_in_array[0], dac_parameters, dac_server)
             V_out_lockins = {}
             for idx in lockin_config:
                 V_out_lockins[idx] = []
