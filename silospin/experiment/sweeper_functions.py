@@ -180,12 +180,12 @@ def do2DSweep(parameter1, start_value1, end_value1, npoints1, parameter2, start_
                     set_val(parameter2, V_y_f[j], dac_parameters, dac_server)
                     for idx in lockin_config:
                         V_out_lockins[idx][j] = lockin_drivers[idx].get_sample_r()
-        #
-        #                 if j%n_r == 0:
-        #                     exec(plot_1)
-        #                     exec(plot_2)
-        #                 else:
-        #                     pass
+
+                    if j%n_r == 0:
+                        exec(plot_1)
+                        exec(plot_2)
+                    else:
+                        pass
         #             for idx in lockin_config:
         #                 V_out_average[idx].append(V_out_lockins[idx])
         #
