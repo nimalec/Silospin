@@ -116,6 +116,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
         dac_idx = dac_channel_map[all_gate_maps[parameter]][0]
         ch_idx = dac_channel_map[all_gate_maps[parameter]][1]
         V_ap = value/voltage_divide[all_gate_maps[parameter]]
+        print(V_ap)
         assert V_ap < 1 , 'Applied voltage must be less than 1 V!!'
 
         if dac_idx == 1:
@@ -123,7 +124,7 @@ def set_val(parameter, value, channel_mapping, dac_client, virtual_gate_param_fi
             dac_client.set_voltage_1(V_ap)
             #dac_client.set_voltage_1(value)
         elif dac_idx == 2:
-            dac_client.set_channel_2(ch_idx) 
+            dac_client.set_channel_2(ch_idx)
             dac_client.set_voltage_2(V_ap)
         else:
             pass
