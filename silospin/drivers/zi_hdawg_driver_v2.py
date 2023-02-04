@@ -127,9 +127,7 @@ class HdawgDriver:
             if self._channel_mapping[dev_name][idx]['rf'] == 1:
                 self.set_modulation_mode(ch_1, 1)
                 self.set_modulation_mode(ch_2, 2)
-                self._daq.setInt(f"/{dev}/awgs/{idx}/outputs/0/enables/0", 1)
-                self._daq.setInt(f"/{dev}/awgs/{idx}/outputs/1/enables/1", 1)
-
+ 
             elif self._channel_mapping[dev_name][idx]['rf'] == 0:
                 self.set_modulation_mode(ch_1, 0)
                 self.set_modulation_mode(ch_2, 0)
