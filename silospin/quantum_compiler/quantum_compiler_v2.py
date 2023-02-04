@@ -449,9 +449,9 @@ class GateSetTomographyQuantumCompiler:
         """
         for awg_idx in self._channel_mapping:
             for core_idx in self._channel_mapping[awg_idx]:
-                self._awgs[awg_idx]._awgs["awg"+str(core_idx)].enable(True)
                 self._awgs[awg_idx]._awgs["awg"+str(core_idx)].single(True)
-                #self._awgs[awg_idx]._awgs["awg"+str(core_idx)].enable(True)
+                self._awgs[awg_idx]._awgs["awg"+str(core_idx)].enable(True)
+
 
 class GateSetTomographyQuantumCompiler_v2:
     """
