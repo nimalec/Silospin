@@ -103,11 +103,11 @@ class GateSetTomographyQuantumCompiler:
         for gt_idx in gate_param_all_dc:
             self._gate_parameters[awg_core_split[gt_idx][0]]["p"][gt_idx] = gate_param_all_dc[gt_idx]
 
-        # if config_awg:
-        #     for awg in self._awgs:
-        #         config_hdawg(self._awgs[awg], self._gate_parameters[awg], channel_mapping[awg])
-        # else:
-        #     pass
+        if config_awg:
+            for awg in self._awgs:
+                config_hdawg(self._awgs[awg], self._gate_parameters[awg], channel_mapping[awg])
+        else:
+            pass
 
         tau_pi_2_set = []
         for idx in gate_parameters["rf"]:
@@ -449,8 +449,9 @@ class GateSetTomographyQuantumCompiler:
         """
         for awg_idx in self._channel_mapping:
             for core_idx in self._channel_mapping[awg_idx]:
-                self._awgs[awg_idx]._awgs["awg"+str(core_idx)].single(True)
                 self._awgs[awg_idx]._awgs["awg"+str(core_idx)].enable(True)
+                self._awgs[awg_idx]._awgs["awg"+str(core_idx)].single(True)
+                #self._awgs[awg_idx]._awgs["awg"+str(core_idx)].enable(True)
 
 class GateSetTomographyQuantumCompiler_v2:
     """
