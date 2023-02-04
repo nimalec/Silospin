@@ -2136,10 +2136,10 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     #3- (pi)_p
     #4- (pi/2)_p
     waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]},  {"index": 2, "awgChannel0": ["sigout0","sigout1"]}, {"index": 3, "awgChannel0": ["sigout0","sigout1"]}, {"index": 4, "awgChannel0": ["sigout0","sigout1"]}]
-    #phases_0_I = [{"value": 0, "increment": False}, {"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": 90, "increment": False}]
-    #phases_0_Q = [{"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": -270, "increment": False}, {"value": 0, "increment": False}]
-    phases_0_I = [{"value": 0, "increment": True}, {"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": 90, "increment": False}]
-    phases_0_Q = [{"value": -90, "increment": True}, {"value": -180, "increment": False}, {"value": -270, "increment": False}, {"value": 0, "increment": False}]
+    phases_0_I = [{"value": 0, "increment": False}, {"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": 90, "increment": False}]
+    phases_0_Q = [{"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": -270, "increment": False}, {"value": 0, "increment": False}]
+    # phases_0_I = [{"value": 0, "increment": True}, {"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": 90, "increment": False}]
+    # phases_0_Q = [{"value": -90, "increment": True}, {"value": -180, "increment": False}, {"value": -270, "increment": False}, {"value": 0, "increment": False}]
 
     phases_incr = [{"value": 0, "increment": True}, {"value": -90, "increment": True}, {"value": -180, "increment": True}, {"value": -270, "increment": True}, {"value": 90, "increment": True},  {"value": 180, "increment": True},{"value": 270, "increment": True}]
     ct_idx = 0
