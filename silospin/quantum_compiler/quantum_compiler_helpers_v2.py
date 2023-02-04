@@ -2104,7 +2104,9 @@ def make_plunger_command_table(n_p, n_rf):
     ct_idx += 1
     ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
     ct_idx += 1
-    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
+
+    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0'}, 'table': ct}
+#    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
 
@@ -2261,8 +2263,9 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 ct_idx += 1
             wave_idx += 1
 
+    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0.0'}, 'table': ct}
     #command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0.0'}, 'table': ct}
-    command_table  = {'header': {'version': '1.0.0'}, 'table': ct}
+    #command_table  = {'header': {'version': '1.0.0'}, 'table': ct}
     #command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_1/schema', 'header': {'version': '1.1.0'}, 'table': ct}
     return command_table
 
@@ -2339,7 +2342,8 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
             ct_idx += 1
             wave_idx += 1
 
-    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
+    command_table  = {'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0'}, 'table': ct}
+    #command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
 
