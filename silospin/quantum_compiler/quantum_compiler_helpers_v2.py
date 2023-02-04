@@ -2105,7 +2105,7 @@ def make_plunger_command_table(n_p, n_rf):
     ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
     ct_idx += 1
 
-    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0'}, 'table': ct}
+    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0.0'}, 'table': ct}
 #    command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
@@ -2341,8 +2341,9 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
             ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude, "amplitude1": amplitude})
             ct_idx += 1
             wave_idx += 1
-
-    command_table  = {'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0'}, 'table': ct}
+            
+    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0.0'}, 'table': ct}
+    #command_table  = {'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0.0'}, 'table': ct}
     #command_table  = {'$schema': 'https://json-schema.org/draft-04/schema#', 'header': {'version': '1.0'}, 'table': ct}
     return command_table
 
