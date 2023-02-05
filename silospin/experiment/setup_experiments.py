@@ -1,7 +1,8 @@
 from silospin.quantum_compiler.quantum_compiler import GateSetTomographyQuantumCompiler
 from silospin.experiment.setup_pulsed_experiments import *
 from silospin.experiment import setup_pulsed_experiments
-from silospin.quantum_compiler.quantum_compiler_helpers import make_gate_parameters
+#from silospin.quantum_compiler.quantum_compiler_helpers import make_gate_parameters
+from silospin.quantum_compiler.quantum_compiler_helpers_v2 import channel_mapper, make_gate_parameters
 from silospin.drivers.trigger_box import TriggerBoxServer
 import pickle
 
@@ -45,7 +46,6 @@ class QuantumAlgoExperiment:
         ##Modify, should now include lockins
         initialize_drivers()
         self._instrument_drivers = {'awgs': {0: setup_pulsed_experiments.awg_driver_1, 1: setup_pulsed_experiments.awg_driver_2}, "mflis": {0: setup_pulsed_experiments.mfli_driver_1, 1: setup_pulsed_experiments.mfli_driver_2}}
-
     #       #GST  experiment file
         self._gst_file = gst_file
         #self._gate_parameters =  unpickle_qubit_parameters(parameter_file_path)["parameters"]
