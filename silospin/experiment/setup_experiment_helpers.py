@@ -7,13 +7,12 @@ import datetime
 def initialize_drivers(awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0: 'dev5759', 1: 'dev5761'}):
     global awg_driver_1
     global awg_driver_2
-    # global mfli_driver_1
-    # global mfli_driver_2
-    # global mfli_driver_3
+    global mfli_driver_1
+    global mfli_driver_2
     awg_driver_1 = HdawgDriver(awgs[0])
     awg_driver_2 = HdawgDriver(awgs[1])
-    # mfli_driver_1 = MfliDriver(lockins[0])
-    # mfli_driver_2 = MfliDriver(lockins[1])
+    mfli_driver_1 = MfliDriver(lockins[0])
+    mfli_driver_2 = MfliDriver(lockins[1])
 
 def pickle_qubit_parameters(parameters_dict, parameters_file_path):
     qubit_parameters = {"timestamp": str(datetime.datetime.now()), "parameters": parameters_dict}
