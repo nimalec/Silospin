@@ -3,7 +3,7 @@ from silospin.experiment.setup_pulsed_experiments import *
 from silospin.experiment import setup_pulsed_experiments
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
 from silospin.quantum_compiler.quantum_compiler_helpers_v2 import channel_mapper, make_gate_parameters
-from silospin.drivers.trigger_box import TriggerBoxServer
+from silospin.drivers.homedac_box import TrigBoxDriverSerialServer
 import pickle
 
 # class GSTExperiment:
@@ -54,8 +54,8 @@ class QuantumAlgoExperiment:
         self._gst_program = GateSetTomographyQuantumCompiler(self._gst_file, awgs, self._gate_parameters, added_padding=added_padding, n_outer = n_outer, n_inner=n_inner)
         self._gst_program.compile_program()
         self._n_trigger = n_inner*n_outer*len(self._gst_program._gate_sequences)
-    #     self._trig_box = TriggerBoxServer(trigger_client)
+        self._trig_box = TrigBoxDriverSerialServer()
 
-    # def run_program(self):
-    #     for i in range(self._n_trigger):
-    #         self._trig_box.trigger()
+    def run_program(self):
+        for i in range(self._n_trigger):
+            self._trig_box.send_trigger()
