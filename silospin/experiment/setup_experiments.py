@@ -50,17 +50,13 @@ class QuantumAlgoExperiment:
         self._gst_file = gst_file
         self._gate_parameters =  unpickle_qubit_parameters(parameter_file_path)["parameters"]
 
-    #     #Gate parameters
-    #     #Generate and compile program for quantum algo
-    #     self._gst_program = GateSetTomographyQuantumCompiler(self._gst_file, self._instrument_drivers['awgs'][0], self._gate_parameters, n_inner, n_outer, added_padding=added_padding)
-    #     self._gst_program.compile_program()
-    #     ##Determine number of total trigger events
-    #     self._n_trigger = n_inner*n_outer*len(self._gst_program._gate_sequences)
-    #     ## Grab instance of client for DAC box
+        awgs = {'hdawg1': self._instrument_drivers['awgs'][0], 'hdawg2': self._instrument_drivers['awgs'][1]}
+        self._gst_program = GateSetTomographyQuantumCompiler(gself._gst_file, awgs, self._gate_parameters, added_padding=added_padding, n_outer = n_outer, n_inner=n_inner)
+        self._gst_program.compile_program()
+        self._n_trigger = n_inner*n_outer*len(self._gst_program._gate_sequences)
+
     #     self._trig_box = TriggerBoxServer(trigger_client)
-    #     pickle_waveforms(self._gst_program._waveforms,waveforms_file_path)
-    #     pickle_instrument_parameters(setup_experiment_helpers.awg_driver_1.get_all_awg_parameters(), setup_experiment_helpers.awg_driver_2.get_all_awg_parameters(), setup_experiment_helpers.mfli_driver_1.get_all_mfli_settings(), setup_experiment_helpers.mfli_driver_2.get_all_mfli_settings(), instruments_file_path)
-    #
+
     # def run_program(self):
     #     for i in range(self._n_trigger):
     #         self._trig_box.trigger()
