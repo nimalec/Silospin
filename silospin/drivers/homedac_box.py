@@ -108,7 +108,7 @@ class TrigBoxDriverSerial:
         self._trig_box.close()
         self._trig_box = serial.Serial(self._dev_id, baudrate=self._baud_rate, parity=serial.PARITY_NONE, stopbits=serial.STOPBITS_ONE, bytesize=serial.EIGHTBITS,timeout=1)
 
-    def send_trigger(self, voltage):
+    def send_trigger(self):
         cmd = 'TRGA\n'
         self._trig_box.write(cmd.encode('utf-8'))
 
