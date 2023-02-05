@@ -333,7 +333,7 @@ class MfliDaqModule:
 
         # Specify triggered data acquisition (type=0).
         self._daq_module.set('type', 6)
-        self._daq_module.set('triggernode', f'/{self._dev_id}/demods/0/sample.TrigIn1')
+        self._daq_module.set('triggernode', f'/{self._dev_id}/demods/0/sample.TrigIn2')
         self._daq_module.set('clearhistory', 1)   #not sure why history got cleared twice in the API log but I am simply copying what LabOne did.
         self._daq_module.set('clearhistory', 1)
         self._daq_module.set('bandwidth', 0)
