@@ -1,4 +1,4 @@
-from silospin.quantum_compiler.quantum_compiler import GateSetTomographyQuantumCompiler
+from silospin.quantum_compiler.quantum_compiler_v2 import GateSetTomographyQuantumCompiler
 from silospin.experiment.setup_pulsed_experiments import *
 from silospin.experiment import setup_pulsed_experiments
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
