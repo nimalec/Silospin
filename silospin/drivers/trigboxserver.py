@@ -13,7 +13,7 @@ class TrigBoxServer(object):
     device_id_1='COM17'
     trigbox_driver_1 = TrigBoxDriverSerial(dev_id = device_id_1, baud_rate=250000)
 
-    def close_1(self):
+    def close(self):
         self.trigbox_driver_1._trig_box.close()
 
     def open_connection(self):

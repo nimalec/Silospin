@@ -148,3 +148,18 @@ class DacDriverSerialServer:
 
     def init_2(self):
         self._client.init_2()
+
+class TrigBoxDriverSerialServer:
+    def __init__(self, client="tcp://127.0.0.1:4244"):
+        self._client_address = client
+        self._client = zerorpc.Client()
+        self._client.connect(self._client_address)
+
+    def close(self):
+        self._client.close()
+
+    def open_connection(self):
+        self._client.open_connection()
+
+    def send_trigger(self):
+        self._client.send_trigger()
