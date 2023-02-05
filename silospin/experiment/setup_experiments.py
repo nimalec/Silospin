@@ -1,6 +1,6 @@
 from silospin.quantum_compiler.quantum_compiler import GateSetTomographyQuantumCompiler
-from silospin.experiment.setup_experiment_helpers import *
-from silospin.experiment import setup_experiment_helpers
+from silospin.experiment.setup_pulsed_experiments import *
+from silospin.experiment import setup_pulsed_experiments  
 from silospin.quantum_compiler.quantum_compiler_helpers import make_gate_parameters
 from silospin.drivers.trigger_box import TriggerBoxServer
 import pickle
