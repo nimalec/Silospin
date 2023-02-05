@@ -54,7 +54,6 @@ class QuantumAlgoExperiment:
         self._gst_program = GateSetTomographyQuantumCompiler(self._gst_file, awgs, self._gate_parameters, added_padding=added_padding, n_outer = n_outer, n_inner=n_inner)
         self._gst_program.compile_program()
         self._n_trigger = n_inner*n_outer*len(self._gst_program._gate_sequences)
-
     #     self._trig_box = TriggerBoxServer(trigger_client)
 
     # def run_program(self):
