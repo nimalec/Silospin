@@ -92,7 +92,7 @@ class DacDriverSerial:
 
 class TrigBoxDriverSerial:
     ##Note: timing error with N still persists. Alternative is to catch a write timeout error and restart the Driver connection  (~every 600 connections)
-    def __init__(self, dev_id = 'COM17', verbose=0, baud_rate=250000):
+    def __init__(self, dev_id = 'COM17', baud_rate=250000):
         self._dev_id = dev_id
         self._baud_rate = baud_rate
         self._trig_box = serial.Serial(self._dev_id)
