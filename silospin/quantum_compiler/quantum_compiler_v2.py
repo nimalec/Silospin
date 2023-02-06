@@ -432,7 +432,8 @@ class GateSetTomographyQuantumCompiler:
                 device_type = daq.getString(f"/{device_id}/features/devtype")
                 samplerate = daq.getDouble(f"/{device_id}/system/clocks/sampleclock/freq")
                 daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/commandtable/data", json.dumps(self._command_tables[awg_idx][core_idx]))
-                assert(daq.getInt(f"/{device_id}/awgs/0/commandtable/status") == 1), f"The upload of command table failed. \n{ct}"
+                assert(daq.getInt(f"/{device_id}/awgs/0/commandtable/status") == 1), f"The upload of command table failed. \n"
+
                 elf, compiler_info = zhinst.core.compile_seqc(self._sequencer_code[awg_idx][core_idx], devtype=device_type, samplerate=samplerate, index = core_idx-1)
                 assert not compiler_info[
                 "messages"
