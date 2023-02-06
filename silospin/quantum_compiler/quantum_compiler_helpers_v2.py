@@ -2229,6 +2229,7 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     else:
         wave_idx = 5
         for wave in arb_rf_pulses:
+            ## Add exception for arb T gate
             gate_str = wave[0]
             amplitude = float(gate_str[0:gate_str.find('*')])
             amb_idxs = [i for i, letter in enumerate(gate_str) if letter == '&']
