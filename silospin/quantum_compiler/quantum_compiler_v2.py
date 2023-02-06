@@ -410,36 +410,33 @@ class GateSetTomographyQuantumCompiler:
         self._sequencer_code = sequencer_code
 
 
-        # for awg_idx in self._channel_mapping:
-        #     for core_idx in self._channel_mapping[awg_idx]:
-        #         daq = self._awgs[awg_idx]._daq
-        #         device_id = self._awgs[awg_idx]._connection_settings["hdawg_id"]
-        #         device_type = daq.getString(f"/{device_id}/features/devtype")
-        #         samplerate = daq.getDouble(f"/{device_id}/system/clocks/sampleclock/freq")
-        #         elf, compiler_info = zhinst.core.compile_seqc(self._sequencer_code[awg_idx][core_idx], devtype=device_type, samplerate=samplerate, index = core_idx-1)
-        #         assert not compiler_info[
-        #         "messages"
-        #         ], f"There was an error during compilation: {compiler_info['messages']}"
-        #         daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/elf/data", elf)
-        #         assert(daq.getDouble(f"/{device_id}/awgs/0/elf/progress") == 100.0), ""
-        #         daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/commandtable/data", json.dumps(self._command_tables[awg_idx][core_idx]))
-        #         assert(daq.getInt(f"/{device_id}/awgs/0/commandtable/status") == 1), f"The upload of command table failed. \n{ct}"
-
         for awg_idx in self._channel_mapping:
             for core_idx in self._channel_mapping[awg_idx]:
                 daq = self._awgs[awg_idx]._daq
                 device_id = self._awgs[awg_idx]._connection_settings["hdawg_id"]
                 device_type = daq.getString(f"/{device_id}/features/devtype")
                 samplerate = daq.getDouble(f"/{device_id}/system/clocks/sampleclock/freq")
-                daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/commandtable/data", json.dumps(self._command_tables[awg_idx][core_idx]))
-                assert(daq.getInt(f"/{device_id}/awgs/0/commandtable/status") == 1), f"The upload of command table failed. \n"
-
                 elf, compiler_info = zhinst.core.compile_seqc(self._sequencer_code[awg_idx][core_idx], devtype=device_type, samplerate=samplerate, index = core_idx-1)
                 assert not compiler_info[
                 "messages"
                 ], f"There was an error during compilation: {compiler_info['messages']}"
                 daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/elf/data", elf)
                 assert(daq.getDouble(f"/{device_id}/awgs/0/elf/progress") == 100.0), ""
+                daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/commandtable/data", json.dumps(self._command_tables[awg_idx][core_idx]))
+                assert(daq.getInt(f"/{device_id}/awgs/0/commandtable/status") == 1), f"The upload of command table failed. \n{ct}"
+
+        # for awg_idx in self._channel_mapping:
+        #     for core_idx in self._channel_mapping[awg_idx]:
+        #         daq = self._awgs[awg_idx]._daq
+        #         device_id = self._awgs[awg_idx]._connection_settings["hdawg_id"]
+        #         device_type = daq.getString(f"/{device_id}/features/devtype")
+        #
+        #         elf, compiler_info = zhinst.core.compile_seqc(self._sequencer_code[awg_idx][core_idx], devtype=device_type, samplerate=samplerate, index = core_idx-1)
+        #         assert not compiler_info[
+        #         "messages"
+        #         ], f"There was an error during compilation: {compiler_info['messages']}"
+        #         daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/elf/data", elf)
+        #         assert(daq.getDouble(f"/{device_id}/awgs/0/elf/progress") == 100.0), ""
 
 
         # for awg_idx in self._channel_mapping:
