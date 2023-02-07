@@ -2375,7 +2375,7 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
         ct.table[ct_idx].waveform.index = waves[2]['index']
         ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
-        ct.table[ct_idx].phase1.value = phases_incr[i]
+        ct.table[ct_idx].phase1.value = phases_incr[i]['value']
         ct.table[ct_idx].phase1.increment = True
         ct_idx += 1
     ## Incremented (pi)_p gates
