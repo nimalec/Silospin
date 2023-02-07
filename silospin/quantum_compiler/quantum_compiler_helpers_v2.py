@@ -2416,21 +2416,21 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
             ct_idx += 1
 
     ##Standard pulse delays
-    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.playZero = True
     ct.table[ct_idx].waveform.length = n_pi_std
     ct_idx += 1
 
-    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.playZero = True
     ct.table[ct_idx].waveform.length = n_pi_2_std
     ct_idx += 1
 
-    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.playZero = True
     ct.table[ct_idx].waveform.length = n_p_std
     ct_idx += 1
 
     #Plunger pulse delays
     for p in plunger_length_set:
-        ct.table[ct_idx].waveform.playzero = True
+        ct.table[ct_idx].waveform.playZero = True
         ct.table[ct_idx].waveform.length = p[1]
         ct_idx += 1
 
@@ -2443,7 +2443,7 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 pass
             else:
                 for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
-                    ct.table[ct_idx].waveform.playzero = True
+                    ct.table[ct_idx].waveform.playZero = True
                     ct.table[ct_idx].waveform.length = len(arbitrary_waveforms[awg_idx][core_idx][i][1])
                     gate_str = arbitrary_waveforms[awg_idx][core_idx][i][0]
                     ct_idx += 1
@@ -2746,23 +2746,23 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
     ct_idx += 1
 
     ##9. tau_pi
-    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.playZero = True
     ct.table[ct_idx].waveform.length = n_pi_std
     ct_idx += 1
 
     ##10. tau_pi/2
-    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.playZero = True
     ct.table[ct_idx].waveform.length = n_pi_2_std
     ct_idx += 1
 
     ##11. tau_p_std
-    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.playZero = True
     ct.table[ct_idx].waveform.length = n_p_std
     ct_idx += 1
 
     ##12. tau_p_1 - tau_p_N
     for p in plunger_length_tups:
-        ct.table[ct_idx].waveform.playzero = True
+        ct.table[ct_idx].waveform.playZero = True
         ct.table[ct_idx].waveform.length = p[1]
         ct_idx += 1
 
@@ -2773,7 +2773,7 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
                 pass
             else:
                 for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
-                    ct.table[ct_idx].waveform.playzero = True
+                    ct.table[ct_idx].waveform.playZero = True
                     ct.table[ct_idx].waveform.length = len(arbitrary_waveforms[awg_idx][core_idx][i][1])
                     ct_idx += 1
 
