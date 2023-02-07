@@ -4,6 +4,11 @@ import pickle
 from silospin.math.math_helpers import *
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
 
+import zhinst
+from zhinst.toolkit import Session
+import inspect
+from zhinst.toolkit import CommandTable
+
 def channel_mapper(rf_dc_awg_grouping = {"hdawg1": {"rf":  [1,2,3,4], "dc": []}, "hdawg2":  {"rf": [1], "dc": [2,3,4]}}, trig_channels = {"hdawg1": 1, "hdawg2": 1}):
     '''
     Outputs a dictionary representing the mapping between AWG cores and gate identifiers used by the quantum compiler. \n
@@ -2603,11 +2608,7 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 ct_idx += 1
             wave_idx += 1
 
-    command_table  = {'header': {'version': '1.1.0'}, 'table': ct}
-    #command_table  = {'$schema':'https://json-schema.org/draft-07/schema#', 'header': {'version': '1.1.0'}, 'table': ct}
-    #command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_1/schema', 'header': {'version': '1.1.0'}, 'table': ct}
-#    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0.0'}, 'table': ct}
-    return command_table
+    return ct
 
 
 def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx):
@@ -2687,75 +2688,82 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
     return command_table
 
 
-def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx, arb_dc_waveforms):
+def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx, arb_dc_waveforms, awg):
+    ct = CommandTable(awg.commandtable.load_validation_schema())
     n_pi_2_std = n_std[0]
     n_pi_std = n_std[1]
     n_p_std = n_std[2]
-    ct = []
     ct_idx = 0
     wave_idx = 0
 
     ##1. [(p_1)_1, 0] - [(p_1)_N, 0]
     for i in range(len(plunger_length_tups)):
-        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        ct.table[ct_idx].waveform.index = wave_idx
         wave_idx += 1
         ct_idx += 1
 
     ##2. [0, (p_2)_1] -  [0, (p_2)_N]
     for i in range(len(plunger_length_tups)):
-        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        ct.table[ct_idx].waveform.index = wave_idx
         wave_idx += 1
         ct_idx += 1
 
     ##3. [(p_1)_1, (p_2)_1] -  [(p_1)_N, (p_2)_N]
     for i in range(len(plunger_length_tups)):
-        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        ct.table[ct_idx].waveform.index = wave_idx
         wave_idx += 1
         ct_idx += 1
 
     ## 4. [(p_1)_pi, 0],  [0, (p_2)_pi]
-    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    ct.table[ct_idx].waveform.index = wave_idx
     wave_idx += 1
     ct_idx += 1
-    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    ct.table[ct_idx].waveform.index = wave_idx
     wave_idx += 1
     ct_idx += 1
 
     ## 5. [(p_1)_pi/2, 0],  [0, (p_2)_pi/2]
-    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    ct.table[ct_idx].waveform.index = wave_idx
     wave_idx += 1
     ct_idx += 1
-    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    ct.table[ct_idx].waveform.index = wave_idx
     wave_idx += 1
     ct_idx += 1
 
     ## 6. [(p_1)_pi, (p_2)_pi], [(p_1)_pi/2, (p_2)_pi/2]
-    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    ct.table[ct_idx].waveform.index = wave_idx
     wave_idx += 1
     ct_idx += 1
-    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    ct.table[ct_idx].waveform.index = wave_idx
     wave_idx += 1
     ct_idx += 1
 
     ##8. Z0Z
-    ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ct.table[ct_idx].phase0.value = 0
+    ct.table[ct_idx].phase0.increment = True
+    ct.table[ct_idx].phase1.value = 0
+    ct.table[ct_idx].phase1.increment = True
     ct_idx += 1
 
     ##9. tau_pi
-    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_std}})
+    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.length = n_pi_std
     ct_idx += 1
 
     ##10. tau_pi/2
-    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2_std}})
+    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.length = n_pi_2_std
     ct_idx += 1
 
     ##11. tau_p_std
-    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_p_std}})
+    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.length = n_p_std
     ct_idx += 1
 
     ##12. tau_p_1 - tau_p_N
     for p in plunger_length_tups:
-        ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": p[1]}})
+        ct.table[ct_idx].waveform.playzero = True
+        ct.table[ct_idx].waveform.length = p[1]
         ct_idx += 1
 
     ##13. Arb waveform delays
@@ -2765,7 +2773,8 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
                 pass
             else:
                 for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
-                    ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
+                    ct.table[ct_idx].waveform.playzero = True
+                    ct.table[ct_idx].waveform.length = len(arbitrary_waveforms[awg_idx][core_idx][i][1])
                     ct_idx += 1
 
     ##14. Arb waveforms
@@ -2777,21 +2786,22 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
                     amplitude_1 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
                     amplitude_2 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
                     #ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
-                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}})
+                    ct.table[ct_idx].waveform.index = wave_idx
                     ct_idx += 1
                     wave_idx += 1
+
                 elif gate_tuple[0][0] != 't' and gate_tuple[1][0] == 't':
                     amplitude_1 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
                     amplitude_2 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
                     #ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
-                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}})
+                    ct.table[ct_idx].waveform.index = wave_idx
                     ct_idx += 1
                     wave_idx += 1
                 elif gate_tuple[0][0] == 't' and gate_tuple[1][0] != 't':
                     amplitude_1 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
                     amplitude_2 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
                     #ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
-                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}})
+                    ct.table[ct_idx].waveform.index = wave_idx
                     ct_idx += 1
                     wave_idx += 1
                 else:
@@ -2799,12 +2809,7 @@ def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, aw
                     pass
             else:
                 continue
-
-    command_table  = {'header': {'version': '1.1.0'}, 'table': ct}
-#    command_table  = {'$schema':'https://json-schema.org/draft-07/schema#', 'header': {'version': '1.1.0'}, 'table': ct}
-#    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_1/schema', 'header': {'version': '1.1.0'}, 'table': ct}
-    #command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0.0'}, 'table': ct}
-    return command_table
+    return ct
 
 def make_dc_command_table_v4(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx, arb_dc_waveforms):
     n_pi_2_std = n_std[0]

@@ -16,6 +16,11 @@ from silospin.quantum_compiler.quantum_compiler_helpers_v2 import *
 from silospin.quantum_compiler.quantum_compiler_io import *
 from silospin.quantum_compiler.quantum_compiler_io_v2 import *
 
+import zhinst
+from zhinst.toolkit import Session
+import inspect
+from zhinst.toolkit import CommandTable
+
 class GateSetTomographyQuantumCompiler:
     """
     Class representing an instance of compiler gate set tomography experiment (uses entirely rectangular waves).
@@ -240,11 +245,14 @@ class GateSetTomographyQuantumCompiler:
             arbgate_counter[awg_idx] = {}
             for core_idx in channel_mapping[awg_idx]:
                 arbgate_counter[awg_idx][core_idx] = 0
+                awg = self._awgs[awg_idx]._hdawg.awgs[core_idx-1]
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
-                    self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
+                    #self._command_tables[awg_idx][core_idx] = make_rf_command_table_v2(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx)
+                    self._command_tables[awg_idx][core_idx] = make_rf_command_table_v3(n_std, arbitrary_z, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx, awg)
                 else:
-                    self._command_tables[awg_idx][core_idx] = make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx, self._arb_dc_waveforms_dict)
-                assert len(self._command_tables[awg_idx][core_idx]['table']) <= 1024, 'Command table length should not exceed 1024, cut down on the number of arbitrary gates!!'
+                    #self._command_tables[awg_idx][core_idx] = make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx, self._arb_dc_waveforms_dict)
+                    self._command_tables[awg_idx][core_idx] = make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_set_npoints_tups, awg_idx, core_idx, self._arb_dc_waveforms_dict, awg)
+            #    assert len(self._command_tables[awg_idx][core_idx]['table']) <= 1024, 'Command table length should not exceed 1024, cut down on the number of arbitrary gates!!'
 
         ct_idxs_all = {}
         taus_std = (tau_waveform_pi_2_std, tau_waveform_pi_std)
@@ -427,8 +435,9 @@ class GateSetTomographyQuantumCompiler:
                     daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/waveform/waves/"+str(wave_idx), waveforms_to_awg[awg_idx][core_idx][wave_idx])
 
                 ## Replace this with
-                daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/commandtable/data", json.dumps(self._command_tables[awg_idx][core_idx]))
-                assert(daq.getInt(f"/{device_id}/awgs/0/commandtable/status") == 1), f"The upload of command table failed. \n{ct}"
+                # daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/commandtable/data", json.dumps(self._command_tables[awg_idx][core_idx]))
+                # assert(daq.getInt(f"/{device_id}/awgs/0/commandtable/status") == 1), f"The upload of command table failed. \n{ct}"
+                self._awgs[awg_idx]._hdawg.awgs[core_idx-1].commandtable.upload_to_device(self._command_tables[awg_idx][core_idx]))
 
         # for awg_idx in self._channel_mapping:
         #     for core_idx in self._channel_mapping[awg_idx]:
