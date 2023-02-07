@@ -437,7 +437,7 @@ class GateSetTomographyQuantumCompiler:
                 ## Replace this with
                 # daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/commandtable/data", json.dumps(self._command_tables[awg_idx][core_idx]))
                 # assert(daq.getInt(f"/{device_id}/awgs/0/commandtable/status") == 1), f"The upload of command table failed. \n{ct}"
-                self._awgs[awg_idx]._hdawg.awgs[core_idx-1].commandtable.upload_to_device(self._command_tables[awg_idx][core_idx]))
+                self._awgs[awg_idx]._hdawg.awgs[core_idx-1].commandtable.upload_to_device(self._command_tables[awg_idx][core_idx])
 
         # for awg_idx in self._channel_mapping:
         #     for core_idx in self._channel_mapping[awg_idx]:
