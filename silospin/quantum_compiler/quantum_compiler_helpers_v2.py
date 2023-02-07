@@ -2270,6 +2270,346 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
 #    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0.0'}, 'table': ct}
     return command_table
 
+def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_set, awgidx, coreidx, awg):
+
+    ct = CommandTable(awg.commandtable.load_validation_schema())
+    #n_std = (n_pi_2_std, n_pi_std, n_p_std)
+    #n_p = [n_p1, ... , npn ] ==> number of points for each DC Pulse
+    #z_gates ==> dict of  Z gates used by this core ==> add to each
+    # arb RF gates =
+    # arb DC gates
+    n_pi_2_std = n_std[0]
+    n_pi_std = n_std[1]
+    n_p_std = n_std[2]
+    ##Initial gates
+    #0- (pi)_pi
+    #1- (pi/2)_pi/2
+    #2- (pi/2)_pi
+    #3- (pi)_p
+    #4- (pi/2)_p
+    initial_gates = {"xx_pi_fr": {"phi": 0, "wave_idx": 0}, "yy_pi_fr": {"phi": -90, "wave_idx": 0}, "mxxm_pi_fr": {"phi": -180, "wave_idx": 0}, "myym_pi_fr": {"phi": 90, "wave_idx": 0},
+    "x_pi_2_fr": {"phi": 0, "wave_idx": 1},  "y_pi_2_fr": {"phi": -90, "wave_idx": 1},  "xxx_pi_2_fr": {"phi": -180, "wave_idx": 1},  "yyy_pi_2_fr": {"phi": 90, "wave_idx": 1},
+    "x_pi_fr": {"phi": 0, "wave_idx": 2},  "y_pi_fr": {"phi": -90, "wave_idx": 2},  "xxx_pi_fr": {"phi": -180, "wave_idx": 2},  "yyy_pi_fr": {"phi": 90, "wave_idx": 2},
+    "xx_p_fr": {"phi": 0, "wave_idx": 3}, "yy_p_fr": {"phi": -90, "wave_idx": 3}, "mxxm_p_fr": {"phi": -180, "wave_idx": 3}, "myym_p_fr": {"phi": 90, "wave_idx": 3},
+    "x_p_fr": {"phi": 0, "wave_idx": 4},  "y_p_fr": {"phi": -90, "wave_idx": 4},  "xxx_p_fr": {"phi": -180, "wave_idx": 4},  "yyy_p_fr": {"phi": 90, "wave_idx": 4}}
+    #Waves
+    #0- (pi)_pi
+    #1- (pi/2)_pi/2
+    #2- (pi/2)_pi
+    #3- (pi)_p
+    #4- (pi/2)_p
+    waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]},  {"index": 2, "awgChannel0": ["sigout0","sigout1"]}, {"index": 3, "awgChannel0": ["sigout0","sigout1"]}, {"index": 4, "awgChannel0": ["sigout0","sigout1"]}]
+    phases_0_I = [{"value": 0, "increment": False}, {"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": 90, "increment": False}]
+    phases_0_Q = [{"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": -270, "increment": False}, {"value": 0, "increment": False}]
+
+    phases_incr = [{"value": 0, "increment": True}, {"value": -90, "increment": True}, {"value": -180, "increment": True}, {"value": -270, "increment": True}, {"value": 90, "increment": True},  {"value": 180, "increment": True},{"value": 270, "increment": True}]
+    ct_idx = 0
+    ## Initial (pi)_pi gates
+    for i in range(len(phases_0_I)):
+        ct.table[ct_idx].waveform.index = waves[0]['index']
+        ct.table[ct_idx].phase0.value = phases_0_I[i]
+        ct.table[ct_idx].phase0.increment = False
+        ct.table[ct_idx].phase1.value = phases_0_Q[i]
+        ct.table[ct_idx].phase1.increment = False
+        ct_idx += 1
+    ## Initial (pi/2)_pi/2 gates
+    for i in range(len(phases_0_I)):
+        ct.table[ct_idx].waveform.index = waves[1]['index']
+        ct.table[ct_idx].phase0.value = phases_0_I[i]
+        ct.table[ct_idx].phase0.increment = False
+        ct.table[ct_idx].phase1.value = phases_0_Q[i]
+        ct.table[ct_idx].phase1.increment = False
+        ct_idx += 1
+
+    ## Initial (pi/2)_pi gates
+    for i in range(len(phases_0_I)):
+        ct.table[ct_idx].waveform.index = waves[2]['index']
+        ct.table[ct_idx].phase0.value = phases_0_I[i]
+        ct.table[ct_idx].phase0.increment = False
+        ct.table[ct_idx].phase1.value = phases_0_Q[i]
+        ct.table[ct_idx].phase1.increment = False
+        ct_idx += 1
+
+    ## Initial (pi)_p gates
+    for i in range(len(phases_0_I)):
+        ct.table[ct_idx].waveform.index = waves[3]['index']
+        ct.table[ct_idx].phase0.value = phases_0_I[i]
+        ct.table[ct_idx].phase0.increment = False
+        ct.table[ct_idx].phase1.value = phases_0_Q[i]
+        ct.table[ct_idx].phase1.increment = False
+        ct_idx += 1
+
+    ## Initial (pi/2)_p gates
+    for i in range(len(phases_0_I)):
+        ct.table[ct_idx].waveform.index = waves[4]['index']
+        ct.table[ct_idx].phase0.value = phases_0_I[i]
+        ct.table[ct_idx].phase0.increment = False
+        ct.table[ct_idx].phase1.value = phases_0_Q[i]
+        ct.table[ct_idx].phase1.increment = False
+        ct_idx += 1
+
+    ## Incremented (pi)_pi gates
+    for i in range(len(phases_incr)):
+        ct.table[ct_idx].waveform.index = waves[0]['index']
+        ct.table[ct_idx].phase0.value = phases_incr[i]
+        ct.table[ct_idx].phase0.increment = True
+        ct.table[ct_idx].phase1.value = phases_incr[i]
+        ct.table[ct_idx].phase1.increment = True
+        ct_idx += 1
+
+    ## Incremented (pi/2)_pi/2 gates
+    for i in range(len(phases_incr)):
+        ct.table[ct_idx].waveform.index = waves[1]['index']
+        ct.table[ct_idx].phase0.value = phases_incr[i]
+        ct.table[ct_idx].phase0.increment = True
+        ct.table[ct_idx].phase1.value = phases_incr[i]
+        ct.table[ct_idx].phase1.increment = True
+        ct_idx += 1
+    ## Incremented (pi/2)_pi gates
+    for i in range(len(phases_incr)):
+        ct.table[ct_idx].waveform.index = waves[2]['index']
+        ct.table[ct_idx].phase0.value = phases_incr[i]
+        ct.table[ct_idx].phase0.increment = True
+        ct.table[ct_idx].phase1.value = phases_incr[i]
+        ct.table[ct_idx].phase1.increment = True
+        ct_idx += 1
+    ## Incremented (pi)_p gates
+    for i in range(len(phases_incr)):
+        ct.table[ct_idx].waveform.index = waves[3]['index']
+        ct.table[ct_idx].phase0.value = phases_incr[i]
+        ct.table[ct_idx].phase0.increment = True
+        ct.table[ct_idx].phase1.value = phases_incr[i]
+        ct.table[ct_idx].phase1.increment = True
+        ct_idx += 1
+
+    ## Incremented (pi/2)_p gates
+    for i in range(len(phases_incr)):
+        ct.table[ct_idx].waveform.index = waves[4]['index']
+        ct.table[ct_idx].phase0.value = phases_incr[i]
+        ct.table[ct_idx].phase0.increment = True
+        ct.table[ct_idx].phase1.value = phases_incr[i]
+        ct.table[ct_idx].phase1.increment = True
+        ct_idx += 1
+
+    ##Z0Z table entry
+    ct.table[ct_idx].phase0.value = 0
+    ct.table[ct_idx].phase0.increment = True
+    ct.table[ct_idx].phase1.value = 0
+    ct.table[ct_idx].phase1.increment = True
+    ct_idx += 1
+
+    ##Arbitrary Z gates to follow
+    if len(arbZs) == 0:
+        pass
+    else:
+        for arbZ in arbZs[awgidx][coreidx]:
+            phase = arbZs[awgidx][coreidx][arbZ][1]
+            ct.table[ct_idx].phase0.value = phase
+            ct.table[ct_idx].phase0.increment = True
+            ct.table[ct_idx].phase1.value = phase
+            ct.table[ct_idx].phase1.increment = True
+            ct_idx += 1
+
+    ##Standard pulse delays
+    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.length = n_pi_std
+    ct_idx += 1
+
+    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.length = n_pi_2_std
+    ct_idx += 1
+
+    ct.table[ct_idx].waveform.playzero = True
+    ct.table[ct_idx].waveform.length = n_p_std
+    ct_idx += 1
+
+    #Plunger pulse delays
+    for p in plunger_length_set:
+        ct.table[ct_idx].waveform.playzero = True
+        ct.table[ct_idx].waveform.length = p[1]
+        ct_idx += 1
+
+    #Arb pulse delays
+    ##Should also extract phase if for current gate ...
+
+    for awg_idx in arbitrary_waveforms:
+        for core_idx in arbitrary_waveforms[awg_idx]:
+            if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
+                pass
+            else:
+                for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
+                    ct.table[ct_idx].waveform.playzero = True
+                    ct.table[ct_idx].waveform.length = len(arbitrary_waveforms[awg_idx][core_idx][i][1])
+                    gate_str = arbitrary_waveforms[awg_idx][core_idx][i][0]
+                    ct_idx += 1
+
+    arb_rf_pulses = arbitrary_waveforms[awgidx][coreidx]
+
+    if len(arb_rf_pulses) == 0:
+        pass
+    else:
+        wave_idx = 5
+        for wave in arb_rf_pulses:
+            ## Add exception for arb T gate
+            gate_str = wave[0]
+            amplitude = float(gate_str[0:gate_str.find('*')])
+            amb_idxs = [i for i, letter in enumerate(gate_str) if letter == '&']
+            phase = float(gate_str[amb_idxs[0]+1:amb_idxs[1]])
+            if wave[0][wave[0].find('*')+1:wave[0].find('[')] in {'X', 'Y', 'U', 'V'}:
+                ## X = arb X, Y = arb Y , U = arb -X , V = arb -Y
+                ## set of CT entries corresponding for this gate for different phases: 0, 90, 180, 270, -90, -180, -270 ==> each will be called depending on the phase used lastly
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -phase
+                ct.table[ct_idx].phase0.increment = False
+                ct.table[ct_idx].phase1.value = -(phase+90)
+                ct.table[ct_idx].phase1.increment =False
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -(phase+90)
+                ct.table[ct_idx].phase0.increment = False
+                ct.table[ct_idx].phase1.value = -(phase+180)
+                ct.table[ct_idx].phase1.increment = False
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value = -(phase+180)
+                ct.table[ct_idx].phase0.increment = False
+                ct.table[ct_idx].phase1.value = -(phase+270)
+                ct.table[ct_idx].phase1.increment = False
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  phase+90
+                ct.table[ct_idx].phase0.increment = False
+                ct.table[ct_idx].phase1.value = phase
+                ct.table[ct_idx].phase1.increment = False
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -phase
+                ct.table[ct_idx].phase0.increment = True
+                ct.table[ct_idx].phase1.value = -phase
+                ct.table[ct_idx].phase1.increment = True
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -phase
+                ct.table[ct_idx].phase0.increment = True
+                ct.table[ct_idx].phase1.value = -phase
+                ct.table[ct_idx].phase1.increment = True
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -(phase+90)
+                ct.table[ct_idx].phase0.increment = True
+                ct.table[ct_idx].phase1.value = -(phase+90)
+                ct.table[ct_idx].phase1.increment = True
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -(phase+180)
+                ct.table[ct_idx].phase0.increment = True
+                ct.table[ct_idx].phase1.value = -(phase+180)
+                ct.table[ct_idx].phase1.increment = True
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -(phase+270)
+                ct.table[ct_idx].phase0.increment = True
+                ct.table[ct_idx].phase1.value = -(phase+270)
+                ct.table[ct_idx].phase1.increment = True
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -(phase-90)
+                ct.table[ct_idx].phase0.increment = True
+                ct.table[ct_idx].phase1.value = -(phase-90)
+                ct.table[ct_idx].phase1.increment = True
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -(phase-180)
+                ct.table[ct_idx].phase0.increment = True
+                ct.table[ct_idx].phase1.value = -(phase-180)
+                ct.table[ct_idx].phase1.increment = True
+                ct_idx += 1
+
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -(phase-270)
+                ct.table[ct_idx].phase0.increment = True
+                ct.table[ct_idx].phase1.value = -(phase-270)
+                ct.table[ct_idx].phase1.increment = True
+                ct_idx += 1
+
+            else:
+                ct.table[ct_idx].waveform.index = wave_idx
+                ct.table[ct_idx].amplitude0.value = amplitude
+                ct.table[ct_idx].amplitude0.increment = False
+                ct.table[ct_idx].amplitude1.value = amplitude
+                ct.table[ct_idx].amplitude1.increment = False
+                ct.table[ct_idx].phase0.value =  -(phase)
+                ct.table[ct_idx].phase0.increment = True
+                ct.table[ct_idx].phase1.value = -(phase)
+                ct.table[ct_idx].phase1.increment = True
+                ct_idx += 1
+            wave_idx += 1
+
+    command_table  = {'header': {'version': '1.1.0'}, 'table': ct}
+    #command_table  = {'$schema':'https://json-schema.org/draft-07/schema#', 'header': {'version': '1.1.0'}, 'table': ct}
+    #command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_1/schema', 'header': {'version': '1.1.0'}, 'table': ct}
+#    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0.0'}, 'table': ct}
+    return command_table
+
+
 def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx):
     n_pi_2_std = n_std[0]
     n_pi_std = n_std[1]
@@ -2348,6 +2688,125 @@ def make_dc_command_table_v2(n_std, arbitrary_waveforms, plunger_length_tups, aw
 
 
 def make_dc_command_table_v3(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx, arb_dc_waveforms):
+    n_pi_2_std = n_std[0]
+    n_pi_std = n_std[1]
+    n_p_std = n_std[2]
+    ct = []
+    ct_idx = 0
+    wave_idx = 0
+
+    ##1. [(p_1)_1, 0] - [(p_1)_N, 0]
+    for i in range(len(plunger_length_tups)):
+        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        wave_idx += 1
+        ct_idx += 1
+
+    ##2. [0, (p_2)_1] -  [0, (p_2)_N]
+    for i in range(len(plunger_length_tups)):
+        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        wave_idx += 1
+        ct_idx += 1
+
+    ##3. [(p_1)_1, (p_2)_1] -  [(p_1)_N, (p_2)_N]
+    for i in range(len(plunger_length_tups)):
+        ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+        wave_idx += 1
+        ct_idx += 1
+
+    ## 4. [(p_1)_pi, 0],  [0, (p_2)_pi]
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+
+    ## 5. [(p_1)_pi/2, 0],  [0, (p_2)_pi/2]
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+
+    ## 6. [(p_1)_pi, (p_2)_pi], [(p_1)_pi/2, (p_2)_pi/2]
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+    ct.append({"index": ct_idx, "waveform": {"index": wave_idx}})
+    wave_idx += 1
+    ct_idx += 1
+
+    ##8. Z0Z
+    ct.append({"index": ct_idx, "phase0": {"value": 0, "increment": True}, "phase1": {"value": 0,  "increment": True}})
+    ct_idx += 1
+
+    ##9. tau_pi
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_std}})
+    ct_idx += 1
+
+    ##10. tau_pi/2
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_pi_2_std}})
+    ct_idx += 1
+
+    ##11. tau_p_std
+    ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": n_p_std}})
+    ct_idx += 1
+
+    ##12. tau_p_1 - tau_p_N
+    for p in plunger_length_tups:
+        ct.append({"index": ct_idx, "waveform": {"playZero": True, "length": p[1]}})
+        ct_idx += 1
+
+    ##13. Arb waveform delays
+    for awg_idx in arbitrary_waveforms:
+        for core_idx in arbitrary_waveforms[awg_idx]:
+            if len(arbitrary_waveforms[awg_idx][core_idx]) == 0:
+                pass
+            else:
+                for i in range(len(arbitrary_waveforms[awg_idx][core_idx])):
+                    ct.append({"index": ct_idx, "waveform": {"playZero": True , "length": len(arbitrary_waveforms[awg_idx][core_idx][i][1])}})
+                    ct_idx += 1
+
+    ##14. Arb waveforms
+    for line in arb_dc_waveforms[awgidx][coreidx]:
+        for idx in arb_dc_waveforms[awgidx][coreidx][line]:
+            if len(arb_dc_waveforms[awgidx][coreidx][line][idx]) != 0:
+                gate_tuple = arb_dc_waveforms[awgidx][coreidx][line][idx]
+                if gate_tuple[0][0] != 't' and gate_tuple[1][0] != 't':
+                    amplitude_1 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
+                    amplitude_2 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
+                    #ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
+                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}})
+                    ct_idx += 1
+                    wave_idx += 1
+                elif gate_tuple[0][0] != 't' and gate_tuple[1][0] == 't':
+                    amplitude_1 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
+                    amplitude_2 = float(gate_tuple[0][0:gate_tuple[0].find('*')])
+                    #ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
+                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}})
+                    ct_idx += 1
+                    wave_idx += 1
+                elif gate_tuple[0][0] == 't' and gate_tuple[1][0] != 't':
+                    amplitude_1 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
+                    amplitude_2 = float(gate_tuple[1][0:gate_tuple[1].find('*')])
+                    #ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}, "amplitude0": amplitude_1, "amplitude1": amplitude_2})
+                    ct.append({"index": ct_idx, "waveform": {"index": wave_idx, "awgChannel0": ["sigout0","sigout1"]}})
+                    ct_idx += 1
+                    wave_idx += 1
+                else:
+                    ##Instead throw an error here
+                    pass
+            else:
+                continue
+
+    command_table  = {'header': {'version': '1.1.0'}, 'table': ct}
+#    command_table  = {'$schema':'https://json-schema.org/draft-07/schema#', 'header': {'version': '1.1.0'}, 'table': ct}
+#    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_1/schema', 'header': {'version': '1.1.0'}, 'table': ct}
+    #command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0.0'}, 'table': ct}
+    return command_table
+
+def make_dc_command_table_v4(n_std, arbitrary_waveforms, plunger_length_tups, awgidx, coreidx, arb_dc_waveforms):
     n_pi_2_std = n_std[0]
     n_pi_std = n_std[1]
     n_p_std = n_std[2]
