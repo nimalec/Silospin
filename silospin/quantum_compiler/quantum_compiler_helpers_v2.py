@@ -2312,68 +2312,68 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Initial (pi)_pi gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[0]['index']
-        ct.table[ct_idx].phase0.value = phases_0_I[i]
+        ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
-        ct.table[ct_idx].phase1.value = phases_0_Q[i]
+        ct.table[ct_idx].phase1.value = phases_0_Q[i]['value']
         ct.table[ct_idx].phase1.increment = False
         ct_idx += 1
     ## Initial (pi/2)_pi/2 gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[1]['index']
-        ct.table[ct_idx].phase0.value = phases_0_I[i]
+        ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
-        ct.table[ct_idx].phase1.value = phases_0_Q[i]
+        ct.table[ct_idx].phase1.value = phases_0_Q[i]['value']
         ct.table[ct_idx].phase1.increment = False
         ct_idx += 1
 
     ## Initial (pi/2)_pi gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[2]['index']
-        ct.table[ct_idx].phase0.value = phases_0_I[i]
+        ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
-        ct.table[ct_idx].phase1.value = phases_0_Q[i]
+        ct.table[ct_idx].phase1.value = phases_0_Q[i]['value']
         ct.table[ct_idx].phase1.increment = False
         ct_idx += 1
 
     ## Initial (pi)_p gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[3]['index']
-        ct.table[ct_idx].phase0.value = phases_0_I[i]
+        ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
-        ct.table[ct_idx].phase1.value = phases_0_Q[i]
+        ct.table[ct_idx].phase1.value = phases_0_Q[i]['value']
         ct.table[ct_idx].phase1.increment = False
         ct_idx += 1
 
     ## Initial (pi/2)_p gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[4]['index']
-        ct.table[ct_idx].phase0.value = phases_0_I[i]
+        ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
-        ct.table[ct_idx].phase1.value = phases_0_Q[i]
+        ct.table[ct_idx].phase1.value = phases_0_Q[i]['value']
         ct.table[ct_idx].phase1.increment = False
         ct_idx += 1
 
     ## Incremented (pi)_pi gates
     for i in range(len(phases_incr)):
         ct.table[ct_idx].waveform.index = waves[0]['index']
-        ct.table[ct_idx].phase0.value = phases_incr[i]
+        ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
-        ct.table[ct_idx].phase1.value = phases_incr[i]
+        ct.table[ct_idx].phase1.value = phases_incr[i]['value']
         ct.table[ct_idx].phase1.increment = True
         ct_idx += 1
 
     ## Incremented (pi/2)_pi/2 gates
     for i in range(len(phases_incr)):
         ct.table[ct_idx].waveform.index = waves[1]['index']
-        ct.table[ct_idx].phase0.value = phases_incr[i]
+        ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
-        ct.table[ct_idx].phase1.value = phases_incr[i]
+        ct.table[ct_idx].phase1.value = phases_incr[i]['value']
         ct.table[ct_idx].phase1.increment = True
         ct_idx += 1
     ## Incremented (pi/2)_pi gates
     for i in range(len(phases_incr)):
         ct.table[ct_idx].waveform.index = waves[2]['index']
-        ct.table[ct_idx].phase0.value = phases_incr[i]
+        ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
         ct.table[ct_idx].phase1.value = phases_incr[i]
         ct.table[ct_idx].phase1.increment = True
@@ -2381,18 +2381,18 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Incremented (pi)_p gates
     for i in range(len(phases_incr)):
         ct.table[ct_idx].waveform.index = waves[3]['index']
-        ct.table[ct_idx].phase0.value = phases_incr[i]
+        ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
-        ct.table[ct_idx].phase1.value = phases_incr[i]
+        ct.table[ct_idx].phase1.value = phases_incr[i]['value']
         ct.table[ct_idx].phase1.increment = True
         ct_idx += 1
 
     ## Incremented (pi/2)_p gates
     for i in range(len(phases_incr)):
         ct.table[ct_idx].waveform.index = waves[4]['index']
-        ct.table[ct_idx].phase0.value = phases_incr[i]
+        ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
-        ct.table[ct_idx].phase1.value = phases_incr[i]
+        ct.table[ct_idx].phase1.value = phases_incr[i]['value']
         ct.table[ct_idx].phase1.increment = True
         ct_idx += 1
 
