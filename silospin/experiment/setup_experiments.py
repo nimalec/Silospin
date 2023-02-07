@@ -17,7 +17,7 @@ class QuantumAlgoExperiment:
         self._gst_file = gst_file
         self._gate_parameters =  unpickle_qubit_parameters(parameter_file_path)["parameters"]
 
-        awgs = {'hdawg1': self._instrument_drivers['awgs'][1], 'hdawg2': self._instrument_drivers['awgs'][0]}
+        awgs = {'hdawg1': self._instrument_drivers['awgs'][0], 'hdawg2': self._instrument_drivers['awgs'][1]}
         self._gst_program = GateSetTomographyQuantumCompiler(self._gst_file, awgs, self._gate_parameters, added_padding=added_padding, n_outer = n_outer, n_inner=n_inner)
         self._gst_program.compile_program()
 
