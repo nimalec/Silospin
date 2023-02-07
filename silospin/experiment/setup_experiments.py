@@ -25,7 +25,7 @@ class QuantumAlgoExperiment:
         self._trig_box = TrigBoxDriverSerialServer()
 
         daq_module =  MfliDaqModule(self._instrument_drivers['mflis'][0])
-       sample_data, time_axis = daq_module.triggered_data_acquisition_time_domain(duration=3.733e-5, n_traces = self._n_trigger, sig_port  = 'Aux_in_1', sample_rate=107e3)
+        # sample_data, time_axis = daq_module.triggered_data_acquisition_time_domain(duration=3.733e-5, n_traces = self._n_trigger, sig_port  = 'Aux_in_1', sample_rate=107e3)
 
     def run_program(self):
         for i in range(self._n_trigger):
