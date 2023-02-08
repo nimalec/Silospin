@@ -429,9 +429,12 @@ class GateSetTomographyQuantumCompiler:
                 "messages"
                 ], f"There was an error during compilation: {compiler_info['messages']}"
 
+                daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/elf/data", elf)
+                assert(daq.getDouble(f"/{device_id}/awgs/0/elf/progress") == 100.0), ""
+
                 for wave_idx in waveforms_to_awg[awg_idx][core_idx]:
                     daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/waveform/waves/"+str(wave_idx), waveforms_to_awg[awg_idx][core_idx][wave_idx])
-
+                #
                 # daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/elf/data", elf)
                 # assert(daq.getDouble(f"/{device_id}/awgs/0/elf/progress") == 100.0), ""
 
