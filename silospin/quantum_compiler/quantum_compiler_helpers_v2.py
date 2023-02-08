@@ -3632,7 +3632,7 @@ def config_hdawg_v2(awg, gate_parameters, channel_mapping, channels_on=True):
                 p2_idx = channel_mapping[core]['channel_number'][1]
                 p1_core_idx = channel_mapping[core]['channel_core_number'][0]
                 p2_core_idx = channel_mapping[core]['channel_core_number'][1]
-                print(p2_core_idx)
+                
                 awg.set_out_amp(p1_core_idx, 1, p_gate_param[p1_idx]["p_amp"])
                 awg.set_out_amp(p2_core_idx, 2, p_gate_param[p2_idx]["p_amp"])
                 if channels_on == True:
