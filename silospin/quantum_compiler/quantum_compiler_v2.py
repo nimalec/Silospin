@@ -267,17 +267,17 @@ class GateSetTomographyQuantumCompiler:
         waveform_lengths = {}
         waveforms_to_awg = {}
         sequencer_code = {}
-        waveforms_obj = {}
+    #    waveforms_obj = {}
         for awg_idx in channel_mapping:
             waveform_lengths[awg_idx] = {}
             waveforms_to_awg[awg_idx] = {}
             sequencer_code[awg_idx] = {}
-            waveforms_obj[awg_idx] = {}
+        #    waveforms_obj[awg_idx] = {}
             for core_idx in channel_mapping[awg_idx]:
                 wave_idx = 0
                 waveform_lengths[awg_idx][core_idx] = {}
                 waveforms_to_awg[awg_idx][core_idx] = {}
-                waveforms_obj[awg_idx][core_idx] = Waveforms()
+            #    waveforms_obj[awg_idx][core_idx] = Waveforms()
                 sequencer_code[awg_idx][core_idx] = {}
                 non_arb_waves = self._waveforms[awg_idx][core_idx]
                 if channel_mapping[awg_idx][core_idx]['rf'] == 1:
@@ -287,7 +287,7 @@ class GateSetTomographyQuantumCompiler:
                      wave_idx += 1
                      waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(self._waveforms[awg_idx][core_idx]['pi_2_pifr'], self._waveforms[awg_idx][core_idx]['pi_2_pifr'])
                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pifr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pifr'])))
-                     waveforms_obj[awg_idx][core_idx].assign_waveform(slot=wave_idx, wave1 = self._waveforms[awg_idx][core_idx]['pi_2_pifr'], wave2=self._waveforms[awg_idx][core_idx]['pi_2_pifr'])
+                #     waveforms_obj[awg_idx][core_idx].assign_waveform(slot=wave_idx, wave1 = self._waveforms[awg_idx][core_idx]['pi_2_pifr'], wave2=self._waveforms[awg_idx][core_idx]['pi_2_pifr'])
                      wave_idx += 1
                      waveforms_to_awg[awg_idx][core_idx][wave_idx] = zhinst.utils.convert_awg_waveform(self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr'], self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr'])
                      waveform_lengths[awg_idx][core_idx][wave_idx] =  (len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr'])), len(np.array(self._waveforms[awg_idx][core_idx]['pi_2_pi_2fr'])))
