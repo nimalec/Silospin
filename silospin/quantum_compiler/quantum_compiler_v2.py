@@ -19,7 +19,8 @@ from silospin.quantum_compiler.quantum_compiler_io_v2 import *
 import zhinst
 from zhinst.toolkit import Session
 import inspect
-from zhinst.toolkit import CommandTable
+from zhinst.toolkit import CommandTable, Sequence 
+
 
 class GateSetTomographyQuantumCompiler:
     """
