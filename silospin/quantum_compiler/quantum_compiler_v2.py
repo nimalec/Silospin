@@ -548,8 +548,8 @@ class GateSetTomographyQuantumCompiler:
                 self._awgs[awg_idx]._awgs["awg"+str(core_idx)].single(True)
                 self._awgs[awg_idx]._awgs["awg"+str(core_idx)].enable(True)
 
-                p1_core_idx = channel_idxs[str(core_idx)]['channel_core_number'][0]
-                p2_core_idx = channel_idxs[str(core_idx)]['channel_core_number'][1]
+                p1_core_idx = channel_idxs[str(core_idx)][0]
+                p2_core_idx = channel_idxs[str(core_idx)][1]
 
                 awg._hdawg.sigouts[p1_core_idx-1].on(1)
                 awg._hdawg.sigouts[p2_core_idx-1].on(1)
