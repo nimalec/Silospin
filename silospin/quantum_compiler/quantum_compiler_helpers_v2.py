@@ -2429,7 +2429,7 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
         ct.table[ct_idx].amplitude0.value = 1
         ct.table[ct_idx].amplitude0.increment = False
         ct.table[ct_idx].amplitude1.value = 1
-        ct.table[ct_idx].amplitude1.increment = False        
+        ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
         ct.table[ct_idx].phase1.value = phases_incr[i]['value']
@@ -3558,11 +3558,11 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
             awg.set_sine(q_idx, osc_idx)
             awg.set_out_amp(i_idx, 1, rf_gate_param[core_idx]["i_amp"])
             awg.set_out_amp(q_idx, 2, rf_gate_param[core_idx]["q_amp"])
-            if channels_on == True:
-                awg._hdawg.sigouts[i_idx-1].on(1)
-                awg._hdawg.sigouts[q_idx-1].on(1)
-            else:
-                pass
+            # if channels_on == True:
+            #     awg._hdawg.sigouts[i_idx-1].on(1)
+            #     awg._hdawg.sigouts[q_idx-1].on(1)
+            # else:
+            #     pass
         elif channel_mapping[core]['rf'] == 0:
             if len(p_gate_param) == 0:
                 pass
@@ -3574,11 +3574,11 @@ def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
                 p2_core_idx = channel_mapping[core]['channel_core_number'][1]
                 awg.set_out_amp(p1_core_idx, 1, p_gate_param[p1_idx]["p_amp"])
                 awg.set_out_amp(p2_core_idx, 2, p_gate_param[p2_idx]["p_amp"])
-                if channels_on == True:
-                    awg._hdawg.sigouts[p1_core_idx-1].on(1)
-                    awg._hdawg.sigouts[p1_core_idx-1].on(1)
-                else:
-                    pass
+                # if channels_on == True:
+                #     awg._hdawg.sigouts[p1_core_idx-1].on(1)
+                #     awg._hdawg.sigouts[p1_core_idx-1].on(1)
+                # else:
+                #     pass
         else:
            pass
 
