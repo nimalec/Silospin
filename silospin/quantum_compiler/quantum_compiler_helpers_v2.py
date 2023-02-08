@@ -2312,6 +2312,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Initial (pi)_pi gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[0]['index']
+        ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.increment = False
+        ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
         ct.table[ct_idx].phase1.value = phases_0_Q[i]['value']
@@ -2320,6 +2324,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Initial (pi/2)_pi/2 gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[1]['index']
+        ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.increment = False
+        ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
         ct.table[ct_idx].phase1.value = phases_0_Q[i]['value']
@@ -2329,6 +2337,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Initial (pi/2)_pi gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[2]['index']
+        ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.increment = False
+        ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
         ct.table[ct_idx].phase1.value = phases_0_Q[i]['value']
@@ -2338,6 +2350,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Initial (pi)_p gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[3]['index']
+        ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.increment = False
+        ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
         ct.table[ct_idx].phase1.value = phases_0_Q[i]['value']
@@ -2347,6 +2363,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Initial (pi/2)_p gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[4]['index']
+        ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.increment = False
+        ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
         ct.table[ct_idx].phase1.value = phases_0_Q[i]['value']
@@ -2356,6 +2376,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Incremented (pi)_pi gates
     for i in range(len(phases_incr)):
         ct.table[ct_idx].waveform.index = waves[0]['index']
+        ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.increment = False
+        ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
         ct.table[ct_idx].phase1.value = phases_incr[i]['value']
@@ -2365,6 +2389,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Incremented (pi/2)_pi/2 gates
     for i in range(len(phases_incr)):
         ct.table[ct_idx].waveform.index = waves[1]['index']
+        ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.increment = False
+        ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
         ct.table[ct_idx].phase1.value = phases_incr[i]['value']
@@ -2373,6 +2401,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Incremented (pi/2)_pi gates
     for i in range(len(phases_incr)):
         ct.table[ct_idx].waveform.index = waves[2]['index']
+        ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.increment = False
+        ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
         ct.table[ct_idx].phase1.value = phases_incr[i]['value']
@@ -2381,6 +2413,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Incremented (pi)_p gates
     for i in range(len(phases_incr)):
         ct.table[ct_idx].waveform.index = waves[3]['index']
+        ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.increment = False
+        ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
         ct.table[ct_idx].phase1.value = phases_incr[i]['value']
@@ -2390,6 +2426,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Incremented (pi/2)_p gates
     for i in range(len(phases_incr)):
         ct.table[ct_idx].waveform.index = waves[4]['index']
+        ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.increment = False
+        ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.increment = False        
         ct.table[ct_idx].phase0.value = phases_incr[i]['value']
         ct.table[ct_idx].phase0.increment = True
         ct.table[ct_idx].phase1.value = phases_incr[i]['value']
