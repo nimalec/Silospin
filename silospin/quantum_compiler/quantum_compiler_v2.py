@@ -551,8 +551,8 @@ class GateSetTomographyQuantumCompiler:
                 p1_core_idx = channel_idxs[str(core_idx)][0]
                 p2_core_idx = channel_idxs[str(core_idx)][1]
 
-                self._awgs[awg_idx].sigouts[p1_core_idx-1].on(1)
-                self._awgs[awg_idx].sigouts[p2_core_idx-1].on(1)
+                self._awgs[awg_idx]._hdawg.sigouts[p1_core_idx-1].on(1)
+                self._awgs[awg_idx]._hdawg.sigouts[p2_core_idx-1].on(1)
 
 class GateSetTomographyQuantumCompiler_v2:
     """
