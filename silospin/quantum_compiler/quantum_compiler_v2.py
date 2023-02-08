@@ -19,7 +19,7 @@ from silospin.quantum_compiler.quantum_compiler_io_v2 import *
 import zhinst
 from zhinst.toolkit import Session
 import inspect
-from zhinst.toolkit import CommandTable, Sequence 
+from zhinst.toolkit import CommandTable, Sequence
 
 
 class GateSetTomographyQuantumCompiler:
@@ -440,8 +440,8 @@ class GateSetTomographyQuantumCompiler:
 
                 elf, info = self._awgs[awg_idx]._hdawg.awgs[core_idx-1].compile_sequencer_program(sequence_program.code)
 
-                for wave_idx in waveforms_to_awg[awg_idx][core_idx]:
-                    daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/waveform/waves/"+str(wave_idx), waveforms_to_awg[awg_idx][core_idx][wave_idx])
+                # for wave_idx in waveforms_to_awg[awg_idx][core_idx]:
+                #     daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/waveform/waves/"+str(wave_idx), waveforms_to_awg[awg_idx][core_idx][wave_idx])
 
 
                 # daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/elf/data", elf)
@@ -458,7 +458,7 @@ class GateSetTomographyQuantumCompiler:
                 # for wave_idx in waveforms_to_awg[awg_idx][core_idx]:
                 #     daq.setVector(f"/{device_id}/awgs/"+str(core_idx-1)+"/waveform/waves/"+str(wave_idx), waveforms_to_awg[awg_idx][core_idx][wave_idx])
                 #
-                self._awgs[awg_idx]._hdawg.awgs[core_idx-1].commandtable.upload_to_device(self._command_tables[awg_idx][core_idx])
+                # self._awgs[awg_idx]._hdawg.awgs[core_idx-1].commandtable.upload_to_device(self._command_tables[awg_idx][core_idx])
         # for awg_idx in self._channel_mapping:
         #     for core_idx in self._channel_mapping[awg_idx]:
         #         for wave_idx in waveforms_to_awg[awg_idx][core_idx]:
