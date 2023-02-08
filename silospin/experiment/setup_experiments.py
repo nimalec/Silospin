@@ -19,7 +19,7 @@ class QuantumAlgoExperiment:
 
         awgs = {'hdawg1': self._instrument_drivers['awgs'][0], 'hdawg2': self._instrument_drivers['awgs'][1]}
         self._gst_program = GateSetTomographyQuantumCompiler(self._gst_file, awgs, self._gate_parameters, added_padding=added_padding, n_outer = n_outer, n_inner=n_inner)
-        #self._gst_program.compile_program()
+        self._gst_program.compile_program()
 
         # self._n_trigger = n_inner*n_outer*len(self._gst_program._gate_sequences)
         # self._trig_box = TrigBoxDriverSerialServer()
