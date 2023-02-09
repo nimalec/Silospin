@@ -5,7 +5,7 @@ from silospin.quantum_compiler.quantum_compiler_helpers_v2 import channel_mapper
 import pickle
 import datetime
 
-def initialize_drivers(awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0: 'dev5759', 1: 'dev5761'}):
+def initialize_drivers(awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0: 'dev6541', 1: 'dev5761'}):
     global awg_driver_1
     global awg_driver_2
     global mfli_driver_1
