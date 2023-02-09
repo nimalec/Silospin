@@ -5,7 +5,7 @@ def make_rabisweep_file(qubits, start_tau, end_tau, npoints, amplitude, filepath
     amp_str = str(amplitude)
     file_str = ""
     for t in tau_grid:
-        tau_str = str(t)
+        tau_str = str(round(t,1))
         gate_str = f"{amp_str}*X[{tau_str}&0&0]"
         temp_line = ""
         for q in qubits:
