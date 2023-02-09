@@ -22,7 +22,6 @@ import inspect
 from zhinst.toolkit import CommandTable, Sequence, Waveforms
 
 
-
 class GateSetTomographyQuantumCompiler:
     """
     Class representing an instance of compiler gate set tomography experiment (uses entirely rectangular waves).

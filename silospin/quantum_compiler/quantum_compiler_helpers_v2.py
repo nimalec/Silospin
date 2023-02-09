@@ -2270,9 +2270,6 @@ def make_rf_command_table_v2(n_std, arbZs, arbitrary_waveforms, plunger_length_s
             wave_idx += 1
 
     command_table  = {'header': {'version': '1.1.0'}, 'table': ct}
-    #command_table  = {'$schema':'https://json-schema.org/draft-07/schema#', 'header': {'version': '1.1.0'}, 'table': ct}
-    #command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_1/schema', 'header': {'version': '1.1.0'}, 'table': ct}
-#    command_table  = {'$schema': 'https://docs.zhinst.com/hdawg/commandtable/v1_0/schema', 'header': {'version': '1.0.0'}, 'table': ct}
     return command_table
 
 def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_set, awgidx, coreidx, awg):
@@ -2473,9 +2470,6 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
         ct.table[ct_idx].waveform.playZero = True
         ct.table[ct_idx].waveform.length = p[1]
         ct_idx += 1
-
-    #Arb pulse delays
-    ##Should also extract phase if for current gate ...
 
     for awg_idx in arbitrary_waveforms:
         for core_idx in arbitrary_waveforms[awg_idx]:
@@ -3632,7 +3626,7 @@ def config_hdawg_v2(awg, gate_parameters, channel_mapping, channels_on=True):
                 p2_idx = channel_mapping[core]['channel_number'][1]
                 p1_core_idx = channel_mapping[core]['channel_core_number'][0]
                 p2_core_idx = channel_mapping[core]['channel_core_number'][1]
-                
+
                 awg.set_out_amp(p1_core_idx, 1, p_gate_param[p1_idx]["p_amp"])
                 awg.set_out_amp(p2_core_idx, 2, p_gate_param[p2_idx]["p_amp"])
                 if channels_on == True:
