@@ -2301,8 +2301,10 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     #3- (pi)_p
     #4- (pi/2)_p
     waves = [{"index": 0, "awgChannel0": ["sigout0","sigout1"]}, {"index": 1, "awgChannel0": ["sigout0","sigout1"]},  {"index": 2, "awgChannel0": ["sigout0","sigout1"]}, {"index": 3, "awgChannel0": ["sigout0","sigout1"]}, {"index": 4, "awgChannel0": ["sigout0","sigout1"]}]
-    phases_0_I = [{"value": 0, "increment": False}, {"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": 90, "increment": False}]
-    phases_0_Q = [{"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": -270, "increment": False}, {"value": 0, "increment": False}]
+#    phases_0_I = [{"value": 0, "increment": False}, {"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": 90, "increment": False}]
+#    phases_0_Q = [{"value": -90, "increment": False}, {"value": -180, "increment": False}, {"value": -270, "increment": False}, {"value": 0, "increment": False}]
+    phases_0_I = [{"value": 0, "increment": False}, {"value": 90, "increment": False}, {"value": 180, "increment": False}, {"value": 90, "increment": False}]
+    phases_0_Q = [{"value": 90, "increment": False}, {"value": 180, "increment": False}, {"value": 270, "increment": False}, {"value": 0, "increment": False}]
 
     phases_incr = [{"value": 0, "increment": True}, {"value": -90, "increment": True}, {"value": -180, "increment": True}, {"value": -270, "increment": True}, {"value": 90, "increment": True},  {"value": 180, "increment": True},{"value": 270, "increment": True}]
     ct_idx = 0
@@ -2321,9 +2323,11 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Initial (pi/2)_pi/2 gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[1]['index']
-        ct.table[ct_idx].amplitude0.value = 1
+    #    ct.table[ct_idx].amplitude0.value = 1
+        ct.table[ct_idx].amplitude0.value = 0.5
         ct.table[ct_idx].amplitude0.increment = False
-        ct.table[ct_idx].amplitude1.value = 1
+        #ct.table[ct_idx].amplitude1.value = 1
+        ct.table[ct_idx].amplitude1.value = 0.5
         ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
