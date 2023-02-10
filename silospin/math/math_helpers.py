@@ -67,6 +67,7 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
         array = np.concatenate((zero_pad_l, array,zero_pad_r), axis=None)
     else:
         array = amp*np.ones(npoints)
+    print(len(array))
     return array.tolist()
 
 def compute_accumulated_phase(gt, phi_l):
