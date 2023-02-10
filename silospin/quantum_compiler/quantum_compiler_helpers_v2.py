@@ -1177,7 +1177,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
     ct_idx_incr_pi_p_fr = {0: 41, -90: 42, -180: 43, -270: 44, 90: 45, 180: 46,  270:  47, 360: 20, -360: 20}
     ct_idx_incr_pi_2_p_fr = {0: 48, -90: 49, -180: 50, -270: 51, 90: 51, 180: 53,  270:  54, 360: 20, -360: 20}
     ct_idx_z0z = 55
-    phi_ls_gt = {'x':  0, 'y': -90, 'xx':  0, 'yy': -90 , 'xxx':  -180, 'yyy': 90, 'mxxm': -180, 'myym': 90}
+    #phi_ls_gt = {'x':  0, 'y': -90, 'xx':  0, 'yy': -90 , 'xxx':  -180, 'yyy': 90, 'mxxm': -180, 'myym': 90}
+    phi_ls_gt = {'x':  0, 'y': 90, 'xx':  0, 'yy': 90 , 'xxx':  180, 'yyy': -90, 'mxxm': 180, 'myym': -90}
     pi_gt_set = {'xx', 'yy', 'mxxm', 'myym'}
     pi_2_gt_set = {'x', 'y', 'xxx', 'yyy'}
 
@@ -1397,7 +1398,8 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                            else:
                                pass
                            incr_gate_map = {0: 5, -90 : 6, -180: 7, -270: 8, 90: 9, 180: 10, 270: 11, -360: 5, 360: 5}
-                           ct_idx_g_a = 58 + N_z + N_p + N_arb_tot + incr_gate_map[-phi_a]+arbgate_counter[awg_idx][core_idx]
+                          # ct_idx_g_a = 58 + N_z + N_p + N_arb_tot + incr_gate_map[-phi_a]+arbgate_counter[awg_idx][core_idx]
+                           ct_idx_g_a = 58 + N_z + N_p + N_arb_tot + incr_gate_map[phi_a]+arbgate_counter[awg_idx][core_idx]
                            arbgate_counter[awg_idx][core_idx] += 11
                         else:
                             pass
@@ -1424,15 +1426,19 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
                                 #Plunger frame
                                 if tau_p > taus_std[1]:
-                                    ct_idx_incr = ct_idx_incr_pi_p_fr[-phi_a]
+                                    #ct_idx_incr = ct_idx_incr_pi_p_fr[-phi_a]
+                                    ct_idx_incr = ct_idx_incr_pi_p_fr[phi_a]
                                     break
                                 #Pi frame
                                 else:
-                                    ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
+                                    #ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
+                                    ct_idx_incr = ct_idx_incr_pi_pi_fr[phi_a]
                             else:
-                                ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
+                                #ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
+                                ct_idx_incr = ct_idx_incr_pi_pi_fr[phi_a]
                      else:
-                         ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
+                         #ct_idx_incr = ct_idx_incr_pi_pi_fr[-phi_a]
+                         ct_idx_incr = ct_idx_incr_pi_pi_fr[phi_a]
                      #ct_idxs[awg_idx][core_idx].append(ct_idx_incr)
                      ct_idxs[awg_idx][core_idx][idx] = ct_idx_incr
                 ##Incremented pi/2 gate
@@ -1444,25 +1450,31 @@ def make_command_table_indices_v4(gt_seqs, channel_map, awg_core_split, arb_gate
                                 tau_p = int(gate_lengths['plunger'][tup[0]]['p'])
                                 #No pi pulses, just pi/2 and plunger ==> plunger > pi/2
                                 if len(pi_intersect) == 0 and tau_p > taus_std[0]:
-                                    ct_idx_incr = ct_idx_incr_pi_2_p_fr[-phi_a]
+                                    #ct_idx_incr = ct_idx_incr_pi_2_p_fr[-phi_a]
+                                    ct_idx_incr = ct_idx_incr_pi_2_p_fr[phi_a]
                                     break
                                 #Pi pulses, with pi/2 and plunger ==> plunger > pi
                                 elif len(pi_intersect) != 0 and tau_p > taus_std[1]:
-                                    ct_idx_incr = ct_idx_incr_pi_2_p_fr[-phi_a]
+                                    #ct_idx_incr = ct_idx_incr_pi_2_p_fr[-phi_a]
+                                    ct_idx_incr = ct_idx_incr_pi_2_p_fr[phi_a]
                                     break
                                #Pi pulses, with pi/2 and plunger ==> plunger < pi
                                 elif len(pi_intersect) != 0 and tau_p < taus_std[1]:
-                                    ct_idx_incr = ct_idx_incr_pi_2_pi_fr[-phi_a]
+                                    #ct_idx_incr = ct_idx_incr_pi_2_pi_fr[-phi_a]
+                                    ct_idx_incr = ct_idx_incr_pi_2_pi_fr[phi_a]
                                 elif len(pi_intersect) == 0 and tau_p < taus_std[0]:
-                                    ct_idx_incr = ct_idx_incr_pi_2_pi_2_fr[-phi_a]
+                                    #ct_idx_incr = ct_idx_incr_pi_2_pi_2_fr[-phi_a]
+                                    ct_idx_incr = ct_idx_incr_pi_2_pi_2_fr[phi_a]
                                 else:
                                     pass
                             else:
                                 pass
                     elif len(pi_intersect) != 0:
-                        ct_idx_incr = ct_idx_incr_pi_2_pi_fr[-phi_a]
+                        #ct_idx_incr = ct_idx_incr_pi_2_pi_fr[-phi_a]
+                        ct_idx_incr = ct_idx_incr_pi_2_pi_fr[phi_a]
                     else:
-                        ct_idx_incr = ct_idx_incr_pi_2_pi_2_fr[-phi_a]
+                        #ct_idx_incr = ct_idx_incr_pi_2_pi_2_fr[-phi_a]
+                        ct_idx_incr = ct_idx_incr_pi_2_pi_2_fr[phi_a]
                     #ct_idxs[awg_idx][core_idx].append(ct_idx_incr)
                     ct_idxs[awg_idx][core_idx][idx] = ct_idx_incr
             ## Consider throwing error here
@@ -2504,9 +2516,11 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 ct.table[ct_idx].amplitude0.increment = False
                 ct.table[ct_idx].amplitude1.value = amplitude
                 ct.table[ct_idx].amplitude1.increment = False
-                ct.table[ct_idx].phase0.value =  -phase
+                #ct.table[ct_idx].phase0.value =  -phase
+                ct.table[ct_idx].phase0.value =  phase
                 ct.table[ct_idx].phase0.increment = False
-                ct.table[ct_idx].phase1.value = -(phase+90)
+                #ct.table[ct_idx].phase1.value = -(phase+90)
+                ct.table[ct_idx].phase1.value = (phase+90)
                 ct.table[ct_idx].phase1.increment =False
                 ct_idx += 1
 
@@ -2515,9 +2529,11 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 ct.table[ct_idx].amplitude0.increment = False
                 ct.table[ct_idx].amplitude1.value = amplitude
                 ct.table[ct_idx].amplitude1.increment = False
-                ct.table[ct_idx].phase0.value =  -(phase+90)
+                #ct.table[ct_idx].phase0.value =  -(phase+90)
+                ct.table[ct_idx].phase0.value =  (phase+90)
                 ct.table[ct_idx].phase0.increment = False
-                ct.table[ct_idx].phase1.value = -(phase+180)
+                #ct.table[ct_idx].phase1.value = -(phase+180)
+                ct.table[ct_idx].phase1.value = (phase+180)
                 ct.table[ct_idx].phase1.increment = False
                 ct_idx += 1
 
@@ -2526,9 +2542,11 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 ct.table[ct_idx].amplitude0.increment = False
                 ct.table[ct_idx].amplitude1.value = amplitude
                 ct.table[ct_idx].amplitude1.increment = False
-                ct.table[ct_idx].phase0.value = -(phase+180)
+                #ct.table[ct_idx].phase0.value = -(phase+180)
+                ct.table[ct_idx].phase0.value = (phase+180)
                 ct.table[ct_idx].phase0.increment = False
-                ct.table[ct_idx].phase1.value = -(phase+270)
+            #    ct.table[ct_idx].phase1.value = -(phase+270)
+                ct.table[ct_idx].phase1.value = (phase+270)
                 ct.table[ct_idx].phase1.increment = False
                 ct_idx += 1
 
@@ -2559,9 +2577,9 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
                 ct.table[ct_idx].amplitude0.increment = False
                 ct.table[ct_idx].amplitude1.value = amplitude
                 ct.table[ct_idx].amplitude1.increment = False
-                ct.table[ct_idx].phase0.value =  -phase
+                ct.table[ct_idx].phase0.value =  phase
                 ct.table[ct_idx].phase0.increment = True
-                ct.table[ct_idx].phase1.value = -phase
+                ct.table[ct_idx].phase1.value = phase
                 ct.table[ct_idx].phase1.increment = True
                 ct_idx += 1
 
