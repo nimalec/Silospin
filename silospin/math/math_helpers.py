@@ -57,20 +57,20 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
     if npoints < min_points:
         npoints_pad = min_points - npoints
         if npoints_pad%2 == 0:
-            zero_pad_l = np.zeros(int(npoints_pad/2))
-            zero_pad_r = np.zeros(int(npoints_pad/2))
-            #zero_pad_l = np.zeros(ceil(npoints_pad/32)*16)
-            #zero_pad_r = np.zeros(ceil(npoints_pad/32)*16)
+            #zero_pad_l = np.zeros(int(npoints_pad/2))
+            #zero_pad_r = np.zeros(int(npoints_pad/2))
+            zero_pad_l = np.zeros(ceil(npoints_pad/32)*16)
+            zero_pad_r = np.zeros(ceil(npoints_pad/32)*16)
         elif 2*int(npoints_pad/2) + npoints < min_points:
-            zero_pad_l = np.zeros(int(npoints_pad/2))
-            zero_pad_r = np.zeros(int(npoints_pad/2) + 1)
-            #zero_pad_l = np.zeros(ceil(npoints_pad/32)*16)
-            #zero_pad_r = np.zeros(ceil((npoints_pad/2 + 1)/16)*16)
+            #zero_pad_l = np.zeros(int(npoints_pad/2))
+            #zero_pad_r = np.zeros(int(npoints_pad/2) + 1)
+            zero_pad_l = np.zeros(ceil(npoints_pad/32)*16)
+            zero_pad_r = np.zeros(ceil((npoints_pad/2 + 1)/16)*16)
         else:
-            zero_pad_l = np.zeros(int(npoints_pad/2))
-            zero_pad_r = np.zeros(int(npoints_pad/2)-1)
-            #zero_pad_l = np.zeros(ceil(npoints_pad/32)*16)
-            #zero_pad_r = np.zeros(ceil((npoints_pad/2 - 1)/16)*16)
+            #zero_pad_l = np.zeros(int(npoints_pad/2))
+            #zero_pad_r = np.zeros(int(npoints_pad/2)-1)
+            zero_pad_l = np.zeros(ceil(npoints_pad/32)*16)
+            zero_pad_r = np.zeros(ceil((npoints_pad/2 - 1)/16)*16)
 
         array = np.concatenate((zero_pad_l, array,zero_pad_r), axis=None)
     else:
