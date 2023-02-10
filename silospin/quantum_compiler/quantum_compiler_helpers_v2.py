@@ -2323,11 +2323,9 @@ def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_s
     ## Initial (pi/2)_pi/2 gates
     for i in range(len(phases_0_I)):
         ct.table[ct_idx].waveform.index = waves[1]['index']
-    #    ct.table[ct_idx].amplitude0.value = 1
-        ct.table[ct_idx].amplitude0.value = 0.5
+        ct.table[ct_idx].amplitude0.value = 1
         ct.table[ct_idx].amplitude0.increment = False
-        #ct.table[ct_idx].amplitude1.value = 1
-        ct.table[ct_idx].amplitude1.value = 0.5
+        ct.table[ct_idx].amplitude1.value = 1
         ct.table[ct_idx].amplitude1.increment = False
         ct.table[ct_idx].phase0.value = phases_0_I[i]['value']
         ct.table[ct_idx].phase0.increment = False
