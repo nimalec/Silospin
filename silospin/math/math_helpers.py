@@ -59,11 +59,12 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
     if npoints < min_points:
         #npoints_pad = min_points - npoints
         npoints_pad = net_pad_0
-        print(npoints_pad)
-        
+
         if npoints_pad%2 == 0:
-            zero_pad_l = np.zeros(ceil(npoints_pad/32)*16)
-            zero_pad_r = np.zeros(ceil(npoints_pad/32)*16)
+            #zero_pad_l = np.zeros(ceil(npoints_pad/32)*16)
+            #zero_pad_r = np.zeros(ceil(npoints_pad/32)*16)
+            zero_pad_l = np.zeros(int(npoints_pad/2))
+            zero_pad_r = np.zeros(int(npoints_pad/2))
 
         elif 2*int(npoints_pad/2) + npoints < min_points:
             zero_pad_l = np.zeros(ceil(npoints_pad/32)*16)
