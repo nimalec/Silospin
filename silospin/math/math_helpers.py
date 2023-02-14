@@ -74,8 +74,8 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
             zero_pad_r = np.zeros(ceil((npoints_pad/2 - 1)/16)*16)
 
         array = np.concatenate((zero_pad_l, array,zero_pad_r), axis=None)
+        print(len(array))
 
-    #    if len(array) != :
     else:
         pass
 
