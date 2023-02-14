@@ -3469,7 +3469,6 @@ def generate_waveforms_v3(gate_npoints, channel_map, added_padding, standard_rf,
             waveforms[awg][core_idx] = {}
             if channel_map[awg][core_idx]['rf'] == 1:
                 gt_idx = channel_map[awg][core_idx]['gate_idx'][0]
-                print(n_std_waveform_pi_2)
                 waveforms[awg][core_idx]["pi_pifr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
                 waveforms[awg][core_idx]["pi_2_pi_2fr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi_2"], amp, min_points = n_std_waveform_pi_2, side_pad=added_padding)
                 waveforms[awg][core_idx]["pi_2_pifr"] = rectangular_add_padding(gate_npoints[awg]["rf"][gt_idx]["pi_2"], amp, min_points = n_std_waveform_pi, side_pad=added_padding)
