@@ -40,7 +40,6 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
     ##Total number of points ==> always integer multiple of 16
     #min_npoints = ceil(min_points/16)*16
     net_pad_0 = min_points - npoints
-    print(net_pad_0)
 
     ## Added padding on each side
     if side_pad == 0:
@@ -60,6 +59,8 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
     if npoints < min_points:
         #npoints_pad = min_points - npoints
         npoints_pad = net_pad_0
+        print(npoints_pad)
+        
         if npoints_pad%2 == 0:
             zero_pad_l = np.zeros(ceil(npoints_pad/32)*16)
             zero_pad_r = np.zeros(ceil(npoints_pad/32)*16)
