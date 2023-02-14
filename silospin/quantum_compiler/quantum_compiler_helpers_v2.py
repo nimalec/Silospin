@@ -3443,7 +3443,7 @@ def generate_waveforms_v3(gate_npoints, channel_map, added_padding, standard_rf,
 
     n_std_waveform_pi_p_std = len(rectangular_add_padding(n_pi_p_std, amp, min_points = n_pi_p_std, side_pad=added_padding))
     n_std_waveform_pi_2_p_std = len(rectangular_add_padding(n_pi_2_p_std, amp, min_points = n_pi_2_p_std, side_pad=added_padding))
-
+    print(gate_npoints)
 
     if n_std_waveform_pi < 48:
          n_std_waveform_pi = 48

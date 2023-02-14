@@ -38,7 +38,7 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
         raise
 
     ##Total number of points ==> always integer multiple of 16
-    min_npoints = ceil(min_points/16)*16
+    #min_npoints = ceil(min_points/16)*16
     net_pad_0 = min_points - npoints
 
     ## Added padding on each side
@@ -71,9 +71,12 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
             zero_pad_r = np.zeros(ceil((npoints_pad/2 - 1)/16)*16)
 
         array = np.concatenate((zero_pad_l, array,zero_pad_r), axis=None)
+
+    #    if len(array) != :
     else:
         pass
-    print(len(array))
+
+
     return array.tolist()
 
 def compute_accumulated_phase(gt, phi_l):
