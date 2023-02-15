@@ -288,7 +288,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                         pass
 
                     #waveform = obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)
-                    amp = float(item[0:item.find('*')]) 
+                    amp = float(item[item.find(')'):item.find('*')]) 
                     waveform = obtain_waveform_arbitrary_gate_waveform_v2(gt_label, tau_val, amp, param_values, arbgate_picklefile_location)
                     gt_idx_awg = awg_core_split[gt_idx][0]
                     gt_idx_core = awg_core_split[gt_idx][1]
