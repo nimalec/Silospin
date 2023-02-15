@@ -245,7 +245,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                     qubit_length = qubit_lengths["plunger"][gt_idx]['p']
                     length_set.append(qubit_length)
 
-              ##Checks if  gate is arb   
+              ##Checks if  gate is arb
                 elif item.find('*') != -1:
                     gt_label_idx = item.find('*') + 1
                     gt_label = item[gt_label_idx]
@@ -287,7 +287,9 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                     else:
                         pass
 
-                    waveform = obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)
+                    #waveform = obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)
+                    amp = float(item[0:item.find('*')]) 
+                    waveform = obtain_waveform_arbitrary_gate_waveform_v2(gt_label, tau_val, amp, param_values, arbgate_picklefile_location)
                     gt_idx_awg = awg_core_split[gt_idx][0]
                     gt_idx_core = awg_core_split[gt_idx][1]
                     arbitrary_waveforms[gt_idx_awg][gt_idx_core].append((item[item.find(')')+1:len(item)], waveform, gt_idx))
