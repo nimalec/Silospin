@@ -245,15 +245,15 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                     qubit_length = qubit_lengths["plunger"][gt_idx]['p']
                     length_set.append(qubit_length)
 
-              ##Checks if  gate is arb  ==>
+              ##Checks if  gate is arb   
                 elif item.find('*') != -1:
-
                     gt_label_idx = item.find('*') + 1
                     gt_label = item[gt_label_idx]
                     gt_parameters = arb_gate_dict[gt_label]['parameters']
                     idx_set.add(gt_idx)
                     comma_idxs = [i for i, letter in enumerate(item) if letter == '&']
                     param_values = []
+
                     ## Arb RF gate
                     if gt_idx in rf_idxs:
                         arbitrary_gates.append((gt_idx, item[item.find(')')+1:len(item)]))

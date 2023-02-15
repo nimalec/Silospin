@@ -145,8 +145,6 @@ class GateSetTomographyQuantumCompiler:
         standard_rf = (hdawg_std_rf, standard_rf_idx)
         n_std = (npoints_pi_2_standard, npoints_pi_standard, npoints_p_standard)
 
-
-
         try:
          if added_padding > 5e-9:
             raise TypeError("Padding should not exceed 5 ns!!")
@@ -156,7 +154,6 @@ class GateSetTomographyQuantumCompiler:
         self._gate_npoints = {}
         for awg in self._gate_parameters:
             self._gate_npoints[awg] = make_gate_npoints(self._gate_parameters[awg], sample_rate)
-        #self._waveforms = generate_waveforms_v2(self._gate_npoints, channel_mapping, added_padding, standard_rf)
         self._waveforms = generate_waveforms_v3(self._gate_npoints, channel_mapping, added_padding, standard_rf, n_std)
 
         dc_lengths = {}

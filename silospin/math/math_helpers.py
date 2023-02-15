@@ -51,7 +51,7 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
         elif added_pad_0 <= min_points:
             pass
         else:
-            added_pad_1= net_pad_0 - added_pad_0
+            added_pad_1 = net_pad_0 - added_pad_0
             min_points =ceil((min_points + added_pad_1)/16)*16
 
     array = amp*np.ones(npoints)
@@ -77,7 +77,6 @@ def rectangular_add_padding(npoints, amp, min_points = 48, side_pad = 0, sample_
 
     else:
         pass
-
 
     return array.tolist()
 

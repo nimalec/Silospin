@@ -3722,6 +3722,28 @@ def obtain_waveform_arbitrary_gate_waveform(gate_label, tau, parameter_values, p
     exec(execute_program, parameters, local_var)
     return local_var['waveform']
 
+def obtain_waveform_arbitrary_gate_waveform_v2(gate_label, tau, amp, parameter_values, pickle_file_location='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
+    ##parameter_values ==> list of tuples of (parameter_name, parameter_value) ==> should be ordered in propoer order of parameters used earlier
+    ### All of these functions will have the form
+    ## def make_arb_waveform(tau,parameter1, ..., parameterN):
+    ##     waveform code....
+    ##     return waveform
+
+    arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
+    arbitrary_gate_function = arbgate_dict[gate_label]['waveform_function']
+
+    local_var = {}
+    parameters = {}
+    sample_rate = 2.4 ##sample rate of hdawg in GSa/s
+    execute_program = arbitrary_gate_function + '\nwaveform = make_arb_waveform(' + str(tau) + ',' + str(amp)
+    for idx in range(len(parameter_values)):
+        parameters[parameter_values[idx][0]] = parameter_values[idx][1]
+        execute_program += ','+str(parameter_values[idx][1])
+    execute_program += ')'
+    parameters['sample_rate'] = sample_rate
+    exec(execute_program, parameters, local_var)
+    return local_var['waveform']
+
 def evaluate_arb_waveform(gate_str, pickle_file_location='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
      arb_gate_dict = unpickle_qubit_parameters(pickle_file_location)
      gt_label_idx = gate_str.find('*') + 1
@@ -3740,4 +3762,26 @@ def evaluate_arb_waveform(gate_str, pickle_file_location='C:\\Users\\Sigillito L
          param_values.append(gt_parameters[len(param_values)], float(gate_str[comma_idxs[idx]+1:gt_label.find(']')]))
 
      waveform = obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, pickle_file_location)
+     return np.array(waveform)
+
+def evaluate_arb_waveform_v2(gate_str, pickle_file_location='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_arb_gates.pickle'):
+     arb_gate_dict = unpickle_qubit_parameters(pickle_file_location)
+     gt_label_idx = gate_str.find('*') + 1
+     gt_label = gate_str[gt_label_idx]
+     gt_parameters = arb_gate_dict[gt_label]['parameters']
+     amp = float(gate_str[0:gate_str.find('*')])
+
+     comma_idxs = [i for i, letter in enumerate(gate_str) if letter == '&']
+     param_values = []
+     tau_val = float(gate_str[gt_label_idx+2:comma_idxs[0]])
+     if len(gt_parameters) == 0:
+         pass
+     elif len(gt_parameters) == 1:
+         param_values.append((gt_parameters[0], float(gate_str[comma_idxs[0]+1:gt_label.find(']')])))
+     else:
+         for idx in range(len(param_values)-1):
+             param_values.append((gt_parameters[idx], float(gate_str[comma_idxs[idx]+1:comma_idxs[idx+1]])))
+         param_values.append(gt_parameters[len(param_values)], float(gate_str[comma_idxs[idx]+1:gt_label.find(']')]))
+
+     waveform = obtain_waveform_arbitrary_gate_waveform_v2(gt_label, tau_val, amp, param_values, pickle_file_location)
      return np.array(waveform)
