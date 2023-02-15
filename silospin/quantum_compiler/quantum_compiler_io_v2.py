@@ -4,7 +4,7 @@ import copy
 from math import ceil
 
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
-from silospin.quantum_compiler.quantum_compiler_helpers_v2 import obtain_waveform_arbitrary_gate_waveform
+from silospin.quantum_compiler.quantum_compiler_helpers_v2 import obtain_waveform_arbitrary_gate_waveform_v2 
 
 def gst_file_parser_v2(file_path, qubit_lengths):
     '''
@@ -288,7 +288,7 @@ def gst_file_parser_v3(file_path, qubit_lengths, channel_mapping, awg_core_split
                         pass
 
                     #waveform = obtain_waveform_arbitrary_gate_waveform(gt_label, tau_val, param_values, arbgate_picklefile_location)
-                    amp = float(item[item.find(')')+1:item.find('*')]) 
+                    amp = float(item[item.find(')')+1:item.find('*')])
                     waveform = obtain_waveform_arbitrary_gate_waveform_v2(gt_label, tau_val, amp, param_values, arbgate_picklefile_location)
                     gt_idx_awg = awg_core_split[gt_idx][0]
                     gt_idx_core = awg_core_split[gt_idx][1]
