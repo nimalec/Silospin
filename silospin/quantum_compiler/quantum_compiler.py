@@ -14,7 +14,7 @@ import zhinst.utils
 import zhinst.core
 import zhinst.utils
 
-from silospin.drivers.zi_hdawg_driver_v2 import HdawgDriver
+from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.math.math_helpers import gauss, rectangular
 from silospin.quantum_compiler.quantum_compiler_helpers import *
 from silospin.quantum_compiler.quantum_compiler_io import *
@@ -80,7 +80,7 @@ class GateSetTomographyQuantumCompiler:
 
 
 
-
+       ##change here ...
         sample_rate = 2.4e9
         self._gst_path = gst_file_path
         self._awgs = awgs

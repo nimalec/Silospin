@@ -16,5 +16,5 @@ def initialize_drivers(awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0: 'dev6541',
     dev_name_2 = 'hdawg2'
     awg_driver_1 = HdawgDriver(awgs[0], dev_name_1, channel_mapping, awg_mapping)
     awg_driver_2 = HdawgDriver(awgs[1], dev_name_2, channel_mapping, awg_mapping)
-    mfli_driver_1 = MfliDriver(lockins[0])
+    mfli_driver_1 = MfliDriver(lockins[1])
 #    mfli_driver_2 = MfliDriver(lockins[1])
