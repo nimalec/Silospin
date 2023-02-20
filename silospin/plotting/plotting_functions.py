@@ -24,8 +24,8 @@ def plotMFLIOutput(sample_data):
     ##Vertical = number of traces
     ##Horizontal = number of time slots
     V_out = []
-    for n in sample_data:
-        V_out.append(sample_data[n]['value'])
+    for trace in sample_data:
+        V_out.append(trace['value'])
     V_out = np.array(V_out)
     fig = plt.figure(figsize=(8,6))
     plt.imshow(V_out)
