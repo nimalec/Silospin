@@ -1,7 +1,7 @@
 from silospin.drivers.zi_hdawg_driver import HdawgDriver
 from silospin.drivers.zi_mfli_driver import MfliDriver
 from silospin.drivers.homedac_box import DacDriverSerial
-from silospin.quantum_compiler.quantum_compiler_helpers_v2 import channel_mapper, make_gate_parameters
+from silospin.quantum_compiler.quantum_compiler_helpers import channel_mapper, make_gate_parameters
 import pickle
 import datetime
 
