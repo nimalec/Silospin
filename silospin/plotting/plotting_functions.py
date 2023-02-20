@@ -19,3 +19,15 @@ def plot2DVoltageSweep(V_x, V_y, V_out, channel_numbers):
     plt.xlabel('Channel ' +str(channel_numbers[0]) + ' Barrier Voltage [V]')
     plt.ylabel('Channel ' +str(channel_numbers[1]) + ' Barrier Voltage [V]')
     plt.show()
+
+def plotMFLIOutput(sample_data):
+    ##Vertical = number of traces
+    ##Horizontal = number of time slots
+    V_out = []
+    for n in sample_data:
+        V_out.append(sample_data[n]['value'])
+    V_out = np.array(V_out)
+    fig = plt.figure(figsize=(8,6))
+    plt.imshow(V_out)
+    plt.title("Plot 2D array")
+    plt.show()
