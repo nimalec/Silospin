@@ -829,7 +829,7 @@ def make_command_table_indices(gt_seqs, channel_map, awg_core_split, arb_gates, 
             continue
     return ct_idxs, arbgate_counter
 
-def make_rf_command_table_v3(n_std, arbZs, arbitrary_waveforms, plunger_length_set, awgidx, coreidx, awg):
+def make_rf_command_table(n_std, arbZs, arbitrary_waveforms, plunger_length_set, awgidx, coreidx, awg):
 
     ct = CommandTable(awg.commandtable.load_validation_schema())
     n_pi_2_std = n_std[0]
