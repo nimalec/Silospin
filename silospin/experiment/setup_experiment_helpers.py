@@ -1,6 +1,3 @@
-from silospin.drivers.zi_hdawg_driver import HdawgDriver
-from silospin.drivers.zi_mfli_driver import MfliDriver
-from silospin.drivers.homedac_box import DacDriverSerial
 import pickle
 import datetime
 
