@@ -27,8 +27,8 @@ def plotMFLIOutput(sample_data):
     for trace in sample_data:
         V_out.append([item[0] for item in trace['value'].T])
     V_out = np.array(V_out)
-    return V_out  
-    # fig = plt.figure(figsize=(8,6))
-    # plt.imshow(V_out)
-    # plt.title("Plot 2D array")
-    # plt.show()
+
+    fig = plt.figure(figsize=(8,6))
+    plt.imshow(V_out)
+    plt.title("Plot 2D array")
+    plt.show()
