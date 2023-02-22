@@ -311,16 +311,66 @@ class MfliDaqModule:
 
         return sample_data, time_axis
 
+    def set_triggered_data_acquisition_time_domain(self, duration, sample_rate=53570, rows = 1 ,sig_port  = 'Aux_in_1' , plot_on = True):
+        #for now, available input signals are only 'Demod_R' and 'Aux_in_1'
+        sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
+        sample_data = []
+        self._daq_module.set("device", self._dev_id)
+
+        self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
+        self._daq.setInt(f'/{self._dev_id}/demods/0/trigger', 0)
+        self._daq.setDouble(f'/{self._dev_id}/demods/0/rate', sample_rate)
+        time.sleep(0.2)
+
+        self._daq_module.set('type', 6)
+        self._daq_module.set('triggernode', f'/{self._dev_id}/demods/0/sample.TrigIn2')
+        self._daq_module.set('clearhistory', 1)
+        self._daq_module.set('clearhistory', 1)
+        self._daq_module.set('bandwidth', 0)
+        self._daq_module.set('edge', 1)
+        columns = np.ceil(duration*sample_rate)
+        self._daq_module.set('grid/mode', 4)
+        self._daq_module.set("grid/cols", columns)
+        self._daq_module.set('grid/rows', rows)
+        self._daq_module.set("holdoff/time", 0)
+        self._daq_module.set("holdoff/count", 0)
+        self._daq_module.subscribe(sig_source[sig_port])
+        time.sleep(0.8)
+        columns = self._daq_module.getInt('grid/cols')
+
+        self._daq_module.set('endless', 0)
+        self._daq_module.subscribe(sig_source[sig_port])
+        self._daq_module.execute()
+        self._daq_module.finish()
+        self._daq_module.unsubscribe('*')
+        self._daq_module.subscribe(sig_source[sig_port])
+
+        # self._daq_module.execute()
+        # while not self._daq_module.finished():
+        #     data_read = self._daq_module.read(True)
+        #     if sig_source[sig_port].lower() in data_read.keys():
+        #         line.set_data(time_axis, data_read[sig_source[sig_port].lower()][0]['value'][0])
+        #         ax1.set_ylim(np.amin(data_read[sig_source[sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[sig_source[sig_port].lower()][0]['value'][0]))/5,
+        #                           np.amax(data_read[sig_source[sig_port].lower()][0]['value'][0]) + abs(np.amax(data_read[sig_source[sig_port].lower()][0]['value'][0]))/5)
+        #         fig.canvas.draw()
+        #         fig.canvas.flush_events()
+        #         for each in data_read[sig_source[sig_port].lower()]:
+        #             sample_data.append(each)
+        # data_read = self._daq_module.read(True)
+        # if sig_source[sig_port].lower() in data_read.keys():
+        #     for each in data_read[sig_source[sig_port].lower()]:
+        #         sample_data.append(each)
+        # self._daq_module.finish()
+        # self._daq_module.unsubscribe('*')
+        # return sample_data, time_axis
+
+
     def triggered_data_acquisition_time_domain(self, duration, n_traces = 100,  sample_rate=53570, rows = 1 ,sig_port  = 'Aux_in_1' , plot_on = True):
 
         #for now, available input signals are only 'Demod_R' and 'Aux_in_1'
-        sig_source = { 'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'   }
+        sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
 
         sample_data = []
-
-
-        # sig_source[sig_port]
-
         self._daq_module.set("device", self._dev_id)
 
         #enable data transfer (sampling rate)
@@ -434,6 +484,11 @@ class MfliDaqModule:
         self._daq_module.unsubscribe('*')
 
         return sample_data, time_axis
+
+
+
+
+
 
     # def 2D_plot(self, sample_data, time_axis):
 
