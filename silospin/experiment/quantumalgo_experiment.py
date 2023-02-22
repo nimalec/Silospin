@@ -22,6 +22,7 @@ class QuantumAlgoExperiment:
     def __init__(self, sequence_file, n_inner=1, n_outer=1, added_padding=0, realtime_plot = True, acquisition_time = 3.733e-3, lockin_sample_rate = 107e3, sig_port = 'Aux_in_1', trigger_settings = {'client': 'tcp://127.0.0.1:4244', 'tlength': 30, 'holdoff': 4000}, parameter_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_qubit_gate_parameters.pickle', awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0:'dev5761', 1: 'dev5759'}, rf_dc_core_grouping = {'hdawg1': {'rf': [1,2,3,4],'dc':[]}, 'hdawg2': {'rf': [1], 'dc': [2,3,4]}}, trig_channels={'hdawg1': 1,'hdawg2': 1}):
         ##Initialize instruments
         self._instrument_drivers = {'awgs': {}, 'mflis': {}}
+        self._sig_port = sig_port
         #initialize_drivers(awgs, lockins, rf_dc_core_grouping, trig_channels)
         initialize_drivers()
         for awg in awgs:
@@ -70,6 +71,7 @@ class QuantumAlgoExperiment:
 
 
     def run_program(self):
+        sig_port = self._sig_port
         for i in range(self._n_trigger):
             for daq in self._daq_modules:
                 self._daq_modules[daq]._daq_module.set("count", 1)
