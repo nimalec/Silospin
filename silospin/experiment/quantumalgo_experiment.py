@@ -60,7 +60,7 @@ class QuantumAlgoExperiment:
         for mfli in lockins:
             idx_1 = str(mfli)
             idx_2 = str(mfli+1)
-            line_temp = f'self._instrument_drivers["mflis"][{idx_1}]=setup_quantumalgo_instruments.awg_driver_{idx_2}\n'
+            line_temp = f'self._instrument_drivers["mflis"][{idx_1}]=setup_quantumalgo_instruments.mfli_driver_{idx_2}\n'
             exec(line_temp)
         awg_drivers = {}
         for awg in awgs:
