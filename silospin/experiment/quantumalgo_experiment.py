@@ -77,6 +77,7 @@ class QuantumAlgoExperiment:
                 self._daq_modules[daq]._daq_module.set("count", 1)
                 self._daq_modules[daq]._daq_module.execute()
             self._trig_box.send_trigger()
+            plot_1_str = ''
             for daq in self._daq_modules:
                 while not self._daq_modules[daq]._daq_module.finished():
                     data_read = self._daq_modules[daq]._daq_module.read(True)
