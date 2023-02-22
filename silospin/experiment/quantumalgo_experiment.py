@@ -10,7 +10,7 @@ from silospin.drivers.mfli_triggered import MfliDaqModule
 
 import subprocess
 import numpy as np
-import matplotlib.pyplot as plt 
+import matplotlib.pyplot as plt
 
 class QuantumAlgoExperiment:
     ##Only utilizes Trigbox, MFLIs. Sweeper modules will utilize this...
@@ -52,7 +52,7 @@ class QuantumAlgoExperiment:
 
         ##Now loop over all lockins
         columns = np.ceil(acquisition_time*lockin_sample_rate)
-        self._time_axis = np.linspace(0, duration,  columns)
+        self._time_axis = np.linspace(0, acquisition_time,  columns)
         v_measured = np.zeros(columns)
 
         self._daq_modules = {}
