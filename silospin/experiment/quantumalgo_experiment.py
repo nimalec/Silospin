@@ -72,8 +72,8 @@ class QuantumAlgoExperiment:
     def run_program(self):
         for i in range(self._n_trigger):
             for daq in self._daq_modules:
-                self._daq_modules[daq].set("count", 1)
-                self._daq_modules[daq].execute()
+                self._daq_modules[daq]._daq.set("count", 1)
+                self._daq_modules[daq]._daq.execute()
             self._trig_box.send_trigger()
             for daq in self._daq_modules:
                 data_read = self._daq_modules[daq].read(True)
