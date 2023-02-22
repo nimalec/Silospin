@@ -74,7 +74,7 @@ class QuantumAlgoExperiment:
             for daq in self._daq_modules:
                 self._daq_modules[daq].set("count", 1)
                 self._daq_modules[daq].execute()
-            #self._trig_box.send_trigger()
+            self._trig_box.send_trigger()
             for daq in self._daq_modules:
                 data_read = self._daq_modules[daq].read(True)
                 if self._sig_sources[daq][sig_port].lower() in data_read.keys():
