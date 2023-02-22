@@ -81,9 +81,9 @@ class QuantumAlgoExperiment:
 
         ##Now loop over all lockins
         ## Issue here ==> all lockins waiting for a trigger event here...
-        daq_module =  MfliDaqModule(self._instrument_drivers['mflis'][0])
-        sample_data, time_axis = daq_module.triggered_data_acquisition_time_domain(duration=trace_duration, n_traces = self._n_trigger, sig_port = sig_port, sample_rate=lockin_sample_rate, plot_on=realtime_plot)
-        self._sample_data = sample_data
+        #daq_module =  MfliDaqModule(self._instrument_drivers['mflis'][0])
+        #sample_data, time_axis = daq_module.triggered_data_acquisition_time_domain(duration=trace_duration, n_traces = self._n_trigger, sig_port = sig_port, sample_rate=lockin_sample_rate, plot_on=realtime_plot)
+        #self._sample_data = sample_data
 
     def run_program(self):
         for i in range(self._n_trigger):
