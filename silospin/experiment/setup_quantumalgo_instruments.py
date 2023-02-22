@@ -22,4 +22,5 @@ def initialize_drivers(awgs, lockins, rf_dc_core_grouping, trig_channels):
     for mfli in lockins:
         drivers_str += f'mfli_driver_{itr+1}=MfliDriver(lockins[{mfli}])\n'
         itr += 1
+    print(drivers_str)
     exec(drivers_str)
