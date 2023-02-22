@@ -73,6 +73,7 @@ class QuantumAlgoExperiment:
     def run_program(self):
         sig_port = self._sig_port
         for i in range(self._n_trigger):
+            print(self._sample_data[mfli])
             for daq in self._daq_modules:
                 self._daq_modules[daq]._daq_module.set("count", 1)
                 self._daq_modules[daq]._daq_module.execute()
@@ -89,6 +90,7 @@ class QuantumAlgoExperiment:
                         for sig in data_read[self._sig_source[daq][sig_port].lower()]:
                             self._sample_data[daq].append(sig)
                 data_read = self._daq_modules[daq]._daq_module.read(True)
+
 
                 if self._sig_source[daq][sig_port].lower() in data_read.keys():
                     for sig in data_read[self._sig_source[daq][sig_port].lower()]:
