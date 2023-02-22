@@ -14,7 +14,7 @@ def initialize_drivers(awgs, lockins, rf_dc_core_grouping, trig_channels):
 
     channel_mapping, awg_mapping = channel_mapper(rf_dc_core_grouping, trig_channels=trig_channels)
     drivers_str = ''
-    quote = "
+    quote = '"'
     itr = 0
     for awg in rf_dc_core_grouping:
         drivers_str += f'awg_driver_{itr+1}=HdawgDriver(awgs[{quote}{awg}{quote}], awg, channel_mapping, awg_mapping)\n'
