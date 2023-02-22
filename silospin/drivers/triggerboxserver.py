@@ -2,7 +2,7 @@ import zerorpc
 from silospin.drivers.trigger_box import TriggerBoxSerial
 
 class TriggerBoxServer(object):
-    device_id='COM5'
+    device_id='COM17'
     triggerbox_driver = TriggerBoxSerial(dev_id = device_id,  baud_rate=250000)
 
     def close(self):
@@ -11,19 +11,21 @@ class TriggerBoxServer(object):
     def open_connection(self):
         self.triggerbox_driver._trigbox.open()
 
-    def trigger(self):
-        self.triggerbox_driver.trigger()
+    def send_trigger(self):
+        self.triggerbox_driver.send_trigger()
 
-    def set_burst_length(self, burst_length):
-        self.triggerbox_driver.set_burst_length(burst_length)
-
-    def set_pulse_length(self, pulse_length):
-        self.triggerbox_driver.set_pulse_length(pulse_length)
+    def send_burst(self):
+        self.triggerbox_driver.send_burst()
 
     def set_holdoff(self, holdoff):
         self.triggerbox_driver.set_holdoff(holdoff)
 
+    def set_tlength(self, tlength):
+        self.triggerbox_driver.set_tlength(tlength)
+
+    def set_nburst(self, nburst):
+        self.triggerbox_driver.set_nburst(nburst)
 
 server = zerorpc.Server(TriggerBoxServer())
-server.bind("tcp://0.0.0.0:4243")
+server.bind("tcp://0.0.0.0:4244")
 server.run()

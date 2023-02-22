@@ -12,9 +12,9 @@ import pickle
 
 
 class QuantumAlgoExperiment:
-    def __init__(self, gst_file, n_inner=1, n_outer=1, added_padding=0, descriptor="gst_experiment", plot = True, trace_duration = 3.733e-5, lockin_sample_rate = 107e3, parameter_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_qubit_gate_parameters.pickle', waveforms_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_waveforms.pickle', instruments_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_instruments.pickle', trigger_client="tcp://127.0.0.1:4243"):
+    ##
+    def __init__(self, gst_file, n_inner=1, n_outer=1, added_padding=0, plot = True, trace_duration = 3.733e-5, lockin_sample_rate = 107e3, parameter_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_qubit_gate_parameters.pickle', waveforms_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_waveforms.pickle', instruments_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_instruments.pickle', trigger_client="tcp://127.0.0.1:4243"):
 
-        ##Modify, should now include lockins
         initialize_drivers()
         self._instrument_drivers = {'awgs': {0: setup_pulsed_experiments.awg_driver_1, 1: setup_pulsed_experiments.awg_driver_2}, "mflis": {0: setup_pulsed_experiments.mfli_driver_1}}
         ##GST  experiment file
@@ -31,7 +31,7 @@ class QuantumAlgoExperiment:
         daq_module =  MfliDaqModule(self._instrument_drivers['mflis'][0])
         sample_data, time_axis = daq_module.triggered_data_acquisition_time_domain(duration=trace_duration, n_traces = self._n_trigger, sig_port  = 'Aux_in_1', sample_rate=lockin_sample_rate, plot_on=plot)
         self._sample_data = sample_data
-        
+
     def run_program(self):
         for i in range(self._n_trigger):
             self._trig_box.send_trigger()
