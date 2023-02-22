@@ -15,8 +15,10 @@ def initialize_drivers(awgs, lockins, rf_dc_core_grouping, trig_channels):
     drivers_str = ''
     itr = 0
     for awg in rf_dc_core_grouping:
-        drivers_str += f'awg_driver_{str(awg+1)}=HdawgDriver(awgs[{str(awg)}], awg, channel_mapping, awg_mapping)\n'
+        idx_1 = str(awg+1)
+        idx_2 = str(awg)
+        drivers_str += f'awg_driver_{idx_1}=HdawgDriver(awgs[{idx_2}], awg, channel_mapping, awg_mapping)\n'
         itr += 1
     for mfli in lockins:
-        drivers_str += f'mfli_driver_{str(mfli+1)}=MfliDriver(lockins[{str(mfli)}])'
+        drivers_str += f'mfli_driver_{idx_1}=MfliDriver(lockins[{idx_2}])'
     exec(drivers_str)
