@@ -10,7 +10,7 @@ from silospin.drivers.mfli_triggered import MfliDaqModule
 
 import subprocess
 import numpy as np
-import matplotib.pyplot as plt 
+import matplotlib.pyplot as plt 
 
 class QuantumAlgoExperiment:
     ##Only utilizes Trigbox, MFLIs. Sweeper modules will utilize this...
