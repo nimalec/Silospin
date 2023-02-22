@@ -52,14 +52,14 @@ class QuantumAlgoExperiment:
         self._instrument_drivers = {'awgs': {}, 'mflis': {}}
         initialize_drivers(awgs, lockins, rf_dc_core_grouping, trig_channels)
         for awg in awgs:
-            line_temp = f'self._instrument_drivers["awgs"][{awg}]=setup_quantumalgo_instruments.awg_driver_{awg+1}\n'
+            line_temp = f'self._instrument_drivers["awgs"][{str(awg)}]=setup_quantumalgo_instruments.awg_driver_{str(awg+1)}\n'
             exec(line_temp)
         for mfli in lockins:
-            line_temp = f'self._instrument_drivers["mflis"][{mfli}]=setup_quantumalgo_instruments.awg_driver_{mfli+1}\n'
+            line_temp = f'self._instrument_drivers["mflis"][{str(mfli)}]=setup_quantumalgo_instruments.awg_driver_{str(mfli+1)}\n'
             exec(line_temp)
         awg_drivers = {}
         for awg in awgs:
-            awg_drivers[f'hdawg{awg+1}'] = self._instrument_drivers['awgs'][awg]
+            awg_drivers[f'hdawg{str(awg+1)}'] = self._instrument_drivers['awgs'][awg]
 
         ##Quantum program compilation
         self._sequence_file = sequence_file
