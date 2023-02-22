@@ -1,9 +1,9 @@
 import zerorpc
-from silospin.drivers.trig_box import TriggerBoxSerial
+from silospin.drivers.trig_box import TrigBoxSerial
 
 class TriggerBoxServer(object):
     device_id='COM17'
-    triggerbox_driver = TriggerBoxSerial(dev_id = device_id,  baud_rate=250000)
+    triggerbox_driver = TrigBoxSerial(dev_id = device_id,  baud_rate=250000)
 
     def close(self):
         self.triggerbox_driver._trigbox.close()
