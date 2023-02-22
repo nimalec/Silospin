@@ -89,8 +89,8 @@ class QuantumAlgoExperiment:
                         self._sample_data[daq].append(sig)
                 data_read = self._daq_modules[daq]._daq_module.read(True)
 
-                if self._sig_source[daq][sigport].lower() in data_read.keys():
-                    for sig in data_read[self._sig_source[daq][sigport].lower()]:
+                if self._sig_source[daq][sig_port].lower() in data_read.keys():
+                    for sig in data_read[self._sig_source[daq][sig_port].lower()]:
                         self._sample_data[daq].append(sig)
                 else:
                     pass
