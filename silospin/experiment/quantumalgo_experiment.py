@@ -62,7 +62,7 @@ class QuantumAlgoExperiment:
             line_temp = f'self._instrument_drivers["mflis"][{idx_1}]=setup_quantumalgo_instruments.awg_driver_{idx_2}\n'
             exec(line_temp)
         awg_drivers = {}
-        for awg in awgs:  
+        for awg in awgs:
             awg_drivers[f'hdawg{str(awg+1)}'] = self._instrument_drivers['awgs'][awg]
 
         ##Quantum program compilation
