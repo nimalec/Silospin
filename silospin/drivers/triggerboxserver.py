@@ -1,5 +1,5 @@
 import zerorpc
-from silospin.drivers.trigger_box import TriggerBoxSerial
+from silospin.drivers.trig_box import TriggerBoxSerial
 
 class TriggerBoxServer(object):
     device_id='COM17'
