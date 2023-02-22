@@ -52,7 +52,7 @@ class QuantumAlgoExperiment:
         ## Issue here ==> all lockins waiting for a trigger event here...
         self._daq_modules = {}
         for mfli in self._instrument_drivers['mflis']:
-            self._daq_modules[mfli] = self._instrument_drivers['mflis'][mfli]
+            self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
 
         #daq_module =  MfliDaqModule(self._instrument_drivers['mflis'][0])
         #sample_data, time_axis = daq_module.triggered_data_acquisition_time_domain(duration=trace_duration, n_traces = self._n_trigger, sig_port = sig_port, sample_rate=lockin_sample_rate, plot_on=realtime_plot)
