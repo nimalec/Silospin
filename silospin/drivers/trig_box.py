@@ -5,7 +5,7 @@ import time
 import serial
 import zerorpc
 
-class TrigBoxDriverSerial:
+class TrigBoxSerial:
     def __init__(self, dev_id = 'COM17', baud_rate=250000):
         self._dev_id = dev_id
         self._baud_rate = baud_rate
