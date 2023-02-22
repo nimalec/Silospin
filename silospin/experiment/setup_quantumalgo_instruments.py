@@ -9,7 +9,6 @@ def initialize_drivers(awgs, lockins, rf_dc_core_grouping, trig_channels):
         global_var_str += f'global awg_driver_{str(awg+1)}\n'
     for mfli in lockins:
         global_var_str += f'global mfli_driver_{str(mfli+1)}\n'
-    print(global_var_str)
     exec(global_var_str)
 
     channel_mapping, awg_mapping = channel_mapper(rf_dc_core_grouping, trig_channels=trig_channels)
