@@ -44,9 +44,9 @@ class QuantumAlgoExperiment:
 
 
         self._n_trigger = n_inner*n_outer*len(self._gst_program._gate_sequences)
-        # self._trig_box = TrigBoxDriverSerialServer(client=trigger_settings['client'])
-        # self._trig_box.set_holdoff(trigger_settings['holdoff'])
-        # self._trig_box.set_tlength(trigger_settings['tlength'])
+        self._trig_box = TrigBoxDriverSerialServer(client=trigger_settings['client'])
+        self._trig_box.set_holdoff(trigger_settings['holdoff'])
+        self._trig_box.set_tlength(trigger_settings['tlength'])
 
         ##Now loop over all lockins
         columns = np.ceil(acquisition_time*lockin_sample_rate)
@@ -72,7 +72,7 @@ class QuantumAlgoExperiment:
             for daq in self._daq_modules:
                 self._daq_modules[daq].set("count", 1)
                 self._daq_modules[daq].execute()
-            self._trig_box.send_trigger()
+            #self._trig_box.send_trigger()
             for daq in self._daq_modules:
                 data_read = self._daq_modules[daq].read(True)
                 if self._sig_sources[daq][sig_port].lower() in data_read.keys():
