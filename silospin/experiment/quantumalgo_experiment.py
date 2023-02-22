@@ -42,18 +42,17 @@ class QuantumAlgoExperiment:
         self._gst_program = GateSetTomographyQuantumCompiler(self._sequence_file, awg_drivers, self._gate_parameters, n_inner=n_inner, n_outer=n_outer,added_padding=added_padding)
         self._gst_program.compile_program()
 
-        ##Trigger box settings ==> add pulse length and holdoff length
-        ##Need to moify entire module ==>
+
         self._n_trigger = n_inner*n_outer*len(self._gst_program._gate_sequences)
-        self._trig_box = TrigBoxDriverSerialServer(client=trigger_settings['client'])
-        self._trig_box.set_holdoff(trigger_settings['holdoff'])
-        self._trig_box.set_tlength(trigger_settings['tlength'])
+        # self._trig_box = TrigBoxDriverSerialServer(client=trigger_settings['client'])
+        # self._trig_box.set_holdoff(trigger_settings['holdoff'])
+        # self._trig_box.set_tlength(trigger_settings['tlength'])
 
         ##Now loop over all lockins
         ## Issue here ==> all lockins waiting for a trigger event here...
         self._daq_modules = {}
         for mfli in self._instrument_drivers['mflis']:
-            self._daq_modules[mfli] = self._instrument_drivers['mflis'][mfli] 
+            self._daq_modules[mfli] = self._instrument_drivers['mflis'][mfli]
 
         #daq_module =  MfliDaqModule(self._instrument_drivers['mflis'][0])
         #sample_data, time_axis = daq_module.triggered_data_acquisition_time_domain(duration=trace_duration, n_traces = self._n_trigger, sig_port = sig_port, sample_rate=lockin_sample_rate, plot_on=realtime_plot)
