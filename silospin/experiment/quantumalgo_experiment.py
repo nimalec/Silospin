@@ -51,7 +51,7 @@ class QuantumAlgoExperiment:
         self._trig_box.set_tlength(trigger_settings['tlength'])
 
         ##Now loop over all lockins
-        columns = int(np.ceil(acquisition_time*lockin_sample_rate)) 
+        columns = int(np.ceil(acquisition_time*lockin_sample_rate))
         self._time_axis = np.linspace(0, acquisition_time,  columns)
         v_measured = np.zeros(columns)
 
@@ -62,10 +62,10 @@ class QuantumAlgoExperiment:
         plot_1_str = ''
         for mfli in self._instrument_drivers['mflis']:
             self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
-            self._daq_modules[mfli].set_triggered_data_acquisition_time_domain(duration=trace_duration, sig_port = sig_port, sample_rate=lockin_sample_rate, plot_on=realtime_plot)
+            self._daq_modules[mfli].set_triggered_data_acquisition_time_domain(duration=acquisition_time, sig_port = sig_port, sample_rate=lockin_sample_rate, plot_on=realtime_plot)
             self._sig_sources[mfli] = {'Demod_R': f'/{self._daq_modules[mfli]._dev_id}/demods/0/sample.R', 'Aux_in_1': f'/{self._daq_modules[mfli]._dev_id}/demods/0/sample.AuxIn0'}
             self._sample_data[mfli] = []
-            plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(time_axis, v_measured, lw=1)\n'
+            plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
         exec(plot_0_str)
 
 
