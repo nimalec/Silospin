@@ -72,11 +72,11 @@ class QuantumAlgoExperiment:
     def run_program(self):
         for i in range(self._n_trigger):
             for daq in self._daq_modules:
-                self._daq_modules[daq]._daq.set("count", 1)
-                self._daq_modules[daq]._daq.execute()
+                self._daq_modules[daq]._daq_module.set("count", 1)
+                self._daq_modules[daq]._daq_module.execute()
             self._trig_box.send_trigger()
             for daq in self._daq_modules:
-                data_read = self._daq_modules[daq].read(True)
+                data_read = self._daq_modules[daq]._daq_module.read(True)
                 if self._sig_sources[daq][sig_port].lower() in data_read.keys():
                     min_val = np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[sig_source[sig_port].lower()][0]['value'][0]))/5
                     max_val = np.amax(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]) + abs(np.amax(data_read[sig_source[sig_port].lower()][0]['value'][0]))/5
@@ -92,5 +92,5 @@ class QuantumAlgoExperiment:
                         self._sample_data[daq].append(sig)
                 else:
                     pass
-                self._daq_modules[daq].finish()
-                self._daq_modules[daq].unsubscribe('*')
+                self._daq_modules[daq]._daq_module.finish()
+                self._daq_modules[daq]._daq_module.unsubscribe('*')
