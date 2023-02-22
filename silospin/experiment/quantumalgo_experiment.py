@@ -52,6 +52,7 @@ class QuantumAlgoExperiment:
 
         ##Now loop over all lockins
         columns = np.ceil(acquisition_time*lockin_sample_rate)
+        print(columns)
         self._time_axis = np.linspace(0, acquisition_time,  columns)
         v_measured = np.zeros(columns)
 
