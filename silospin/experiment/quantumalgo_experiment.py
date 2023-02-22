@@ -51,8 +51,7 @@ class QuantumAlgoExperiment:
         self._trig_box.set_tlength(trigger_settings['tlength'])
 
         ##Now loop over all lockins
-        columns = np.ceil(acquisition_time*lockin_sample_rate)
-        print(columns)
+        columns = int(np.ceil(acquisition_time*lockin_sample_rate)) 
         self._time_axis = np.linspace(0, acquisition_time,  columns)
         v_measured = np.zeros(columns)
 
