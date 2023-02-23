@@ -72,6 +72,10 @@ class QuantumAlgoExperiment:
 
     def run_program(self):
         sig_port = self._sig_port
+        columns = int(np.ceil(self._measurement_settings['acquisition_time']*self._measurement_settings['sample_rate']))
+        self._time_axis = np.linspace(0, acquisition_time,  columns)
+        v_measured = np.zeros(columns)
+
         plot_0_str = ''
         for mfli in self._instrument_drivers['mflis']:
             plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
