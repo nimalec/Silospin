@@ -82,6 +82,7 @@ class QuantumAlgoExperiment:
 
         for i in range(self._n_trigger):
             #t_0 = time.time()
+            print(i)
             for daq in self._daq_modules:
                 self._daq_modules[daq].enable_triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], self._measurement_settings['sample_rate'], rows = 1 ,sig_port  = sig_port)
                 self._daq_modules[daq]._daq_module.execute()
