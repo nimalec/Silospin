@@ -369,7 +369,7 @@ class MfliDaqModule:
         self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
         self._daq.setInt(f'/{self._dev_id}/demods/0/trigger', 0)   #set Trigger to the continuous mode
         self._daq.setDouble(f'/{self._dev_id}/demods/0/rate', sample_rate)
-        time.sleep(0.2)  #giving the DAQ enough time to set the sampling/data transfer rate
+        #time.sleep(0.2)  #giving the DAQ enough time to set the sampling/data transfer rate
 
         # Specify triggered data acquisition (type=0).
         self._daq_module.set('type', 6)
