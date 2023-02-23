@@ -415,6 +415,10 @@ class MfliDaqModule:
         # self._daq_module.unsubscribe('*')
 
     def set_triggered_data_acquisition_time_domain_v3(self, duration, sample_rate, rows=1, sig_port  = 'Aux_in_1'):
+        self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
+        self._daq_module.set('clearhistory', 1)
+        self._daq_module.set('clearhistory', 1)
+
         self._daq_module.set("device", self._dev_id)
         self._daq.setDouble(f'/{self._dev_id}/demods/0/rate', sample_rate)
         self._daq.setInt(f'/{self._dev_id}/demods/0/trigger', 0)
@@ -431,14 +435,17 @@ class MfliDaqModule:
         self._daq_module.set("holdoff/time", 0)
         self._daq_module.set("holdoff/count", 0)
 
+        #
+        # self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
+        # self._daq_module.set('clearhistory', 1)
+        # self._daq_module.set('clearhistory', 1)
+        # sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
+        # self._daq_module.subscribe(sig_source[sig_port])
 
-        self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
-        self._daq_module.set('clearhistory', 1)
-        self._daq_module.set('clearhistory', 1)
+    def enable_triggered_data_acquisition_time_domain(self, duration, sample_rate, rows = 1 ,sig_port  = 'Aux_in_1'):
         sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
         self._daq_module.subscribe(sig_source[sig_port])
 
-    # def enable_triggered_data_acquisition_time_domain(self, duration, sample_rate, rows = 1 ,sig_port  = 'Aux_in_1'):
     #     self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
     #     self._daq_module.set('clearhistory', 1)
     #     self._daq_module.set('clearhistory', 1)
