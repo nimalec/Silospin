@@ -423,11 +423,11 @@ class MfliDaqModule:
         self._daq_module.set('bandwidth', 0)
         self._daq_module.set('edge', 1)
 
-        # columns = np.ceil(duration*sample_rate)
-        # self._daq_module.set('grid/mode', 4)
-        # self._daq_module.set("count", 1)
-        # self._daq_module.set("grid/cols", columns)
-        # self._daq_module.set('grid/rows', rows)
+        columns = np.ceil(duration*sample_rate)
+        self._daq_module.set('grid/mode', 4)
+        self._daq_module.set("count", 1)
+        self._daq_module.set("grid/cols", columns)
+        self._daq_module.set('grid/rows', rows)
         self._daq_module.set("holdoff/time", 0)
         self._daq_module.set("holdoff/count", 0)
 
@@ -441,10 +441,10 @@ class MfliDaqModule:
         self._daq_module.set('clearhistory', 1)
         self._daq_module.set('clearhistory', 1)
 
-        columns = np.ceil(duration*sample_rate)
-        self._daq_module.set("grid/cols", columns)
-        self._daq_module.set('grid/rows', rows)
-        self._daq_module.set("count", 1)
+        # columns = np.ceil(duration*sample_rate)
+        # self._daq_module.set("grid/cols", columns)
+        # self._daq_module.set('grid/rows', rows)
+        # self._daq_module.set("count", 1)
 
         sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
         self._daq_module.subscribe(sig_source[sig_port])
