@@ -8,9 +8,9 @@ from silospin.experiment.setup_experiment_helpers import unpickle_qubit_paramete
 from silospin.drivers.trig_box import TrigBoxDriverSerialServer
 from silospin.drivers.mfli_triggered import MfliDaqModule
 
-import subprocess
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 class QuantumAlgoExperiment:
     ##Only utilizes Trigbox, MFLIs. Sweeper modules will utilize this...
