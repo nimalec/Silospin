@@ -73,7 +73,7 @@ class QuantumAlgoExperiment:
     def run_program(self):
         sig_port = self._sig_port
         columns = int(np.ceil(self._measurement_settings['acquisition_time']*self._measurement_settings['sample_rate']))
-        self._time_axis = np.linspace(0, acquisition_time,  columns)
+        self._time_axis = np.linspace(0, self._measurement_settings['acquisition_time'],  columns)
         v_measured = np.zeros(columns)
 
         plot_0_str = ''
