@@ -389,7 +389,6 @@ class MfliDaqModule:
         #We set the holdoff time to 0 s to ensure that no triggers are lost in between successive lines
         self._daq_module.set("holdoff/time", 0)
         self._daq_module.set("holdoff/count", 0)  #num of skipped triggers until the next trigger is recorded again
-
         self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
 
 
@@ -418,6 +417,64 @@ class MfliDaqModule:
         #         sample_data.append(each)
         # self._daq_module.finish()
         # self._daq_module.unsubscribe('*')
+
+    def set_triggered_data_acquisition_time_domain_v3(self, duration, sample_rate=53570, rows = 1 ,sig_port  = 'Aux_in_1'):
+        ##Meant to keep outside of interleave loop
+        sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
+        self._daq_module.set("device", self._dev_id)
+        self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
+        self._daq.setInt(f'/{self._dev_id}/demods/0/trigger', 0)   #set Trigger to the continuous mode
+        self._daq.setDouble(f'/{self._dev_id}/demods/0/rate', sample_rate)
+#        time.sleep(0.2)  #giving the DAQ enough time to set the sampling/data transfer rate
+
+        # Specify triggered data acquisition (type=0).
+        self._daq_module.set('type', 6)
+        self._daq_module.set('triggernode', f'/{self._dev_id}/demods/0/sample.TrigIn2')
+        self._daq_module.set('clearhistory', 1)   #not sure why history got cleared twice in the API log but I am simply copying what LabOne did.
+        self._daq_module.set('clearhistory', 1)
+        self._daq_module.set('bandwidth', 0)
+        self._daq_module.set('edge', 1)   #trigger edge: positive
+
+        columns = np.ceil(duration*sample_rate)
+
+        self._daq_module.set('grid/mode', 4)  #exact on-grid mode (no interpolation)
+        self._daq_module.set("count", 1)
+        self._daq_module.set("grid/cols", columns)
+        self._daq_module.set('grid/rows', rows)   # setting the # of rows here. we are going to set the default to be 1. this seems relevant when plotting traces on GUI.
+
+        #We set the holdoff time to 0 s to ensure that no triggers are lost in between successive lines
+        self._daq_module.set("holdoff/time", 0)
+        self._daq_module.set("holdoff/count", 0)  #num of skipped triggers until the next trigger is recorded again
+        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+
+    def enable_triggered_data_acquisition_time_domain(self, duration, sample_rate=53570, rows = 1 ,sig_port  = 'Aux_in_1'):
+        ##Meant to keep outside of interleave loop
+        sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
+        self._daq_module.set("device", self._dev_id)
+        self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
+        self._daq.setInt(f'/{self._dev_id}/demods/0/trigger', 0)   #set Trigger to the continuous mode
+        self._daq.setDouble(f'/{self._dev_id}/demods/0/rate', sample_rate)
+
+        # Specify triggered data acquisition (type=0).
+        self._daq_module.set('type', 6)
+        self._daq_module.set('triggernode', f'/{self._dev_id}/demods/0/sample.TrigIn2')
+        self._daq_module.set('clearhistory', 1)   #not sure why history got cleared twice in the API log but I am simply copying what LabOne did.
+        self._daq_module.set('clearhistory', 1)
+        self._daq_module.set('bandwidth', 0)
+        self._daq_module.set('edge', 1)   #trigger edge: positive
+
+        columns = np.ceil(duration*sample_rate)
+
+        self._daq_module.set('grid/mode', 4)  #exact on-grid mode (no interpolation)
+        self._daq_module.set("count", 1)
+        self._daq_module.set("grid/cols", columns)
+        self._daq_module.set('grid/rows', rows)   # setting the # of rows here. we are going to set the default to be 1. this seems relevant when plotting traces on GUI.
+
+        #We set the holdoff time to 0 s to ensure that no triggers are lost in between successive lines
+        self._daq_module.set("holdoff/time", 0)
+        self._daq_module.set("holdoff/count", 0)  #num of skipped triggers until the next trigger is recorded again
+        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+
 
     def triggered_data_acquisition_time_domain(self, duration, n_traces = 100,  sample_rate=53570, rows = 1 ,sig_port  = 'Aux_in_1' , plot_on = True):
 
