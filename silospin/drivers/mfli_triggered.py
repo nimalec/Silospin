@@ -393,7 +393,7 @@ class MfliDaqModule:
         self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
 
 
-        time.sleep(0.8)  #giving the DAQ enough time to set the the parameters (columns, and num of traces before being read back out)
+        #time.sleep(0.8)  #giving the DAQ enough time to set the the parameters (columns, and num of traces before being read back out)
 
 
         #im just repeating this to make sure that the correct duration is set for the DAQ module. Without this, even with columns and sample rate set correctly
