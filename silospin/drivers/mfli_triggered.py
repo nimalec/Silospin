@@ -398,12 +398,12 @@ class MfliDaqModule:
 
         #im just repeating this to make sure that the correct duration is set for the DAQ module. Without this, even with columns and sample rate set correctly
         #the duration read back from the DAQ module is erroneous
-        self._daq_module.set('endless', 0)
-        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
-        self._daq_module.execute()
-        self._daq_module.finish()
-        self._daq_module.unsubscribe('*')
-        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+        # self._daq_module.set('endless', 0)
+        # self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+        # self._daq_module.execute()
+        # self._daq_module.finish()
+        # self._daq_module.unsubscribe('*')
+        # self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
 
         ## Execution
         # self._daq_module.execute()
