@@ -431,12 +431,19 @@ class MfliDaqModule:
         self._daq_module.set("holdoff/time", 0)
         self._daq_module.set("holdoff/count", 0)
 
-    def enable_triggered_data_acquisition_time_domain(self, duration, sample_rate, rows = 1 ,sig_port  = 'Aux_in_1'):
+
         self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
         self._daq_module.set('clearhistory', 1)
         self._daq_module.set('clearhistory', 1)
         sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
         self._daq_module.subscribe(sig_source[sig_port])
+
+    # def enable_triggered_data_acquisition_time_domain(self, duration, sample_rate, rows = 1 ,sig_port  = 'Aux_in_1'):
+    #     self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
+    #     self._daq_module.set('clearhistory', 1)
+    #     self._daq_module.set('clearhistory', 1)
+    #     sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
+    #     self._daq_module.subscribe(sig_source[sig_port])
 
     def triggered_data_acquisition_time_domain(self, duration, n_traces = 100,  sample_rate=53570, rows = 1 ,sig_port  = 'Aux_in_1' , plot_on = True):
 

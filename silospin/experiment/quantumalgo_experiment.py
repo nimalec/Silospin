@@ -75,18 +75,18 @@ class QuantumAlgoExperiment:
         self._time_axis = np.linspace(0, self._measurement_settings['acquisition_time'],  columns)
         v_measured = np.zeros(columns)
 
-        plot_0_str = ''
-        for mfli in self._instrument_drivers['mflis']:
-            plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
-        exec(plot_0_str)
+        # plot_0_str = ''
+        # for mfli in self._instrument_drivers['mflis']:
+        #     plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
+        # exec(plot_0_str)
 
         for i in range(self._n_trigger):
-            t_0 = time.time()
+            #t_0 = time.time()
             for daq in self._daq_modules:
                 self._daq_modules[daq].enable_triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], self._measurement_settings['sample_rate'], rows = 1 ,sig_port  = sig_port)
                 self._daq_modules[daq]._daq_module.execute()
             self._trig_box.send_trigger()
-            plot_1_str = ''
+            #plot_1_str = ''
             for daq in self._daq_modules:
                 while not self._daq_modules[daq]._daq_module.finished():
                     data_read = self._daq_modules[daq]._daq_module.read(True)
@@ -103,7 +103,7 @@ class QuantumAlgoExperiment:
                             self._sample_data[daq].append(sig)
                     else:
                         pass
-                t_1 = time.time()
-                print(t_1-t_0)
+                #t_1 = time.time()
+                #print(t_1-t_0)
                 self._daq_modules[daq]._daq_module.finish()
                 self._daq_modules[daq]._daq_module.unsubscribe('*')
