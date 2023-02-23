@@ -74,6 +74,9 @@ class QuantumAlgoExperiment:
         columns = int(np.ceil(self._measurement_settings['acquisition_time']*self._measurement_settings['sample_rate']))
         self._time_axis = np.linspace(0, self._measurement_settings['acquisition_time'],  columns)
         v_measured = np.zeros(columns)
+        for daq in self._daq_modules:
+            self._daq_modules[daq].set_triggered_data_acquisition_time_domain_v3(self._measurement_settings['acquisition_time'], self._measurement_settings['sample_rate'], rows = 1 ,sig_port  = sig_port)
+            #self._daq_modules[daq]._daq_module.execute()
 
         # plot_0_str = ''
         # for mfli in self._instrument_drivers['mflis']:
@@ -81,12 +84,10 @@ class QuantumAlgoExperiment:
         # exec(plot_0_str)
 
         for i in range(self._n_trigger):
-            t_0 = time.time()
             for daq in self._daq_modules:
-                self._daq_modules[daq].set_triggered_data_acquisition_time_domain_v3(self._measurement_settings['acquisition_time'], self._measurement_settings['sample_rate'], rows = 1 ,sig_port  = sig_port)
                 self._daq_modules[daq]._daq_module.execute()
-            t_1 = time.time()
-            print(t_1-t_0)
+            #     self._daq_modules[daq].set_triggered_data_acquisition_time_domain_v3(self._measurement_settings['acquisition_time'], self._measurement_settings['sample_rate'], rows = 1 ,sig_port  = sig_port)
+            #     self._daq_modules[daq]._daq_module.execute()
             self._trig_box.send_trigger()
             #plot_1_str = ''
             for daq in self._daq_modules:
