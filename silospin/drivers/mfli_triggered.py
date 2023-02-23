@@ -442,7 +442,7 @@ class MfliDaqModule:
         # sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
         # self._daq_module.subscribe(sig_source[sig_port])
 
-    def enable_triggered_data_acquisition_time_domain(self, duration, sample_rate, rows = 1 ,sig_port  = 'Aux_in_1'):
+    def enable_triggered_data_acquisition_time_domain(self, sig_port):
         sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
         self._daq_module.subscribe(sig_source[sig_port])
 

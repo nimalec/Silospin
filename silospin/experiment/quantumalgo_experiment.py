@@ -76,8 +76,7 @@ class QuantumAlgoExperiment:
         v_measured = np.zeros(columns)
         for daq in self._daq_modules:
             self._daq_modules[daq].set_triggered_data_acquisition_time_domain_v3(self._measurement_settings['acquisition_time'], self._measurement_settings['sample_rate'], rows = 1 ,sig_port  = sig_port)
-            #self._daq_modules[daq]._daq_module.execute()
-
+ 
         # plot_0_str = ''
         # for mfli in self._instrument_drivers['mflis']:
         #     plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
@@ -86,7 +85,7 @@ class QuantumAlgoExperiment:
         for i in range(self._n_trigger):
             t_0 = time.time()
             for daq in self._daq_modules:
-                self._daq_modules[daq].enable_triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], self._measurement_settings['sample_rate'], rows = 1 ,sig_port  = sig_port)
+                self._daq_modules[daq].enable_triggered_data_acquisition_time_domain(sig_port)
                 self._daq_modules[daq]._daq_module.execute()
             t_1 = time.time()
             print(t_1 -t_0)
