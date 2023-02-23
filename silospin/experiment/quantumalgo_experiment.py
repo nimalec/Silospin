@@ -84,14 +84,14 @@ class QuantumAlgoExperiment:
             for daq in self._daq_modules:
                 while not self._daq_modules[daq]._daq_module.finished():
                     data_read = self._daq_modules[daq]._daq_module.read(True)
-                    if self._sig_source[daq][sig_port].lower() in data_read.keys():
+                #    if self._sig_source[daq][sig_port].lower() in data_read.keys():
                         # min_val = np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]))/5
                         # max_val = np.amax(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]) + abs(np.amax(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]))/5
                         # plot_1_str += f'line{daq}.set_data(self._time_axis, data_read[self._sig_source[daq][sig_port].lower()][0]["value"][0])\nax{daq}.set_ylim({min_val},{max_val})\nfig{daq}.canvas.draw()\nfig{daq}.canvas.flush_events()'
                         # exec(plot_1_str)
                         # for sig in data_read[self._sig_source[daq][sig_port].lower()]:
                         #     self._sample_data[daq].append(sig)
-                data_read = self._daq_modules[daq]._daq_module.read(True)
+                #data_read = self._daq_modules[daq]._daq_module.read(True)
                 # if self._sig_source[daq][sig_port].lower() in data_read.keys():
                 #     for sig in data_read[self._sig_source[daq][sig_port].lower()]:
                 #         self._sample_data[daq].append(sig)
