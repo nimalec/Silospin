@@ -85,6 +85,8 @@ class QuantumAlgoExperiment:
             for daq in self._daq_modules:
                 self._daq_modules[daq].set_triggered_data_acquisition_time_domain_v3(self._measurement_settings['acquisition_time'], self._measurement_settings['sample_rate'], rows = 1 ,sig_port  = sig_port)
                 self._daq_modules[daq]._daq_module.execute()
+            t_1 = time.time()
+            print(t_1-t_0)
             self._trig_box.send_trigger()
             #plot_1_str = ''
             for daq in self._daq_modules:
@@ -97,13 +99,7 @@ class QuantumAlgoExperiment:
                         # exec(plot_1_str)
                         for sig in data_read[self._sig_source[daq][sig_port].lower()]:
                             self._sample_data[daq].append(sig)
-                    # data_read = self._daq_modules[daq]._daq_module.read(True)
-                    # if self._sig_source[daq][sig_port].lower() in data_read.keys():
-                    #     for sig in data_read[self._sig_source[daq][sig_port].lower()]:
-                    #         self._sample_data[daq].append(sig)
-                    # else:
-                    #     pass
                 self._daq_modules[daq]._daq_module.finish()
                 self._daq_modules[daq]._daq_module.unsubscribe('*')
-            t_1 = time.time()
-            print(t_1-t_0)
+            # t_1 = time.time()
+            # print(t_1-t_0)
