@@ -103,7 +103,7 @@ class QuantumAlgoExperiment:
                     #         self._sample_data[daq].append(sig)
                     # else:
                     #     pass
-                t_1 = time.time()
-                print(t_1-t_0)
+            t_1 = time.time()
+            print(t_1-t_0)
                 self._daq_modules[daq]._daq_module.finish()
                 self._daq_modules[daq]._daq_module.unsubscribe('*')
