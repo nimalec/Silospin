@@ -414,7 +414,7 @@ class MfliDaqModule:
         # self._daq_module.finish()
         # self._daq_module.unsubscribe('*')
 
-    def set_triggered_data_acquisition_time_domain_v3(self, duration, sample_rate):
+    def set_triggered_data_acquisition_time_domain_v3(self, duration, sample_rate, rows=1, sig_port  = 'Aux_in_1'):
         self._daq_module.set("device", self._dev_id)
         self._daq.setDouble(f'/{self._dev_id}/demods/0/rate', sample_rate)
         self._daq.setInt(f'/{self._dev_id}/demods/0/trigger', 0)
@@ -422,13 +422,7 @@ class MfliDaqModule:
         self._daq_module.set('triggernode', f'/{self._dev_id}/demods/0/sample.TrigIn2')
         self._daq_module.set('bandwidth', 0)
         self._daq_module.set('edge', 1)
-        self._daq_module.set('grid/mode', 4)
 
-    def enable_triggered_data_acquisition_time_domain(self, duration, sample_rate, rows = 1 ,sig_port  = 'Aux_in_1'):
-        sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
-        self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
-        self._daq_module.set('clearhistory', 1)
-        self._daq_module.set('clearhistory', 1)
         columns = np.ceil(duration*sample_rate)
         self._daq_module.set('grid/mode', 4)
         self._daq_module.set("count", 1)
@@ -436,7 +430,24 @@ class MfliDaqModule:
         self._daq_module.set('grid/rows', rows)
         self._daq_module.set("holdoff/time", 0)
         self._daq_module.set("holdoff/count", 0)
+
+
+        sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
         self._daq_module.subscribe(sig_source[sig_port])
+
+    def enable_triggered_data_acquisition_time_domain(self, duration, sample_rate, rows = 1 ,sig_port  = 'Aux_in_1'):
+        #sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
+        self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
+        self._daq_module.set('clearhistory', 1)
+        self._daq_module.set('clearhistory', 1)
+        # columns = np.ceil(duration*sample_rate)
+        # self._daq_module.set('grid/mode', 4)
+        # self._daq_module.set("count", 1)
+        # self._daq_module.set("grid/cols", columns)
+        # self._daq_module.set('grid/rows', rows)
+        # self._daq_module.set("holdoff/time", 0)
+        # self._daq_module.set("holdoff/count", 0)
+        #self._daq_module.subscribe(sig_source[sig_port])
 
     def triggered_data_acquisition_time_domain(self, duration, n_traces = 100,  sample_rate=53570, rows = 1 ,sig_port  = 'Aux_in_1' , plot_on = True):
 
