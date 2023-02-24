@@ -104,6 +104,7 @@ class QuantumAlgoExperiment:
                         # exec(plot_1_str)
                         for sig in data_read[self._sig_source[daq][sig_port].lower()]:
                             self._sample_data[daq].append(sig)
+                            print(len(self._sample_data[daq]))
             t_1 = time.time()
             print(t_1-t_0)
         self._daq_modules[daq]._daq_module.finish()
