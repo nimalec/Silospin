@@ -62,25 +62,23 @@ class QuantumAlgoExperiment:
 
         self._daq_modules = {}
         self._sample_data = {}
-        #self._sig_source = {}
-        # for mfli in self._instrument_drivers['mflis']:
-        #     ## Replace th
-        #     self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
+        self._sig_source = {}
+        for mfli in self._instrument_drivers['mflis']:
+            self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
         #     self._sig_source[mfli] = {'Demod_R': f'/{self._daq_modules[mfli]._dev_id}/demods/0/sample.R', 'Aux_in_1': f'/{self._daq_modules[mfli]._dev_id}/demods/0/sample.AuxIn0'}
         #     self._daq_modules[mfli].set_triggered_data_acquisition_time_domain_v3(self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
         #     self._sample_data[mfli] = []
             #plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
     #    exec(plot_0_str)
+        sample_data = self._daq_modules[0].triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], n_traces = self._n_trigger,  sample_rate=self._measurement_settings['sample_rate']), sig_port  = self._sig_port)
 
-    def run_program(self):
-        for mfli in self._lockins:
-            result = subprocess.run(["python", self._mflidaq_file, self._lockins[mfli], str(self._n_trigger),  str(self._measurement_settings['acquisition_time']), str(self._measurement_settings['sample_rate']), str(self._sig_port)], capture_output=True, text=True)
-            #print(result)
-            #self._sample_data[mfli] = result.stdout
-            #print(result.stdout)
-
-        for i in range(self._n_trigger):
-             self._trig_box.send_trigger()
+    #def run_program(self):
+    #    triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], n_traces = self._n_trigger,  sample_rate=self._measurement_settings['sample_rate']), sig_port  = self._sig_port)
+    #    for mfli in self._lockins:
+        #     result = subprocess.run(["python", self._mflidaq_file, self._lockins[mfli], str(self._n_trigger),  str(self._measurement_settings['acquisition_time']), str(self._measurement_settings['sample_rate']), str(self._sig_port)], capture_output=True, text=True)
+        #
+        # for i in range(self._n_trigger):
+        #      self._trig_box.send_trigger()
 
     ##Initiate lockins here
     ##Loop over to pass in lockins to function and generate plots
