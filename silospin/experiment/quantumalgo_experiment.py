@@ -80,7 +80,7 @@ class QuantumAlgoExperiment:
         processes = []
         for daq in self._daq_modules:
             daq_mod = self._daq_modules[daq]
-            process = multiprocessing.Process(target=mflitrig_daq_helper, args=(daq_mod, self._n_trigger, self._measurement_settings['acquisition_time'], self._measurement_settings['sample_rate'], self._sig_port))
+            process = Process(target=mflitrig_daq_helper, args=(daq_mod, self._n_trigger, self._measurement_settings['acquisition_time'], self._measurement_settings['sample_rate'], self._sig_port))
             process.start()
             processes.append(process)
 
