@@ -7,6 +7,7 @@ from silospin.experiment.setup_experiment_helpers import unpickle_qubit_paramete
 
 from silospin.drivers.trig_box import TrigBoxDriverSerialServer
 from silospin.drivers.mfli_triggered import MfliDaqModule
+from silospin.mflitrig_daq_helper import mflitrig_daq_helper 
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -74,9 +75,9 @@ class QuantumAlgoExperiment:
 
     def run_program(self):
 
-        def mflitrig_daq_helper(daqmod, ntrigger, time, samplerate, sigport):
-            sample_data = daqmod.triggered_data_acquisition_time_domain(time, n_traces = ntrigger, sample_rate=samplerate, sig_port  = sigport , plot_on = True)
-            return sample_data
+        # def mflitrig_daq_helper(daqmod, ntrigger, time, samplerate, sigport):
+        #     sample_data = daqmod.triggered_data_acquisition_time_domain(time, n_traces = ntrigger, sample_rate=samplerate, sig_port  = sigport , plot_on = True)
+        #     return sample_data
 
         processes = []
         for daq in self._daq_modules:
