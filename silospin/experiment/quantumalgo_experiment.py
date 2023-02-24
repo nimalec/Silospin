@@ -20,8 +20,9 @@ class QuantumAlgoExperiment:
     ##realtime_plot ==> plot output on lockins (arb number) in realtime
     ##Should allow for arbitrary numberso f dacs
 
-    def __init__(self, sequence_file, n_inner=1, n_outer=1, added_padding=0, realtime_plot = True, acquisition_time = 3.733e-3, lockin_sample_rate = 107e3, sig_port = 'Aux_in_1', trigger_settings = {'client': 'tcp://127.0.0.1:4244', 'tlength': 30, 'holdoff': 4000}, parameter_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_qubit_gate_parameters.pickle', awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0:'dev5761', 1: 'dev5759'}, rf_dc_core_grouping = {'hdawg1': {'rf': [1,2,3,4],'dc':[]}, 'hdawg2': {'rf': [1], 'dc': [2,3,4]}}, trig_channels={'hdawg1': 1,'hdawg2': 1}):
+    def __init__(self, sequence_file, n_inner=1, n_outer=1, added_padding=0, realtime_plot = True, acquisition_time = 3.733e-3, lockin_sample_rate = 107e3, sig_port = 'Aux_in_1', trigger_settings = {'client': 'tcp://127.0.0.1:4244', 'tlength': 30, 'holdoff': 4000}, parameter_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_qubit_gate_parameters.pickle', awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0:'dev5761', 1: 'dev5759'}, rf_dc_core_grouping = {'hdawg1': {'rf': [1,2,3,4],'dc':[]}, 'hdawg2': {'rf': [1], 'dc': [2,3,4]}}, trig_channels={'hdawg1': 1,'hdawg2': 1}, mflidaq_file = 'C:\\Users\\Sigillito Lab\\Desktop\\codebases\\Silospin\\silospin\\experiment\\mflitrig_daq_helper.py'):
         ##Initialize instruments
+        self._mflidaq_file = mflidaq_file
         self._instrument_drivers = {'awgs': {}, 'mflis': {}}
         self._sig_port = sig_port
         self._lockins = lockins
@@ -73,10 +74,10 @@ class QuantumAlgoExperiment:
 
     def run_program(self):
         for mfli in self._lockins:
-            result = subprocess.run(["python", "mflitrig_daq_helper.py", self._lockins[mfli], str(self._n_trigger),  str(self._measurement_settings['acquisition_time']), str(self._measurement_settings['sample_rate']), str(self._sig_port)], capture_output=True, text=True)
+            result = subprocess.run(["python", self._mflidaq_file, self._lockins[mfli], str(self._n_trigger),  str(self._measurement_settings['acquisition_time']), str(self._measurement_settings['sample_rate']), str(self._sig_port)], capture_output=True, text=True)
             print(result)
-            self._sample_data[mfli] = result.stdout
-            print(result.stdout)
+            #self._sample_data[mfli] = result.stdout
+            #print(result.stdout)
 
         for i in range(self._n_trigger):
              self._trig_box.send_trigger()
