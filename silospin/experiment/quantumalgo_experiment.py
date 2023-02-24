@@ -11,7 +11,7 @@ from silospin.drivers.mfli_triggered import MfliDaqModule
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-import subprocess
+from multiprocessing import Process   
 
 class QuantumAlgoExperiment:
     ##Only utilizes Trigbox, MFLIs. Sweeper modules will utilize this...
@@ -70,9 +70,26 @@ class QuantumAlgoExperiment:
         #     self._sample_data[mfli] = []
             #plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
     #    exec(plot_0_str)
-        sample_data = self._daq_modules[0].triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], n_traces = self._n_trigger,  sample_rate=self._measurement_settings['sample_rate'], sig_port  = self._sig_port)
+    #    sample_data = self._daq_modules[0].triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], n_traces = self._n_trigger,  sample_rate=self._measurement_settings['sample_rate'], sig_port  = self._sig_port)
 
-    #def run_program(self):
+    def run_program(self):
+
+        def mflitrig_daq_helper(daq, ntrigger, time, samplerate, sigport):
+            sample_data = daq_module.triggered_data_acquisition_time_domain(acquisition_time, n_traces = ntrigger, sample_rate=samplerate, sig_port  = sigport , plot_on = True)
+            return sample_data
+        processes = []
+        for daq in self._daq_modules:
+            daq_mod = self._daq_modules[daq]
+            process = multiprocessing.Process(target=mflitrig_daq_helper, args=(daq_mod, self._n_trigger, self._measurement_settings['sample_rate'], self._sig_port))
+            process.start()
+            processes.append(process)
+
+        for i in range(self._n_trigger):
+             self._trig_box.send_trigger()
+
+        for p in processes:
+            p.join()
+
     #    triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], n_traces = self._n_trigger,  sample_rate=self._measurement_settings['sample_rate']), sig_port  = self._sig_port)
     #    for mfli in self._lockins:
         #     result = subprocess.run(["python", self._mflidaq_file, self._lockins[mfli], str(self._n_trigger),  str(self._measurement_settings['acquisition_time']), str(self._measurement_settings['sample_rate']), str(self._sig_port)], capture_output=True, text=True)
