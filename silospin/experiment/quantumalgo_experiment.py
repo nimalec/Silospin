@@ -4,10 +4,10 @@ from silospin.quantum_compiler.quantum_compiler_helpers import channel_mapper, m
 from silospin.experiment import setup_quantumalgo_instruments
 from silospin.experiment.setup_quantumalgo_instruments import *
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
+from silospin.experiment.mflitrig_daq_helper import mflitrig_daq_helper
 
 from silospin.drivers.trig_box import TrigBoxDriverSerialServer
 from silospin.drivers.mfli_triggered import MfliDaqModule
-from silospin.mflitrig_daq_helper import mflitrig_daq_helper 
 
 import numpy as np
 import matplotlib.pyplot as plt
