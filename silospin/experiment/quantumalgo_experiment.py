@@ -70,6 +70,7 @@ class QuantumAlgoExperiment:
 
 
     def run_program(self):
+        ## Run background code here ..
         sig_port = self._sig_port
         columns = int(np.ceil(self._measurement_settings['acquisition_time']*self._measurement_settings['sample_rate']))
         self._time_axis = np.linspace(0, self._measurement_settings['acquisition_time'],  columns)
@@ -83,18 +84,18 @@ class QuantumAlgoExperiment:
         # exec(plot_0_str)
 
         for i in range(self._n_trigger):
-            t_0 = time.time()
+        #    t_0 = time.time()
         #     for daq in self._daq_modules:
         #         self._daq_modules[daq].enable_triggered_data_acquisition_time_domain(sig_port)
         #         t_0 = time.time()
         #         self._daq_modules[daq]._daq_module.execute()
         #         t_1 = time.time()
         #         print(t_1 -t_0)
-
             self._trig_box.send_trigger()
             #plot_1_str = ''
 
             for daq in self._daq_modules:
+                self._daq_modules[daq].enable_triggered_data_acquisition_time_domain(sig_port)
                 while not self._daq_modules[daq]._daq_module.finished():
                     data_read = self._daq_modules[daq]._daq_module.read(True)
                     if self._sig_source[daq][sig_port].lower() in data_read.keys():
@@ -106,6 +107,7 @@ class QuantumAlgoExperiment:
                             self._sample_data[daq].append(sig)
             t_1 = time.time()
             print(t_1-t_0)
+
         self._daq_modules[daq]._daq_module.finish()
         self._daq_modules[daq]._daq_module.unsubscribe('*')
 
