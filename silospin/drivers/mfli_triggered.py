@@ -414,7 +414,7 @@ class MfliDaqModule:
         # self._daq_module.finish()
         # self._daq_module.unsubscribe('*')
 
-    def set_triggered_data_acquisition_time_domain_v3(self, duration, sample_rate, rows=1, sig_port  = 'Aux_in_1'):
+    def set_triggered_data_acquisition_time_domain_v3(self, duration, sample_rate, sig_port  = 'Aux_in_1'):
         self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
         self._daq_module.set('clearhistory', 1)
         self._daq_module.set('clearhistory', 1)
@@ -431,7 +431,7 @@ class MfliDaqModule:
         self._daq_module.set('grid/mode', 4)
         self._daq_module.set("count", 1)
         self._daq_module.set("grid/cols", columns)
-        self._daq_module.set('grid/rows', rows)
+        self._daq_module.set('grid/rows', 1)
         self._daq_module.set("holdoff/time", 0)
         self._daq_module.set("holdoff/count", 0)
 
