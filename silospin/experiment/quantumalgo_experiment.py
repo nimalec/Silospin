@@ -75,7 +75,7 @@ class QuantumAlgoExperiment:
     def run_program(self):
         for mfli in self._lockins:
             result = subprocess.run(["python", self._mflidaq_file, self._lockins[mfli], str(self._n_trigger),  str(self._measurement_settings['acquisition_time']), str(self._measurement_settings['sample_rate']), str(self._sig_port)], capture_output=True, text=True)
-            print(result)
+            #print(result)
             #self._sample_data[mfli] = result.stdout
             #print(result.stdout)
 
