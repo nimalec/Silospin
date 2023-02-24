@@ -429,7 +429,7 @@ class MfliDaqModule:
 
         columns = np.ceil(duration*sample_rate)
         self._daq_module.set('grid/mode', 4)
-        self._daq_module.set("count", 5)
+        self._daq_module.set("count", 1)
         self._daq_module.set("grid/cols", columns)
         self._daq_module.set('grid/rows', 1)
         self._daq_module.set("holdoff/time", 0)
