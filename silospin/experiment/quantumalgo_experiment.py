@@ -83,7 +83,7 @@ class QuantumAlgoExperiment:
         # exec(plot_0_str)
 
         for i in range(self._n_trigger):
-            print(i)
+            t_0 = time.time()
         #     for daq in self._daq_modules:
         #         self._daq_modules[daq].enable_triggered_data_acquisition_time_domain(sig_port)
         #         t_0 = time.time()
@@ -105,6 +105,8 @@ class QuantumAlgoExperiment:
                         # exec(plot_1_str)
                         for sig in data_read[self._sig_source[daq][sig_port].lower()]:
                             self._sample_data[daq].append(sig)
+            t_1 = time.time()
+            print(t_1-t_0)
         self._daq_modules[daq]._daq_module.finish()
         self._daq_modules[daq]._daq_module.unsubscribe('*')
 
