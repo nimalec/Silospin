@@ -146,10 +146,9 @@ class QuantumAlgoExperiment:
             time.sleep(1)
             #print('toc')
             #print(data_read.keys())
-            print(self._sig_source[0][sig_port].lower())
-            print(data_read.keys())
-            # if '/triggered' in data_read.keys():
-            #     print(1)
+            if '/triggered' in data_read.keys():
+                time.sleep(1)
+                print(data_read.keys())
             #if self._sig_source[0][sig_port].lower() in data_read.keys():
                 #if self._sig_source[daq][sig_port].lower() in data_read.keys():
                 # min_val = np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]))/5
