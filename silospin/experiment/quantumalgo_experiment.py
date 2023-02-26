@@ -146,16 +146,14 @@ class QuantumAlgoExperiment:
                 for sig in data_read[self._sig_source[0][sig_port].lower()]:
                 #for sig in data_read[self._sig_source[daq][sig_port].lower()]:
                     self._sample_data[daq].append(sig)
+                    print(self._sample_data[daq])
+
             t_1 = time.time()
-            print(t_1-t_0)
-            
             if t_1 - t_0 < self._measurement_settings['acquisition_time'] + 500e-6:
                 print(t_1-t_0)
                 wait(self._measurement_settings['acquisition_time'] + 500e-6)
             else:
                 continue
-
-
 
         self._daq_modules[daq]._daq_module.finish()
         self._daq_modules[daq]._daq_module.unsubscribe('*')
