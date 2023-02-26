@@ -143,7 +143,7 @@ class QuantumAlgoExperiment:
             #t_0 = time.time()
             #data_read = self._daq_modules[daq]._daq_module.read(True)
             data_read = self._daq_modules[0]._daq_module.read(True)
-            #time.sleep(1)
+            time.sleep(self._measurement_settings['acquisition_time'])
             #print('toc')
             print(data_read.keys())
             #if '/triggered' in data_read.keys():
