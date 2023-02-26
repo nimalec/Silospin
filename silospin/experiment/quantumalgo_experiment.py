@@ -318,4 +318,4 @@ class QuantumAlgoExperiment:
         self._daq_module.unsubscribe('*')
 
         #return sample_data, time_axis
-        return sample_data
+        self._sample_data = sample_data
