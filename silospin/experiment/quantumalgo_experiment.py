@@ -67,7 +67,7 @@ class QuantumAlgoExperiment:
         for mfli in self._instrument_drivers['mflis']:
             self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
             self._sig_source[mfli]  = {'Demod_R': f'/{lockins[mfli]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[mfli]}/demods/0/sample.AuxIn0'}
-        #    self._daq_modules[mfli].set_triggered_data_acquisition_time_domain_v3(self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
+            self._daq_modules[mfli].set_triggered_data_acquisition_time_domain_v3(self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
             self._sample_data[mfli] = []
             #plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
     #    exec(plot_0_str)
@@ -133,25 +133,29 @@ class QuantumAlgoExperiment:
                 #self._trig_box.send_trigger()
             #    for i in range(self._n_trigger):
 
-#        while not self._daq_modules[0]._daq_module.finished():
-        for i in range(self._n_trigger):
+        while not self._daq_modules[0]._daq_module.finished():
+#        for i in range(self._n_trigger):
             self._trig_box.send_trigger()
             t_0 = time.time()
             #data_read = self._daq_modules[daq]._daq_module.read(True)
             data_read = self._daq_modules[0]._daq_module.read(True)
-            time.sleep(.1)
+            #ime.sleep(.1)
             if self._sig_source[0][sig_port].lower() in data_read.keys():
-                print(1)
-            #if self._sig_source[daq][sig_port].lower() in data_read.keys():
+                #if self._sig_source[daq][sig_port].lower() in data_read.keys():
                 # min_val = np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]))/5
+
                 # max_val = np.amax(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]) + abs(np.amax(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]))/5
                 # plot_1_str += f'line{daq}.set_data(self._time_axis, data_read[self._sig_source[daq][sig_port].lower()][0]["value"][0])\nax{daq}.set_ylim({min_val},{max_val})\nfig{daq}.canvas.draw()\nfig{daq}.canvas.flush_events()'
                 # exec(plot_1_str)
                 for sig in data_read[self._sig_source[0][sig_port].lower()]:
                 #for sig in data_read[self._sig_source[daq][sig_port].lower()]:
                     self._sample_data[daq].append(sig)
+        data_read = self._daq_modules[0]._daq_module.read(True)
+        if sig_source[sig_port].lower() in data_read.keys():
+            for each in data_read[sig_source[sig_port].lower()]:
+                self._sample_data.append(each)
 
-            t_1 = time.time()
+            #t_1 = time.time()
             #print(t_1-t_0)
             # if t_1 - t_0 < self._measurement_settings['acquisition_time'] + 500e-6:
             #     print(t_1-t_0)
