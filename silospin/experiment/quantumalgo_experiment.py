@@ -67,7 +67,7 @@ class QuantumAlgoExperiment:
         for mfli in self._instrument_drivers['mflis']:
             self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
             self._sig_source[mfli]  = {'Demod_R': f'/{lockins[mfli]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[mfli]}/demods/0/sample.AuxIn0'}
-            self._daq_modules[mfli].set_triggered_data_acquisition_time_domain_v3(self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
+            self._daq_modules[mfli].set_triggered_data_acquisition_time_domain_v4(self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
             self._sample_data[mfli] = []
             #plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
     #    exec(plot_0_str)
@@ -133,6 +133,7 @@ class QuantumAlgoExperiment:
                 #self._trig_box.send_trigger()
             #    for i in range(self._n_trigger):
 
+
         while not self._daq_modules[0]._daq_module.finished():
 #        for i in range(self._n_trigger):
             self._trig_box.send_trigger()
@@ -171,6 +172,6 @@ class QuantumAlgoExperiment:
         # self._daq_modules[daq]._daq_module.unsubscribe('*')
         self._daq_modules[0]._daq_module.finish()
         self._daq_modules[0]._daq_module.unsubscribe('*')
-    #
+
     #         # t_1 = time.time()
     #         # print(t_1-t_0)
