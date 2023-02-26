@@ -284,7 +284,7 @@ class QuantumAlgoExperiment:
         t_start = time.time()
         while not self._daq_module.finished():
             self._trig_box.send_trigger()
-
+            t_start = time.time()
             # print('nm of triggered events', n_traces*self._daq_module.progress()[0] , 'is it finished?',self._daq_module.finished() )
             data_read = self._daq_module.read(True)
 
@@ -306,7 +306,8 @@ class QuantumAlgoExperiment:
                     sample_data.append(each)
             time.sleep(duration)
 
-        t_final = time.time()
+            t_final = time.time()
+            print(t_final-t_start)
 
         #in case there's leftover data, call the 'read' function again and append it to 'sample_data' array
         data_read = self._daq_module.read(True)
