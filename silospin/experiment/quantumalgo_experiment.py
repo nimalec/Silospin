@@ -52,9 +52,9 @@ class QuantumAlgoExperiment:
 
 
         self._n_trigger = n_inner*n_outer*len(self._gst_program._gate_sequences)
-        self._trig_box = TrigBoxDriverSerialServer(client=trigger_settings['client'])
-        self._trig_box.set_holdoff(trigger_settings['holdoff'])
-        self._trig_box.set_tlength(trigger_settings['tlength'])
+        # self._trig_box = TrigBoxDriverSerialServer(client=trigger_settings['client'])
+        # self._trig_box.set_holdoff(trigger_settings['holdoff'])
+        # self._trig_box.set_tlength(trigger_settings['tlength'])
 
         ##Now loop over all lockins
         columns = int(np.ceil(acquisition_time*lockin_sample_rate))
@@ -73,9 +73,9 @@ class QuantumAlgoExperiment:
     #    exec(plot_0_str)
         self._daq_modules[0] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
         self._sig_source[0]  = {'Demod_R': f'/{lockins[0]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[0]}/demods/0/sample.AuxIn0'}
-        self._daq_modules[0].set_triggered_data_acquisition_time_domain_v4(self._n_trigger, self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
+    #    self._daq_modules[0].set_triggered_data_acquisition_time_domain_v4(self._n_trigger, self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
 
-        #sample_data = self._daq_modules[0].triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], n_traces = self._n_trigger,  sample_rate=self._measurement_settings['sample_rate'], sig_port  = self._sig_port)
+        sample_data = self._daq_modules[0].triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], n_traces = self._n_trigger,  sample_rate=self._measurement_settings['sample_rate'], sig_port  = self._sig_port)
 
 #    def run_program(self):
         # def mflitrig_daq_helper(daqmod, ntrigger, time, samplerate, sigport):
