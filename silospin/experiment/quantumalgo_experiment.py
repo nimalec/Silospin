@@ -147,6 +147,7 @@ class QuantumAlgoExperiment:
             #print('toc')
             #print(data_read.keys())
             print(self._sig_source[0][sig_port].lower())
+            print(data_read.keys())
             # if '/triggered' in data_read.keys():
             #     print(1)
             #if self._sig_source[0][sig_port].lower() in data_read.keys():
