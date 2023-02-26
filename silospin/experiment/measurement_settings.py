@@ -1,4 +1,6 @@
 import time
+import numpy as np
+
 def daq_measurement_settings(n_traces, daq_module, daq, dev_id, measurement_settings, sig_port):
     duration = measurement_settings['acquisition_time']
     sample_rate = measurement_settings['sample_rate']
