@@ -175,6 +175,7 @@ class QuantumAlgoExperiment:
         if self._sig_source[0][sig_port].lower() in data_read.keys():
             for each in data_read[sig_source[sig_port].lower()]:
                 self._sample_data.append(each)
+        print(data_read.keys())
 
             #t_1 = time.time()
             #print(t_1-t_0)
