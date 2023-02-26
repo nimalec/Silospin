@@ -21,7 +21,7 @@ class QuantumAlgoExperiment:
     ##realtime_plot ==> plot output on lockins (arb number) in realtime
     ##Should allow for arbitrary numberso f dacs
 
-    def __init__(self, sequence_file, n_inner=1, n_outer=1, added_padding=0, realtime_plot = True, acquisition_time = 3.733e-3, lockin_sample_rate = 107e3, sig_port = 'Aux_in_1', trigger_settings = {'client': 'tcp://127.0.0.1:4244', 'tlength': 30, 'holdoff': 4000}, parameter_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_qubit_gate_parameters.pickle', awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0:'dev5761', 1: 'dev5759'}, rf_dc_core_grouping = {'hdawg1': {'rf': [1,2,3,4],'dc':[]}, 'hdawg2': {'rf': [1], 'dc': [2,3,4]}}, trig_channels={'hdawg1': 1,'hdawg2': 1}, mflidaq_file = 'C:\\Users\\Sigillito Lab\\Desktop\\codebases\\Silospin\\silospin\\experiment\\mflitrig_daq_helper.py'):
+    def __init__(self, sequence_file, n_inner=1, n_outer=1, added_padding=0, realtime_plot = True, acquisition_time = 3.733e-3, lockin_sample_rate = 107e3, sig_port = 'Aux_in_1', trigger_settings = {'client': 'tcp://127.0.0.1:4244', 'tlength': 70, 'holdoff': 4000}, parameter_file_path='C:\\Users\\Sigillito Lab\\Desktop\\experimental_workspaces\\quantum_dot_workspace_bluefors1\\experiment_parameters\\bluefors1_qubit_gate_parameters.pickle', awgs={0: 'dev8446', 1: 'dev8485'}, lockins={0:'dev5761', 1: 'dev5759'}, rf_dc_core_grouping = {'hdawg1': {'rf': [1,2,3,4],'dc':[]}, 'hdawg2': {'rf': [1], 'dc': [2,3,4]}}, trig_channels={'hdawg1': 1,'hdawg2': 1}, mflidaq_file = 'C:\\Users\\Sigillito Lab\\Desktop\\codebases\\Silospin\\silospin\\experiment\\mflitrig_daq_helper.py'):
         ##Initialize instruments
         self._mflidaq_file = mflidaq_file
         self._instrument_drivers = {'awgs': {}, 'mflis': {}}
@@ -52,9 +52,9 @@ class QuantumAlgoExperiment:
 
 
         self._n_trigger = n_inner*n_outer*len(self._gst_program._gate_sequences)
-        # self._trig_box = TrigBoxDriverSerialServer(client=trigger_settings['client'])
-        # self._trig_box.set_holdoff(trigger_settings['holdoff'])
-        # self._trig_box.set_tlength(trigger_settings['tlength'])
+        self._trig_box = TrigBoxDriverSerialServer(client=trigger_settings['client'])
+        self._trig_box.set_holdoff(trigger_settings['holdoff'])
+        self._trig_box.set_tlength(trigger_settings['tlength'])
 
         ##Now loop over all lockins
         columns = int(np.ceil(acquisition_time*lockin_sample_rate))
@@ -204,7 +204,7 @@ class QuantumAlgoExperiment:
         duration = self._measurement_settings['acquisition_time']
         sample_rate = self._measurement_settings['sample_rate']
         sig_port = self._sig_port
-        rows = 1 
+        rows = 1
 
         dev_id = self._lockins[0]
         sig_source = {'Demod_R': f'/{dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{dev_id}/demods/0/sample.AuxIn0'}
