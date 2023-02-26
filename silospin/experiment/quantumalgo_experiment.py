@@ -64,14 +64,15 @@ class QuantumAlgoExperiment:
         self._daq_modules = {}
         self._sample_data = {}
         self._sig_source = {}
-        for mfli in self._instrument_drivers['mflis']:
-            self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
-            self._sig_source[mfli]  = {'Demod_R': f'/{lockins[mfli]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[mfli]}/demods/0/sample.AuxIn0'}
-            self._daq_modules[mfli].set_triggered_data_acquisition_time_domain_v4(self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
-            self._sample_data[mfli] = []
+        #for mfli in self._instrument_drivers['mflis']:
+        #    self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
+        #    self._sig_source[mfli]  = {'Demod_R': f'/{lockins[mfli]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[mfli]}/demods/0/sample.AuxIn0'}
+        #    self._daq_modules[mfli].set_triggered_data_acquisition_time_domain_v4(self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
+    #        self._sample_data[mfli] = []
             #plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
     #    exec(plot_0_str)
-    #    sample_data = self._daq_modules[0].triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], n_traces = self._n_trigger,  sample_rate=self._measurement_settings['sample_rate'], sig_port  = self._sig_port)
+        self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
+        sample_data = self._daq_modules[0].triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], n_traces = self._n_trigger,  sample_rate=self._measurement_settings['sample_rate'], sig_port  = self._sig_port)
 
 #    def run_program(self):
         # def mflitrig_daq_helper(daqmod, ntrigger, time, samplerate, sigport):
@@ -101,9 +102,6 @@ class QuantumAlgoExperiment:
     ##Initiate lockins here
     ##Loop over to pass in lockins to function and generate plots
     ## Run over trigger events
-
-
-
     def run_program(self):
     #     ## Run background code here ..
         sig_port = self._sig_port
