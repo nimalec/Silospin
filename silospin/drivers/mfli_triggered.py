@@ -444,7 +444,7 @@ class MfliDaqModule:
         # self._daq_module.set('clearhistory', 1)
         # sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
         # self._daq_module.subscribe(sig_source[sig_port])
-    def set_triggered_data_acquisition_time_domain_v4(self, duration, sample_rate, sig_port  = 'Aux_in_1'):
+    def set_triggered_data_acquisition_time_domain_v4(self, n_traces, duration, sample_rate, sig_port  = 'Aux_in_1'):
         #for now, available input signals are only 'Demod_R' and 'Aux_in_1'
         sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
 
