@@ -2,6 +2,7 @@ from silospin.quantum_compiler.quantum_compiler import GateSetTomographyQuantumC
 from silospin.quantum_compiler.quantum_compiler_helpers import channel_mapper, make_gate_parameters
 
 from silospin.experiment import setup_quantumalgo_instruments
+from silospin.experiment.measurement_settings import daq_measurement_settings
 from silospin.experiment.setup_quantumalgo_instruments import *
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
 from silospin.experiment.mflitrig_daq_helper import mflitrig_daq_helper
@@ -199,126 +200,75 @@ class QuantumAlgoExperiment:
     #         # print(t_1-t_0)
 
     def run_program(self):
-        #for now, available input signals are only 'Demod_R' and 'Aux_in_1'
-        n_traces = self._n_trigger
-        duration = self._measurement_settings['acquisition_time']
-        sample_rate = self._measurement_settings['sample_rate']
-        sig_port = self._sig_port
-        rows = 1
-
-        dev_id = self._lockins[0]
-        sig_source = {'Demod_R': f'/{dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{dev_id}/demods/0/sample.AuxIn0'}
-
+        # n_traces = self._n_trigger
+        # duration = self._measurement_settings['acquisition_time']
+        # sample_rate = self._measurement_settings['sample_rate']
+        # sig_port = self._sig_port
+        # dev_id = self._lockins[0]
+        # sig_source = {'Demod_R': f'/{dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{dev_id}/demods/0/sample.AuxIn0'}
         sample_data = []
-        self._daq_module.set("device", dev_id)
-
-        #enable data transfer (sampling rate)
-        self._daq.setInt(f'/{dev_id}/demods/0/enable', 1)
-        self._daq.setInt(f'/{dev_id}/demods/0/trigger', 0)   #set Trigger to the continuous mode
-        self._daq.setDouble(f'/{dev_id}/demods/0/rate', sample_rate)
-        time.sleep(0.2)  #giving the DAQ enough time to set the sampling/data transfer rate
-    #    print(self._daq.getDouble(f'/{self._dev_id}/demods/0/rate'))  #only for testing
-
-
-        # Specify triggered data acquisition (type=0).
-        self._daq_module.set('type', 6)
-        self._daq_module.set('triggernode', f'/{dev_id}/demods/0/sample.TrigIn2')
-        self._daq_module.set('clearhistory', 1)   #not sure why history got cleared twice in the API log but I am simply copying what LabOne did.
-        self._daq_module.set('clearhistory', 1)
-        self._daq_module.set('bandwidth', 0)
-        self._daq_module.set('edge', 1)   #trigger edge: positive
-
-        columns = np.ceil(duration*sample_rate)
-
-        self._daq_module.set('grid/mode', 4)  #exact on-grid mode (no interpolation)
-        self._daq_module.set("count", n_traces)
-        self._daq_module.set("grid/cols", columns)
-        self._daq_module.set('grid/rows', rows)   # setting the # of rows here. we are going to set the default to be 1. this seems relevant when plotting traces on GUI.
-
-        #We set the holdoff time to 0 s to ensure that no triggers are lost in between successive lines
-        self._daq_module.set("holdoff/time", 0)
-        self._daq_module.set("holdoff/count", 0)  #num of skipped triggers until the next trigger is recorded again
-
-        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
-
-
-        time.sleep(0.8)  #giving the DAQ enough time to set the the parameters (columns, and num of traces before being read back out)
-
-        columns = self._daq_module.getInt('grid/cols')  #replace the calculated columns with the accepted val
-
-
-
-        #im just repeating this to make sure that the correct duration is set for the DAQ module. Without this, even with columns and sample rate set correctly
-        #the duration read back from the DAQ module is erroneous
-
-        self._daq_module.set('endless', 0)
-        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
-        self._daq_module.execute()
-        self._daq_module.finish()
-        self._daq_module.unsubscribe('*')
-
-
+        daq_measurement_settings(self._n_trigger, self._daq_module, self._daq, self._lockins[0], self._measurement_settings, self._sig_port)
+        # self._daq_module.set("device", dev_id)
+        # self._daq.setInt(f'/{dev_id}/demods/0/enable', 1)
+        # self._daq.setInt(f'/{dev_id}/demods/0/trigger', 0)
+        # self._daq.setDouble(f'/{dev_id}/demods/0/rate', sample_rate)
+        # time.sleep(0.2)
+        # self._daq_module.set('type', 6)
+        # self._daq_module.set('triggernode', f'/{dev_id}/demods/0/sample.TrigIn2')
+        # self._daq_module.set('clearhistory', 1)
+        # self._daq_module.set('clearhistory', 1)
+        # self._daq_module.set('bandwidth', 0)
+        # self._daq_module.set('edge', 1)
+        # columns = np.ceil(duration*sample_rate)
+        # self._daq_module.set('grid/mode', 4)
+        # self._daq_module.set("count", n_traces)
+        # self._daq_module.set("grid/cols", columns)
+        # self._daq_module.set('grid/rows', 1)
+        # self._daq_module.set("holdoff/time", 0)
+        # self._daq_module.set("holdoff/count", 0)
+        # self._daq_module.subscribe(sig_source[sig_port])
+        # time.sleep(0.8)  #giving the DAQ enough time to set the the parameters (columns, and num of traces before being read back out)
+        # columns = self._daq_module.getInt('grid/cols')  #replace the calculated columns with the accepted val
         # self._daq_module.set('endless', 0)
-        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+        # self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+        # self._daq_module.execute()
+        # self._daq_module.finish()
+        # self._daq_module.unsubscribe('*')
+        # self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+
 
 
         duration = self._daq_module.getDouble("duration")
         columns = self._daq_module.getInt('grid/cols')  #replace the calculated columns with the accepted val
-
         time_axis = np.linspace(0, duration,  columns)   #preparing x axis
         v_measured = np.zeros(columns)
 
-        #fig = plt.figure(self._counter)
         fig = plt.figure(0)
-        #self._counter += 1
-
-
         ax1 = fig.add_subplot(111)
         ax1.set_xlabel('time in sec')
-        ax1.set_ylabel('volts')
+        ax1.set_ylabel('Volts')
         line, = ax1.plot(time_axis, v_measured, lw=1)  #lw is the thickness of the plot
-
-        #data acquisition starts here
         self._daq_module.execute()
-
         t_start = time.time()
         while not self._daq_module.finished():
             self._trig_box.send_trigger()
             t_start = time.time()
-            # print('nm of triggered events', n_traces*self._daq_module.progress()[0] , 'is it finished?',self._daq_module.finished() )
             data_read = self._daq_module.read(True)
-
-        #    print(data_read.keys())
             if sig_source[sig_port].lower() in data_read.keys():
-
-                #updating the 1D plot with only the first trace of the bundle recovered from each 'read()' call
-                # print('what is this?', data_read.keys())
-
-
-                line.set_data(time_axis, data_read[sig_source[sig_port].lower()][0]['value'][0])   #updating the time trace plot with just the first array from 'read()'
+                line.set_data(time_axis, data_read[sig_source[sig_port].lower()][0]['value'][0])
                 ax1.set_ylim(np.amin(data_read[sig_source[sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[sig_source[sig_port].lower()][0]['value'][0]))/5,
                                   np.amax(data_read[sig_source[sig_port].lower()][0]['value'][0]) + abs(np.amax(data_read[sig_source[sig_port].lower()][0]['value'][0]))/5)
-
                 fig.canvas.draw()
                 fig.canvas.flush_events()
 
                 for each in data_read[sig_source[sig_port].lower()]:
                     sample_data.append(each)
             time.sleep(duration)
-
             t_final = time.time()
-            print(t_final-t_start)
-
-        #in case there's leftover data, call the 'read' function again and append it to 'sample_data' array
         data_read = self._daq_module.read(True)
         if sig_source[sig_port].lower() in data_read.keys():
             for each in data_read[sig_source[sig_port].lower()]:
                 sample_data.append(each)
-
-
-        #clearing the trigger event count and unsubscribing the data stream after the measurement run is over.
         self._daq_module.finish()
         self._daq_module.unsubscribe('*')
-
-        #return sample_data, time_axis
         self._sample_data = sample_data
