@@ -139,13 +139,16 @@ class QuantumAlgoExperiment:
         #while not self._daq_modules[0]._daq_module.finished() or itr < self._n_trigger:
 #        for i in range(self._n_trigger):
         #    print('tic')
+            t_0 = time.time()
             self._trig_box.send_trigger()
             #t_0 = time.time()
             #data_read = self._daq_modules[daq]._daq_module.read(True)
             data_read = self._daq_modules[0]._daq_module.read(True)
             time.sleep(self._measurement_settings['acquisition_time'])
             #print('toc')
-            print(data_read.keys())
+            t_1 = time.time()
+            print(t_1-t_0)
+            #print(data_read.keys())
             #if '/triggered' in data_read.keys():
         #        time.sleep(1)
         #        print(data_read.keys())
