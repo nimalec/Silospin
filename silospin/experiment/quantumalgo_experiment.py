@@ -151,7 +151,7 @@ class QuantumAlgoExperiment:
                     print(self._sample_data[daq])
 
             t_1 = time.time()
-            print(t_1-t_0)
+            #print(t_1-t_0)
             # if t_1 - t_0 < self._measurement_settings['acquisition_time'] + 500e-6:
             #     print(t_1-t_0)
             #     wait(self._measurement_settings['acquisition_time'] + 500e-6)
