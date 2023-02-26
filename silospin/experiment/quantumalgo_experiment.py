@@ -138,7 +138,7 @@ class QuantumAlgoExperiment:
             t_0 = time.time()
             #data_read = self._daq_modules[daq]._daq_module.read(True)
             data_read = self._daq_modules[0]._daq_module.read(True)
-            time.wait(1)
+            time.sleep(1)
             if self._sig_source[0][sig_port].lower() in data_read.keys():
             #if self._sig_source[daq][sig_port].lower() in data_read.keys():
                 # min_val = np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]))/5
