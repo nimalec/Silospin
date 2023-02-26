@@ -52,9 +52,9 @@ class QuantumAlgoExperiment:
 
 
         self._n_trigger = n_inner*n_outer*len(self._gst_program._gate_sequences)
-        self._trig_box = TrigBoxDriverSerialServer(client=trigger_settings['client'])
-        self._trig_box.set_holdoff(trigger_settings['holdoff'])
-        self._trig_box.set_tlength(trigger_settings['tlength'])
+        # self._trig_box = TrigBoxDriverSerialServer(client=trigger_settings['client'])
+        # self._trig_box.set_holdoff(trigger_settings['holdoff'])
+        # self._trig_box.set_tlength(trigger_settings['tlength'])
 
         ##Now loop over all lockins
         columns = int(np.ceil(acquisition_time*lockin_sample_rate))
@@ -71,9 +71,12 @@ class QuantumAlgoExperiment:
     #        self._sample_data[mfli] = []
             #plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
     #    exec(plot_0_str)
-        self._daq_modules[0] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
-        self._sig_source[0]  = {'Demod_R': f'/{lockins[0]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[0]}/demods/0/sample.AuxIn0'}
-        self._daq_modules[0].set_triggered_data_acquisition_time_domain_v4(self._n_trigger, self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
+        self._daq_modules[0] = MfliDaqModule(self._instrument_drivers['mflis'][0])
+        self._daq_module = self._daq_modules[0]._daq_module
+        self._daq = self._daq_modules[0]._daq
+
+    #    self._sig_source[0]  = {'Demod_R': f'/{lockins[0]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[0]}/demods/0/sample.AuxIn0'}
+    #    self._daq_modules[0].set_triggered_data_acquisition_time_domain_v4(self._n_trigger, self._measurement_settings['acquisition_time'], sample_rate=self._measurement_settings['sample_rate'], sig_port = sig_port)
 
     #    sample_data = self._daq_modules[0].triggered_data_acquisition_time_domain(self._measurement_settings['acquisition_time'], n_traces = self._n_trigger,  sample_rate=self._measurement_settings['sample_rate'], sig_port  = self._sig_port)
 
@@ -105,13 +108,13 @@ class QuantumAlgoExperiment:
     ##Initiate lockins here
     ##Loop over to pass in lockins to function and generate plots
     ## Run over trigger events
-    def run_program(self):
-    #     ## Run background code here ..
-        sig_port = self._sig_port
-    #     columns = int(np.ceil(self._measurement_settings['acquisition_time']*self._measurement_settings['sample_rate']))
-    #     self._time_axis = np.linspace(0, self._measurement_settings['acquisition_time'],  columns)
-    #     v_measured = np.zeros(columns)
-        self._daq_modules[0]._daq_module.execute()
+#    def run_program(self):
+    # #     ## Run background code here ..
+    #     sig_port = self._sig_port
+    # #     columns = int(np.ceil(self._measurement_settings['acquisition_time']*self._measurement_settings['sample_rate']))
+    # #     self._time_axis = np.linspace(0, self._measurement_settings['acquisition_time'],  columns)
+    # #     v_measured = np.zeros(columns)
+    #     self._daq_modules[0]._daq_module.execute()
         #for daq in self._daq_modules:
         #    self._daq_modules[daq]._daq_module.execute()
     #     # plot_0_str = ''
@@ -134,21 +137,21 @@ class QuantumAlgoExperiment:
                 #self._trig_box.send_trigger()
             #    for i in range(self._n_trigger):
 
-        itr = 0
-        while itr < self._n_trigger:
-        #while not self._daq_modules[0]._daq_module.finished() or itr < self._n_trigger:
-#        for i in range(self._n_trigger):
-        #    print('tic')
-            t_0 = time.time()
-            self._trig_box.send_trigger()
-            #t_0 = time.time()
-            #data_read = self._daq_modules[daq]._daq_module.read(True)
-            data_read = self._daq_modules[0]._daq_module.read(True)
-            time.sleep(self._measurement_settings['acquisition_time'])
-            #print('toc')
-            t_1 = time.time()
-            print(t_1-t_0)
-            #print(data_read.keys())
+#         itr = 0
+#         while itr < self._n_trigger:
+#         #while not self._daq_modules[0]._daq_module.finished() or itr < self._n_trigger:
+# #        for i in range(self._n_trigger):
+#         #    print('tic')
+#             t_0 = time.time()
+#             self._trig_box.send_trigger()
+#             #t_0 = time.time()
+#             #data_read = self._daq_modules[daq]._daq_module.read(True)
+#             data_read = self._daq_modules[0]._daq_module.read(True)
+#             time.sleep(self._measurement_settings['acquisition_time'])
+#             #print('toc')
+#             t_1 = time.time()
+#             print(t_1-t_0)
+#             #print(data_read.keys())
             #if '/triggered' in data_read.keys():
         #        time.sleep(1)
         #        print(data_read.keys())
@@ -165,17 +168,17 @@ class QuantumAlgoExperiment:
                 #     #self._sample_data[daq].append(sig)
                 #     self._sample_data[0].append(sig)
                 #     print(1)
-            #else: continue
-            time.sleep(1)
-            itr += 1
-            print(itr)
+            # #else: continue
+            # time.sleep(1)
+            # itr += 1
+            # print(itr)
 
-
-        data_read = self._daq_modules[0]._daq_module.read(True)
-        if self._sig_source[0][sig_port].lower() in data_read.keys():
-            for each in data_read[sig_source[sig_port].lower()]:
-                self._sample_data.append(each)
-        print(data_read.keys())
+        #
+        # data_read = self._daq_modules[0]._daq_module.read(True)
+        # if self._sig_source[0][sig_port].lower() in data_read.keys():
+        #     for each in data_read[sig_source[sig_port].lower()]:
+        #         self._sample_data.append(each)
+        # print(data_read.keys())
 
             #t_1 = time.time()
             #print(t_1-t_0)
@@ -189,8 +192,128 @@ class QuantumAlgoExperiment:
 
         # self._daq_modules[daq]._daq_module.finish()
         # self._daq_modules[daq]._daq_module.unsubscribe('*')
-        self._daq_modules[0]._daq_module.finish()
-        self._daq_modules[0]._daq_module.unsubscribe('*')
+        #self._daq_modules[0]._daq_module.finish()
+        #self._daq_modules[0]._daq_module.unsubscribe('*')
 
     #         # t_1 = time.time()
     #         # print(t_1-t_0)
+
+    def run_program(self):
+        #for now, available input signals are only 'Demod_R' and 'Aux_in_1'
+        n_traces = self._n_trigger
+        duration = self._measurement_settings['acquisition_time']
+        sample_rate = self._measurement_settings['sample_rate']
+        sig_port = self._sig_port
+
+        dev_id = self._lockins[0]
+        sig_source = {'Demod_R': f'/{dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{dev_id}/demods/0/sample.AuxIn0'}
+
+        sample_data = []
+        self._daq_module.set("device", dev_id)
+
+        #enable data transfer (sampling rate)
+        self._daq.setInt(f'/{dev_id}/demods/0/enable', 1)
+        self._daq.setInt(f'/{dev_id}/demods/0/trigger', 0)   #set Trigger to the continuous mode
+        self._daq.setDouble(f'/{dev_id}/demods/0/rate', sample_rate)
+        time.sleep(0.2)  #giving the DAQ enough time to set the sampling/data transfer rate
+    #    print(self._daq.getDouble(f'/{self._dev_id}/demods/0/rate'))  #only for testing
+
+
+        # Specify triggered data acquisition (type=0).
+        self._daq_module.set('type', 6)
+        self._daq_module.set('triggernode', f'/{dev_id}/demods/0/sample.TrigIn2')
+        self._daq_module.set('clearhistory', 1)   #not sure why history got cleared twice in the API log but I am simply copying what LabOne did.
+        self._daq_module.set('clearhistory', 1)
+        self._daq_module.set('bandwidth', 0)
+        self._daq_module.set('edge', 1)   #trigger edge: positive
+
+        columns = np.ceil(duration*sample_rate)
+
+        self._daq_module.set('grid/mode', 4)  #exact on-grid mode (no interpolation)
+        self._daq_module.set("count", n_traces)
+        self._daq_module.set("grid/cols", columns)
+        self._daq_module.set('grid/rows', rows)   # setting the # of rows here. we are going to set the default to be 1. this seems relevant when plotting traces on GUI.
+
+        #We set the holdoff time to 0 s to ensure that no triggers are lost in between successive lines
+        self._daq_module.set("holdoff/time", 0)
+        self._daq_module.set("holdoff/count", 0)  #num of skipped triggers until the next trigger is recorded again
+
+        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+
+
+        time.sleep(0.8)  #giving the DAQ enough time to set the the parameters (columns, and num of traces before being read back out)
+
+        columns = self._daq_module.getInt('grid/cols')  #replace the calculated columns with the accepted val
+
+
+
+        #im just repeating this to make sure that the correct duration is set for the DAQ module. Without this, even with columns and sample rate set correctly
+        #the duration read back from the DAQ module is erroneous
+
+        self._daq_module.set('endless', 0)
+        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+        self._daq_module.execute()
+        self._daq_module.finish()
+        self._daq_module.unsubscribe('*')
+
+
+        # self._daq_module.set('endless', 0)
+        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+
+
+        duration = self._daq_module.getDouble("duration")
+        columns = self._daq_module.getInt('grid/cols')  #replace the calculated columns with the accepted val
+
+        time_axis = np.linspace(0, duration,  columns)   #preparing x axis
+        v_measured = np.zeros(columns)
+
+        #fig = plt.figure(self._counter)
+        fig = plt.figure(0)
+        #self._counter += 1
+
+
+        ax1 = fig.add_subplot(111)
+        ax1.set_xlabel('time in sec')
+        ax1.set_ylabel('volts')
+        line, = ax1.plot(time_axis, v_measured, lw=1)  #lw is the thickness of the plot
+
+        #data acquisition starts here
+        self._daq_module.execute()
+
+        t_start = time.time()
+        while not self._daq_module.finished():
+
+            # print('nm of triggered events', n_traces*self._daq_module.progress()[0] , 'is it finished?',self._daq_module.finished() )
+            data_read = self._daq_module.read(True)
+
+            print(data_read.keys())
+            if sig_source[sig_port].lower() in data_read.keys():
+
+                #updating the 1D plot with only the first trace of the bundle recovered from each 'read()' call
+                # print('what is this?', data_read.keys())
+
+
+                line.set_data(time_axis, data_read[sig_source[sig_port].lower()][0]['value'][0])   #updating the time trace plot with just the first array from 'read()'
+                ax1.set_ylim(np.amin(data_read[sig_source[sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[sig_source[sig_port].lower()][0]['value'][0]))/5,
+                                  np.amax(data_read[sig_source[sig_port].lower()][0]['value'][0]) + abs(np.amax(data_read[sig_source[sig_port].lower()][0]['value'][0]))/5)
+
+                fig.canvas.draw()
+                fig.canvas.flush_events()
+
+                for each in data_read[sig_source[sig_port].lower()]:
+                    sample_data.append(each)
+        t_final = time.time()
+
+        #in case there's leftover data, call the 'read' function again and append it to 'sample_data' array
+        data_read = self._daq_module.read(True)
+        if sig_source[sig_port].lower() in data_read.keys():
+            for each in data_read[sig_source[sig_port].lower()]:
+                sample_data.append(each)
+
+
+        #clearing the trigger event count and unsubscribing the data stream after the measurement run is over.
+        self._daq_module.finish()
+        self._daq_module.unsubscribe('*')
+
+        #return sample_data, time_axis
+        return sample_data
