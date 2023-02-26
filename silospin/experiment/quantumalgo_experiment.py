@@ -133,9 +133,9 @@ class QuantumAlgoExperiment:
                 #self._trig_box.send_trigger()
             #    for i in range(self._n_trigger):
 
-        self._trig_box.send_trigger()
         while not self._daq_modules[0]._daq_module.finished():
-            #self._trig_box.send_trigger()
+            self._trig_box.send_trigger()
+            time.wait(1)
             t_0 = time.time()
             #data_read = self._daq_modules[daq]._daq_module.read(True)
             data_read = self._daq_modules[0]._daq_module.read(True)
@@ -148,7 +148,6 @@ class QuantumAlgoExperiment:
                 for sig in data_read[self._sig_source[0][sig_port].lower()]:
                 #for sig in data_read[self._sig_source[daq][sig_port].lower()]:
                     self._sample_data[daq].append(sig)
-                    print(self._sample_data[daq])
 
             t_1 = time.time()
             #print(t_1-t_0)
@@ -157,8 +156,8 @@ class QuantumAlgoExperiment:
             #     wait(self._measurement_settings['acquisition_time'] + 500e-6)
             # else:
             #     continue
-            self._trig_box.send_trigger()
-            print(1)
+            #self._trig_box.send_trigger()
+            #print(1)
 
         self._daq_modules[daq]._daq_module.finish()
         self._daq_modules[daq]._daq_module.unsubscribe('*')
