@@ -203,11 +203,11 @@ class QuantumAlgoExperiment:
         # n_traces = self._n_trigger
         # duration = self._measurement_settings['acquisition_time']
         # sample_rate = self._measurement_settings['sample_rate']
-        # sig_port = self._sig_port
+        sig_port = self._sig_port
         dev_id = self._lockins[0]
         sig_source = {'Demod_R': f'/{dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{dev_id}/demods/0/sample.AuxIn0'}
         sample_data = []
-        daq_measurement_settings(self._n_trigger, self._daq_module, self._daq, self._lockins[0], self._measurement_settings, self._sig_port)
+        daq_measurement_settings(self._n_trigger, self._daq_module, self._daq, self._lockins[0], self._measurement_settings, sig_port)
         # self._daq_module.set("device", dev_id)
         # self._daq.setInt(f'/{dev_id}/demods/0/enable', 1)
         # self._daq.setInt(f'/{dev_id}/demods/0/trigger', 0)
