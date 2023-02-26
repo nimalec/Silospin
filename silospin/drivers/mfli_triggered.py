@@ -572,7 +572,7 @@ class MfliDaqModule:
         self._daq_module.unsubscribe('*')
 
         #return sample_data, time_axis
-        return sample_data  
+        return sample_data
 
 
 
