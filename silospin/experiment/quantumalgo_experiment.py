@@ -135,7 +135,8 @@ class QuantumAlgoExperiment:
             #    for i in range(self._n_trigger):
 
         itr = 0
-        while not self._daq_modules[0]._daq_module.finished() or itr < self._n_trigger:
+        while itr < self._n_trigger:
+        #while not self._daq_modules[0]._daq_module.finished() or itr < self._n_trigger:
 #        for i in range(self._n_trigger):
             print('tic')
             self._trig_box.send_trigger()
@@ -157,7 +158,9 @@ class QuantumAlgoExperiment:
                     self._sample_data[0].append(sig)
                     print(1)
             else: continue
+            time.sleep(1)
             itr += 1
+            print(itr)
 
         data_read = self._daq_modules[0]._daq_module.read(True)
         if self._sig_source[0][sig_port].lower() in data_read.keys():
