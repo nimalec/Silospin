@@ -1,4 +1,4 @@
-import time 
+import time
 def daq_measurement_settings(n_traces, daq_module, daq, dev_id, measurement_settings, sig_port):
     duration = measurement_settings['acquisition_time']
     sample_rate = measurement_settings['sample_rate']
@@ -13,7 +13,7 @@ def daq_measurement_settings(n_traces, daq_module, daq, dev_id, measurement_sett
     daq_module.set('clearhistory', 1)
     daq_module.set('clearhistory', 1)
     daq_module.set('bandwidth', 0)
-    sdaq_module.set('edge', 1)
+    daq_module.set('edge', 1)
     columns = np.ceil(duration*sample_rate)
     daq_module.set('grid/mode', 4)
     daq_module.set("count", n_traces)
