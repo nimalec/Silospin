@@ -445,6 +445,49 @@ class MfliDaqModule:
         # sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
         # self._daq_module.subscribe(sig_source[sig_port])
     def set_triggered_data_acquisition_time_domain_v4(self, n_traces, duration, sample_rate, sig_port  = 'Aux_in_1'):
+        #for now, available input signals are only 'Demod_R' and 'Aux_in_1'
+        sig_source = {'Demod_R': f'/{self._dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{self._dev_id}/demods/0/sample.AuxIn0'}
+
+        sample_data = []
+        self._daq_module.set("device", self._dev_id)
+
+        #enable data transfer (sampling rate)
+        self._daq.setInt(f'/{self._dev_id}/demods/0/enable', 1)
+        self._daq.setInt(f'/{self._dev_id}/demods/0/trigger', 0)   #set Trigger to the continuous mode
+        self._daq.setDouble(f'/{self._dev_id}/demods/0/rate', sample_rate)
+        time.sleep(0.2)  #giving the DAQ enough time to set the sampling/data transfer rate
+
+        # Specify triggered data acquisition (type=0).
+        self._daq_module.set('type', 6)
+        self._daq_module.set('triggernode', f'/{self._dev_id}/demods/0/sample.TrigIn2')
+        self._daq_module.set('clearhistory', 1)   #not sure why history got cleared twice in the API log but I am simply copying what LabOne did.
+        self._daq_module.set('clearhistory', 1)
+        self._daq_module.set('bandwidth', 0)
+        self._daq_module.set('edge', 1)   #trigger edge: positive
+
+        columns = np.ceil(duration*sample_rate)
+
+        self._daq_module.set('grid/mode', 4)  #exact on-grid mode (no interpolation)
+        self._daq_module.set("count", n_traces)
+        self._daq_module.set("grid/cols", columns)
+        self._daq_module.set('grid/rows', 1)   # setting the # of rows here. we are going to set the default to be 1. this seems relevant when plotting traces on GUI.
+
+        #We set the holdoff time to 0 s to ensure that no triggers are lost in between successive lines
+        self._daq_module.set("holdoff/time", 0)
+        self._daq_module.set("holdoff/count", 0)  #num of skipped triggers until the next trigger is recorded again
+
+        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+
+        time.sleep(0.8)  #giving the DAQ enough time to set the the parameters (columns, and num of traces before being read back out)
+
+
+        self._daq_module.set('endless', 0)
+        self._daq_module.subscribe(sig_source[sig_port])  #assuming we are measuring from AuxIn0
+        self._daq_module.execute()
+        self._daq_module.finish()
+        self._daq_module.unsubscribe('*')
+
+
 
 
     def enable_triggered_data_acquisition_time_domain(self, sig_port):
