@@ -145,22 +145,27 @@ class QuantumAlgoExperiment:
             data_read = self._daq_modules[0]._daq_module.read(True)
             time.sleep(1)
             #print('toc')
-            print(data_read.keys())
-            if self._sig_source[0][sig_port].lower() in data_read.keys():
+            #print(data_read.keys())
+            print(self._sig_source[0][sig_port].lower())
+            if '/triggered' in data_read.keys():
+                print(1)
+            #if self._sig_source[0][sig_port].lower() in data_read.keys():
                 #if self._sig_source[daq][sig_port].lower() in data_read.keys():
                 # min_val = np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]))/5
 
                 # max_val = np.amax(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]) + abs(np.amax(data_read[self._sig_source[daq][sig_port].lower()][0]['value'][0]))/5
                 # plot_1_str += f'line{daq}.set_data(self._time_axis, data_read[self._sig_source[daq][sig_port].lower()][0]["value"][0])\nax{daq}.set_ylim({min_val},{max_val})\nfig{daq}.canvas.draw()\nfig{daq}.canvas.flush_events()'
                 # exec(plot_1_str)
-                for sig in data_read[self._sig_source[0][sig_port].lower()]:
-                #for sig in data_read[self._sig_source[daq][sig_port].lower()]:
-                    #self._sample_data[daq].append(sig)
-                    self._sample_data[0].append(sig)
-                    print(1)
-            else: continue
+
+                # for sig in data_read[self._sig_source[0][sig_port].lower()]:
+                # #for sig in data_read[self._sig_source[daq][sig_port].lower()]:
+                #     #self._sample_data[daq].append(sig)
+                #     self._sample_data[0].append(sig)
+                #     print(1)
+            #else: continue
             time.sleep(1)
             itr += 1
+            print(itr)
 
 
         data_read = self._daq_modules[0]._daq_module.read(True)
