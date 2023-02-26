@@ -304,6 +304,8 @@ class QuantumAlgoExperiment:
 
                 for each in data_read[sig_source[sig_port].lower()]:
                     sample_data.append(each)
+            time.sleep(duration)
+
         t_final = time.time()
 
         #in case there's leftover data, call the 'read' function again and append it to 'sample_data' array
