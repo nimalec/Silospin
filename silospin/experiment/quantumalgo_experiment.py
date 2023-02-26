@@ -133,7 +133,6 @@ class QuantumAlgoExperiment:
             #    for i in range(self._n_trigger):
         itr = 0
         while not self._daq_modules[daq]._daq_module.finished():
-            print(itr)
             self._trig_box.send_trigger()
             #self._trig_box.send_trigger()
             t_0 = time.time()
@@ -153,6 +152,7 @@ class QuantumAlgoExperiment:
             else:
                 continue
             itr += 1
+            print(itr)
 
         self._daq_modules[daq]._daq_module.finish()
         self._daq_modules[daq]._daq_module.unsubscribe('*')
