@@ -149,11 +149,12 @@ class QuantumAlgoExperiment:
                     print(self._sample_data[daq])
 
             t_1 = time.time()
-            if t_1 - t_0 < self._measurement_settings['acquisition_time'] + 500e-6:
-                print(t_1-t_0)
-                wait(self._measurement_settings['acquisition_time'] + 500e-6)
-            else:
-                continue
+            print(t_1-t_0)
+            # if t_1 - t_0 < self._measurement_settings['acquisition_time'] + 500e-6:
+            #     print(t_1-t_0)
+            #     wait(self._measurement_settings['acquisition_time'] + 500e-6)
+            # else:
+            #     continue
 
         self._daq_modules[daq]._daq_module.finish()
         self._daq_modules[daq]._daq_module.unsubscribe('*')
