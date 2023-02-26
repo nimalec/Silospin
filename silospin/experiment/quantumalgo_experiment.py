@@ -149,7 +149,8 @@ class QuantumAlgoExperiment:
                 # exec(plot_1_str)
                 for sig in data_read[self._sig_source[0][sig_port].lower()]:
                 #for sig in data_read[self._sig_source[daq][sig_port].lower()]:
-                    self._sample_data[daq].append(sig)
+                    #self._sample_data[daq].append(sig)
+                    self._sample_data[0].append(sig)
         data_read = self._daq_modules[0]._daq_module.read(True)
         if sig_source[sig_port].lower() in data_read.keys():
             for each in data_read[sig_source[sig_port].lower()]:
@@ -165,8 +166,10 @@ class QuantumAlgoExperiment:
             #self._trig_box.send_trigger()
             #print(1)
 
-        self._daq_modules[daq]._daq_module.finish()
-        self._daq_modules[daq]._daq_module.unsubscribe('*')
+        # self._daq_modules[daq]._daq_module.finish()
+        # self._daq_modules[daq]._daq_module.unsubscribe('*')
+        self._daq_modules[0]._daq_module.finish()
+        self._daq_modules[0]._daq_module.unsubscribe('*')
     #
     #         # t_1 = time.time()
     #         # print(t_1-t_0)
