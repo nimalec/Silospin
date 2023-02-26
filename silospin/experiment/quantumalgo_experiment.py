@@ -116,7 +116,7 @@ class QuantumAlgoExperiment:
     #     # for mfli in self._instrument_drivers['mflis']:
     #     #     plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
     #     # exec(plot_0_str)
-        for i in range(self._n_trigger):
+        #for i in range(self._n_trigger):
         #    t_0 = time.time()
         #     for daq in self._daq_modules:
         #         self._daq_modules[daq].enable_triggered_data_acquisition_time_domain(sig_port)
@@ -131,9 +131,9 @@ class QuantumAlgoExperiment:
                 #self._daq_modules[daq].enable_triggered_data_acquisition_time_domain(sig_port)
                 #self._trig_box.send_trigger()
             #    for i in range(self._n_trigger):
-                #while not self._daq_modules[daq]._daq_module.finished():
-                    #self._trig_box.send_trigger()
+        while not self._daq_modules[daq]._daq_module.finished():
             self._trig_box.send_trigger()
+            #self._trig_box.send_trigger()
             t_0 = time.time()
             data_read = self._daq_modules[daq]._daq_module.read(True)
             if self._sig_source[daq][sig_port].lower() in data_read.keys():
