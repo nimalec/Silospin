@@ -204,6 +204,7 @@ class QuantumAlgoExperiment:
         duration = self._measurement_settings['acquisition_time']
         sample_rate = self._measurement_settings['sample_rate']
         sig_port = self._sig_port
+        rows = 1 
 
         dev_id = self._lockins[0]
         sig_source = {'Demod_R': f'/{dev_id}/demods/0/sample.R' , 'Aux_in_1': f'/{dev_id}/demods/0/sample.AuxIn0'}
