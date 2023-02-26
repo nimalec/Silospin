@@ -158,6 +158,7 @@ class QuantumAlgoExperiment:
             # else:
             #     continue
             self._trig_box.send_trigger()
+            print(1)
 
         self._daq_modules[daq]._daq_module.finish()
         self._daq_modules[daq]._daq_module.unsubscribe('*')
