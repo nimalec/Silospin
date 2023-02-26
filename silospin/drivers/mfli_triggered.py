@@ -470,7 +470,7 @@ class MfliDaqModule:
         self._daq_module.set('grid/mode', 4)  #exact on-grid mode (no interpolation)
         self._daq_module.set("count", n_traces)
         self._daq_module.set("grid/cols", columns)
-        self._daq_module.set('grid/rows', rows)   # setting the # of rows here. we are going to set the default to be 1. this seems relevant when plotting traces on GUI.
+        self._daq_module.set('grid/rows', 1)   # setting the # of rows here. we are going to set the default to be 1. this seems relevant when plotting traces on GUI.
 
         #We set the holdoff time to 0 s to ensure that no triggers are lost in between successive lines
         self._daq_module.set("holdoff/time", 0)
