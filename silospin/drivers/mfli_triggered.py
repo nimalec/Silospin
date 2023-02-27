@@ -586,8 +586,7 @@ class MfliDaqModule:
 
             # print('nm of triggered events', n_traces*self._daq_module.progress()[0] , 'is it finished?',self._daq_module.finished() )
             data_read = self._daq_module.read(True)
-
-            print(data_read.keys())
+ 
             if sig_source[sig_port].lower() in data_read.keys():
 
                 #updating the 1D plot with only the first trace of the bundle recovered from each 'read()' call

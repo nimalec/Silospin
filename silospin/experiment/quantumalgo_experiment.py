@@ -72,6 +72,7 @@ class QuantumAlgoExperiment:
         self._daq_modules[0] = MfliDaqModule(self._instrument_drivers['mflis'][0])
         self._daq_module = self._daq_modules[0]._daq_module
         self._daq = self._daq_modules[0]._daq
+        self._volt_test = 0
 
 
     def run_program(self):
@@ -95,7 +96,6 @@ class QuantumAlgoExperiment:
         ax1.set_xlabel('Time [seconds]')
         ax1.set_ylabel('Demodulated Voltage [Volts]')
         line, = ax1.plot(time_axis, v_measured, lw=1)
-
 
         self._daq_module.execute()
         while not self._daq_module.finished():
@@ -122,4 +122,4 @@ class QuantumAlgoExperiment:
         self._daq_module.finish()
         self._daq_module.unsubscribe('*')
         self._sample_data = sample_data
-        plot_voltage_traces(self._sample_data)
+        self._volt_test = plot_voltage_traces(self._sample_data)

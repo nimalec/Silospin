@@ -39,11 +39,10 @@ def plot_voltage_traces(sample_data):
     for i in range(len(sample_data)):
         voltages.append(np.array(sample_data[i]['value']).T)
     voltages = np.array(voltages)
-    voltages.T[0,:,:]
+    return voltages.T[0,:,:]
     #c = plt.imshow(voltages.T[0,:,:],  vmin = np.min(voltages), vmax = np.max(voltages))
     #print(np.shape(voltages))
-    fig = plt.figure()
-    plt.imshow(voltages.T[0,:,:])
+    #fig = plt.figure()
+    #plt.imshow(voltages.T[0,:,:])
     #plt.colorbar(c)
-    plt.show()
-    print(voltages)
+    #plt.show()
