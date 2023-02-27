@@ -29,7 +29,6 @@ class QuantumAlgoExperiment:
         self._sig_port = sig_port
         self._lockins = lockins
         self._measurement_settings = {'sample_rate': lockin_sample_rate, 'acquisition_time': acquisition_time}
-        #initialize_drivers(awgs, lockins, rf_dc_core_grouping, trig_channels)
         initialize_drivers()
         for awg in awgs:
             idx_1 = str(awg)
@@ -65,15 +64,9 @@ class QuantumAlgoExperiment:
            self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
            self._sig_sources[mfli]  = {'Demod_R': f'/{lockins[mfli]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[mfli]}/demods/0/sample.AuxIn0'}
            self._sample_data[mfli] = []
-            #plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
-    #    exec(plot_0_str)
 
-        ##Configure now for 1
-        self._daq_modules[0] = MfliDaqModule(self._instrument_drivers['mflis'][0])
         self._daq_module = self._daq_modules[0]._daq_module
         self._daq = self._daq_modules[0]._daq
-        self._volt_test = 0
-
 
     def run_program(self):
         ##Should replace with loop over
@@ -122,4 +115,4 @@ class QuantumAlgoExperiment:
         self._daq_module.finish()
         self._daq_module.unsubscribe('*')
         self._sample_data = sample_data
-        self._volt_test = plot_voltage_traces(self._sample_data)
+        plot_voltage_traces(self._sample_data)
