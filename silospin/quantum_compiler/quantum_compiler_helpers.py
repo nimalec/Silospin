@@ -64,6 +64,7 @@ def make_gate_parameters(tau_pi, tau_pi_2, i_amp, q_amp, mod_freq, plunger_lengt
     gate_parameters = {}
     gate_parameters["rf"] = {}
     gate_parameters["p"] = {}
+
     for rf_idx in tau_pi:
         gate_parameters["rf"][rf_idx] = {"i_amp": None, "q_amp": None, "tau_pi" : None,  "tau_pi_2" :  None,  "mod_freq": None}
         gate_parameters["rf"][rf_idx]["i_amp"] = i_amp[rf_idx]
