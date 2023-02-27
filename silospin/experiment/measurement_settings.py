@@ -32,3 +32,5 @@ def daq_measurement_settings(n_traces, daq_module, daq, dev_id, measurement_sett
     daq_module.finish()
     daq_module.unsubscribe('*')
     daq_module.subscribe(sig_source[sig_port])
+
+def plot_voltage_traces(sample_data):
