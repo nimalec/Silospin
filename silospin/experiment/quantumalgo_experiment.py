@@ -115,8 +115,8 @@ class QuantumAlgoExperiment:
             time.sleep(duration)
 
         data_read = self._daq_module.read(True)
-        if sig_source[sig_port].lower() in data_read.keys():
-            for each in data_read[sig_source[sig_port].lower()]:
+        if sig_source[self._sig_port].lower() in data_read.keys():
+            for each in data_read[sig_source[self._sig_port].lower()]:
                 sample_data.append(each)
 
         self._daq_module.finish()
