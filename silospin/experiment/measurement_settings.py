@@ -47,5 +47,6 @@ def plot_voltage_traces(sample_data, acquisition_time):
     plt.ylabel('Trace index [a.u.]')
     cbar = plt.colorbar(c)
     cbar.set_label('Demodulated Voltage [Volts]', rotation=270)
-    plt.xlim([0, acquisition_time]) 
+#plt.xlim([0, acquisition_time])
+#    plt.ylim([0, acquisition_time]) 
     plt.show()
