@@ -37,7 +37,7 @@ def daq_measurement_settings(n_traces, daq_module, daq, dev_id, measurement_sett
 def plot_voltage_traces(sample_data):
     voltages = []
     for i in range(len(sample_data)):
-        voltages.append(np.array(sample_data[i]['value']).reshape(400))
+        voltages.append(np.array(sample_data[i]['value']))
     voltages = np.array(voltages)
     print(np.shape(voltages))
     #c = plt.imshow(voltages,  vmin = np.min(voltages), vmax = np.max(voltages))
