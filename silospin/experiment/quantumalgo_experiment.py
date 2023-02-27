@@ -63,7 +63,7 @@ class QuantumAlgoExperiment:
 
         for mfli in self._instrument_drivers['mflis']:
            self._daq_modules[mfli] = MfliDaqModule(self._instrument_drivers['mflis'][mfli])
-           self._sig_source[mfli]  = {'Demod_R': f'/{lockins[mfli]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[mfli]}/demods/0/sample.AuxIn0'}
+           self._sig_sources[mfli]  = {'Demod_R': f'/{lockins[mfli]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[mfli]}/demods/0/sample.AuxIn0'}
            self._sample_data[mfli] = []
             #plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [s]")\nax{mfli}.set_ylabel("Demodulated Voltage [V]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
     #    exec(plot_0_str)
