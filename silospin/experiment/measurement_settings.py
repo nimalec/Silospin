@@ -35,7 +35,7 @@ def daq_measurement_settings(n_traces, daq_module, daq, dev_id, measurement_sett
     daq_module.subscribe(sig_source[sig_port])
 
 def plot_voltage_traces(sample_data, acquisition_time):
-    ## Fix x and y range issues  
+    ## Fix x and y range issues
     voltages = []
     for i in range(len(sample_data)):
         voltages.append(np.array(sample_data[i]['value']).T)
@@ -49,6 +49,7 @@ def plot_voltage_traces(sample_data, acquisition_time):
     plt.ylabel('Trace index [a.u.]')
     cbar = plt.colorbar(c)
     cbar.set_label('Demodulated Voltage [Volts]', rotation=270)
+    plt.xticks(np.linspace(0,acquisition_time, 400))
 #plt.xlim([0, acquisition_time])
 #    plt.ylim([0, acquisition_time])
     plt.show()
