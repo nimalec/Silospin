@@ -42,6 +42,8 @@ def plot_voltage_traces(sample_data):
     voltages.T[0,:,:]
     #c = plt.imshow(voltages.T[0,:,:],  vmin = np.min(voltages), vmax = np.max(voltages))
     #print(np.shape(voltages))
+    fig = plt.figure()
     plt.imshow(voltages.T[0,:,:])
     #plt.colorbar(c)
     plt.show()
+    print(voltages)
