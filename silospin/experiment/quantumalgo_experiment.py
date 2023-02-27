@@ -2,7 +2,7 @@ from silospin.quantum_compiler.quantum_compiler import GateSetTomographyQuantumC
 from silospin.quantum_compiler.quantum_compiler_helpers import channel_mapper, make_gate_parameters
 
 from silospin.experiment import setup_quantumalgo_instruments
-from silospin.experiment.measurement_settings import daq_measurement_settings
+from silospin.experiment.measurement_settings import *
 from silospin.experiment.setup_quantumalgo_instruments import *
 from silospin.experiment.setup_experiment_helpers import unpickle_qubit_parameters
 from silospin.experiment.mflitrig_daq_helper import mflitrig_daq_helper
@@ -122,3 +122,4 @@ class QuantumAlgoExperiment:
         self._daq_module.finish()
         self._daq_module.unsubscribe('*')
         self._sample_data = sample_data
+        plot_voltage_traces(self._sample_data)
