@@ -115,4 +115,4 @@ class QuantumAlgoExperiment:
         self._daq_module.finish()
         self._daq_module.unsubscribe('*')
         self._sample_data = sample_data
-        plot_voltage_traces(self._sample_data)
+        plot_voltage_traces(self._sample_data, self._measurement_settings['acquisition_time'])
