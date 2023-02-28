@@ -43,7 +43,7 @@ def plot_voltage_traces(sample_data, acquisition_time, idx):
     fig_end = plt.figure(idx)
     c = plt.imshow(volt_plt_array, vmin = np.min(voltages), vmax = np.max(voltages))
     plt.title('Quantum Agorithm Experiment Readout', fontweight ="bold")
-    plt.xlabel('Acquisition time [Seconds]')
+    plt.xlabel('Time step [a.u.]')
     plt.ylabel('Trace index [a.u.]')
     cbar = plt.colorbar(c)
     cbar.set_label('Demodulated Voltage [Volts]', rotation=270)
