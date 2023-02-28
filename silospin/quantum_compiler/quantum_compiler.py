@@ -111,7 +111,7 @@ class GateSetTomographyQuantumCompiler:
             self._gate_parameters[awg_core_split[gt_idx][0]]["p"][gt_idx] = gate_param_all_dc[gt_idx]
 
         for awg in self._awgs:
-            #config_hdawg(self._awgs[awg], self._gate_parameters[awg], channel_mapping[awg])
+            config_hdawg(self._awgs[awg], self._gate_parameters[awg], channel_mapping[awg])
 
         tau_pi_2_set = []
         for idx in gate_parameters["rf"]:
