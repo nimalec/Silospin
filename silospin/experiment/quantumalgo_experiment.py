@@ -96,7 +96,7 @@ class QuantumAlgoExperiment:
     #    self._daq_module.execute()
         data_reads = {}
         #for i in range(self._n_trigger):
-        while not self._daq_module[mfli]._daq_module.finished():
+        while not self._daq_module[0]._daq_module.finished():
     #    while not self._daq_module.finished():
              self._trig_box.send_trigger()
              for mfli in self._lockins:
