@@ -152,13 +152,18 @@ def make_command_table_indices(gt_seqs, channel_map, awg_core_split, arb_gates, 
     arbgate_dict = unpickle_qubit_parameters(pickle_file_location)
     plunger_len_set = set([gate_lengths['plunger'][item]['p'] for item in gate_lengths['plunger']])
     plunger_len_tups = [(item, gate_lengths['plunger'][item]['p']) for item in gate_lengths['plunger']]
+
     N_p = len(plunger_tup_lengths)
-    p_std_idx = 0
-    for item in plunger_len_tups:
-        if p_tup_std[0] == item[0]:
-            break
-        else:
-            p_std_idx += 1
+    if len(plunger_len_tups) == 0:
+        p_std_idx = 0     
+    else:
+        p_tup_std = max(plunger_len_tups, key=lambda x:x[1])
+        p_std_idx = 0
+        for item in plunger_len_tups:
+            if p_tup_std[0] == item[0]:
+                break
+            else:
+                p_std_idx += 1
 
     ct_idx_p1_pi = 3*N_p
     ct_idx_p2_pi = 3*N_p + 1
