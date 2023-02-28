@@ -1551,6 +1551,7 @@ def generate_waveforms(gate_npoints, channel_map, added_padding, standard_rf, n_
                 pass
     return waveforms
 
+
 def config_hdawg(awg, gate_parameters, channel_mapping, channels_on=True):
     '''
     Configures HDAWG module to run a quantum algorithm. In particular, this function does the following:

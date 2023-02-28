@@ -111,7 +111,7 @@ class GateSetTomographyQuantumCompiler:
             self._gate_parameters[awg_core_split[gt_idx][0]]["p"][gt_idx] = gate_param_all_dc[gt_idx]
 
         for awg in self._awgs:
-            config_hdawg(self._awgs[awg], self._gate_parameters[awg], channel_mapping[awg])
+            #config_hdawg(self._awgs[awg], self._gate_parameters[awg], channel_mapping[awg])
 
         tau_pi_2_set = []
         for idx in gate_parameters["rf"]:
@@ -133,11 +133,8 @@ class GateSetTomographyQuantumCompiler:
             plunger_set_npoints_tups.append((idx, ceil(gate_parameters["p"][idx]["tau"]*2.4/16)*16))
         hdawg_std_rf = awg_core_split[standard_rf_idx][0]
 
-        if len(plunger_set) == 0 :
-            pass
-        else:
-            npoints_p_standard = max(plunger_set_npoints)
-
+        npoints_p_standard = max(plunger_set_npoints)
+        n_std = (npoints_pi_2_standard, npoints_pi_standard, npoints_p_standard)
         for core_idx in channel_mapping[hdawg_std_rf]:
             if channel_mapping[hdawg_std_rf][core_idx]['core_idx'] == standard_rf_idx:
                 core_std_rf = core_idx
@@ -145,7 +142,6 @@ class GateSetTomographyQuantumCompiler:
                 pass
 
         standard_rf = (hdawg_std_rf, standard_rf_idx)
-        n_std = (npoints_pi_2_standard, npoints_pi_standard, npoints_p_standard)
 
         self._gate_npoints = {}
         for awg in self._gate_parameters:
