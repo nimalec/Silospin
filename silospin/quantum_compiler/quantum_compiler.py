@@ -77,9 +77,6 @@ class GateSetTomographyQuantumCompiler:
             raise
 
 
-
-
-
        ##change here ...
         sample_rate = 2.4e9
         self._gst_path = gst_file_path

@@ -65,54 +65,78 @@ class QuantumAlgoExperiment:
            self._sig_sources[mfli]  = {'Demod_R': f'/{lockins[mfli]}/demods/0/sample.R' , 'Aux_in_1': f'/{lockins[mfli]}/demods/0/sample.AuxIn0'}
            self._sample_data[mfli] = []
 
-        self._daq_module = self._daq_modules[0]._daq_module
-        self._daq = self._daq_modules[0]._daq
+#        self._daq_module = self._daq_modules[0]._daq_module
+#        self._daq = self._daq_modules[0]._daq
 
     def run_program(self):
-        ##Should replace with loop over
-        dev_id = self._lockins[0]
-        sig_source = {'Demod_R': f'/{dev_id}/demods/0/sample.R','Aux_in_1': f'/{dev_id}/demods/0/sample.AuxIn0'}
-        sample_data = []
-        daq_measurement_settings(self._n_trigger, self._daq_module, self._daq, self._lockins[0], self._measurement_settings, self._sig_port)
+        for mfli in self._lockins:
+            daq_measurement_settings(self._n_trigger, self._daq_modules[mfli]._daq_module, self._daq_modules[mfli]._daq, self._lockins[mfli], self._measurement_settings, self._sig_port)
 
-        duration = self._daq_module.getDouble("duration")
-        columns = self._daq_module.getInt('grid/cols')
+        #dev_id = self._lockins[0]
+        #sig_source = {'Demod_R': f'/{dev_id}/demods/0/sample.R','Aux_in_1': f'/{dev_id}/demods/0/sample.AuxIn0'}
+        #sample_data = []
+        #daq_measurement_settings(self._n_trigger, self._daq_module, self._daq, self._lockins[0], self._measurement_settings, self._sig_port)
+
+        duration = self._daq_modules[0]._daq_module.getDouble("duration")
+        columns = self._daq_modules[0]._daq_module.getInt('grid/cols')
         time_axis = np.linspace(0, duration,  columns)
-        v_measured = np.zeros(columns)
+    #    v_measured = np.zeros(columns)
 
-        # for mfli in self._instrument_drivers['mflis']:
-        #     plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [Seconds]")\nax{mfli}.set_ylabel("Demodulated Voltage [Voltage]")\nline{mfli}, = ax{mfli}.plot(self._time_axis, v_measured, lw=1)\n'
-        # exec(plot_0_str)
+        for mfli in self._lockins:
+            plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [Seconds]")\nax{mfli}.set_ylabel("Demodulated Voltage [Voltage]")\nline{mfli}, = ax{mfli}.plot(time_axis, v_measured, lw=1)\n'
+            self._daq_modules[mfli]._daq_module.execute()
+        exec(plot_0_str)
 
-        fig = plt.figure()
-        ax1 = fig.add_subplot(111)
-        ax1.set_xlabel('Time [seconds]')
-        ax1.set_ylabel('Demodulated Voltage [Volts]')
-        line, = ax1.plot(time_axis, v_measured, lw=1)
+        # fig = plt.figure()
+        # ax1 = fig.add_subplot(111)
+        # ax1.set_xlabel('Time [seconds]')
+        # ax1.set_ylabel('Demodulated Voltage [Volts]')
+        # line, = ax1.plot(time_axis, v_measured, lw=1)
 
-        self._daq_module.execute()
-        while not self._daq_module.finished():
+    #    self._daq_module.execute()
+       data_reads = {}
+       for i in range(self._n_trigger):
+       #while not self._daq_module.finished():
             self._trig_box.send_trigger()
-            t_start = time.time()
-            data_read = self._daq_module.read(True)
-            if sig_source[self._sig_port].lower() in data_read.keys():
-                min_val = np.amin(data_read[sig_source[self._sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[sig_source[self._sig_port].lower()][0]['value'][0]))/5
-                max_val =   np.amax(data_read[sig_source[self._sig_port].lower()][0]['value'][0]) + abs(np.amax(data_read[sig_source[self._sig_port].lower()][0]['value'][0]))/5
-                line.set_data(time_axis, data_read[sig_source[self._sig_port].lower()][0]['value'][0])
-                ax1.set_ylim(min_val, max_val)
-                fig.canvas.draw()
-                fig.canvas.flush_events()
+            for mfli in self._lockins:
+                data_reads[mfli] = self._daq_modules[mfli]._daq_module.read(True)
+            #data_read = self._daq_module.read(True)
+                if self._sig_sources[mfli][self._sig_port].lower() in data_reads[mfli].keys():
+            #    if sig_source[self._sig_port].lower() in data_read.keys():
+                    #min_val = np.amin(data_read[sig_source[self._sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[sig_source[self._sig_port].lower()][0]['value'][0]))/5
+                    #max_val =   np.amax(data_read[sig_source[self._sig_port].lower()][0]['value'][0]) + abs(np.amax(data_read[sig_source[self._sig_port].lower()][0]['value'][0]))/5
+                    min_val = np.amin(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]) - abs(np.amin(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]))/5
+                    max_val = np.amax(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]) + abs(np.amax(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]))/5
 
-                for each in data_read[sig_source[self._sig_port].lower()]:
-                    sample_data.append(each)
+                    ##Replace this ....
+                    # line.set_data(time_axis, data_read[sig_source[self._sig_port].lower()][0]['value'][0])
+                    # ax1.set_ylim(min_val, max_val)
+                    # fig.canvas.draw()
+                    # fig.canvas.flush_events()
+
+                    plot_1 = f'line{mfli}.set_data(time_axis, data_reads[{mfli}][self._sig_source[{mfli}][self._sig_port].lower()][0]["value"][0])\nax{mfli}.set_ylim({min_val}, {max_val})\nfig{mfli}.canvas.draw()\nfig{mfli}.canvas.flush_events()'
+                    exec(plot_1)
+                    #for each in data_read[sig_source[self._sig_port].lower()]:
+                    for each in data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()]:
+                        self._sample_data[mfli].append(each)
             time.sleep(duration)
 
-        data_read = self._daq_module.read(True)
-        if sig_source[self._sig_port].lower() in data_read.keys():
-            for each in data_read[sig_source[self._sig_port].lower()]:
-                sample_data.append(each)
+        for mfli in self._lockins:
+            data_reads[mfli] = self._daq_modules[mfli]._daq_module.read(True)
 
-        self._daq_module.finish()
-        self._daq_module.unsubscribe('*')
-        self._sample_data = sample_data
-        plot_voltage_traces(self._sample_data, self._measurement_settings['acquisition_time'])
+            if self._sig_sources[mfli][self._sig_port].lower() in data_reads[mfli].keys():
+                for each in data_read[self._sig_sources[mfli][self._sig_port].lower()]:
+                     self._sample_data[mfli].append(each)
+                     self._daq_modules[mfli]._daq_module.finish()
+                     self._daq_modules[mfli]._daq_module('*')
+
+
+        #data_read = self._daq_module.read(True)
+        # if sig_source[self._sig_port].lower() in data_read.keys():
+        #     for each in data_read[sig_source[self._sig_port].lower()]:
+        #         sample_data.append(each)
+
+        # self._daq_module.finish()
+        # self._daq_module.unsubscribe('*')
+        #self._sample_data = sample_data
+        #plot_voltage_traces(self._sample_data, self._measurement_settings['acquisition_time'])
