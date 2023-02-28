@@ -96,7 +96,7 @@ class QuantumAlgoExperiment:
         for mfli in self._lockins:
             data_reads[mfli] = self._daq_modules[mfli]._daq_module.read(True)
             if self._sig_sources[mfli][self._sig_port].lower() in data_reads[mfli].keys():
-                for each in data_read[self._sig_sources[mfli][self._sig_port].lower()]:
+                for each in data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()]:
                     self._sample_data[mfli].append(each)
                     self._daq_modules[mfli]._daq_module.finish()
                     self._daq_modules[mfli]._daq_module('*')
