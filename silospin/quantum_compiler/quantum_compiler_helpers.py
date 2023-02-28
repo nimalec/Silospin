@@ -409,206 +409,107 @@ def make_command_table_indices(gt_seqs, channel_map, awg_core_split, arb_gates, 
                     pass
 
     ##Start here
-    idx_temp = list(dc_gate_sequence.keys())[0]
-    n_gates = len(dc_gate_sequence[idx_temp])
+    if len(dc_gate_sequence.keys()) == 0:
+        pass
+    else:
 
-    check_dc_p_channels = {}
-    for i in range(n_gates):
-        check_dc_p_channels[i] = {}
+        idx_temp = list(dc_gate_sequence.keys())[0]
+        n_gates = len(dc_gate_sequence[idx_temp])
+
+        check_dc_p_channels = {}
+        for i in range(n_gates):
+            check_dc_p_channels[i] = {}
+            for dc_idx in dc_gate_sequence:
+                check_dc_p_channels[i][dc_idx] = 0
+
         for dc_idx in dc_gate_sequence:
-            check_dc_p_channels[i][dc_idx] = 0
+            arb_gate_counter = 0
+            awg_idx = awg_core_split[dc_idx][0]
+            core_idx = awg_core_split[dc_idx][1]
+            dc_diff_idxs = list(set([i for i in dc_gate_sequence.keys()]).difference({dc_idx}))
+            rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]))
+            gate_sequence = dc_gate_sequence[dc_idx]
+            n_gates = len(gate_sequence)
 
-    for dc_idx in dc_gate_sequence:
-        arb_gate_counter = 0
-        awg_idx = awg_core_split[dc_idx][0]
-        core_idx = awg_core_split[dc_idx][1]
-        dc_diff_idxs = list(set([i for i in dc_gate_sequence.keys()]).difference({dc_idx}))
-        rf_diff_idxs = list(set([i for i in rf_gate_sequence.keys()]))
-        gate_sequence = dc_gate_sequence[dc_idx]
-        n_gates = len(gate_sequence)
+            ##Loop through all gates
+            for idx in range(n_gates):
+                gt = gate_sequence[idx]
+                dc_gates_other = set([dc_gate_sequence[j][idx] for j in dc_diff_idxs])
+                p_gates_other = dc_gates_other.intersection({'p'})
+                rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
+                pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
+                pi_intersect = rf_gates_other.intersection(pi_gt_set)
 
-        ##Loop through all gates
-        for idx in range(n_gates):
-            gt = gate_sequence[idx]
-            dc_gates_other = set([dc_gate_sequence[j][idx] for j in dc_diff_idxs])
-            p_gates_other = dc_gates_other.intersection({'p'})
-            rf_gates_other = set([rf_gate_sequence[j][idx] for j in rf_diff_idxs])
-            pi_2_intersect = rf_gates_other.intersection(pi_2_gt_set)
-            pi_intersect = rf_gates_other.intersection(pi_gt_set)
-
-            if gt == 'p':
-                itr = 0
-                p_dc_intersect = {}
-                for j in dc_gate_sequence.keys():
-                    gt_dc = dc_gate_sequence[j][idx]
-                    if gt_dc == 'p':
-                        itr = 0
-                        for item in plunger_tup_lengths:
-                            if j == item[0]:
-                                p_dc_intersect[itr] = item[1]
-
-                            else:
-                                itr += 1
-                    else:
-                        pass
-                p_dc_diff_max_idx = max(p_dc_intersect, key=p_dc_intersect.get)
-
-                if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                if gt == 'p':
                     itr = 0
-                    for item in plunger_tup_lengths:
-                        if dc_idx == item[0]:
-                            break
-                        else:
-                            itr += 1
-                    if dc_idx%2 != 0:
-                        ct_idx_p = itr
-                    else:
-                        ct_idx_p = itr + N_p
-                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-                elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
-                    itr = 0
-                    for item in plunger_tup_lengths:
-                        if dc_idx == item[0]:
-                            tau_p_gt = item[1]
-                            break
-                        else:
-                            itr += 1
-
-                    p_diff_taus = {}
+                    p_dc_intersect = {}
                     for j in dc_gate_sequence.keys():
                         gt_dc = dc_gate_sequence[j][idx]
                         if gt_dc == 'p':
+                            itr = 0
                             for item in plunger_tup_lengths:
                                 if j == item[0]:
-                                    p_diff_taus[j] = item[1]
-                                    break
+                                    p_dc_intersect[itr] = item[1]
+
                                 else:
-                                    pass
+                                    itr += 1
                         else:
                             pass
-                    p_diff_max_idx = max(p_diff_taus, key=p_diff_taus.get)
+                    p_dc_diff_max_idx = max(p_dc_intersect, key=p_dc_intersect.get)
 
-                    itr_diff_idx = 0
-                    for item in plunger_tup_lengths:
-                        if p_diff_max_idx == item[0]:
-                            break
-                        else:
-                            itr_diff_idx += 1
-
-                    ## CH 1
-                    if dc_idx%2 != 0:
-                        if check_dc_p_channels[idx][dc_idx] == 0:
-                            if dc_gate_sequence[dc_idx+1][idx] == 'p':
-                                ct_idx_p = itr_diff_idx + 2*N_p
-                                ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-
-                            elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
-                                ##only p1
-                                ct_idx_p = itr_diff_idx
-                                ct_idxs[awg_idx][core_idx][idx] =  ct_idx_p
-
+                    if len(p_gates_other) == 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                        itr = 0
+                        for item in plunger_tup_lengths:
+                            if dc_idx == item[0]:
+                                break
                             else:
-                                ##Throw error instead
-                                pass
-                            check_dc_p_channels[idx][dc_idx] += 1
-                            check_dc_p_channels[idx][dc_idx+1] += 1
+                                itr += 1
+                        if dc_idx%2 != 0:
+                            ct_idx_p = itr
                         else:
-                           pass
-
-
-                   ## CH 2
-                    elif dc_idx%2 == 0:
-                        if check_dc_p_channels[idx][dc_idx] == 0:
-                            if dc_gate_sequence[dc_idx-1][idx] == 'p':
-                                ##p1, p2 simulataneous
-                                ct_idx_p = itr_diff_idx + 2*N_p
-                                ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-
-                            elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
-                                ##only p2
-                                ct_idx_p = itr_diff_idx + N_p
-                                ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                            ct_idx_p = itr + N_p
+                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                    elif len(p_gates_other) != 0 and len(pi_2_intersect) == 0 and len(pi_intersect) == 0:
+                        itr = 0
+                        for item in plunger_tup_lengths:
+                            if dc_idx == item[0]:
+                                tau_p_gt = item[1]
+                                break
                             else:
-                                ##Throw error instead
+                                itr += 1
+
+                        p_diff_taus = {}
+                        for j in dc_gate_sequence.keys():
+                            gt_dc = dc_gate_sequence[j][idx]
+                            if gt_dc == 'p':
+                                for item in plunger_tup_lengths:
+                                    if j == item[0]:
+                                        p_diff_taus[j] = item[1]
+                                        break
+                                    else:
+                                        pass
+                            else:
                                 pass
-                            check_dc_p_channels[idx][dc_idx] += 1
-                            check_dc_p_channels[idx][dc_idx-1] += 1
-                        else:
-                           pass
-                    else:
-                        pass
+                        p_diff_max_idx = max(p_diff_taus, key=p_diff_taus.get)
 
-                ##Case 4
-                elif len(pi_intersect) != 0:
-                    if p_dc_intersect[p_dc_diff_max_idx] > taus_std[1]:
-                        use_p_std = 1
-                    else:
-                        use_p_std = 0
+                        itr_diff_idx = 0
+                        for item in plunger_tup_lengths:
+                            if p_diff_max_idx == item[0]:
+                                break
+                            else:
+                                itr_diff_idx += 1
 
-                    ##Work in p std frame
-                    if use_p_std == 1:
-                        ##CH 1
+                        ## CH 1
                         if dc_idx%2 != 0:
                             if check_dc_p_channels[idx][dc_idx] == 0:
                                 if dc_gate_sequence[dc_idx+1][idx] == 'p':
-                                    ##p1, p2 simulataneous in p std frame
-                                    ct_idx_p = p_std_idx + 2*N_p
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-
-                                elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
-                                    ##only p1 in p std frame
-                                    ct_idx_p = p_std_idx
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-
-                                else:
-                                    ##Throw error instead
-                                    pass
-                                check_dc_p_channels[idx][dc_idx] += 1
-                                check_dc_p_channels[idx][dc_idx+1] += 1
-                            else:
-                               pass
-
-
-                       ## CH 2
-                        elif dc_idx%2 == 0:
-                            ## Check if index already generated for the other channel
-                            if check_dc_p_channels[idx][dc_idx] == 0:
-                                if dc_gate_sequence[dc_idx-1][idx] == 'p':
-                                    ##p1, p2 simulataneous in p frmae
-                                    ct_idx_p = p_std_idx + 2*N_p
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-                                elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
-                                    ##only p2 in pi frame
-                                    ct_idx_p = N_p + p_std_idx
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-
-                                else:
-                                    ##Throw error instead
-                                    pass
-                                check_dc_p_channels[idx][dc_idx] += 1
-                                check_dc_p_channels[idx][dc_idx-1] += 1
-                            else:
-                               pass
-
-                        else:
-                            pass
-
-
-                    else:
-                        ## PI frame
-                        ##CH 1
-                        if dc_idx%2 != 0:
-                            ## Check if index already generated for the other channel
-                            if check_dc_p_channels[idx][dc_idx] == 0:
-                                if dc_gate_sequence[dc_idx+1][idx] == 'p':
-                                    ##p1, p2 simulataneous in pi frame
-                                    ct_idx_p = 3*N_p + 4
+                                    ct_idx_p = itr_diff_idx + 2*N_p
                                     ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
 
                                 elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
                                     ##only p1
-                                    ct_idx_p = 3*N_p
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                                    ct_idx_p = itr_diff_idx
+                                    ct_idxs[awg_idx][core_idx][idx] =  ct_idx_p
 
                                 else:
                                     ##Throw error instead
@@ -618,17 +519,18 @@ def make_command_table_indices(gt_seqs, channel_map, awg_core_split, arb_gates, 
                             else:
                                pass
 
+
                        ## CH 2
                         elif dc_idx%2 == 0:
-                            ## Check if index already generated for the other channel
                             if check_dc_p_channels[idx][dc_idx] == 0:
                                 if dc_gate_sequence[dc_idx-1][idx] == 'p':
                                     ##p1, p2 simulataneous
-                                    ct_idx_p = 3*N_p + 4
+                                    ct_idx_p = itr_diff_idx + 2*N_p
                                     ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+
                                 elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
                                     ##only p2
-                                    ct_idx_p = 3*N_p + 1
+                                    ct_idx_p = itr_diff_idx + N_p
                                     ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
                                 else:
                                     ##Throw error instead
@@ -637,86 +539,276 @@ def make_command_table_indices(gt_seqs, channel_map, awg_core_split, arb_gates, 
                                 check_dc_p_channels[idx][dc_idx-1] += 1
                             else:
                                pass
-
                         else:
                             pass
 
-                #Case 5: working in  pi/2 frame
-                elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
-                    if p_dc_intersect[p_dc_diff_max_idx] > taus_std[0]:
-                        use_p_std = 1
-                    else:
-                        use_p_std = 0
+                    ##Case 4
+                    elif len(pi_intersect) != 0:
+                        if p_dc_intersect[p_dc_diff_max_idx] > taus_std[1]:
+                            use_p_std = 1
+                        else:
+                            use_p_std = 0
 
-                    ##Work in p std frame
-                    if use_p_std == 1:
-                        ##CH 1
-                        if dc_idx%2 != 0:
-                            ## Check if index already generated for the other channel
-                            if check_dc_p_channels[idx][dc_idx] == 0:
-                                if dc_gate_sequence[dc_idx+1][idx] == 'p':
-                                    ##p1, p2 simulataneous in p std frame
-                                    ct_idx_p = p_std_idx + 2*N_p
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                        ##Work in p std frame
+                        if use_p_std == 1:
+                            ##CH 1
+                            if dc_idx%2 != 0:
+                                if check_dc_p_channels[idx][dc_idx] == 0:
+                                    if dc_gate_sequence[dc_idx+1][idx] == 'p':
+                                        ##p1, p2 simulataneous in p std frame
+                                        ct_idx_p = p_std_idx + 2*N_p
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
 
-                                elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
-                                    ##only p1 in p std frame
-                                    ct_idx_p = p_std_idx
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                                    elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
+                                        ##only p1 in p std frame
+                                        ct_idx_p = p_std_idx
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
 
+                                    else:
+                                        ##Throw error instead
+                                        pass
+                                    check_dc_p_channels[idx][dc_idx] += 1
+                                    check_dc_p_channels[idx][dc_idx+1] += 1
                                 else:
-                                    ##Throw error instead
-                                    pass
-                                check_dc_p_channels[idx][dc_idx] += 1
-                                check_dc_p_channels[idx][dc_idx+1] += 1
-                            else:
-                               pass
+                                   pass
 
 
-                       ## CH 2
-                        elif dc_idx%2 == 0:
-                            ## Check if index already generated for the other channel
-                            if check_dc_p_channels[idx][dc_idx] == 0:
-                                if dc_gate_sequence[dc_idx-1][idx] == 'p':
-                                    ##p1, p2 simulataneous in p frmae
-                                    ct_idx_p = p_std_idx + 2*N_p
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-                                elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
-                                    ##only p2 in pi frame
-                                    ct_idx_p = N_p + p_std_idx
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                           ## CH 2
+                            elif dc_idx%2 == 0:
+                                ## Check if index already generated for the other channel
+                                if check_dc_p_channels[idx][dc_idx] == 0:
+                                    if dc_gate_sequence[dc_idx-1][idx] == 'p':
+                                        ##p1, p2 simulataneous in p frmae
+                                        ct_idx_p = p_std_idx + 2*N_p
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                                    elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
+                                        ##only p2 in pi frame
+                                        ct_idx_p = N_p + p_std_idx
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
 
+                                    else:
+                                        ##Throw error instead
+                                        pass
+                                    check_dc_p_channels[idx][dc_idx] += 1
+                                    check_dc_p_channels[idx][dc_idx-1] += 1
                                 else:
-                                    ##Throw error instead
-                                    pass
-                                check_dc_p_channels[idx][dc_idx] += 1
-                                check_dc_p_channels[idx][dc_idx-1] += 1
+                                   pass
+
                             else:
-                               pass
+                                pass
+
 
                         else:
-                            pass
+                            ## PI frame
+                            ##CH 1
+                            if dc_idx%2 != 0:
+                                ## Check if index already generated for the other channel
+                                if check_dc_p_channels[idx][dc_idx] == 0:
+                                    if dc_gate_sequence[dc_idx+1][idx] == 'p':
+                                        ##p1, p2 simulataneous in pi frame
+                                        ct_idx_p = 3*N_p + 4
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+
+                                    elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
+                                        ##only p1
+                                        ct_idx_p = 3*N_p
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+
+                                    else:
+                                        ##Throw error instead
+                                        pass
+                                    check_dc_p_channels[idx][dc_idx] += 1
+                                    check_dc_p_channels[idx][dc_idx+1] += 1
+                                else:
+                                   pass
+
+                           ## CH 2
+                            elif dc_idx%2 == 0:
+                                ## Check if index already generated for the other channel
+                                if check_dc_p_channels[idx][dc_idx] == 0:
+                                    if dc_gate_sequence[dc_idx-1][idx] == 'p':
+                                        ##p1, p2 simulataneous
+                                        ct_idx_p = 3*N_p + 4
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                                    elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
+                                        ##only p2
+                                        ct_idx_p = 3*N_p + 1
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                                    else:
+                                        ##Throw error instead
+                                        pass
+                                    check_dc_p_channels[idx][dc_idx] += 1
+                                    check_dc_p_channels[idx][dc_idx-1] += 1
+                                else:
+                                   pass
+
+                            else:
+                                pass
+
+                    #Case 5: working in  pi/2 frame
+                    elif len(pi_2_intersect) != 0 and len(pi_intersect) == 0:
+                        if p_dc_intersect[p_dc_diff_max_idx] > taus_std[0]:
+                            use_p_std = 1
+                        else:
+                            use_p_std = 0
+
+                        ##Work in p std frame
+                        if use_p_std == 1:
+                            ##CH 1
+                            if dc_idx%2 != 0:
+                                ## Check if index already generated for the other channel
+                                if check_dc_p_channels[idx][dc_idx] == 0:
+                                    if dc_gate_sequence[dc_idx+1][idx] == 'p':
+                                        ##p1, p2 simulataneous in p std frame
+                                        ct_idx_p = p_std_idx + 2*N_p
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+
+                                    elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
+                                        ##only p1 in p std frame
+                                        ct_idx_p = p_std_idx
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+
+                                    else:
+                                        ##Throw error instead
+                                        pass
+                                    check_dc_p_channels[idx][dc_idx] += 1
+                                    check_dc_p_channels[idx][dc_idx+1] += 1
+                                else:
+                                   pass
 
 
+                           ## CH 2
+                            elif dc_idx%2 == 0:
+                                ## Check if index already generated for the other channel
+                                if check_dc_p_channels[idx][dc_idx] == 0:
+                                    if dc_gate_sequence[dc_idx-1][idx] == 'p':
+                                        ##p1, p2 simulataneous in p frmae
+                                        ct_idx_p = p_std_idx + 2*N_p
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                                    elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
+                                        ##only p2 in pi frame
+                                        ct_idx_p = N_p + p_std_idx
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+
+                                    else:
+                                        ##Throw error instead
+                                        pass
+                                    check_dc_p_channels[idx][dc_idx] += 1
+                                    check_dc_p_channels[idx][dc_idx-1] += 1
+                                else:
+                                   pass
+
+                            else:
+                                pass
+
+
+                        else:
+                            ## PI/2 frame
+                            ##CH 1
+                            if dc_idx%2 != 0:
+                                ## Check if index already generated for the other channel
+                                if check_dc_p_channels[idx][dc_idx] == 0:
+                                    if dc_gate_sequence[dc_idx+1][idx] == 'p':
+                                        ##p1, p2 simulataneous in pi/2 frame
+                                        ct_idx_p = 3*N_p + 5
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+
+                                    elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
+                                        ##only p1
+                                        ct_idx_p = 3*N_p + 2
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+
+                                    else:
+                                        ##Throw error instead
+                                        pass
+                                    check_dc_p_channels[idx][dc_idx] += 1
+                                    check_dc_p_channels[idx][dc_idx+1] += 1
+                                else:
+                                   pass
+
+                           ## CH 2
+                            elif dc_idx%2 == 0:
+                                ## Check if index already generated for the other channel
+                                if check_dc_p_channels[idx][dc_idx] == 0:
+                                    if dc_gate_sequence[dc_idx-1][idx] == 'p':
+                                        ##p1, p2 simulataneous
+                                        ct_idx_p = 3*N_p + 5
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                                    elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
+                                        ##only p2
+                                        ct_idx_p = 3*N_p + 3
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
+                                    else:
+                                        ##Throw error instead
+                                        pass
+                                    check_dc_p_channels[idx][dc_idx] += 1
+                                    check_dc_p_channels[idx][dc_idx-1] += 1
+                                else:
+                                   pass
+
+                            else:
+                                pass
+
+                elif gt == 'z0z':
+                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p_z0z
+
+                elif gt[0] == 't':
+                    if dc_idx%2 != 0:
+                        if dc_gate_sequence[dc_idx+1][idx][0] != 't':
+                            dual_channel = 0
+                        else:
+                            dual_channel = 1
                     else:
+                        if dc_gate_sequence[dc_idx-1][idx][0] != 't':
+                            dual_channel = 0
+                        else:
+                            dual_channel = 1
+
+                    if dual_channel == 0:
+                        pass
+                    else:
+                        gt_t_str = int(gt[1:len(gt)])
+                        ## pi delays
+                        if gt_t_str == int(taus_std[1]):
+                            ct_idxs[awg_idx][core_idx][idx] = ct_p_idx_tau_pi
+                        # std pi/2 delays
+                        elif gt_t_str == int(taus_std[0]):
+                            ct_idxs[awg_idx][core_idx][idx] = ct_p_idx_tau_pi_2
+
+                        # plunger delays
+                        else:
+                            if gt_t_str in plunger_len_set:
+                                idx_t_p = 0
+                                for itm in plunger_len_tups:
+                                    idx_t_p += 1
+                                    if gt_t_str == itm[1]:
+                                        ct_idx_t_p  = ct_p_idx_tau_p_std + idx_t_p
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_p
+                                        break
+                                    else:
+                                        continue
+
+                            elif gt_t_str in set(arb_gate_taus):
+                                idx_a = 0
+                                for itm in arb_gate_taus:
+                                    idx_a += 1
+                                    if gt_t_str == itm:
+                                        ct_idx_t_a =  ct_p_idx_tau_p_std+ N_p+idx_a
+                                        ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_a
+                                        break
+                                    else:
+                                        continue
+                            else:
+                                pass
+
+                elif gt.find('*') != -1:
+                    if gt[gt.find('*')+1] in arbgate_dict.keys():
                         ## PI/2 frame
                         ##CH 1
                         if dc_idx%2 != 0:
-                            ## Check if index already generated for the other channel
                             if check_dc_p_channels[idx][dc_idx] == 0:
-                                if dc_gate_sequence[dc_idx+1][idx] == 'p':
-                                    ##p1, p2 simulataneous in pi/2 frame
-                                    ct_idx_p = 3*N_p + 5
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-
-                                elif dc_gate_sequence[dc_idx+1][idx][0] == 't':
-                                    ##only p1
-                                    ct_idx_p = 3*N_p + 2
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-
-                                else:
-                                    ##Throw error instead
-                                    pass
+                                ct_idx_t_a = ct_p_idx_tau_p_std+ N_p+len(arb_gate_taus) + arb_dc_dict[awg_idx][core_idx][line][idx][1]
+                                ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_a
                                 check_dc_p_channels[idx][dc_idx] += 1
                                 check_dc_p_channels[idx][dc_idx+1] += 1
                             else:
@@ -724,19 +816,9 @@ def make_command_table_indices(gt_seqs, channel_map, awg_core_split, arb_gates, 
 
                        ## CH 2
                         elif dc_idx%2 == 0:
-                            ## Check if index already generated for the other channel
                             if check_dc_p_channels[idx][dc_idx] == 0:
-                                if dc_gate_sequence[dc_idx-1][idx] == 'p':
-                                    ##p1, p2 simulataneous
-                                    ct_idx_p = 3*N_p + 5
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-                                elif dc_gate_sequence[dc_idx-1][idx][0] == 't':
-                                    ##only p2
-                                    ct_idx_p = 3*N_p + 3
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_p
-                                else:
-                                    ##Throw error instead
-                                    pass
+                                ct_idx_t_a = ct_p_idx_tau_p_std+ N_p+len(arb_gate_taus) + arb_dc_dict[awg_idx][core_idx][line][idx][1]
+                                ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_a
                                 check_dc_p_channels[idx][dc_idx] += 1
                                 check_dc_p_channels[idx][dc_idx-1] += 1
                             else:
@@ -744,88 +826,10 @@ def make_command_table_indices(gt_seqs, channel_map, awg_core_split, arb_gates, 
 
                         else:
                             pass
-
-            elif gt == 'z0z':
-                ct_idxs[awg_idx][core_idx][idx] = ct_idx_p_z0z
-
-            elif gt[0] == 't':
-                if dc_idx%2 != 0:
-                    if dc_gate_sequence[dc_idx+1][idx][0] != 't':
-                        dual_channel = 0
-                    else:
-                        dual_channel = 1
-                else:
-                    if dc_gate_sequence[dc_idx-1][idx][0] != 't':
-                        dual_channel = 0
-                    else:
-                        dual_channel = 1
-
-                if dual_channel == 0:
-                    pass
-                else:
-                    gt_t_str = int(gt[1:len(gt)])
-                    ## pi delays
-                    if gt_t_str == int(taus_std[1]):
-                        ct_idxs[awg_idx][core_idx][idx] = ct_p_idx_tau_pi
-                    # std pi/2 delays
-                    elif gt_t_str == int(taus_std[0]):
-                        ct_idxs[awg_idx][core_idx][idx] = ct_p_idx_tau_pi_2
-
-                    # plunger delays
-                    else:
-                        if gt_t_str in plunger_len_set:
-                            idx_t_p = 0
-                            for itm in plunger_len_tups:
-                                idx_t_p += 1
-                                if gt_t_str == itm[1]:
-                                    ct_idx_t_p  = ct_p_idx_tau_p_std + idx_t_p
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_p
-                                    break
-                                else:
-                                    continue
-
-                        elif gt_t_str in set(arb_gate_taus):
-                            idx_a = 0
-                            for itm in arb_gate_taus:
-                                idx_a += 1
-                                if gt_t_str == itm:
-                                    ct_idx_t_a =  ct_p_idx_tau_p_std+ N_p+idx_a
-                                    ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_a
-                                    break
-                                else:
-                                    continue
-                        else:
-                            pass
-
-            elif gt.find('*') != -1:
-                if gt[gt.find('*')+1] in arbgate_dict.keys():
-                    ## PI/2 frame
-                    ##CH 1
-                    if dc_idx%2 != 0:
-                        if check_dc_p_channels[idx][dc_idx] == 0:
-                            ct_idx_t_a = ct_p_idx_tau_p_std+ N_p+len(arb_gate_taus) + arb_dc_dict[awg_idx][core_idx][line][idx][1]
-                            ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_a
-                            check_dc_p_channels[idx][dc_idx] += 1
-                            check_dc_p_channels[idx][dc_idx+1] += 1
-                        else:
-                           pass
-
-                   ## CH 2
-                    elif dc_idx%2 == 0:
-                        if check_dc_p_channels[idx][dc_idx] == 0:
-                            ct_idx_t_a = ct_p_idx_tau_p_std+ N_p+len(arb_gate_taus) + arb_dc_dict[awg_idx][core_idx][line][idx][1]
-                            ct_idxs[awg_idx][core_idx][idx] = ct_idx_t_a
-                            check_dc_p_channels[idx][dc_idx] += 1
-                            check_dc_p_channels[idx][dc_idx-1] += 1
-                        else:
-                           pass
-
                     else:
                         pass
-                else:
-                    pass
-        else:
-            continue
+            else:
+                continue
     return ct_idxs, arbgate_counter
 
 def make_rf_command_table(n_std, arbZs, arbitrary_waveforms, plunger_length_set, awgidx, coreidx, awg):
