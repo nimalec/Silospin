@@ -133,6 +133,19 @@ class GateSetTomographyQuantumCompiler:
             plunger_set_npoints_tups.append((idx, ceil(gate_parameters["p"][idx]["tau"]*2.4/16)*16))
         hdawg_std_rf = awg_core_split[standard_rf_idx][0]
 
+        dc_cores = 0
+        for awg_idx in self._channel_mapping:
+            for core_idx in self._channel_mapping[awg_idx]:
+                if self._channel_mapping[awg_idx][core_idx]['rf'] == 0:
+                    dc_cores += 1
+                else:
+                    pass
+
+        if dc_cores == 0:
+            npoints_p_standard = 48
+        else:
+            npoints_p_standard = max(plunger_set_npoints)
+
         npoints_p_standard = max(plunger_set_npoints)
         n_std = (npoints_pi_2_standard, npoints_pi_standard, npoints_p_standard)
         for core_idx in channel_mapping[hdawg_std_rf]:
