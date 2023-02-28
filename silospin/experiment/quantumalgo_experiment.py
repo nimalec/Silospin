@@ -94,19 +94,19 @@ class QuantumAlgoExperiment:
         # line, = ax1.plot(time_axis, v_measured, lw=1)
 
     #    self._daq_module.execute()
-       data_reads = {}
-       for i in range(self._n_trigger):
+        data_reads = {}
+        for i in range(self._n_trigger):
        #while not self._daq_module.finished():
-            self._trig_box.send_trigger()
-            for mfli in self._lockins:
-                data_reads[mfli] = self._daq_modules[mfli]._daq_module.read(True)
+             self._trig_box.send_trigger()
+             for mfli in self._lockins:
+                 data_reads[mfli] = self._daq_modules[mfli]._daq_module.read(True)
             #data_read = self._daq_module.read(True)
-                if self._sig_sources[mfli][self._sig_port].lower() in data_reads[mfli].keys():
+                 if self._sig_sources[mfli][self._sig_port].lower() in data_reads[mfli].keys():
             #    if sig_source[self._sig_port].lower() in data_read.keys():
                     #min_val = np.amin(data_read[sig_source[self._sig_port].lower()][0]['value'][0]) - abs(np.amin(data_read[sig_source[self._sig_port].lower()][0]['value'][0]))/5
                     #max_val =   np.amax(data_read[sig_source[self._sig_port].lower()][0]['value'][0]) + abs(np.amax(data_read[sig_source[self._sig_port].lower()][0]['value'][0]))/5
-                    min_val = np.amin(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]) - abs(np.amin(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]))/5
-                    max_val = np.amax(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]) + abs(np.amax(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]))/5
+                     min_val = np.amin(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]) - abs(np.amin(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]))/5
+                     max_val = np.amax(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]) + abs(np.amax(data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()][0]['value'][0]))/5
 
                     ##Replace this ....
                     # line.set_data(time_axis, data_read[sig_source[self._sig_port].lower()][0]['value'][0])
@@ -114,21 +114,20 @@ class QuantumAlgoExperiment:
                     # fig.canvas.draw()
                     # fig.canvas.flush_events()
 
-                    plot_1 = f'line{mfli}.set_data(time_axis, data_reads[{mfli}][self._sig_source[{mfli}][self._sig_port].lower()][0]["value"][0])\nax{mfli}.set_ylim({min_val}, {max_val})\nfig{mfli}.canvas.draw()\nfig{mfli}.canvas.flush_events()'
-                    exec(plot_1)
+                     plot_1 = f'line{mfli}.set_data(time_axis, data_reads[{mfli}][self._sig_source[{mfli}][self._sig_port].lower()][0]["value"][0])\nax{mfli}.set_ylim({min_val}, {max_val})\nfig{mfli}.canvas.draw()\nfig{mfli}.canvas.flush_events()'
+                     exec(plot_1)
                     #for each in data_read[sig_source[self._sig_port].lower()]:
-                    for each in data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()]:
-                        self._sample_data[mfli].append(each)
-            time.sleep(duration)
+                     for each in data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()]:
+                         self._sample_data[mfli].append(each)
+             time.sleep(duration)
 
         for mfli in self._lockins:
-            data_reads[mfli] = self._daq_modules[mfli]._daq_module.read(True)
-
+            data_reads[mfli] = self._daq_modules[mfli]._daq_module.read(True)  
             if self._sig_sources[mfli][self._sig_port].lower() in data_reads[mfli].keys():
                 for each in data_read[self._sig_sources[mfli][self._sig_port].lower()]:
-                     self._sample_data[mfli].append(each)
-                     self._daq_modules[mfli]._daq_module.finish()
-                     self._daq_modules[mfli]._daq_module('*')
+                    self._sample_data[mfli].append(each)
+                    self._daq_modules[mfli]._daq_module.finish()
+                    self._daq_modules[mfli]._daq_module('*')
 
 
         #data_read = self._daq_module.read(True)
