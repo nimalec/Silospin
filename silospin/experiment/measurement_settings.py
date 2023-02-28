@@ -34,7 +34,7 @@ def daq_measurement_settings(n_traces, daq_module, daq, dev_id, measurement_sett
     daq_module.unsubscribe('*')
     daq_module.subscribe(sig_source[sig_port])
 
-def plot_voltage_traces(sample_data, acquisition_time, idx): 
+def plot_voltage_traces(sample_data, acquisition_time, idx):
     voltages = []
     for i in range(len(sample_data)):
         voltages.append(np.array(sample_data[i]['value']).T)
@@ -43,7 +43,6 @@ def plot_voltage_traces(sample_data, acquisition_time, idx):
     fig_end = plt.figure(idx)
     c = plt.imshow(volt_plt_array, vmin = np.min(voltages), vmax = np.max(voltages))
     plt.title('Quantum Agorithm Experiment Readout', fontweight ="bold")
-    ax2= plt.gca()
     plt.xlabel('Acquisition time [Seconds]')
     plt.ylabel('Trace index [a.u.]')
     cbar = plt.colorbar(c)

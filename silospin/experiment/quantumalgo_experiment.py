@@ -100,4 +100,4 @@ class QuantumAlgoExperiment:
                     self._sample_data[mfli].append(each)
                     self._daq_modules[mfli]._daq_module.finish()
                     self._daq_modules[mfli]._daq_module('*')
-            plot_voltage_traces(self._sample_data[mfli], self._measurement_settings['acquisition_time'], mfli)
+            plot_voltage_traces(self._sample_data[mfli], self._measurement_settings['acquisition_time'], mfli+len(self._lockins))
