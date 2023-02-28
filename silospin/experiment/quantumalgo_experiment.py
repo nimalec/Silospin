@@ -80,8 +80,8 @@ class QuantumAlgoExperiment:
         duration = self._daq_modules[0]._daq_module.getDouble("duration")
         columns = self._daq_modules[0]._daq_module.getInt('grid/cols')
         time_axis = np.linspace(0, duration,  columns)
-    #    v_measured = np.zeros(columns)
-
+        v_measured = np.zeros(columns)
+        plot_0_str = ''
         for mfli in self._lockins:
             plot_0_str += f'fig{mfli}=plt.figure()\nax{mfli} = fig{mfli}.add_subplot(111)\nax{mfli}.set_xlabel("Duration [Seconds]")\nax{mfli}.set_ylabel("Demodulated Voltage [Voltage]")\nline{mfli}, = ax{mfli}.plot(time_axis, v_measured, lw=1)\n'
             self._daq_modules[mfli]._daq_module.execute()
@@ -122,7 +122,7 @@ class QuantumAlgoExperiment:
              time.sleep(duration)
 
         for mfli in self._lockins:
-            data_reads[mfli] = self._daq_modules[mfli]._daq_module.read(True)  
+            data_reads[mfli] = self._daq_modules[mfli]._daq_module.read(True)
             if self._sig_sources[mfli][self._sig_port].lower() in data_reads[mfli].keys():
                 for each in data_read[self._sig_sources[mfli][self._sig_port].lower()]:
                     self._sample_data[mfli].append(each)
