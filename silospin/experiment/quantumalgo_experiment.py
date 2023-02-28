@@ -115,7 +115,7 @@ class QuantumAlgoExperiment:
                     # fig.canvas.draw()
                     # fig.canvas.flush_events()
 
-                     plot_1 = f'line{mfli}.set_data(time_axis, data_reads[{mfli}][self._sig_source[{mfli}][self._sig_port].lower()][0]["value"][0])\nax{mfli}.set_ylim({min_val}, {max_val})\nfig{mfli}.canvas.draw()\nfig{mfli}.canvas.flush_events()'
+                     plot_1 = f'line{mfli}.set_data(time_axis, data_reads[{mfli}][self._sig_sources[{mfli}][self._sig_port].lower()][0]["value"][0])\nax{mfli}.set_ylim({min_val}, {max_val})\nfig{mfli}.canvas.draw()\nfig{mfli}.canvas.flush_events()'
                      exec(plot_1)
                     #for each in data_read[sig_source[self._sig_port].lower()]:
                      for each in data_reads[mfli][self._sig_sources[mfli][self._sig_port].lower()]:
