@@ -146,7 +146,6 @@ class GateSetTomographyQuantumCompiler:
         else:
             npoints_p_standard = max(plunger_set_npoints)
 
-        npoints_p_standard = max(plunger_set_npoints)
         n_std = (npoints_pi_2_standard, npoints_pi_standard, npoints_p_standard)
         for core_idx in channel_mapping[hdawg_std_rf]:
             if channel_mapping[hdawg_std_rf][core_idx]['core_idx'] == standard_rf_idx:
