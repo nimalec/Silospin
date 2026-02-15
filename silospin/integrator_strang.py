@@ -46,7 +46,7 @@ class StrangSplitIntegrator:
             Template state for .clone()
         """
         self.H_callback = H_callback
-        self.collapse_ops = collapse_ops_raw
+        self.collapse_ops = list(collapse_ops_raw)  # snapshot — immune to later mutations
         self.B = batch_size
         self.d = dim
         self.state_template = state
@@ -93,13 +93,13 @@ class StrangSplitIntegrator:
             LdL = self._LdagL[idx]
 
             # L_k rho -> pre-allocated buffer
-            cp.einsum('ijb,jkb->ikb', L_k, rho, out=self._L_rho)
+            self._L_rho[:] = cp.einsum('ijb,jkb->ikb', L_k, rho)
             # L_k rho L_k^dag
-            cp.einsum('ijb,jkb->ikb', self._L_rho, Ldag, out=self._LrhoLdag)
+            self._LrhoLdag[:] = cp.einsum('ijb,jkb->ikb', self._L_rho, Ldag)
             # L†L rho
-            cp.einsum('ijb,jkb->ikb', LdL, rho, out=self._LdL_rho)
+            self._LdL_rho[:] = cp.einsum('ijb,jkb->ikb', LdL, rho)
             # rho L†L
-            cp.einsum('ijb,jkb->ikb', rho, LdL, out=self._rho_LdL)
+            self._rho_LdL[:] = cp.einsum('ijb,jkb->ikb', rho, LdL)
 
             # D[L_k] rho = rate * (L rho L† - 0.5 * (L†L rho + rho L†L))
             drho_out += rate_k[None, None, :] * (
